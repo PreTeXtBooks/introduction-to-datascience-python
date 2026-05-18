@@ -2,11 +2,1514 @@
 <chapter xml:id="ch-classification1" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Classification I: training and predicting</title>
 
-  <introduction>
+  <section xml:id="sec-classif1-overview">
+    <title>Overview</title>
     <p>
-      This chapter is a skeleton placeholder for the PreTeXt version of the book.
-      Content will be filled in from the corresponding R Markdown source file.
+      In previous chapters, we focused solely on descriptive and exploratory data
+      analysis questions. This chapter and the next together serve as our first foray
+      into answering <em>predictive</em> questions about data. In particular, we will
+      focus on <em>classification</em>, i.e., using one or more variables to predict
+      the value of a categorical variable of interest. This chapter will cover the
+      basics of classification, how to preprocess data to make it suitable for use in
+      a classifier, and how to use our observed data to make predictions. The next
+      chapter will focus on how to evaluate how accurate the predictions from our
+      classifier are, as well as how to improve our classifier (where possible) to
+      maximize its accuracy.
     </p>
-  </introduction>
+  </section>
+
+  <section xml:id="sec-classif1-objectives">
+    <title>Chapter learning objectives</title>
+    <p>By the end of the chapter, readers will be able to do the following:</p>
+    <ul>
+      <li><p>Recognize situations where a classifier would be appropriate for making
+        predictions.</p></li>
+      <li><p>Describe what a training data set is and how it is used in
+        classification.</p></li>
+      <li><p>Interpret the output of a classifier.</p></li>
+      <li><p>Compute, by hand, the straight-line (Euclidean) distance between points
+        on a graph when there are two predictor variables.</p></li>
+      <li><p>Explain the K-nearest neighbors classification algorithm.</p></li>
+      <li><p>Perform K-nearest neighbors classification in R using
+        <c>tidymodels</c>.</p></li>
+      <li><p>Use a <c>recipe</c> to center, scale, balance, and impute data as a
+        preprocessing step.</p></li>
+      <li><p>Combine preprocessing and model training using a
+        <c>workflow</c>.</p></li>
+    </ul>
+  </section>
+
+  <section xml:id="sec-classif1-problem">
+    <title>The classification problem</title>
+    <p>
+      In many situations, we want to make predictions
+      <idx><h>predictive question</h></idx>
+      based on the current situation as well as past experiences. For instance, a
+      doctor may want to diagnose a patient as either diseased or healthy based on
+      their symptoms and the doctor's past experience with patients; an email provider
+      might want to tag a given email as &#x201C;spam&#x201D; or &#x201C;not
+      spam&#x201D; based on the email's text and past email text data; or a credit card
+      company may want to predict whether a purchase is fraudulent based on the
+      current purchase item, amount, and location as well as past purchases. These
+      tasks are all examples of
+      <idx><h>classification</h></idx>
+      <term>classification</term>, i.e., predicting a categorical class (sometimes
+      called a <em>label</em>)
+      <idx><h>class</h></idx>
+      <idx><h>categorical variable</h></idx>
+      for an observation given its other variables (sometimes called
+      <em>features</em>).
+      <idx><h>feature</h><see>predictor</see></idx>
+    </p>
+    <p>
+      Generally, a classifier assigns an observation without a known class (e.g., a
+      new patient) to a class (e.g., diseased or healthy) on the basis of how similar
+      it is to other observations for which we do know the class (e.g., previous
+      patients with known diseases and symptoms). These observations with known
+      classes that we use as a basis for prediction are called a <term>training
+      set</term>;
+      <idx><h>training set</h></idx>
+      this name comes from the fact that we use these data to train, or teach, our
+      classifier. Once taught, we can use the classifier to make predictions on new
+      data for which we do not know the class.
+    </p>
+    <p>
+      There are many possible methods that we could use to predict a categorical
+      class/label for an observation. In this book, we will focus on the widely used
+      <term>K-nearest neighbors</term>
+      <idx><h>K-nearest neighbors</h></idx>
+      algorithm <xref ref="knnfix"/> <xref ref="knncover"/>. In your future studies,
+      you might encounter decision trees, support vector machines (SVMs), logistic
+      regression, neural networks, and more; see the additional resources section at
+      the end of the next chapter for where to begin learning more about these other
+      methods. It is also worth mentioning that there are many variations on the basic
+      classification problem. For example, we focus on the setting of <term>binary
+      classification</term>
+      <idx><h>classification</h><h>binary</h></idx>
+      where only two classes are involved (e.g., a diagnosis of either healthy or
+      diseased), but you may also run into multiclass classification problems with
+      more than two categories (e.g., a diagnosis of healthy, bronchitis, pneumonia,
+      or a common cold).
+    </p>
+  </section>
+
+  <section xml:id="sec-classif1-exploring">
+    <title>Exploring a data set</title>
+    <p>
+      In this chapter and the next, we will study a data set of
+      <url href="https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+%28Diagnostic%29"
+           visual="archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)">digitized
+      breast cancer image features</url>, created by Dr. William H. Wolberg,
+      W. Nick Street, and Olvi L. Mangasarian <xref ref="streetbreastcancer"/>.
+      <idx><h>breast cancer</h></idx>
+      Each row in the data set represents an image of a tumor sample, including the
+      diagnosis (benign or malignant) and several other measurements (nucleus texture,
+      perimeter, area, and more). Diagnosis for each image was conducted by
+      physicians.
+    </p>
+    <p>
+      As with all data analyses, we first need to formulate a precise question that we
+      want to answer. Here, the question is <em>predictive</em>:
+      <idx><h>question</h><h>classification</h></idx>
+      can we use the tumor image measurements available to us to predict whether a
+      future tumor image (with unknown diagnosis) shows a benign or malignant tumor?
+      Answering this question is important because traditional, non-data-driven methods
+      for tumor diagnosis are quite subjective and dependent upon how skilled and
+      experienced the diagnosing physician is. Furthermore, benign tumors are not
+      normally dangerous; the cells stay in the same place, and the tumor stops
+      growing before it gets very large. By contrast, in malignant tumors, the cells
+      invade the surrounding tissue and spread into nearby organs, where they can
+      cause serious damage <xref ref="stanfordhealthcare"/>. Thus, it is important to
+      quickly and accurately diagnose the tumor type to guide patient treatment.
+    </p>
+
+    <subsection xml:id="subsec-classif1-loading">
+      <title>Loading the cancer data</title>
+      <p>
+        Our first step is to load, wrangle, and explore the data using visualizations
+        in order to better understand the data we are working with. We start by
+        loading the <c>tidyverse</c> package needed for our analysis.
+      </p>
+      <program language="r">
+        <input>
+library(tidyverse)
+        </input>
+      </program>
+      <p>
+        In this case, the file containing the breast cancer data set is a
+        <c>.csv</c> file with headers. We'll use the <c>read_csv</c> function
+        <idx><h>read function</h><h>read_csv</h></idx>
+        with no additional arguments, and then inspect its contents:
+      </p>
+      <program language="r">
+        <input>
+cancer &lt;- read_csv("data/wdbc.csv")
+cancer
+        </input>
+      </program>
+      <pre>
+# A tibble: 569 × 12
+       ID Class Radius Texture Perimeter   Area Smoothness Compactness Concavity
+    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+ 1 8.42e5 M       1.10   -2.07      1.27  0.984      1.57        3.28       2.65
+ 2 8.43e5 M       1.83   -0.354     1.69  1.91      -0.827      -0.487     -0.0239
+ 3 8.43e5 M       1.58    0.456     1.57  1.56       0.941       1.05       1.36
+ # … with 566 more rows
+      </pre>
+    </subsection>
+
+    <subsection xml:id="subsec-classif1-describing">
+      <title>Describing the variables in the cancer data set</title>
+      <p>
+        Breast tumors can be diagnosed by performing a <em>biopsy</em>, a process
+        where tissue is removed from the body and examined for the presence of
+        disease. Traditionally these procedures were quite invasive; modern methods
+        such as fine needle aspiration, used to collect the present data set, extract
+        only a small amount of tissue and are less invasive. Based on a digital image
+        of each breast tissue sample collected for this data set, ten different
+        variables were measured for each cell nucleus in the image (items 3&#x2013;12
+        of the list of variables below), and then the mean for each variable across
+        the nuclei was recorded. As part of the data preparation, these values have
+        been <em>standardized (centered and scaled)</em>; we will discuss what this
+        means and why we do it later in this chapter. Each image additionally was
+        given a unique ID and a diagnosis by a physician. Therefore, the total set of
+        variables per image in this data set is:
+      </p>
+      <ol>
+        <li><p>ID: identification number</p></li>
+        <li><p>Class: the diagnosis (M = malignant or B = benign)</p></li>
+        <li><p>Radius: the mean of distances from center to points on the
+          perimeter</p></li>
+        <li><p>Texture: the standard deviation of gray-scale values</p></li>
+        <li><p>Perimeter: the length of the surrounding contour</p></li>
+        <li><p>Area: the area inside the contour</p></li>
+        <li><p>Smoothness: the local variation in radius lengths</p></li>
+        <li><p>Compactness: the ratio of squared perimeter and area</p></li>
+        <li><p>Concavity: severity of concave portions of the contour</p></li>
+        <li><p>Concave Points: the number of concave portions of the
+          contour</p></li>
+        <li><p>Symmetry: how similar the nucleus is when mirrored</p></li>
+        <li><p>Fractal Dimension: a measurement of how &#x201C;rough&#x201D; the
+          perimeter is</p></li>
+      </ol>
+      <p>
+        Below we use <c>glimpse</c>
+        <idx><h>glimpse</h></idx>
+        to preview the data frame. This function can make it easier to inspect the
+        data when we have a lot of columns, as it prints the data such that the
+        columns go down the page (instead of across).
+      </p>
+      <program language="r">
+        <input>
+glimpse(cancer)
+        </input>
+      </program>
+      <pre>
+Rows: 569
+Columns: 12
+$ ID               &lt;dbl&gt; 842302, 842517, 84300903, 84348301, …
+$ Class            &lt;chr&gt; "M", "M", "M", "M", …
+$ Radius           &lt;dbl&gt; 1.097, 1.829, 1.580, -0.769, …
+$ Texture          &lt;dbl&gt; -2.073, -0.354, 0.456, 0.254, …
+$ Perimeter        &lt;dbl&gt; 1.269, 1.686, 1.567, -0.592, …
+      </pre>
+      <p>
+        From the summary of the data above, we can see that <c>Class</c> is of type
+        character (denoted by <c>&lt;chr&gt;</c>). We can use the
+        <c>distinct</c>
+        <idx><h>distinct</h></idx>
+        function to see all the unique values present in that column. We see that
+        there are two diagnoses: benign, represented by &#x201C;B&#x201D;, and
+        malignant, represented by &#x201C;M&#x201D;.
+      </p>
+      <program language="r">
+        <input>
+cancer |>
+  distinct(Class)
+        </input>
+      </program>
+      <pre>
+# A tibble: 2 × 1
+  Class
+  &lt;chr&gt;
+1 M
+2 B
+      </pre>
+      <p>
+        Since we will be working with <c>Class</c> as a categorical variable, it is a
+        good idea to convert it to a factor type using the <c>as_factor</c> function.
+        <idx><h>factor</h><h>as_factor</h></idx>
+        We will also improve the readability of our analysis by renaming &#x201C;M&#x201D;
+        to &#x201C;Malignant&#x201D; and &#x201C;B&#x201D; to &#x201C;Benign&#x201D;
+        using the <c>fct_recode</c> method.
+        <idx><h>factor</h><h>fct_recode</h></idx>
+        The <c>fct_recode</c> method is used to replace the names of factor values
+        with other names. The arguments of <c>fct_recode</c> are the column that you
+        want to modify, followed by any number of arguments of the form
+        <c>"new name" = "old name"</c> to specify the renaming scheme.
+      </p>
+      <program language="r">
+        <input>
+cancer &lt;- cancer |>
+  mutate(Class = as_factor(Class)) |>
+  mutate(Class = fct_recode(Class, "Malignant" = "M", "Benign" = "B"))
+glimpse(cancer)
+        </input>
+      </program>
+      <p>
+        Let's verify that we have successfully converted the <c>Class</c> column to a
+        factor variable and renamed its values to &#x201C;Benign&#x201D; and
+        &#x201C;Malignant&#x201D; using the <c>distinct</c> function once more.
+      </p>
+      <program language="r">
+        <input>
+cancer |>
+  distinct(Class)
+        </input>
+      </program>
+      <pre>
+# A tibble: 2 × 1
+  Class
+  &lt;fct&gt;
+1 Malignant
+2 Benign
+      </pre>
+    </subsection>
+
+    <subsection xml:id="subsec-classif1-exploring-data">
+      <title>Exploring the cancer data</title>
+      <p>
+        Before we start doing any modeling, let's explore our data set. Below we use
+        the <c>group_by</c>, <c>summarize</c> and <c>n</c>
+        <idx><h>group_by</h></idx>
+        <idx><h>summarize</h></idx>
+        functions to find the number and percentage of benign and malignant tumor
+        observations in our data set. The <c>n</c> function within <c>summarize</c>,
+        when paired with <c>group_by</c>, counts the number of observations in each
+        <c>Class</c> group. Then we calculate the percentage in each group by dividing
+        by the total number of observations and multiplying by 100. We have 357 (63%)
+        benign and 212 (37%) malignant tumor observations.
+      </p>
+      <program language="r">
+        <input>
+num_obs &lt;- nrow(cancer)
+cancer |>
+  group_by(Class) |>
+  summarize(
+    count = n(),
+    percentage = n() / num_obs * 100
+  )
+        </input>
+      </program>
+      <pre>
+# A tibble: 2 × 3
+  Class     count percentage
+  &lt;fct&gt;     &lt;int&gt;      &lt;dbl&gt;
+1 Malignant   212       37.3
+2 Benign      357       62.7
+      </pre>
+      <p>
+        Next, let's draw a scatter plot
+        <idx><h>visualization</h><h>scatter</h></idx>
+        to visualize the relationship between the perimeter and concavity variables.
+        Rather than use <c>ggplot</c>'s default palette, we select our own
+        colorblind-friendly colors&#x2014;<c>"darkorange"</c> for orange and
+        <c>"steelblue"</c> for blue&#x2014;and pass them as the <c>values</c>
+        argument to the <c>scale_color_manual</c> function.
+      </p>
+      <program language="r">
+        <input>
+perim_concav &lt;- cancer |>
+  ggplot(aes(x = Perimeter, y = Concavity, color = Class)) +
+  geom_point(alpha = 0.6) +
+  labs(x = "Perimeter (standardized)",
+       y = "Concavity (standardized)",
+       color = "Diagnosis") +
+  scale_color_manual(values = c("darkorange", "steelblue")) +
+  theme(text = element_text(size = 12))
+perim_concav
+        </input>
+      </program>
+      <figure xml:id="fig-classif1-cancer-scatter">
+        <caption>Scatter plot of concavity versus perimeter colored by diagnosis
+          label.</caption>
+        <image source="images/classification1/cancer-scatter.png" width="70%"/>
+      </figure>
+      <p>
+        In <xref ref="fig-classif1-cancer-scatter"/>, we can see that malignant
+        observations typically fall in the upper right-hand corner of the plot area.
+        By contrast, benign observations typically fall in the lower left-hand corner
+        of the plot. In other words, benign observations tend to have lower concavity
+        and perimeter values, and malignant ones tend to have larger values. Suppose
+        we obtain a new observation not in the current data set that has all the
+        variables measured <em>except</em> the label (i.e., an image without the
+        physician's diagnosis for the tumor class). We could compute the standardized
+        perimeter and concavity values, resulting in values of, say, 1 and 1. Could
+        we use this information to classify that observation as benign or malignant?
+        Based on the scatter plot, how might you classify that new observation? If the
+        standardized concavity and perimeter values are 1 and 1 respectively, the
+        point would lie in the middle of the orange cloud of malignant points and thus
+        we could probably classify it as malignant. Based on our visualization, it
+        seems like it may be possible to make accurate predictions of the <c>Class</c>
+        variable (i.e., a diagnosis) for tumor images with unknown diagnoses.
+      </p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-classif1-knn">
+    <title>Classification with K-nearest neighbors</title>
+    <p>
+      In order to actually make predictions for new observations in practice, we will
+      need a classification algorithm. In this book, we will use the K-nearest
+      neighbors
+      <idx><h>K-nearest neighbors</h><h>classification</h></idx>
+      classification algorithm. To predict the label of a new observation (here,
+      classify it as either benign or malignant), the K-nearest neighbors classifier
+      generally finds the <m>K</m> &#x201C;nearest&#x201D; or &#x201C;most
+      similar&#x201D; observations in our training set, and then uses their diagnoses
+      to make a prediction for the new observation's diagnosis. <m>K</m> is a number
+      that we must choose in advance; for now, we will assume that someone has chosen
+      <m>K</m> for us. We will cover how to choose <m>K</m> ourselves in the next
+      chapter.
+    </p>
+    <p>
+      To illustrate the concept of K-nearest neighbors classification, we will walk
+      through an example. Suppose we have a new observation, with standardized
+      perimeter of 2 and standardized concavity of 4, whose diagnosis
+      &#x201C;Class&#x201D; is unknown. This new observation is depicted by the red,
+      diamond point in <xref ref="fig-classif1-knn-new-obs"/>.
+    </p>
+    <figure xml:id="fig-classif1-knn-new-obs">
+      <caption>Scatter plot of concavity versus perimeter with new observation
+        represented as a red diamond.</caption>
+      <image source="images/classification1/cancer-knn-new-obs.png" width="70%"/>
+    </figure>
+    <p>
+      <xref ref="fig-classif1-knn-1nn"/> shows that the nearest point to this new
+      observation is <term>malignant</term>. The idea here is that if a point is
+      close to another in the scatter plot, then the perimeter and concavity values
+      are similar, and so we may expect that they would have the same diagnosis.
+    </p>
+    <figure xml:id="fig-classif1-knn-1nn">
+      <caption>Scatter plot of concavity versus perimeter. The new observation is
+        represented as a red diamond with a line to the one nearest neighbor, which
+        has a malignant label.</caption>
+      <image source="images/classification1/cancer-knn-1nn.png" width="70%"/>
+    </figure>
+    <p>
+      Suppose we have another new observation with standardized perimeter 0.2 and
+      concavity of 3.3. Looking at the scatter plot in
+      <xref ref="fig-classif1-knn-1nn-benign"/>, how would you classify this red,
+      diamond observation? The nearest neighbor to this new point is a
+      <term>benign</term> observation. Does this seem like the right prediction to
+      make for this observation? Probably not, if you consider the other nearby
+      points.
+    </p>
+    <figure xml:id="fig-classif1-knn-1nn-benign">
+      <caption>Scatter plot of concavity versus perimeter. The new observation is
+        represented as a red diamond with a line to the one nearest neighbor, which
+        has a benign label.</caption>
+      <image source="images/classification1/cancer-knn-1nn-benign.png" width="70%"/>
+    </figure>
+    <p>
+      To improve the prediction we can consider several neighboring points, say
+      <m>K = 3</m>, that are closest to the new observation to predict its diagnosis
+      class. Among those 3 closest points, we use the <em>majority class</em> as our
+      prediction for the new observation. As shown in
+      <xref ref="fig-classif1-knn-3nn"/>, we see that the diagnoses of 2 of the 3
+      nearest neighbors to our new observation are malignant. Therefore we take
+      majority vote and classify our new red, diamond observation as malignant.
+    </p>
+    <figure xml:id="fig-classif1-knn-3nn">
+      <caption>Scatter plot of concavity versus perimeter with three nearest
+        neighbors.</caption>
+      <image source="images/classification1/cancer-knn-3nn.png" width="70%"/>
+    </figure>
+    <p>
+      Here we chose the <m>K=3</m> nearest observations, but there is nothing special
+      about <m>K=3</m>. We could have used <m>K=4, 5</m> or more (though we may want
+      to choose an odd number to avoid ties). We will discuss more about choosing
+      <m>K</m> in the next chapter.
+    </p>
+
+    <subsection xml:id="subsec-classif1-distance">
+      <title>Distance between points</title>
+      <p>
+        We decide which points are the <m>K</m> &#x201C;nearest&#x201D; to our new
+        observation using the <em>straight-line distance</em> (we will often just
+        refer to this as <em>distance</em>).
+        <idx><h>distance</h><h>K-nearest neighbors</h></idx>
+        <idx><h>straight line</h><h>distance</h></idx>
+        Suppose we have two observations <m>a</m> and <m>b</m>, each having two
+        predictor variables, <m>x</m> and <m>y</m>. Denote <m>a_x</m> and
+        <m>a_y</m> to be the values of variables <m>x</m> and <m>y</m> for
+        observation <m>a</m>; <m>b_x</m> and <m>b_y</m> have similar definitions for
+        observation <m>b</m>. Then the straight-line distance between observation
+        <m>a</m> and <m>b</m> on the x-y plane can be computed using the following
+        formula:
+      </p>
+      <me>\mathrm{Distance} = \sqrt{(a_x - b_x)^2 + (a_y - b_y)^2}</me>
+      <p>
+        To find the <m>K</m> nearest neighbors to our new observation, we compute the
+        distance from that new observation to each observation in our training data,
+        and select the <m>K</m> observations corresponding to the <m>K</m>
+        <em>smallest</em> distance values. For example, suppose we want to use
+        <m>K=5</m> neighbors to classify a new observation with perimeter of 0 and
+        concavity of 3.5, shown as a red diamond in
+        <xref ref="fig-classif1-knn-new-obs2"/>. Let's calculate the distances
+        between our new point and each of the observations in the training set to find
+        the <m>K=5</m> neighbors that are nearest to our new point. You will see in
+        the <c>mutate</c>
+        <idx><h>mutate</h></idx>
+        step below, we compute the straight-line distance using the formula above:
+        we square the differences between the two observations' perimeter and
+        concavity coordinates, add the squared differences, and then take the square
+        root. In order to find the <m>K=5</m> nearest neighbors, we will use the
+        <c>slice_min</c> function.
+        <idx><h>slice_min</h></idx>
+      </p>
+      <figure xml:id="fig-classif1-knn-new-obs2">
+        <caption>Scatter plot of concavity versus perimeter with new observation
+          represented as a red diamond.</caption>
+        <image source="images/classification1/cancer-knn-new-obs2.png" width="70%"/>
+      </figure>
+      <program language="r">
+        <input>
+new_obs_Perimeter &lt;- 0
+new_obs_Concavity &lt;- 3.5
+cancer |>
+  select(ID, Perimeter, Concavity, Class) |>
+  mutate(dist_from_new = sqrt((Perimeter - new_obs_Perimeter)^2 +
+                              (Concavity - new_obs_Concavity)^2)) |>
+  slice_min(dist_from_new, n = 5)
+        </input>
+      </program>
+      <pre>
+# A tibble: 5 × 5
+        ID Perimeter Concavity Class     dist_from_new
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;fct&gt;             &lt;dbl&gt;
+1   869691    0.0556      3.38  Malignant         0.124
+2   921385    0.164       3.43  Malignant         0.200
+3   919812    0.198       3.30  Malignant         0.226
+4   916799   -0.104       3.37  Malignant         0.244
+5   862261    0.245       3.32  Malignant         0.281
+      </pre>
+      <p>
+        The result of this computation shows that 3 of the 5 nearest neighbors to our
+        new observation are malignant; since this is the majority, we classify our new
+        observation as malignant. These 5 neighbors are circled in
+        <xref ref="fig-classif1-knn-5nn"/>.
+      </p>
+      <figure xml:id="fig-classif1-knn-5nn">
+        <caption>Scatter plot of concavity versus perimeter with 5 nearest neighbors
+          circled.</caption>
+        <image source="images/classification1/cancer-knn-5nn-circled.png" width="70%"/>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-classif1-more-variables">
+      <title>More than two explanatory variables</title>
+      <p>
+        Although the above description is directed toward two predictor variables,
+        exactly the same K-nearest neighbors algorithm applies when you have a higher
+        number of predictor variables. Each predictor variable may give us new
+        information to help create our classifier. The only difference is the formula
+        for the distance between points. Suppose we have <m>m</m> predictor variables
+        for two observations <m>a</m> and <m>b</m>, i.e.,
+        <m>a = (a_{1}, a_{2}, \dots, a_{m})</m> and
+        <m>b = (b_{1}, b_{2}, \dots, b_{m})</m>.
+      </p>
+      <p>
+        The distance formula becomes
+        <idx><h>distance</h><h>more than two variables</h></idx>
+      </p>
+      <me>\mathrm{Distance} = \sqrt{(a_{1}-b_{1})^2 + (a_{2}-b_{2})^2 + \cdots + (a_{m}-b_{m})^2}.</me>
+      <p>
+        This formula still corresponds to a straight-line distance, just in a space
+        with more dimensions. Suppose we want to calculate the distance between a new
+        observation with a perimeter of 0, concavity of 3.5, and symmetry of 1, and
+        another observation with a perimeter, concavity, and symmetry of 0.417, 2.31,
+        and 0.837 respectively. We have two observations with three predictor
+        variables: perimeter, concavity, and symmetry. Previously, when we had two
+        variables, we added up the squared difference between each of our (two)
+        variables, and then took the square root. Now we will do the same, except for
+        our three variables. We calculate the distance as follows
+      </p>
+      <me>\mathrm{Distance} =\sqrt{(0 - 0.417)^2 + (3.5 - 2.31)^2 + (1 - 0.837)^2} = 1.27.</me>
+      <p>
+        Let's calculate the distances between our new observation and each of the
+        observations in the training set to find the <m>K=5</m> neighbors when we
+        have these three predictors.
+      </p>
+      <program language="r">
+        <input>
+new_obs_Perimeter &lt;- 0
+new_obs_Concavity &lt;- 3.5
+new_obs_Symmetry &lt;- 1
+cancer |>
+  select(ID, Perimeter, Concavity, Symmetry, Class) |>
+  mutate(dist_from_new = sqrt((Perimeter - new_obs_Perimeter)^2 +
+                              (Concavity - new_obs_Concavity)^2 +
+                                (Symmetry - new_obs_Symmetry)^2)) |>
+  slice_min(dist_from_new, n = 5)
+        </input>
+      </program>
+      <pre>
+# A tibble: 5 × 6
+        ID Perimeter Concavity Symmetry Class     dist_from_new
+     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt;             &lt;dbl&gt;
+1   862261     0.245      3.32    1.08   Malignant         0.290
+2   869691     0.0556     3.38    1.12   Malignant         0.304
+3   921385     0.164      3.43    1.21   Malignant         0.339
+4   916799    -0.104      3.37    0.825  Malignant         0.440
+5   913102     0.416      3.47    1.48   Malignant         0.521
+      </pre>
+      <p>
+        Based on <m>K=5</m> nearest neighbors with these three predictors, we would
+        classify the new observation as malignant since 4 out of 5 of the nearest
+        neighbors are from the malignant class.
+        <xref ref="fig-classif1-3d"/> shows what the data look like when we visualize
+        them as a 3-dimensional scatter with lines from the new observation to its
+        five nearest neighbors.
+      </p>
+      <figure xml:id="fig-classif1-3d">
+        <caption>3D scatter plot of the standardized symmetry, concavity, and
+          perimeter variables. Note that in general we recommend against using 3D
+          visualizations; here we show the data in 3D only to illustrate what higher
+          dimensions and nearest neighbors look like, for learning
+          purposes.</caption>
+        <image source="images/classification1/plot3d-knn-classification.png"
+               width="90%"/>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-classif1-summary-knn">
+      <title>Summary of K-nearest neighbors algorithm</title>
+      <p>
+        In order to classify a new observation using a K-nearest neighbors classifier,
+        we have to do the following:
+      </p>
+      <ol>
+        <li><p>Compute the distance between the new observation and each observation
+          in the training set.</p></li>
+        <li><p>Sort the data table in ascending order according to the
+          distances.</p></li>
+        <li><p>Choose the top <m>K</m> rows of the sorted table.</p></li>
+        <li><p>Classify the new observation based on a majority vote of the neighbor
+          classes.</p></li>
+      </ol>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-classif1-tidymodels">
+    <title>K-nearest neighbors with <c>tidymodels</c></title>
+    <p>
+      Coding the K-nearest neighbors algorithm in R ourselves can get complicated,
+      especially if we want to handle multiple classes, more than two variables, or
+      predict the class for multiple new observations. Thankfully, in R, the K-nearest
+      neighbors algorithm is implemented in
+      <url href="https://parsnip.tidymodels.org/" visual="parsnip.tidymodels.org/">the
+      <c>parsnip</c> R package</url> <xref ref="parsnip"/>
+      included in <c>tidymodels</c>, along with many
+      <url href="https://www.tidymodels.org/find/parsnip/" visual="www.tidymodels.org/find/parsnip/">other models</url>
+      <idx><h>tidymodels</h></idx>
+      <idx><h>parsnip</h></idx>
+      that you will encounter in this and future chapters of the book. The
+      <c>tidymodels</c> collection provides tools to help make and use models, such as
+      classifiers. Using the packages in this collection will help keep our code
+      simple, readable and accurate; the less we have to code ourselves, the fewer
+      mistakes we will likely make. We start by loading <c>tidymodels</c>.
+    </p>
+    <program language="r">
+      <input>
+library(tidymodels)
+      </input>
+    </program>
+    <p>
+      Let's walk through how to use <c>tidymodels</c> to perform K-nearest neighbors
+      classification. We will use the <c>cancer</c> data set from above, with
+      perimeter and concavity as predictors and <m>K = 5</m> neighbors to build our
+      classifier. Then we will use the classifier to predict the diagnosis label for a
+      new observation with perimeter 0, concavity 3.5, and an unknown diagnosis label.
+      Let's pick out our two desired predictor variables and class label and store them
+      as a new data set named <c>cancer_train</c>:
+    </p>
+    <program language="r">
+      <input>
+cancer_train &lt;- cancer |>
+  select(Class, Perimeter, Concavity)
+cancer_train
+      </input>
+    </program>
+    <pre>
+# A tibble: 569 × 3
+   Class     Perimeter Concavity
+   &lt;fct&gt;         &lt;dbl&gt;     &lt;dbl&gt;
+ 1 Malignant     1.27      2.65
+ 2 Malignant     1.69     -0.0239
+ 3 Malignant     1.57      1.36
+ # … with 566 more rows
+    </pre>
+    <p>
+      Next, we create a <em>model specification</em>
+      <idx><h>tidymodels</h><h>model specification</h></idx>
+      for K-nearest neighbors classification by calling the
+      <c>nearest_neighbor</c> function, specifying that we want to use <m>K = 5</m>
+      neighbors (we will discuss how to choose <m>K</m> in the next chapter) and that
+      each neighboring point should have the same weight when voting
+      (<c>weight_func = "rectangular"</c>). The <c>weight_func</c> argument controls
+      how neighbors vote when classifying a new observation; by setting it to
+      <c>"rectangular"</c>, each of the <m>K</m> nearest neighbors gets exactly 1
+      vote as described above. Other choices, which weigh each neighbor's vote
+      differently, can be found on
+      <url href="https://parsnip.tidymodels.org/reference/nearest_neighbor.html"
+           visual="parsnip.tidymodels.org/reference/nearest_neighbor.html">the
+      <c>parsnip</c> website</url>. In the <c>set_engine</c>
+      <idx><h>tidymodels</h><h>engine</h></idx>
+      argument, we specify which package or system will be used for training the model.
+      Here <c>kknn</c> is the R package we will use for performing K-nearest neighbors
+      classification. Finally, we specify that this is a classification problem with
+      the <c>set_mode</c> function.
+    </p>
+    <program language="r">
+      <input>
+knn_spec &lt;- nearest_neighbor(weight_func = "rectangular", neighbors = 5) |>
+  set_engine("kknn") |>
+  set_mode("classification")
+knn_spec
+      </input>
+    </program>
+    <pre>
+K-Nearest Neighbor Model Specification (classification)
+
+Main Arguments:
+  neighbors = 5
+  weight_func = rectangular
+
+Computational engine: kknn
+    </pre>
+    <p>
+      In order to fit the model on the breast cancer data, we need to pass the model
+      specification and the data set to the <c>fit</c> function. We also need to
+      specify what variables to use as predictors and what variable to use as the
+      response. Below, the <c>Class ~ Perimeter + Concavity</c> argument specifies
+      that <c>Class</c> is the response variable (the one we want to predict), and
+      both <c>Perimeter</c> and <c>Concavity</c> are to be used as the predictors.
+    </p>
+    <program language="r">
+      <input>
+knn_fit &lt;- knn_spec |>
+  fit(Class ~ Perimeter + Concavity, data = cancer_train)
+      </input>
+    </program>
+    <p>
+      We can also use a convenient shorthand syntax using a period,
+      <c>Class ~ .</c>,
+      <idx><h>tidymodels</h><h>model formula</h></idx>
+      to indicate that we want to use every variable <em>except</em> <c>Class</c> as
+      a predictor in the model. In this particular setup, since <c>Concavity</c> and
+      <c>Perimeter</c> are the only two predictors in the <c>cancer_train</c> data
+      frame, <c>Class ~ Perimeter + Concavity</c> and <c>Class ~ .</c> are equivalent.
+      In general, you can choose individual predictors using the <c>+</c> symbol, or
+      you can specify to use <em>all</em> predictors using the <c>.</c> symbol.
+    </p>
+    <program language="r">
+      <input>
+knn_fit &lt;- knn_spec |>
+  fit(Class ~ ., data = cancer_train)
+knn_fit
+      </input>
+    </program>
+    <pre>
+== Workflow [trained] ====================================
+Preprocessor: Formula
+Model: nearest_neighbor()
+
+-- Preprocessor ------------------------------------------
+Class ~ .
+
+-- Model -------------------------------------------------
+Call:
+kknn::train.kknn(formula = Class ~ ., data = data, ks = min_rows(5, data, 5), …)
+
+Type of response variable: nominal
+Minimal misclassification: 0.09139
+Best kernel: rectangular
+Best k: 5
+    </pre>
+    <p>
+      Here you can see the final trained model summary. It confirms that the
+      computational engine used to train the model was <c>kknn::train.kknn</c>. It
+      also shows the fraction of errors made by the K-nearest neighbors model, but we
+      will ignore this for now and discuss it in more detail in the next chapter.
+      Finally, it shows (somewhat confusingly) that the &#x201C;best&#x201D; weight
+      function was &#x201C;rectangular&#x201D; and &#x201C;best&#x201D; setting of
+      <m>K</m> was 5; but since we specified these earlier, R is just repeating those
+      settings to us here. In the next chapter, we will actually let R find the value
+      of <m>K</m> for us.
+    </p>
+    <p>
+      Finally, we make the prediction on the new observation by calling the
+      <c>predict</c>
+      <idx><h>tidymodels</h><h>predict</h></idx>
+      function, passing both the fit object we just created and the new observation
+      itself. As above, when we ran the K-nearest neighbors classification algorithm
+      manually, the <c>knn_fit</c> object classifies the new observation as malignant.
+      Note that the <c>predict</c> function outputs a data frame with a single variable
+      named <c>.pred_class</c>.
+    </p>
+    <program language="r">
+      <input>
+new_obs &lt;- tibble(Perimeter = 0, Concavity = 3.5)
+predict(knn_fit, new_obs)
+      </input>
+    </program>
+    <pre>
+# A tibble: 1 × 1
+  .pred_class
+  &lt;fct&gt;
+1 Malignant
+    </pre>
+    <p>
+      Is this predicted malignant label the actual class for this observation? Well,
+      we don't know because we do not have this observation's
+      diagnosis&#x2014;that is what we were trying to predict! The classifier's
+      prediction is not necessarily correct, but in the next chapter, we will learn
+      ways to quantify how accurate we think our predictions are.
+    </p>
+  </section>
+
+  <section xml:id="sec-classif1-preprocessing">
+    <title>Data preprocessing with <c>tidymodels</c></title>
+
+    <subsection xml:id="subsec-classif1-centering">
+      <title>Centering and scaling</title>
+      <p>
+        When using K-nearest neighbors classification, the <em>scale</em>
+        <idx><h>scaling</h></idx>
+        of each variable (i.e., its size and range of values) matters. Since the
+        classifier predicts classes by identifying observations nearest to it, any
+        variables with a large scale will have a much larger effect than variables
+        with a small scale. But just because a variable has a large scale
+        <em>doesn't mean</em> that it is more important for making accurate
+        predictions. For example, suppose you have a data set with two features, salary
+        (in dollars) and years of education, and you want to predict the corresponding
+        type of job. When we compute the neighbor distances, a difference of $1000 is
+        huge compared to a difference of 10 years of education. But for our conceptual
+        understanding and answering of the problem, it's the opposite; 10 years of
+        education is huge compared to a difference of $1000 in yearly salary!
+      </p>
+      <p>
+        In many other predictive models, the <em>center</em> of each variable (e.g.,
+        its mean) matters as well. For example, if we had a data set with a temperature
+        variable measured in degrees Kelvin, and the same data set with temperature
+        measured in degrees Celsius, the two variables would differ by a constant shift
+        of 273 (even though they contain exactly the same information). Likewise, in
+        our hypothetical job classification example, we would likely see that the
+        center of the salary variable is in the tens of thousands, while the center of
+        the years of education variable is in the single digits. Although this doesn't
+        affect the K-nearest neighbors classification algorithm, this large shift can
+        change the outcome of using many other predictive models.
+        <idx><h>centering</h></idx>
+      </p>
+      <p>
+        To scale and center our data, we need to find our variables'
+        <em>mean</em> (the average, which quantifies the &#x201C;central&#x201D; value
+        of a set of numbers) and <em>standard deviation</em> (a number quantifying how
+        spread out values are). For each observed value of the variable, we subtract
+        the mean (i.e., center the variable) and divide by the standard deviation
+        (i.e., scale the variable). When we do this, the data is said to be
+        <em>standardized</em>,
+        <idx><h>standardization</h><h>K-nearest neighbors</h></idx>
+        and all variables in a data set will have a mean of 0 and a standard
+        deviation of 1. To illustrate the effect that standardization can have on the
+        K-nearest neighbors algorithm, we will read in the original, unstandardized
+        Wisconsin breast cancer data set; we have been using a standardized version of
+        the data set up until now. As before, we will convert the <c>Class</c>
+        variable to the factor type and rename the values to &#x201C;Malignant&#x201D;
+        and &#x201C;Benign&#x201D;. To keep things simple, we will just use the
+        <c>Area</c>, <c>Smoothness</c>, and <c>Class</c> variables:
+      </p>
+      <program language="r">
+        <input>
+unscaled_cancer &lt;- read_csv("data/wdbc_unscaled.csv") |>
+  mutate(Class = as_factor(Class)) |>
+  mutate(Class = fct_recode(Class, "Benign" = "B", "Malignant" = "M")) |>
+  select(Class, Area, Smoothness)
+unscaled_cancer
+        </input>
+      </program>
+      <pre>
+# A tibble: 569 × 3
+   Class     Area Smoothness
+   &lt;fct&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+ 1 Malignant 1001.      0.118
+ 2 Malignant 1326.      0.0847
+ 3 Malignant  700.      0.110
+ # … with 566 more rows
+      </pre>
+      <p>
+        Looking at the unscaled and uncentered data above, you can see that the
+        differences between the values for area measurements are much larger than those
+        for smoothness. Will this affect predictions? In order to find out, we will
+        create a scatter plot of these two predictors (colored by diagnosis) for both
+        the unstandardized data we just loaded, and the standardized version of that
+        same data. But first, we need to standardize the <c>unscaled_cancer</c> data
+        set with <c>tidymodels</c>.
+      </p>
+      <p>
+        In the <c>tidymodels</c> framework, all data preprocessing happens using a
+        <c>recipe</c> from
+        <url href="https://recipes.tidymodels.org/" visual="recipes.tidymodels.org/">the
+        <c>recipes</c> R package</url> <xref ref="recipes"/>.
+        Here we will initialize a recipe
+        <idx><h>recipe</h></idx>
+        <idx><h>tidymodels</h><h>recipe</h><see>recipe</see></idx>
+        for the <c>unscaled_cancer</c> data above, specifying that the <c>Class</c>
+        variable is the response, and all other variables are predictors:
+      </p>
+      <program language="r">
+        <input>
+uc_recipe &lt;- recipe(Class ~ ., data = unscaled_cancer)
+uc_recipe
+        </input>
+      </program>
+      <pre>
+── Recipe ──────────────────────────────────────────────────────────────────────
+── Inputs
+ outcomes:  Class
+ predictors:  Area, Smoothness
+      </pre>
+      <p>
+        So far, there is not much in the recipe; just a statement about the number of
+        response variables and predictors. Let's add scaling
+        (<c>step_scale</c>)
+        <idx><h>recipe</h><h>step_scale</h></idx>
+        and centering (<c>step_center</c>)
+        <idx><h>recipe</h><h>step_center</h></idx>
+        steps for all of the predictors so that they each have a mean of 0 and
+        standard deviation of 1. Note that <c>tidyverse</c> actually provides
+        <c>step_normalize</c>, which does both centering and scaling in a single recipe
+        step; in this book we will keep <c>step_scale</c> and <c>step_center</c>
+        separate to emphasize conceptually that there are two steps happening. The
+        <c>prep</c> function finalizes the recipe by using the data (here,
+        <c>unscaled_cancer</c>) to compute anything necessary to run the recipe (in
+        this case, the column means and standard deviations):
+        <idx><h>tidymodels</h><h>prep</h></idx>
+        <idx><h>prep</h><see>tidymodels</see></idx>
+      </p>
+      <program language="r">
+        <input>
+uc_recipe &lt;- uc_recipe |>
+  step_scale(all_predictors()) |>
+  step_center(all_predictors()) |>
+  prep()
+uc_recipe
+        </input>
+      </program>
+      <pre>
+── Recipe ──────────────────────────────────────────────────────────────────────
+── Inputs
+ outcomes:  Class
+ predictors:  Area, Smoothness
+
+── Training information
+Training data contained 569 data points and no incomplete rows.
+
+── Operations
+• Scaling for: Area, Smoothness | Trained
+• Centering for: Area, Smoothness | Trained
+      </pre>
+      <p>
+        You can now see that the recipe includes a scaling and centering step for all
+        predictor variables. Note that when you add a step to a recipe, you must
+        specify what columns to apply the step to. Here we used the
+        <c>all_predictors()</c>
+        <idx><h>recipe</h><h>all_predictors</h></idx>
+        function to specify that each step should be applied to all predictor
+        variables. However, there are a number of different arguments one could use
+        here, as well as naming particular columns with the same syntax as the
+        <c>select</c> function. For example:
+      </p>
+      <ul>
+        <li><p><c>all_nominal()</c> and <c>all_numeric()</c>: specify all categorical
+          or all numeric variables</p></li>
+        <li><p><c>all_predictors()</c> and <c>all_outcomes()</c>: specify all
+          predictor or all response variables</p></li>
+        <li><p><c>Area, Smoothness</c>: specify both the <c>Area</c> and
+          <c>Smoothness</c> variable</p></li>
+        <li><p><c>-Class</c>: specify everything except the <c>Class</c>
+          variable</p></li>
+      </ul>
+      <p>
+        You can find a full set of all the steps and variable selection functions on
+        the
+        <url href="https://recipes.tidymodels.org/reference/index.html"
+             visual="recipes.tidymodels.org/reference/index.html"><c>recipes</c>
+        reference page</url>.
+      </p>
+      <p>
+        At this point, we have calculated the required statistics based on the data
+        input into the recipe, but the data are not yet scaled and centered. To
+        actually scale and center the data, we need to apply the <c>bake</c>
+        <idx><h>tidymodels</h><h>bake</h></idx>
+        <idx><h>bake</h><see>tidymodels</see></idx>
+        function to the unscaled data.
+      </p>
+      <program language="r">
+        <input>
+scaled_cancer &lt;- bake(uc_recipe, unscaled_cancer)
+scaled_cancer
+        </input>
+      </program>
+      <pre>
+# A tibble: 569 × 3
+   Class     Area Smoothness
+   &lt;fct&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+ 1 Malignant 1.00      0.673
+ 2 Malignant 2.49     -1.03
+ 3 Malignant 0.0890    0.190
+ # … with 566 more rows
+      </pre>
+      <p>
+        It may seem redundant that we had to both <c>bake</c> <em>and</em> <c>prep</c>
+        to scale and center the data. However, we do this in two steps so we can
+        specify a different data set in the <c>bake</c> step if we want. For example,
+        we may want to specify new data that were not part of the training set.
+      </p>
+      <p>
+        You may wonder why we are doing so much work just to center and scale our
+        variables. Can't we just manually scale and center the <c>Area</c> and
+        <c>Smoothness</c> variables ourselves before building our K-nearest neighbors
+        model? Well, technically <em>yes</em>; but doing so is error-prone. In
+        particular, we might accidentally forget to apply the same centering/scaling
+        when making predictions, or accidentally apply a <em>different</em>
+        centering/scaling than what we used while training. Proper use of a
+        <c>recipe</c> helps keep our code simple, readable, and error-free.
+        Furthermore, note that using <c>prep</c> and <c>bake</c> is required only when
+        you want to inspect the result of the preprocessing steps yourself. You will
+        see further on in <xref ref="sec-classif1-workflow"/> that <c>tidymodels</c>
+        provides tools to automatically apply <c>prep</c> and <c>bake</c> as necessary
+        without additional coding effort.
+      </p>
+      <p>
+        <xref ref="fig-classif1-scaling"/> shows the two scatter plots
+        side-by-side&#x2014;one for <c>unscaled_cancer</c> and one for
+        <c>scaled_cancer</c>. Each has the same new observation annotated with its
+        <m>K=3</m> nearest neighbors. In the original unstandardized data plot, you
+        can see some odd choices for the three nearest neighbors. In particular, the
+        &#x201C;neighbors&#x201D; are visually well within the cloud of benign
+        observations, and the neighbors are all nearly vertically aligned with the new
+        observation (which is why it looks like there is only one black line on this
+        plot). <xref ref="fig-classif1-scaling-zoomed"/> shows a close-up of that
+        region on the unstandardized plot. Here the computation of nearest neighbors
+        is dominated by the much larger-scale area variable. The plot for standardized
+        data on the right in <xref ref="fig-classif1-scaling"/> shows a much more
+        intuitively reasonable selection of nearest neighbors. Thus, standardizing the
+        data can change things in an important way when we are using predictive
+        algorithms. Standardizing your data should be a part of the preprocessing you
+        do before predictive modeling and you should always think carefully about your
+        problem domain and whether you need to standardize your data.
+      </p>
+      <figure xml:id="fig-classif1-scaling">
+        <caption>Comparison of <m>K = 3</m> nearest neighbors with unstandardized
+          and standardized data.</caption>
+        <image source="images/classification1/cancer-scaling-comparison.png"
+               width="90%"/>
+      </figure>
+      <figure xml:id="fig-classif1-scaling-zoomed">
+        <caption>Close-up of three nearest neighbors for unstandardized
+          data.</caption>
+        <image source="images/classification1/cancer-scaling-zoomed.png" width="90%"/>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-classif1-balancing">
+      <title>Balancing</title>
+      <p>
+        Another potential issue in a data set for a classifier is <em>class
+        imbalance</em>,
+        <idx><h>balance</h></idx>
+        <idx><h>imbalance</h></idx>
+        i.e., when one label is much more common than another. Since classifiers like
+        the K-nearest neighbors algorithm use the labels of nearby points to predict
+        the label of a new point, if there are many more data points with one label
+        overall, the algorithm is more likely to pick that label in general (even if
+        the &#x201C;pattern&#x201D; of data suggests otherwise). Class imbalance is
+        actually quite a common and important problem: from rare disease diagnosis to
+        malicious email detection, there are many cases in which the
+        &#x201C;important&#x201D; class to identify (presence of disease, malicious
+        email) is much rarer than the &#x201C;unimportant&#x201D; class (no disease,
+        normal email).
+      </p>
+      <p>
+        To better illustrate the problem, let's revisit the scaled breast cancer data,
+        <c>cancer</c>; except now we will remove many of the observations of malignant
+        tumors, simulating what the data would look like if the cancer was rare. We
+        will do this by picking only 3 observations from the malignant group, and
+        keeping all of the benign observations. We choose these 3 observations using
+        the <c>slice_head</c> function, which takes two arguments: a data frame-like
+        object, and the number of rows to select from the top (<c>n</c>). We will use
+        the <c>bind_rows</c> function to glue the two resulting filtered data frames
+        back together, and name the result <c>rare_cancer</c>. The new imbalanced data
+        is shown in <xref ref="fig-classif1-imbalanced"/>.
+      </p>
+      <program language="r">
+        <input>
+rare_cancer &lt;- bind_rows(
+      filter(cancer, Class == "Benign"),
+      cancer |> filter(Class == "Malignant") |> slice_head(n = 3)
+    ) |>
+    select(Class, Perimeter, Concavity)
+
+rare_plot &lt;- rare_cancer |>
+  ggplot(aes(x = Perimeter, y = Concavity, color = Class)) +
+  geom_point(alpha = 0.5) +
+  labs(x = "Perimeter (standardized)",
+       y = "Concavity (standardized)",
+       color = "Diagnosis") +
+  scale_color_manual(values = c("darkorange", "steelblue")) +
+  theme(text = element_text(size = 12))
+
+rare_plot
+        </input>
+      </program>
+      <figure xml:id="fig-classif1-imbalanced">
+        <caption>Imbalanced data.</caption>
+        <image source="images/classification1/cancer-imbalanced.png" width="70%"/>
+      </figure>
+      <p>
+        Suppose we now decided to use <m>K = 7</m> in K-nearest neighbors
+        classification. With only 3 observations of malignant tumors, the classifier
+        will <em>always predict that the tumor is benign, no matter what its concavity
+        and perimeter are!</em> This is because in a majority vote of 7 observations,
+        at most 3 will be malignant (we only have 3 total malignant observations), so
+        at least 4 must be benign, and the benign vote will always win. For example,
+        <xref ref="fig-classif1-imbalanced-7nn"/> shows what happens for a new tumor
+        observation that is quite close to three observations in the training data that
+        were tagged as malignant.
+      </p>
+      <figure xml:id="fig-classif1-imbalanced-7nn">
+        <caption>Imbalanced data with 7 nearest neighbors to a new observation
+          highlighted.</caption>
+        <image source="images/classification1/cancer-imbalanced-7nn.png" width="70%"/>
+      </figure>
+      <p>
+        <xref ref="fig-classif1-imbalanced-boundary"/> shows what happens if we set
+        the background color of each area of the plot to the prediction the K-nearest
+        neighbors classifier would make for a new observation at that location. We can
+        see that the decision is always &#x201C;benign,&#x201D; corresponding to the
+        blue color.
+      </p>
+      <figure xml:id="fig-classif1-imbalanced-boundary">
+        <caption>Imbalanced data with background color indicating the decision of the
+          classifier and the points represent the labeled data.</caption>
+        <image source="images/classification1/cancer-imbalanced-boundary.png"
+               width="70%"/>
+      </figure>
+      <p>
+        Despite the simplicity of the problem, solving it in a statistically sound
+        manner is actually fairly nuanced, and a careful treatment would require a lot
+        more detail and mathematics than we will cover in this textbook. For the
+        present purposes, it will suffice to rebalance the data by <em>oversampling</em>
+        the rare class.
+        <idx><h>oversampling</h></idx>
+        In other words, we will replicate rare observations multiple times in our data
+        set to give them more voting power in the K-nearest neighbors algorithm. In
+        order to do this, we will add an oversampling step to the earlier
+        <c>uc_recipe</c> recipe with the <c>step_upsample</c> function from the
+        <c>themis</c> R package.
+        <idx><h>recipe</h><h>step_upsample</h></idx>
+        We show below how to do this, and also use the <c>group_by</c> and
+        <c>summarize</c> functions to see that our classes are now balanced:
+      </p>
+      <program language="r">
+        <input>
+library(themis)
+
+ups_recipe &lt;- recipe(Class ~ ., data = rare_cancer) |>
+  step_upsample(Class, over_ratio = 1, skip = FALSE) |>
+  prep()
+
+ups_recipe
+        </input>
+      </program>
+      <pre>
+── Recipe ──────────────────────────────────────────────────────────────────────
+── Inputs
+ outcomes:  Class
+ predictors:  Perimeter, Concavity
+
+── Training information
+Training data contained 360 data points and no incomplete rows.
+
+── Operations
+• Up-sampling based on: Class | Trained
+      </pre>
+      <program language="r">
+        <input>
+upsampled_cancer &lt;- bake(ups_recipe, rare_cancer)
+
+upsampled_cancer |>
+  group_by(Class) |>
+  summarize(n = n())
+        </input>
+      </program>
+      <pre>
+# A tibble: 2 × 2
+  Class         n
+  &lt;fct&gt;     &lt;int&gt;
+1 Malignant   357
+2 Benign      357
+      </pre>
+      <p>
+        Now suppose we train our K-nearest neighbors classifier with <m>K=7</m> on
+        this <em>balanced</em> data. <xref ref="fig-classif1-upsampled"/> shows what
+        happens now when we set the background color of each area of our scatter plot
+        to the decision the K-nearest neighbors classifier would make. We can see that
+        the decision is more reasonable; when the points are close to those labeled
+        malignant, the classifier predicts a malignant tumor, and vice versa when they
+        are closer to the benign tumor observations.
+      </p>
+      <figure xml:id="fig-classif1-upsampled">
+        <caption>Upsampled data with background color indicating the decision of the
+          classifier.</caption>
+        <image source="images/classification1/cancer-upsampled-boundary.png"
+               width="70%"/>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-classif1-missing">
+      <title>Missing data</title>
+      <p>
+        One of the most common issues in real data sets in the wild is <em>missing
+        data</em>,
+        <idx><h>missing data</h></idx>
+        i.e., observations where the values of some of the variables were not
+        recorded. Unfortunately, as common as it is, handling missing data properly is
+        very challenging and generally relies on expert knowledge about the data,
+        setting, and how the data were collected. One typical challenge with missing
+        data is that missing entries can be <em>informative</em>: the very fact that
+        entries were missing is related to the values of other variables. For example,
+        survey participants from a marginalized group of people may be less likely to
+        respond to certain kinds of questions if they fear that answering honestly will
+        come with negative consequences. In that case, if we were to simply throw away
+        data with missing entries, we would bias the conclusions of the survey by
+        inadvertently removing many members of that group of respondents. So ignoring
+        this issue in real problems can easily lead to misleading analyses, with
+        detrimental impacts. In this book, we will cover only those techniques for
+        dealing with missing entries in situations where missing entries are just
+        &#x201C;randomly missing&#x201D;, i.e., where the fact that certain entries
+        are missing <em>isn't related to anything else</em> about the observation.
+      </p>
+      <p>
+        Let's load and examine a modified subset of the tumor image data that has a
+        few missing entries:
+      </p>
+      <program language="r">
+        <input>
+missing_cancer &lt;- read_csv("data/wdbc_missing.csv") |>
+  select(Class, Radius, Texture, Perimeter) |>
+  mutate(Class = as_factor(Class)) |>
+  mutate(Class = fct_recode(Class, "Malignant" = "M", "Benign" = "B"))
+missing_cancer
+        </input>
+      </program>
+      <pre>
+# A tibble: 569 × 4
+   Class     Radius Texture Perimeter
+   &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+ 1 Malignant  1.10   -2.07      1.27
+ 2 Malignant  1.83   NA         1.69
+ 3 Malignant  1.58    0.456     1.57
+ # … with 566 more rows
+      </pre>
+      <p>
+        Recall that K-nearest neighbors classification makes predictions by computing
+        the straight-line distance to nearby training observations, and hence requires
+        access to the values of <em>all</em> variables for <em>all</em> observations
+        in the training data. So how can we perform K-nearest neighbors classification
+        in the presence of missing data? Well, since there are not too many
+        observations with missing entries, one option is to simply remove those
+        observations prior to building the K-nearest neighbors classifier. We can
+        accomplish this by using the <c>drop_na</c> function from <c>tidyverse</c>
+        prior to working with the data.
+        <idx><h>missing data</h><h>drop_na</h></idx>
+      </p>
+      <program language="r">
+        <input>
+no_missing_cancer &lt;- missing_cancer |> drop_na()
+no_missing_cancer
+        </input>
+      </program>
+      <pre>
+# A tibble: 546 × 4
+   Class     Radius Texture Perimeter
+   &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+ 1 Malignant  1.10   -2.07      1.27
+ 2 Malignant  1.58    0.456     1.57
+ 3 Malignant -0.769   0.254    -0.592
+ # … with 543 more rows
+      </pre>
+      <p>
+        However, this strategy will not work when many of the rows have missing
+        entries, as we may end up throwing away too much data. In this case, another
+        possible approach is to <em>impute</em> the missing entries, i.e., fill in
+        synthetic values based on the other observations in the data set. One
+        reasonable choice is to perform <em>mean imputation</em>, where missing
+        entries are filled in using the mean of the present entries in each variable.
+        To perform mean imputation, we add the <c>step_impute_mean</c>
+        <idx><h>recipe</h><h>step_impute_mean</h></idx>
+        <idx><h>missing data</h><h>mean imputation</h></idx>
+        step to the <c>tidymodels</c> preprocessing recipe.
+      </p>
+      <program language="r">
+        <input>
+impute_missing_recipe &lt;- recipe(Class ~ ., data = missing_cancer) |>
+  step_impute_mean(all_predictors()) |>
+  prep()
+impute_missing_recipe
+        </input>
+      </program>
+      <pre>
+── Recipe ──────────────────────────────────────────────────────────────────────
+── Inputs
+ outcomes:  Class
+ predictors:  Radius, Texture, Perimeter
+
+── Training information
+Training data contained 569 data points and 23 incomplete rows.
+
+── Operations
+• Mean imputation for: Radius, Texture, Perimeter | Trained
+      </pre>
+      <p>
+        To visualize what mean imputation does, let's just apply the recipe directly
+        to the <c>missing_cancer</c> data frame using the <c>bake</c> function. The
+        imputation step fills in the missing entries with the mean values of their
+        corresponding variables.
+      </p>
+      <program language="r">
+        <input>
+imputed_cancer &lt;- bake(impute_missing_recipe, missing_cancer)
+imputed_cancer
+        </input>
+      </program>
+      <pre>
+# A tibble: 569 × 4
+   Class     Radius Texture Perimeter
+   &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+ 1 Malignant  1.10  -2.07       1.27
+ 2 Malignant  1.83   0.000105   1.69
+ 3 Malignant  1.58   0.456      1.57
+ # … with 566 more rows
+      </pre>
+      <p>
+        Many other options for missing data imputation can be found in
+        <url href="https://recipes.tidymodels.org/reference/index.html"
+             visual="recipes.tidymodels.org/reference/index.html">the <c>recipes</c>
+        documentation</url>. However you decide to handle missing data in your data
+        analysis, it is always crucial to think critically about the setting, how the
+        data were collected, and the question you are answering.
+      </p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-classif1-workflow">
+    <title>Putting it together in a <c>workflow</c></title>
+    <p>
+      The <c>tidymodels</c> package collection also provides the <c>workflow</c>, a
+      way to chain
+      <idx><h>tidymodels</h><h>workflow</h></idx>
+      <idx><h>workflow</h><see>tidymodels</see></idx>
+      together multiple data analysis steps without a lot of otherwise necessary code
+      for intermediate steps. To illustrate the whole pipeline, let's start from
+      scratch with the <c>wdbc_unscaled.csv</c> data. First we will load the data,
+      create a model, and specify a recipe for how the data should be preprocessed:
+    </p>
+    <program language="r">
+      <input>
+# load the unscaled cancer data
+# and make sure the response variable, Class, is a factor
+unscaled_cancer &lt;- read_csv("data/wdbc_unscaled.csv") |>
+  mutate(Class = as_factor(Class)) |>
+  mutate(Class = fct_recode(Class, "Malignant" = "M", "Benign" = "B"))
+
+# create the K-NN model
+knn_spec &lt;- nearest_neighbor(weight_func = "rectangular", neighbors = 7) |>
+  set_engine("kknn") |>
+  set_mode("classification")
+
+# create the centering / scaling recipe
+uc_recipe &lt;- recipe(Class ~ Area + Smoothness, data = unscaled_cancer) |>
+  step_scale(all_predictors()) |>
+  step_center(all_predictors())
+      </input>
+    </program>
+    <p>
+      Note that each of these steps is exactly the same as earlier, except for one
+      major difference: we did not use the <c>select</c> function to extract the
+      relevant variables from the data frame, and instead simply specified the
+      relevant variables to use via the formula <c>Class ~ Area + Smoothness</c>
+      (instead of <c>Class ~ .</c>) in the recipe. You will also notice that we did
+      not call <c>prep()</c> on the recipe; this is unnecessary when it is placed in
+      a workflow.
+    </p>
+    <p>
+      We will now place these steps in a <c>workflow</c> using the <c>add_recipe</c>
+      and <c>add_model</c> functions,
+      <idx><h>tidymodels</h><h>add_recipe</h></idx>
+      <idx><h>tidymodels</h><h>add_model</h></idx>
+      and finally we will use the <c>fit</c> function to run the whole workflow on the
+      <c>unscaled_cancer</c> data. Note another difference from earlier here: we do
+      not include a formula in the <c>fit</c> function.
+      <idx><h>tidymodels</h><h>fit</h></idx>
+      This is again because we included the formula in the recipe, so there is no
+      need to respecify it:
+    </p>
+    <program language="r">
+      <input>
+knn_fit &lt;- workflow() |>
+  add_recipe(uc_recipe) |>
+  add_model(knn_spec) |>
+  fit(data = unscaled_cancer)
+
+knn_fit
+      </input>
+    </program>
+    <pre>
+== Workflow [trained] ====================================
+Preprocessor: Recipe
+Model: nearest_neighbor()
+
+-- Preprocessor ------------------------------------------
+2 Recipe Steps
+
+* step_scale()
+* step_center()
+
+-- Model -------------------------------------------------
+Call:
+kknn::train.kknn(formula = ..y ~ ., data = data, ks = min_rows(7, data, 5), …)
+
+Type of response variable: nominal
+Minimal misclassification: 0.0861
+Best kernel: rectangular
+Best k: 7
+    </pre>
+    <p>
+      As before, the fit object lists the function that trains the model as well as
+      the &#x201C;best&#x201D; settings for the number of neighbors and weight
+      function (for now, these are just the values we chose manually when we created
+      <c>knn_spec</c> above). But now the fit object also includes information about
+      the overall workflow, including the centering and scaling preprocessing steps.
+      In other words, when we use the <c>predict</c> function with the <c>knn_fit</c>
+      object to make a prediction for a new observation, it will first apply the same
+      recipe steps to the new observation. As an example, we will predict the class
+      label of two new observations: one with <c>Area = 500</c> and
+      <c>Smoothness = 0.075</c>, and one with <c>Area = 1500</c> and
+      <c>Smoothness = 0.1</c>.
+    </p>
+    <program language="r">
+      <input>
+new_observation &lt;- tibble(Area = c(500, 1500), Smoothness = c(0.075, 0.1))
+prediction &lt;- predict(knn_fit, new_observation)
+
+prediction
+      </input>
+    </program>
+    <pre>
+# A tibble: 2 × 1
+  .pred_class
+  &lt;fct&gt;
+1 Benign
+2 Malignant
+    </pre>
+    <p>
+      The classifier predicts that the first observation is benign, while the second
+      is malignant. <xref ref="fig-classif1-workflow"/> visualizes the predictions
+      that this trained K-nearest neighbors model will make on a large range of new
+      observations. Although you have seen colored prediction map visualizations like
+      this a few times now, we have not included the code to generate them, as it is a
+      little bit complicated. For the interested reader who wants a learning challenge,
+      we now include it below. The basic idea is to create a grid of synthetic new
+      observations using the <c>expand.grid</c> function, predict the label of each,
+      and visualize the predictions with a colored scatter having a very high
+      transparency (low <c>alpha</c> value) and large point radius. See if you can
+      figure out what each line is doing!
+    </p>
+    <note>
+      <p>Understanding this code is not required for the remainder of the textbook. It
+      is included for those readers who would like to use similar visualizations in
+      their own data analyses.</p>
+    </note>
+    <program language="r">
+      <input>
+# create the grid of area/smoothness vals, and arrange in a data frame
+are_grid &lt;- seq(min(unscaled_cancer$Area),
+                max(unscaled_cancer$Area),
+                length.out = 100)
+smo_grid &lt;- seq(min(unscaled_cancer$Smoothness),
+                max(unscaled_cancer$Smoothness),
+                length.out = 100)
+asgrid &lt;- as_tibble(expand.grid(Area = are_grid,
+                                Smoothness = smo_grid))
+
+# use the fit workflow to make predictions at the grid points
+knnPredGrid &lt;- predict(knn_fit, asgrid)
+
+# bind the predictions as a new column with the grid points
+prediction_table &lt;- bind_cols(knnPredGrid, asgrid) |>
+  rename(Class = .pred_class)
+
+# plot:
+# 1. the colored scatter of the original data
+# 2. the faded colored scatter for the grid points
+wkflw_plot &lt;-
+  ggplot() +
+  geom_point(data = unscaled_cancer,
+             mapping = aes(x = Area,
+                           y = Smoothness,
+                           color = Class),
+             alpha = 0.75) +
+  geom_point(data = prediction_table,
+             mapping = aes(x = Area,
+                           y = Smoothness,
+                           color = Class),
+             alpha = 0.02,
+             size = 5) +
+  labs(color = "Diagnosis",
+       x = "Area",
+       y = "Smoothness") +
+  scale_color_manual(values = c("darkorange", "steelblue")) +
+  theme(text = element_text(size = 12))
+
+wkflw_plot
+      </input>
+    </program>
+    <figure xml:id="fig-classif1-workflow">
+      <caption>Scatter plot of smoothness versus area where background color
+        indicates the decision of the classifier.</caption>
+      <image source="images/classification1/cancer-workflow-map.png" width="70%"/>
+    </figure>
+  </section>
+
+  <section xml:id="sec-classif1-exercises">
+    <title>Exercises</title>
+    <p>
+      Practice exercises for the material covered in this chapter can be found in the
+      accompanying
+      <url href="https://worksheets.datasciencebook.ca"
+           visual="worksheets.datasciencebook.ca">worksheets repository</url>
+      in the &#x201C;Classification I: training and predicting&#x201D; row. You can
+      launch an interactive version of the worksheet in your browser by clicking the
+      &#x201C;launch binder&#x201D; button. You can also preview a non-interactive
+      version of the worksheet by clicking &#x201C;view worksheet.&#x201D; If you
+      instead decide to download the worksheet and run it on your own machine, make
+      sure to follow the instructions for computer setup found in
+      <xref ref="ch-setup"/>. This will ensure that the automated feedback and
+      guidance that the worksheets provide will function as intended.
+    </p>
+  </section>
 
 </chapter>

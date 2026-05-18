@@ -245,6 +245,47 @@
       <url href="https://clauswilke.com/dataviz/" visual="clauswilke.com/dataviz/"/>
     </biblio>
 
+    <!-- References added for Chapter 5: Classification I -->
+
+    <biblio type="raw" xml:id="knnfix">
+      Fix, E. and Hodges, J. L. (1951).
+      Discriminatory analysis&#x2014;nonparametric discrimination: consistency
+      properties.
+      <em>USAF School of Aviation Medicine</em>, 4(3), 477&#x2013;496.
+    </biblio>
+
+    <biblio type="raw" xml:id="knncover">
+      Cover, T. and Hart, P. (1967).
+      Nearest neighbor pattern classification.
+      <em>IEEE Transactions on Information Theory</em>, 13(1), 21&#x2013;27.
+    </biblio>
+
+    <biblio type="raw" xml:id="streetbreastcancer">
+      Street, W. N., Wolberg, W. H., and Mangasarian, O. L. (1993).
+      Nuclear feature extraction for breast tumor diagnosis.
+      <em>IS&amp;T/SPIE 1993 International Symposium on Electronic Imaging:
+      Science and Technology</em>, 1905, 861&#x2013;870.
+    </biblio>
+
+    <biblio type="raw" xml:id="stanfordhealthcare">
+      Stanford Health Care. (2021).
+      <em>Tumor: benign vs. malignant</em>.
+      <url href="https://stanfordhealthcare.org/medical-conditions/cancer/cancer/cancer-causes/tumors.html"
+           visual="stanfordhealthcare.org/medical-conditions/cancer/cancer-causes/tumors.html"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="parsnip">
+      Kuhn, M. and Vaughan, D. (2021).
+      <em>parsnip R package</em>.
+      <url href="https://parsnip.tidymodels.org/" visual="parsnip.tidymodels.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="recipes">
+      Kuhn, M. and Wickham, H. (2021).
+      <em>recipes R package</em>.
+      <url href="https://recipes.tidymodels.org/" visual="recipes.tidymodels.org/"/>
+    </biblio>
+
   </references>
   <index>
     <title>Index</title>
