@@ -2,11 +2,1163 @@
 <chapter xml:id="ch-intro" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>R and the Tidyverse</title>
 
-  <introduction>
+  <section xml:id="sec-intro-overview">
+    <title>Overview</title>
     <p>
-      This chapter is a skeleton placeholder for the PreTeXt version of the book.
-      Content will be filled in from the corresponding R Markdown source file.
+      This chapter provides an introduction to data science and the R programming language.
+      The goal here is to get your hands dirty right from the start! We will walk through an
+      entire data analysis, and along the way introduce different types of data analysis
+      question, some fundamental programming concepts in R, and the basics of loading,
+      cleaning, and visualizing data. In the following chapters, we will dig into each of
+      these steps in much more detail; but for now, let&#x2019;s jump in to see how much we
+      can do with data science!
     </p>
-  </introduction>
+  </section>
+
+  <section xml:id="sec-intro-objectives">
+    <title>Chapter learning objectives</title>
+    <p>By the end of the chapter, readers will be able to do the following:</p>
+    <ul>
+      <li><p>Identify the different types of data analysis question and categorize a question
+        into the correct type.</p></li>
+      <li><p>Load the <c>tidyverse</c> package into R.</p></li>
+      <li><p>Read tabular data with <c>read_csv</c>.</p></li>
+      <li><p>Create new variables and objects in R using the assignment symbol.</p></li>
+      <li><p>Create and organize subsets of tabular data using <c>filter</c>, <c>select</c>,
+        <c>arrange</c>, and <c>slice</c>.</p></li>
+      <li><p>Add and modify columns in tabular data using <c>mutate</c>.</p></li>
+      <li><p>Visualize data with a <c>ggplot</c> bar plot.</p></li>
+      <li><p>Use <c>?</c> to access help and documentation tools in R.</p></li>
+    </ul>
+  </section>
+
+  <section xml:id="sec-intro-canadian-languages">
+    <title>Canadian languages data set</title>
+    <p>
+      In this chapter, <idx><h>Canadian languages</h></idx> we will walk through a full
+      analysis of a data set relating to languages spoken at home by Canadian residents
+      (<xref ref="fig-canada-map"/>). Many Indigenous peoples exist in Canada with their own
+      cultures and languages; these languages are often unique to Canada and not spoken
+      anywhere else in the world <xref provisional="statcan2018mothertongue"/>. Sadly,
+      colonization has led to the loss of many of these languages. For instance, generations
+      of children were not allowed to speak their mother tongue (the first language an
+      individual learns in childhood) in Canadian residential schools. Colonizers also renamed
+      places they had &#x201C;discovered&#x201D; <xref provisional="wilson2018"/>. Acts such
+      as these have significantly harmed the continuity of Indigenous languages in Canada, and
+      some languages are considered &#x201C;endangered&#x201D; as few people report speaking
+      them. To learn more, please see <em>Canadian Geographic</em>&#x2019;s article,
+      &#x201C;Mapping Indigenous Languages in Canada&#x201D;
+      <xref provisional="walker2017"/>, <em>They Came for the Children: Canada, Aboriginal
+      peoples, and Residential Schools</em> <xref provisional="children2012"/> and the
+      <em>Truth and Reconciliation Commission of Canada&#x2019;s Calls to Action</em>
+      <xref provisional="calls2015"/>.
+    </p>
+
+    <figure xml:id="fig-canada-map">
+      <caption>Map of Canada.</caption>
+      <image source="images/intro/canada_map.png" width="100%"/>
+    </figure>
+
+    <p>
+      The data set we will study in this chapter is taken from
+      <url href="https://ttimbers.github.io/canlang/" visual="ttimbers.github.io/canlang/">the
+      <c>canlang</c> R data package</url> <xref provisional="timbers2020canlang"/>, which has
+      population language data collected during the 2016 Canadian census
+      <xref provisional="cancensus2016"/>. In this data, there are 214 languages recorded,
+      each having six different properties:
+    </p>
+    <ol>
+      <li><p><c>category</c>: Higher-level language category, describing whether the language
+        is an Official Canadian language, an Aboriginal (i.e., Indigenous) language, or a
+        Non-Official and Non-Aboriginal language.</p></li>
+      <li><p><c>language</c>: The name of the language.</p></li>
+      <li><p><c>mother_tongue</c>: Number of Canadian residents who reported the language as
+        their mother tongue. Mother tongue is generally defined as the language someone was
+        exposed to since birth.</p></li>
+      <li><p><c>most_at_home</c>: Number of Canadian residents who reported the language as
+        being spoken most often at home.</p></li>
+      <li><p><c>most_at_work</c>: Number of Canadian residents who reported the language as
+        being used most often at work.</p></li>
+      <li><p><c>lang_known</c>: Number of Canadian residents who reported knowledge of the
+        language.</p></li>
+    </ol>
+    <p>
+      According to the census, more than 60 Aboriginal languages were reported as being
+      spoken in Canada. Suppose we want to know which are the most common; then we might ask
+      the following question, which we wish to answer using our data:
+    </p>
+    <p>
+      <em>Which ten Aboriginal languages were most often reported in 2016 as mother tongues in
+      Canada, and how many people speak each of them?</em>
+    </p>
+    <note>
+      <p>
+        <idx><h>data science</h><h>good practices</h></idx>
+        Data science cannot be done without a deep understanding of the data and problem
+        domain. In this book, we have simplified the data sets used in our examples to
+        concentrate on methods and fundamental concepts. But in real life, you cannot and
+        should not do data science without a domain expert. Alternatively, it is common to
+        practice data science in your own domain of expertise! Remember that when you work
+        with data, it is essential to think about <em>how</em> the data were collected, which
+        affects the conclusions you can draw. If your data are biased, then your results will
+        be biased!
+      </p>
+    </note>
+  </section>
+
+  <section xml:id="sec-intro-asking-question">
+    <title>Asking a question</title>
+    <p>
+      Every good data analysis begins with a <em>question</em>&#x2014;like the
+      above&#x2014;that you aim to answer using data. As it turns out, there are actually a
+      number of different <em>types</em> of question regarding data: descriptive, exploratory,
+      predictive, inferential, causal, and mechanistic, all of which are defined in
+      <xref ref="tab-questions-table"/>. Carefully formulating a question as early as possible
+      in your analysis&#x2014;and correctly identifying which type of question it
+      is&#x2014;will guide your overall approach to the analysis as well as the selection of
+      appropriate tools.
+      <idx><h>question</h><h>data analysis</h></idx>
+      <idx><h>descriptive question</h><h>definition</h></idx>
+      <idx><h>exploratory question</h><h>definition</h></idx>
+      <idx><h>predictive question</h><h>definition</h></idx>
+      <idx><h>inferential question</h><h>definition</h></idx>
+      <idx><h>causal question</h><h>definition</h></idx>
+      <idx><h>mechanistic question</h><h>definition</h></idx>
+    </p>
+
+    <table xml:id="tab-questions-table">
+      <title>Types of data analysis question
+        <xref provisional="leek2015question"/>
+        <xref provisional="peng2015art"/>.</title>
+      <tabular halign="left" top="minor" bottom="minor" left="minor" right="minor">
+        <col width="20%"/>
+        <col width="45%"/>
+        <col width="35%"/>
+        <row header="yes" bottom="medium">
+          <cell>Question type</cell>
+          <cell>Description</cell>
+          <cell>Example</cell>
+        </row>
+        <row>
+          <cell>Descriptive</cell>
+          <cell>A question that asks about summarized characteristics of a data set without
+            interpretation (i.e., report a fact).</cell>
+          <cell>How many people live in each province and territory in Canada?</cell>
+        </row>
+        <row>
+          <cell>Exploratory</cell>
+          <cell>A question that asks if there are patterns, trends, or relationships within a
+            single data set. Often used to propose hypotheses for future study.</cell>
+          <cell>Does political party voting change with indicators of wealth in a set of data
+            collected on 2,000 people living in Canada?</cell>
+        </row>
+        <row>
+          <cell>Predictive</cell>
+          <cell>A question that asks about predicting measurements or labels for individuals
+            (people or things). The focus is on what things predict some outcome, but not what
+            causes the outcome.</cell>
+          <cell>What political party will someone vote for in the next Canadian election?</cell>
+        </row>
+        <row>
+          <cell>Inferential</cell>
+          <cell>A question that looks for patterns, trends, or relationships in a single data
+            set <alert>and</alert> also asks for quantification of how applicable these
+            findings are to the wider population.</cell>
+          <cell>Does political party voting change with indicators of wealth for all people
+            living in Canada?</cell>
+        </row>
+        <row>
+          <cell>Causal</cell>
+          <cell>A question that asks about whether changing one factor will lead to a change
+            in another factor, on average, in the wider population.</cell>
+          <cell>Does wealth lead to voting for a certain political party in Canadian
+            elections?</cell>
+        </row>
+        <row>
+          <cell>Mechanistic</cell>
+          <cell>A question that asks about the underlying mechanism of the observed patterns,
+            trends, or relationships (i.e., how does it happen?)</cell>
+          <cell>How does wealth lead to voting for a certain political party in Canadian
+            elections?</cell>
+        </row>
+      </tabular>
+    </table>
+
+    <p>
+      In this book, you will learn techniques to answer the first four types of question:
+      descriptive, exploratory, predictive, and inferential; causal and mechanistic questions
+      are beyond the scope of this book. In particular, you will learn how to apply the
+      following analysis tools:
+    </p>
+    <ol>
+      <li>
+        <p>
+          <alert>Summarization:</alert>
+          <idx><h>summarization</h><h>overview</h></idx>
+          computing and reporting aggregated values pertaining to a data set.
+          Summarization is most often used to answer descriptive questions, and can
+          occasionally help with answering exploratory questions. For example, you might use
+          summarization to answer the following question: <em>What is the average race time
+          for runners in this data set?</em> Tools for summarization are covered in detail in
+          <xref ref="ch-reading"/> and <xref ref="ch-wrangling"/>, but appear regularly
+          throughout the text.
+        </p>
+      </li>
+      <li>
+        <p>
+          <alert>Visualization:</alert>
+          <idx><h>visualization</h><h>overview</h></idx>
+          plotting data graphically. Visualization is typically used to answer descriptive
+          and exploratory questions, but plays a critical supporting role in answering all of
+          the types of question in <xref ref="tab-questions-table"/>. For example, you might
+          use visualization to answer the following question: <em>Is there any relationship
+          between race time and age for runners in this data set?</em> This is covered in
+          detail in <xref ref="ch-viz"/>, but again appears regularly throughout the book.
+        </p>
+      </li>
+      <li>
+        <p>
+          <alert>Classification:</alert>
+          <idx><h>classification</h><h>overview</h></idx>
+          predicting a class or category for a new observation. Classification is used to
+          answer predictive questions. For example, you might use classification to answer
+          the following question: <em>Given measurements of a tumor&#x2019;s average cell
+          area and perimeter, is the tumor benign or malignant?</em> Classification is covered
+          in <xref ref="ch-classification1"/> and <xref ref="ch-classification2"/>.
+        </p>
+      </li>
+      <li>
+        <p>
+          <alert>Regression:</alert>
+          <idx><h>regression</h><h>overview</h></idx>
+          predicting a quantitative value for a new observation. Regression is also used to
+          answer predictive questions. For example, you might use regression to answer the
+          following question: <em>What will be the race time for a 20-year-old runner who
+          weighs 50kg?</em> Regression is covered in <xref ref="ch-regression1"/> and
+          <xref ref="ch-regression2"/>.
+        </p>
+      </li>
+      <li>
+        <p>
+          <alert>Clustering:</alert>
+          <idx><h>clustering</h><h>overview</h></idx>
+          finding previously unknown/unlabeled subgroups in a data set. Clustering is often
+          used to answer exploratory questions. For example, you might use clustering to
+          answer the following question: <em>What products are commonly bought together on
+          Amazon?</em> Clustering is covered in <xref ref="ch-clustering"/>.
+        </p>
+      </li>
+      <li>
+        <p>
+          <alert>Estimation:</alert>
+          <idx><h>estimation</h><h>overview</h></idx>
+          taking measurements for a small number of items from a large group and making a
+          good guess for the average or proportion for the large group. Estimation is used to
+          answer inferential questions. For example, you might use estimation to answer the
+          following question: <em>Given a survey of cellphone ownership of 100 Canadians,
+          what proportion of the entire Canadian population own Android phones?</em>
+          Estimation is covered in <xref ref="ch-inference"/>.
+        </p>
+      </li>
+    </ol>
+    <p>
+      Referring to <xref ref="tab-questions-table"/>, our question about Aboriginal languages
+      is an example of a <em>descriptive question</em>: we are summarizing the
+      characteristics of a data set without further interpretation. And referring to the list
+      above, it looks like we should use visualization and perhaps some summarization to
+      answer the question. So in the remainder of this chapter, we will work towards making a
+      visualization that shows us the ten most common Aboriginal languages in Canada and their
+      associated counts, according to the 2016 census.
+    </p>
+  </section>
+
+  <section xml:id="sec-intro-loading">
+    <title>Loading a tabular data set</title>
+    <p>
+      A data set is, at its core essence, a structured collection of numbers and characters.
+      Aside from that, there are really no strict rules; data sets can come in many different
+      forms! Perhaps the most common form of data set that you will find in the wild, however,
+      is <em>tabular data</em>.<idx><h>tabular data</h></idx> Think spreadsheets in Microsoft
+      Excel: tabular data are rectangular-shaped and spreadsheet-like, as shown in
+      <xref ref="fig-spreadsheet-vs-dataframe"/>. In this book, we will focus primarily on
+      tabular data.
+    </p>
+    <p>
+      Since we are using R for data analysis in this book, the first step for us is to load
+      the data into R. When we load tabular data into R, it is represented as a <em>data
+      frame</em> object.<idx><h>data frame</h><h>overview</h></idx>
+      <xref ref="fig-spreadsheet-vs-dataframe"/> shows that an R data frame is very similar
+      to a spreadsheet. We refer to the rows as
+      <idx><h>observation</h></idx> <alert>observations</alert>; these are the individual
+      objects for which we collect data. In
+      <xref ref="fig-spreadsheet-vs-dataframe"/>, the observations are languages. We refer to
+      the columns as <alert>variables</alert>; these are the characteristics of each
+      observation. In <xref ref="fig-spreadsheet-vs-dataframe"/>, the variables are the
+      language&#x2019;s category, its name, the number of mother tongue speakers, etc.
+    </p>
+
+    <figure xml:id="fig-spreadsheet-vs-dataframe">
+      <caption>A spreadsheet versus a data frame in R.</caption>
+      <image source="images/intro/spreadsheet_vs_dataframe.png" width="100%"/>
+    </figure>
+
+    <p>
+      The first kind of data file that we will learn how to load into R as a data frame is
+      the <em>comma-separated values</em> format (<c>.csv</c> for
+      short).<idx><h>comma-separated values</h><see>csv</see></idx><idx><h>csv</h></idx>
+      These files have names ending in <c>.csv</c>, and can be opened and saved using common
+      spreadsheet programs like Microsoft Excel and Google Sheets. For example, the <c>.csv</c>
+      file named <c>can_lang.csv</c> is included with
+      <url href="https://github.com/UBC-DSCI/introduction-to-datascience/tree/master/data"
+           visual="github.com/UBC-DSCI/introduction-to-datascience/tree/master/data">the code
+      for this book</url>. If we were to open this data in a plain text editor (a program
+      like Notepad that just shows text with no formatting), we would see each row on its own
+      line, and each entry in the table separated by a comma:
+    </p>
+
+    <pre>
+category,language,mother_tongue,most_at_home,most_at_work,lang_known
+Aboriginal languages,"Aboriginal languages, n.o.s.",590,235,30,665
+Non-Official &amp; Non-Aboriginal languages,Afrikaans,10260,4785,85,23415
+Non-Official &amp; Non-Aboriginal languages,"Afro-Asiatic languages, n.i.e.",1150,445,10,2775
+Non-Official &amp; Non-Aboriginal languages,Akan (Twi),13460,5985,25,22150
+Non-Official &amp; Non-Aboriginal languages,Albanian,26895,13135,345,31930
+Aboriginal languages,"Algonquian languages, n.i.e.",45,10,0,120
+Aboriginal languages,Algonquin,1260,370,40,2480
+Non-Official &amp; Non-Aboriginal languages,American Sign Language,2685,3020,1145,21930
+Non-Official &amp; Non-Aboriginal languages,Amharic,22465,12785,200,33670
+    </pre>
+
+    <p>
+      To load this data into R so that we can do things with it (e.g., perform analyses or
+      create data visualizations), we will need to use a <em>function</em>.
+      <idx><h>function</h></idx>
+      A function is a special word in R that takes instructions (we call these
+      <em>arguments</em>)<idx><h>argument</h></idx> and does something. The function we will
+      use to load a <c>.csv</c> file into R is called <c>read_csv</c>.
+      <idx><h>read function</h><h>read_csv</h></idx>
+      In its most basic use-case, <c>read_csv</c> expects that the data file:
+    </p>
+    <ul>
+      <li><p>has column names (or <em>headers</em>),</p></li>
+      <li><p>uses a comma (<c>,</c>) to separate the columns, and</p></li>
+      <li><p>does not have row names.</p></li>
+    </ul>
+    <p>
+      Below you&#x2019;ll see the code used to load the data into R using the <c>read_csv</c>
+      function. Note that the <c>read_csv</c> function is not included in the base
+      installation of R, meaning that it is not one of the primary functions ready to use
+      when you install R. Therefore, you need to load it from somewhere else before you can
+      use it. The place from which we will load it is called an R <em>package</em>. An R
+      package<idx><h>package</h></idx> is a collection of functions that can be used in
+      addition to the built-in R package functions once loaded. The <c>read_csv</c> function,
+      in particular, can be made accessible by loading
+      <url href="https://tidyverse.tidyverse.org/" visual="tidyverse.tidyverse.org/">the
+      <c>tidyverse</c> R package</url>
+      <xref provisional="tidyverse"/>
+      <xref provisional="wickham2019tidverse"/>
+      using the <c>library</c> function.<idx><h>library</h></idx> The
+      <c>tidyverse</c><idx><h>tidyverse</h></idx> package contains many functions that we
+      will use throughout this book to load, clean, wrangle, and visualize data.
+    </p>
+
+    <program language="r">
+      <input>
+library(tidyverse)
+      </input>
+    </program>
+
+    <pre>
+&#x2500;&#x2500; Attaching packages &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500; tidyverse 1.3.1 &#x2500;&#x2500;
+&#x2713; ggplot2 3.3.5     &#x2713; purrr   0.3.4
+&#x2713; tibble  3.1.4     &#x2713; dplyr   1.0.7
+&#x2713; tidyr   1.1.4     &#x2713; stringr 1.4.0
+&#x2713; readr   2.0.1     &#x2713; forcats 0.5.1
+&#x2500;&#x2500; Conflicts &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500; tidyverse_conflicts() &#x2500;&#x2500;
+&#x2717; dplyr::filter() masks stats::filter()
+&#x2717; dplyr::lag()    masks stats::lag()
+    </pre>
+
+    <note>
+      <p>
+        You may have noticed that we got some extra output from R regarding attached packages
+        and conflicts below our code line. These are examples of <em>messages</em> in R,
+        which give the user more information that might be handy to know. The
+        <c>Attaching packages</c> message is natural when loading <c>tidyverse</c>, since
+        <c>tidyverse</c> actually automatically causes other packages to be imported too,
+        such as <c>dplyr</c>. In the future, when we load <c>tidyverse</c> in this book, we
+        will silence these messages to help with the readability of the book. The
+        <c>Conflicts</c> message is also totally normal in this circumstance. This message
+        tells you if functions from different packages share the same name, which is
+        confusing to R. For example, in this case, the <c>dplyr</c> package and the
+        <c>stats</c> package both provide a function called <c>filter</c>. The message above
+        (<c>dplyr::filter() masks stats::filter()</c>) is R telling you that it is going to
+        default to the <c>dplyr</c> package version of this function. So if you use the
+        <c>filter</c> function, you will be using the <c>dplyr</c> version. In order to use
+        the <c>stats</c> version, you need to use its full name <c>stats::filter</c>.
+        Messages are not errors, so generally you don&#x2019;t need to take action when you
+        see a message; but you should always read the message and critically think about what
+        it means and whether you need to do anything about it.
+      </p>
+    </note>
+
+    <p>
+      After loading the <c>tidyverse</c> package, we can call the <c>read_csv</c> function
+      and pass it a single argument: the name of the file, <c>"can_lang.csv"</c>. We have to
+      put quotes around file names and other letters and words that we use in our code to
+      distinguish it from the special words (like functions!) that make up the R programming
+      language. The file&#x2019;s name is the only argument we need to provide because our
+      file satisfies everything else that the <c>read_csv</c> function expects in the default
+      use-case. <xref ref="fig-img-read-csv"/> describes how we use the <c>read_csv</c> to
+      read data into R.
+    </p>
+
+    <figure xml:id="fig-img-read-csv">
+      <caption>Syntax for the <c>read_csv</c> function.</caption>
+      <image source="images/intro/read_csv_function.png" width="100%"/>
+    </figure>
+
+    <program language="r">
+      <input>
+read_csv("data/can_lang.csv")
+      </input>
+    </program>
+
+    <pre>
+# A tibble: 214 x 6
+   category                               language      mother_tongue most_at_home
+   &lt;chr&gt;                                  &lt;chr&gt;                 &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages                   Aboriginal …            590          235
+ 2 Non-Official &amp; Non-Aboriginal languag… Afrikaans            10260         4785
+ 3 Non-Official &amp; Non-Aboriginal languag… Afro-Asiati…          1150          445
+ 4 Non-Official &amp; Non-Aboriginal languag… Akan (Twi)           13460         5985
+ 5 Non-Official &amp; Non-Aboriginal languag… Albanian             26895        13135
+ 6 Aboriginal languages                   Algonquian …            45           10
+ 7 Aboriginal languages                   Algonquin             1260          370
+ 8 Non-Official &amp; Non-Aboriginal languag… American Si…          2685         3020
+ 9 Non-Official &amp; Non-Aboriginal languag… Amharic              22465        12785
+10 Non-Official &amp; Non-Aboriginal languag… Arabic              419890       223535
+# … with 204 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+    </pre>
+
+    <note>
+      <p>
+        There is another function that also loads csv files named <c>read.csv</c>. We will
+        <em>always</em> use <c>read_csv</c> in this book, as it is designed to play nicely
+        with all of the other <c>tidyverse</c> functions, which we will use extensively. Be
+        careful not to accidentally use <c>read.csv</c>, as it can cause some tricky errors
+        to occur in your code that are hard to track down!
+      </p>
+    </note>
+  </section>
+
+  <section xml:id="sec-intro-naming">
+    <title>Naming things in R</title>
+    <p>
+      When we loaded the 2016 Canadian census language data using <c>read_csv</c>, we did not
+      give this data frame a name. Therefore the data was just printed on the screen, and we
+      cannot do anything else with it. That isn&#x2019;t very useful. What would be more
+      useful would be to give a name to the data frame that <c>read_csv</c> outputs, so that
+      we can refer to it later for analysis and visualization.
+    </p>
+    <p>
+      The way to assign a name to a value in R is via the <em>assignment symbol</em>
+      <c>&lt;-</c>.
+      <idx><h>assignment symbol</h></idx>
+      On the left side of the assignment symbol you put the name that you want to use, and on
+      the right side of the assignment symbol you put the value that you want the name to
+      refer to. Names can be used to refer to almost anything in R, such as numbers, words
+      (also known as <em>strings</em> of characters), and data frames! Below, we set
+      <c>my_number</c> to <c>3</c> (the result of <c>1+2</c>) and we set <c>name</c> to the
+      string <c>"Alice"</c>.<idx><h>string</h></idx>
+    </p>
+
+    <program language="r">
+      <input>
+my_number &lt;- 1 + 2
+name &lt;- "Alice"
+      </input>
+    </program>
+
+    <p>
+      Note that when we name something in R using the assignment symbol, <c>&lt;-</c>, we do
+      not need to surround the name we are creating with quotes. This is because we are
+      formally telling R that this special word denotes the value of whatever is on the
+      right-hand side. Only characters and words that act as <em>values</em> on the
+      right-hand side of the assignment symbol&#x2014;e.g., the file name
+      <c>"data/can_lang.csv"</c> that we specified before, or <c>"Alice"</c>
+      above&#x2014;need to be surrounded by quotes.
+    </p>
+    <p>
+      After making the assignment, we can use the special name words we have created in place
+      of their values. For example, if we want to do something with the value <c>3</c> later
+      on, we can just use <c>my_number</c> instead. Let&#x2019;s try adding 2 to
+      <c>my_number</c>; you will see that R just interprets this as adding 3 and 2:
+    </p>
+
+    <program language="r">
+      <input>
+my_number + 2
+      </input>
+    </program>
+
+    <pre>
+[1] 5
+    </pre>
+
+    <p>
+      Object names<idx><h>object</h></idx> can consist of letters, numbers, periods
+      <c>.</c> and underscores <c>_</c>. Other symbols won&#x2019;t work since they have
+      their own meanings in R. For example, <c>-</c> is the subtraction symbol; if we try to
+      assign a name with the <c>-</c> symbol, R will complain and we will get an error!
+    </p>
+
+    <program language="r">
+      <input>
+my-number &lt;- 1
+      </input>
+    </program>
+
+    <pre>
+Error in my - number &lt;- 1 : object 'my' not found
+    </pre>
+
+    <p>
+      There are certain conventions for naming objects in R. When naming
+      <idx><h>object</h><h>naming convention</h></idx>
+      an object we suggest using only lowercase letters, numbers and underscores <c>_</c> to
+      separate the words in a name. R is case sensitive, which means that <c>Letter</c> and
+      <c>letter</c> would be two different objects in R. You should also try to give your
+      objects meaningful names. For instance, you <em>can</em> name a data frame <c>x</c>.
+      However, using more meaningful terms, such as <c>language_data</c>, will help you
+      remember what each name in your code represents. We recommend following the Tidyverse
+      naming conventions outlined in the <em>Tidyverse Style Guide</em>
+      <xref provisional="tidyversestyleguide"/>. Let&#x2019;s now use the assignment symbol
+      to give the name <c>can_lang</c> to the 2016 Canadian census language data frame that
+      we get from <c>read_csv</c>.
+    </p>
+
+    <program language="r">
+      <input>
+can_lang &lt;- read_csv("data/can_lang.csv")
+      </input>
+    </program>
+
+    <p>
+      Wait a minute, nothing happened this time! Where&#x2019;s our data? Actually, something
+      did happen: the data was loaded in and now has the name <c>can_lang</c> associated with
+      it. And we can use that name to access the data frame and do things with it. For
+      example, we can type the name of the data frame to print the first few rows on the
+      screen. You will also see at the top that the number of observations (i.e., rows) and
+      variables (i.e., columns) are printed. Printing the first few rows of a data frame like
+      this is a handy way to get a quick sense for what is contained in a data frame.
+    </p>
+
+    <program language="r">
+      <input>
+can_lang
+      </input>
+    </program>
+
+    <pre>
+# A tibble: 214 x 6
+   category                               language      mother_tongue most_at_home
+   &lt;chr&gt;                                  &lt;chr&gt;                 &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages                   Aboriginal …            590          235
+ 2 Non-Official &amp; Non-Aboriginal languag… Afrikaans            10260         4785
+ 3 Non-Official &amp; Non-Aboriginal languag… Afro-Asiati…          1150          445
+ 4 Non-Official &amp; Non-Aboriginal languag… Akan (Twi)           13460         5985
+ 5 Non-Official &amp; Non-Aboriginal languag… Albanian             26895        13135
+ 6 Aboriginal languages                   Algonquian …            45           10
+ 7 Aboriginal languages                   Algonquin             1260          370
+ 8 Non-Official &amp; Non-Aboriginal languag… American Si…          2685         3020
+ 9 Non-Official &amp; Non-Aboriginal languag… Amharic              22465        12785
+10 Non-Official &amp; Non-Aboriginal languag… Arabic              419890       223535
+# … with 204 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+    </pre>
+
+  </section>
+
+  <section xml:id="sec-intro-filter-select">
+    <title>Creating subsets of data frames with <c>filter</c> and <c>select</c></title>
+    <p>
+      Now that we&#x2019;ve loaded our data into R, we can start wrangling the data to find
+      the ten Aboriginal languages that were most often reported in 2016 as mother tongues in
+      Canada. In particular, we will construct a table with the ten Aboriginal languages that
+      have the largest counts in the <c>mother_tongue</c> column. The <c>filter</c> and
+      <c>select</c> functions from the <c>tidyverse</c> package will help us here. The
+      <c>filter</c><idx><h>filter</h></idx> function allows you to obtain a subset of the
+      rows with specific values, while the <c>select</c><idx><h>select</h></idx> function
+      allows you to obtain a subset of the columns. Therefore, we can <c>filter</c> the rows
+      to extract the Aboriginal languages in the data set, and then use <c>select</c> to
+      obtain only the columns we want to include in our table.
+    </p>
+
+    <subsection xml:id="subsec-intro-filter">
+      <title>Using <c>filter</c> to extract rows</title>
+      <p>
+        Looking at the <c>can_lang</c> data above, we see the <c>category</c> column contains
+        different high-level categories of languages, which include
+        <c>"Aboriginal languages"</c>, <c>"Non-Official &amp; Non-Aboriginal languages"</c>
+        and <c>"Official languages"</c>. To answer our question we want to filter our data
+        set so we restrict our attention to only those languages in the
+        <c>"Aboriginal languages"</c> category.
+      </p>
+      <p>
+        We can use the <c>filter</c><idx><h>filter</h></idx> function to obtain the subset of
+        rows with desired values from a data frame.
+        <xref ref="fig-img-filter"/> outlines what arguments we need to specify to use
+        <c>filter</c>. The first argument to <c>filter</c> is the name of the data frame
+        object, <c>can_lang</c>. The second argument is a <em>logical statement</em>
+        <idx><h>logical statement</h></idx> to use when filtering the rows. A logical
+        statement evaluates to either <c>TRUE</c> or <c>FALSE</c>; <c>filter</c> keeps only
+        those rows for which the logical statement evaluates to <c>TRUE</c>. For example, in
+        our analysis, we are interested in keeping only languages in the
+        <c>"Aboriginal languages"</c> higher-level category. We can use the
+        <em>equivalency operator</em> <c>==</c>
+        <idx><h>logical operator</h><h>equivalency</h></idx>
+        to compare the values of the <c>category</c> column with the value
+        <c>"Aboriginal languages"</c>; you will learn about many other kinds of logical
+        statements in <xref ref="ch-wrangling"/>. Similar to when we loaded the data file and
+        put quotes around the file name, here we need to put quotes around
+        <c>"Aboriginal languages"</c>. Using quotes tells R that this is a string
+        <em>value</em><idx><h>string</h></idx> and not one of the special words that make up
+        the R programming language, or one of the names we have given to data frames in the
+        code we have already written.
+      </p>
+
+      <figure xml:id="fig-img-filter">
+        <caption>Syntax for the <c>filter</c> function.</caption>
+        <image source="images/intro/filter_function.png" width="100%"/>
+      </figure>
+
+      <p>
+        With these arguments, <c>filter</c> returns a data frame that has all the columns of
+        the input data frame, but only those rows we asked for in our logical filter
+        statement.
+      </p>
+
+      <program language="r">
+        <input>
+aboriginal_lang &lt;- filter(can_lang, category == "Aboriginal languages")
+aboriginal_lang
+        </input>
+      </program>
+
+      <pre>
+# A tibble: 67 x 6
+   category             language                   mother_tongue most_at_home
+   &lt;chr&gt;                &lt;chr&gt;                              &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages Aboriginal languages, n.o…           590          235
+ 2 Aboriginal languages Algonquian languages, n.i…            45           10
+ 3 Aboriginal languages Algonquin                           1260          370
+ 4 Aboriginal languages Athabaskan languages, n.i…            50           10
+ 5 Aboriginal languages Atikamekw                           6150         5465
+ 6 Aboriginal languages Babine (Wetsuwet'en)                 110           20
+ 7 Aboriginal languages Beaver                               190           50
+ 8 Aboriginal languages Blackfoot                           2815         1110
+ 9 Aboriginal languages Carrier                             1025          250
+10 Aboriginal languages Cayuga                                45           10
+# … with 57 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
+
+      <p>
+        It&#x2019;s good practice to check the output after using a function in R. We can see
+        the original <c>can_lang</c> data set contained 214 rows with multiple kinds of
+        <c>category</c>. The data frame <c>aboriginal_lang</c> contains only 67 rows, and
+        looks like it only contains languages in the <c>"Aboriginal languages"</c> in the
+        <c>category</c> column. So it looks like the function gave us the result we wanted!
+      </p>
+    </subsection>
+
+    <subsection xml:id="subsec-intro-select">
+      <title>Using <c>select</c> to extract columns</title>
+      <p>
+        Now let&#x2019;s use <c>select</c><idx><h>select</h></idx> to extract the
+        <c>language</c> and <c>mother_tongue</c> columns from this data frame.
+        <xref ref="fig-img-select"/> shows us the syntax for the <c>select</c> function. To
+        extract these columns, we need to provide the <c>select</c> function with three
+        arguments. The first argument is the name of the data frame object, which in this
+        example is <c>aboriginal_lang</c>. The second and third arguments are the column
+        names that we want to select: <c>language</c> and <c>mother_tongue</c>. After passing
+        these three arguments, the <c>select</c> function returns two columns (the
+        <c>language</c> and <c>mother_tongue</c> columns that we asked for) as a data frame.
+        This code is also a great example of why being able to name things in R is useful:
+        you can see that we are using the result of our earlier <c>filter</c> step (which we
+        named <c>aboriginal_lang</c>) here in the next step of the analysis!
+      </p>
+
+      <figure xml:id="fig-img-select">
+        <caption>Syntax for the <c>select</c> function.</caption>
+        <image source="images/intro/select_function.png" width="100%"/>
+      </figure>
+
+      <program language="r">
+        <input>
+selected_lang &lt;- select(aboriginal_lang, language, mother_tongue)
+selected_lang
+        </input>
+      </program>
+
+      <pre>
+# A tibble: 67 x 2
+   language                   mother_tongue
+   &lt;chr&gt;                              &lt;dbl&gt;
+ 1 Aboriginal languages, n.o.s.         590
+ 2 Algonquian languages, n.i.e.          45
+ 3 Algonquin                           1260
+ 4 Athabaskan languages, n.i.e.          50
+ 5 Atikamekw                           6150
+ 6 Babine (Wetsuwet'en)                 110
+ 7 Beaver                               190
+ 8 Blackfoot                           2815
+ 9 Carrier                             1025
+10 Cayuga                                45
+# … with 57 more rows
+      </pre>
+
+    </subsection>
+  </section>
+
+  <section xml:id="sec-arrange-slice-intro">
+    <title>Using <c>arrange</c> to order and <c>slice</c> to select rows by index
+      number</title>
+    <p>
+      We have used <c>filter</c> and <c>select</c> to obtain a table with only the Aboriginal
+      languages in the data set and their associated counts. However, we want to know the
+      <alert>ten</alert> languages that are spoken most often. As a next step, we will order
+      the <c>mother_tongue</c> column from largest to smallest value and then extract only the
+      top ten rows. This is where the <c>arrange</c><idx><h>arrange</h></idx> and
+      <c>slice</c><idx><h>slice</h></idx> functions come to the rescue!
+    </p>
+    <p>
+      The <c>arrange</c> function allows us to order the rows of a data frame by the values
+      of a particular column. <xref ref="fig-img-arrange"/> details what arguments we need to
+      specify to use the <c>arrange</c> function. We need to pass the data frame as the first
+      argument to this function, and the variable to order by as the second argument. Since we
+      want to choose the ten Aboriginal languages most often reported as a mother tongue
+      language, we will use the <c>arrange</c> function to order the rows in our
+      <c>selected_lang</c> data frame by the <c>mother_tongue</c> column. We want to arrange
+      the rows in descending order (from largest to smallest), so we pass the column to the
+      <c>desc</c> function before using it as an argument.
+    </p>
+
+    <figure xml:id="fig-img-arrange">
+      <caption>Syntax for the <c>arrange</c> function.</caption>
+      <image source="images/intro/arrange_function.png" width="100%"/>
+    </figure>
+
+    <program language="r">
+      <input>
+arranged_lang &lt;- arrange(selected_lang, by = desc(mother_tongue))
+arranged_lang
+      </input>
+    </program>
+
+    <pre>
+# A tibble: 67 x 2
+   language          mother_tongue
+   &lt;chr&gt;                     &lt;dbl&gt;
+ 1 Cree, n.o.s.              64050
+ 2 Inuktitut                 35210
+ 3 Ojibway                   17885
+ 4 Oji-Cree                  12855
+ 5 Dene                      10700
+ 6 Montagnais (Innu)         10235
+ 7 Mi'kmaq                    6690
+ 8 Atikamekw                  6150
+ 9 Plains Cree                3065
+10 Stoney                     3025
+# … with 57 more rows
+    </pre>
+
+    <p>
+      Next we will use the <c>slice</c> function, which selects rows according to their row
+      number. Since we want to choose the most common ten languages, we will indicate we want
+      the rows 1 to 10 using the argument <c>1:10</c>.
+    </p>
+
+    <program language="r">
+      <input>
+ten_lang &lt;- slice(arranged_lang, 1:10)
+ten_lang
+      </input>
+    </program>
+
+    <pre>
+# A tibble: 10 x 2
+   language          mother_tongue
+   &lt;chr&gt;                     &lt;dbl&gt;
+ 1 Cree, n.o.s.              64050
+ 2 Inuktitut                 35210
+ 3 Ojibway                   17885
+ 4 Oji-Cree                  12855
+ 5 Dene                      10700
+ 6 Montagnais (Innu)         10235
+ 7 Mi'kmaq                    6690
+ 8 Atikamekw                  6150
+ 9 Plains Cree                3065
+10 Stoney                     3025
+    </pre>
+
+  </section>
+
+  <section xml:id="sec-intro-mutate">
+    <title>Adding and modifying columns using <c>mutate</c></title>
+    <p>
+      Recall that our data analysis question referred to the <em>count</em> of Canadians that
+      speak each of the top ten most commonly reported Aboriginal languages as their mother
+      tongue, and the <c>ten_lang</c> data frame indeed contains those counts&#x2026; But
+      perhaps, seeing these numbers, we became curious about the <em>percentage</em> of the
+      population of Canada associated with each count. It is common to come up with new data
+      analysis questions in the process of answering a first one&#x2014;so fear not and
+      explore! To answer this small question along the way, we need to divide each count in
+      the <c>mother_tongue</c> column by the total Canadian population according to the 2016
+      census&#x2014;i.e., 35,151,728&#x2014;and multiply it by 100. We can perform this
+      computation using the <c>mutate</c> function. We pass the <c>ten_lang</c> data frame as
+      its first argument, then specify the equation that computes the percentages in the
+      second argument. By using a new variable name on the left hand side of the equation, we
+      will create a new column in the data frame; and if we use an existing name, we will
+      modify that variable. In this case, we will opt to create a new column called
+      <c>mother_tongue_percent</c>.
+    </p>
+
+    <program language="r">
+      <input>
+canadian_population = 35151728
+ten_lang_percent = mutate(ten_lang, mother_tongue_percent = 100 * mother_tongue / canadian_population)
+ten_lang_percent
+      </input>
+    </program>
+
+    <pre>
+# A tibble: 10 x 3
+   language          mother_tongue mother_tongue_percent
+   &lt;chr&gt;                     &lt;dbl&gt;                 &lt;dbl&gt;
+ 1 Cree, n.o.s.              64050               0.182  
+ 2 Inuktitut                 35210               0.100  
+ 3 Ojibway                   17885               0.0509 
+ 4 Oji-Cree                  12855               0.0366 
+ 5 Dene                      10700               0.0304 
+ 6 Montagnais (Innu)         10235               0.0291 
+ 7 Mi'kmaq                    6690               0.0190 
+ 8 Atikamekw                  6150               0.0175 
+ 9 Plains Cree                3065               0.00872
+10 Stoney                     3025               0.00861
+    </pre>
+
+    <p>
+      The <c>ten_lang_percent</c> data frame shows that the ten Aboriginal languages in the
+      <c>ten_lang</c> data frame were spoken as a mother tongue by between 0.008% and 0.18%
+      of the Canadian population.
+    </p>
+  </section>
+
+  <section xml:id="sec-intro-visualizations">
+    <title>Exploring data with visualizations</title>
+    <p>
+      The <c>ten_lang</c> table we generated in <xref ref="sec-arrange-slice-intro"/> answers
+      our initial data analysis question. Are we done? Well, not quite; tables are almost
+      never the best way to present the result of your analysis to your audience. Even the
+      <c>ten_lang</c> table with only two columns presents some difficulty: for example, you
+      have to scrutinize the table quite closely to get a sense for the relative numbers of
+      speakers of each language. When you move on to more complicated analyses, this issue
+      only gets worse. In contrast, a <em>visualization</em> would convey this information in
+      a much more easily understood format. Visualizations are a great tool for summarizing
+      information to help you effectively communicate with your audience, and creating
+      effective data visualizations<idx><h>visualization</h></idx> is an essential component
+      of any data analysis. In this section we will develop a visualization of the ten
+      Aboriginal languages that were most often reported in 2016 as mother tongues in Canada,
+      as well as the number of people that speak each of them.
+    </p>
+
+    <subsection xml:id="subsec-intro-ggplot-bar">
+      <title>Using <c>ggplot</c> to create a bar plot</title>
+      <p>
+        In our data set, we can see that <c>language</c> and <c>mother_tongue</c> are in
+        separate columns (or variables). In addition, there is a single row (or observation)
+        for each language. The data are, therefore, in what we call a <em>tidy data</em>
+        format. Tidy data is a fundamental concept and will be a significant focus in the
+        remainder of this book: many of the functions from <c>tidyverse</c> require tidy
+        data, including the <c>ggplot</c><idx><h>ggplot</h></idx> function that we will use
+        shortly for our visualization. We will formally introduce tidy data in
+        <xref ref="ch-wrangling"/>.
+      </p>
+      <p>
+        We will make a bar plot to visualize our data. A bar
+        plot<idx><h>visualization</h><h>bar</h></idx> is a chart where the lengths of the
+        bars represent certain values, like counts or proportions. We will make a bar plot
+        using the <c>mother_tongue</c> and <c>language</c> columns from our <c>ten_lang</c>
+        data frame. To create a bar plot of these two variables using the <c>ggplot</c>
+        function, we must specify the data frame, which variables to put on the x and y axes,
+        and what kind of plot to create. The <c>ggplot</c> function and its common usage is
+        illustrated in <xref ref="fig-img-ggplot"/>.
+        <xref ref="fig-barplot-mother-tongue"/> shows the resulting bar plot generated by
+        following the instructions in <xref ref="fig-img-ggplot"/>.
+      </p>
+
+      <figure xml:id="fig-img-ggplot">
+        <caption>Creating a bar plot with the <c>ggplot</c> function.</caption>
+        <image source="images/intro/ggplot_function.png" width="100%"/>
+      </figure>
+
+      <program language="r">
+        <input>
+ggplot(ten_lang, aes(x = language, y = mother_tongue)) +
+  geom_bar(stat = "identity")
+        </input>
+      </program>
+
+      <figure xml:id="fig-barplot-mother-tongue">
+        <caption>Bar plot of the ten Aboriginal languages most often reported by Canadian
+          residents as their mother tongue. Note that this visualization is not done yet;
+          there are still improvements to be made.</caption>
+        <image source="images/intro/barplot-mother-tongue.png" width="75%"/>
+      </figure>
+
+      <note>
+        <p>
+          The vast majority of the time, a single expression in R must be contained in a
+          single line of code. However, there <em>are</em> a small number of situations in
+          which you can have a single R expression span multiple lines. Above is one such
+          case: here, R knows that a line cannot end with a <c>+</c> symbol, and so it keeps
+          reading the next line to figure out what the right-hand side of the <c>+</c> symbol
+          should be. We could, of course, put all of the added layers on one line of code,
+          but splitting them across multiple lines helps a lot with code readability.
+          <idx><h>multi-line expression</h></idx>
+        </p>
+      </note>
+    </subsection>
+
+    <subsection xml:id="subsec-intro-ggplot-format">
+      <title>Formatting ggplot objects</title>
+      <p>
+        It is exciting that we can already visualize our data to help answer our question, but
+        we are not done yet! We can (and should) do more to improve the interpretability of
+        the data visualization that we created. For example, by default, R uses the column
+        names as the axis labels. Usually these column names do not have enough information
+        about the variable in the column. We really should replace this default with a more
+        informative label. For the example above, R uses the column name
+        <c>mother_tongue</c> as the label for the y axis, but most people will not know what
+        that is. And even if they did, they will not know how we measured this variable, or
+        the group of people on which the measurements were taken. An axis label that reads
+        &#x201C;Mother Tongue (Number of Canadian Residents)&#x201D; would be much more
+        informative.
+      </p>
+      <p>
+        Adding additional layers<idx><h>plot</h><h>layers</h></idx> to our visualizations
+        that we create in <c>ggplot</c> is one common and easy way to improve and refine our
+        data visualizations. New layers are added to <c>ggplot</c> objects using the
+        <c>+</c> symbol. For example, we can use the
+        <c>xlab</c><idx><h>ggplot</h><h>xlab</h></idx> (short for x axis label) and
+        <c>ylab</c><idx><h>ggplot</h><h>ylab</h></idx> (short for y axis label) functions to
+        add layers where we specify meaningful and informative labels for the x and y axes.
+        <idx><h>plot</h><h>axis labels</h></idx>
+        Again, since we are specifying words (e.g.
+        <c>"Mother Tongue (Number of Canadian Residents)"</c>) as arguments to <c>xlab</c>
+        and <c>ylab</c>, we surround them with double quotation marks. We can add many more
+        layers to format the plot further, and we will explore these in
+        <xref ref="ch-viz"/>.
+      </p>
+
+      <program language="r">
+        <input>
+ggplot(ten_lang, aes(x = language, y = mother_tongue)) +
+  geom_bar(stat = "identity") +
+  xlab("Language") +
+  ylab("Mother Tongue (Number of Canadian Residents)")
+        </input>
+      </program>
+
+      <figure xml:id="fig-barplot-mother-tongue-labs">
+        <caption>Bar plot of the ten Aboriginal languages most often reported by Canadian
+          residents as their mother tongue with x and y labels. Note that this visualization
+          is not done yet; there are still improvements to be made.</caption>
+        <image source="images/intro/barplot-mother-tongue-labs.png" width="75%"/>
+      </figure>
+
+      <p>
+        The result is shown in <xref ref="fig-barplot-mother-tongue-labs"/>. This is already
+        quite an improvement! Let&#x2019;s tackle the next major issue with the visualization
+        in <xref ref="fig-barplot-mother-tongue-labs"/>: the overlapping x axis labels, which
+        are currently making it difficult to read the different language names. One solution
+        is to rotate the plot such that the bars are horizontal rather than vertical. To
+        accomplish this, we will swap the x and y coordinate axes:
+      </p>
+
+      <program language="r">
+        <input>
+ggplot(ten_lang, aes(x = mother_tongue, y = language)) +
+  geom_bar(stat = "identity") +
+  xlab("Mother Tongue (Number of Canadian Residents)") +
+  ylab("Language")
+        </input>
+      </program>
+
+      <figure xml:id="fig-barplot-mother-tongue-flipped">
+        <caption>Horizontal bar plot of the ten Aboriginal languages most often reported by
+          Canadian residents as their mother tongue. There are no more serious issues with
+          this visualization, but it could be refined further.</caption>
+        <image source="images/intro/barplot-mother-tongue-flipped.png" width="75%"/>
+      </figure>
+
+      <p>
+        Another big step forward, as shown in
+        <xref ref="fig-barplot-mother-tongue-flipped"/>! There are no more serious issues with
+        the visualization. Now comes time to refine the visualization to make it even more
+        well-suited to answering the question we asked earlier in this chapter. For example,
+        the visualization could be made more transparent by organizing the bars according to
+        the number of Canadian residents reporting each language, rather than in alphabetical
+        order. We can reorder the bars using the <c>reorder</c><idx><h>reorder</h></idx>
+        function, which orders a variable (here <c>language</c>) based on the values of the
+        second variable (<c>mother_tongue</c>).
+      </p>
+
+      <program language="r">
+        <input>
+ggplot(ten_lang, aes(x = mother_tongue,
+                     y = reorder(language, mother_tongue))) +
+  geom_bar(stat = "identity") +
+  xlab("Mother Tongue (Number of Canadian Residents)") +
+  ylab("Language")
+        </input>
+      </program>
+
+      <figure xml:id="fig-barplot-mother-tongue-reorder">
+        <caption>Bar plot of the ten Aboriginal languages most often reported by Canadian
+          residents as their mother tongue with bars reordered.</caption>
+        <image source="images/intro/barplot-mother-tongue-reorder.png" width="75%"/>
+      </figure>
+
+      <p>
+        <xref ref="fig-barplot-mother-tongue-reorder"/> provides a very clear and
+        well-organized answer to our original question; we can see what the ten most often
+        reported Aboriginal languages were, according to the 2016 Canadian census, and how
+        many people speak each of them. For instance, we can see that the Aboriginal language
+        most often reported was Cree n.o.s. with over 60,000 Canadian residents reporting it
+        as their mother tongue.
+      </p>
+      <note>
+        <p>
+          &#x201C;n.o.s.&#x201D; means &#x201C;not otherwise specified&#x201D;, so Cree
+          n.o.s. refers to individuals who reported Cree as their mother tongue. In this data
+          set, the Cree languages include the following categories: Cree n.o.s., Swampy Cree,
+          Plains Cree, Woods Cree, and a &#x2018;Cree not included elsewhere&#x2019; category
+          (which includes Moose Cree, Northern East Cree and Southern East Cree)
+          <xref provisional="language2016"/>.
+        </p>
+      </note>
+    </subsection>
+
+    <subsection xml:id="subsec-intro-all-together">
+      <title>Putting it all together</title>
+      <p>
+        In the block of code below, we put everything from this chapter together, with a few
+        modifications. In particular, we have actually skipped the <c>select</c> step that we
+        did above; since you specify the variable names to plot in the <c>ggplot</c> function,
+        you don&#x2019;t actually need to <c>select</c> the columns in advance when creating
+        a visualization. We have also provided <em>comments</em> next to many of the lines of
+        code below using the hash symbol <c>#</c>. When R sees a <c>#</c>
+        sign,<idx><h>comment</h></idx> it will ignore all of the text that comes after the
+        symbol on that line. So you can use comments to explain lines of code for others, and
+        perhaps more importantly, your future self! It&#x2019;s good practice to get in the
+        habit of commenting your code to improve its readability.
+      </p>
+      <p>
+        This exercise demonstrates the power of R. In relatively few lines of code, we
+        performed an entire data science workflow with a highly effective data visualization!
+        We asked a question, loaded the data into R, wrangled the data (using <c>filter</c>,
+        <c>arrange</c> and <c>slice</c>) and created a data visualization to help answer our
+        question. In this chapter, you got a quick taste of the data science workflow;
+        continue on with the next few chapters to learn each of these steps in much more
+        detail!
+      </p>
+
+      <program language="r">
+        <input>
+library(tidyverse)
+
+# load the data set
+can_lang &lt;- read_csv("data/can_lang.csv")
+
+# obtain the 10 most common Aboriginal languages
+aboriginal_lang &lt;- filter(can_lang, category == "Aboriginal languages")
+arranged_lang &lt;- arrange(aboriginal_lang, by = desc(mother_tongue))
+ten_lang &lt;- slice(arranged_lang, 1:10)
+
+# create the visualization
+ggplot(ten_lang, aes(x = mother_tongue,
+                     y = reorder(language, mother_tongue))) +
+  geom_bar(stat = "identity") +
+  xlab("Mother Tongue (Number of Canadian Residents)") +
+  ylab("Language")
+        </input>
+      </program>
+
+      <figure xml:id="fig-nachos-to-cheesecake">
+        <caption>Putting it all together: bar plot of the ten Aboriginal languages most often
+          reported by Canadian residents as their mother tongue.</caption>
+        <image source="images/intro/nachos-to-cheesecake.png" width="75%"/>
+      </figure>
+
+    </subsection>
+  </section>
+
+  <section xml:id="sec-intro-documentation">
+    <title>Accessing documentation</title>
+    <p>
+      There are many R functions in the <c>tidyverse</c> package (and beyond!), and nobody
+      can be expected to remember what every one of them does or all of the arguments we have
+      to give them. Fortunately, R provides the <c>?</c> symbol,
+      <idx><h>documentation</h></idx>
+      which provides an easy way to pull up the documentation for most functions quickly. To
+      use the <c>?</c> symbol to access documentation, you just put the name of the function
+      you are curious about after the <c>?</c> symbol. For example, if you had forgotten what
+      the <c>filter</c> function did or exactly what arguments to pass in, you could run the
+      following code:
+    </p>
+
+    <program language="r">
+      <input>
+?filter
+      </input>
+    </program>
+
+    <p>
+      <xref ref="fig-01-help"/> shows the documentation that will pop up, including a
+      high-level description of the function, its arguments, a description of each, and more.
+      Note that you may find some of the text in the documentation a bit too technical right
+      now (for example, what is <c>dbplyr</c>, and what is a lazy data frame?). Fear not: as
+      you work through this book, many of these terms will be introduced to you, and slowly
+      but surely you will become more adept at understanding and navigating documentation like
+      that shown in <xref ref="fig-01-help"/>. But do keep in mind that the documentation is
+      not written to <em>teach</em> you about a function; it is just there as a reference to
+      <em>remind</em> you about the different arguments and usage of functions that you have
+      already learned about elsewhere.
+    </p>
+
+    <figure xml:id="fig-01-help">
+      <caption>The documentation for the <c>filter</c> function, including a high-level
+        description, a list of arguments and their meanings, and more.</caption>
+      <image source="images/intro/help-filter.png" width="80%"/>
+    </figure>
+  </section>
+
+  <section xml:id="sec-intro-exercises">
+    <title>Exercises</title>
+    <p>
+      Practice exercises for the material covered in this chapter can be found in the
+      accompanying
+      <url href="https://worksheets.datasciencebook.ca"
+           visual="worksheets.datasciencebook.ca">worksheets repository</url>
+      in the &#x201C;R and the tidyverse&#x201D; row. You can launch an interactive version
+      of the worksheet in your browser by clicking the &#x201C;launch binder&#x201D; button.
+      You can also preview a non-interactive version of the worksheet by clicking &#x201C;view
+      worksheet.&#x201D; If you instead decide to download the worksheet and run it on your
+      own machine, make sure to follow the instructions for computer setup found in
+      <xref ref="ch-setup"/>. This will ensure that the automated feedback and guidance that
+      the worksheets provide will function as intended.
+    </p>
+  </section>
 
 </chapter>

@@ -2,9 +2,99 @@
 <backmatter xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="meta-back">
   <references xml:id="references">
     <title>References</title>
-    <p>
-      References will be populated here as the book content is filled in.
-    </p>
+
+    <biblio type="raw" xml:id="calls2015">
+      Truth and Reconciliation Commission of Canada. (2015).
+      <em>Calls to Action</em>.
+      Public Works &amp; Government Services Canada.
+      <url href="https://www2.gov.bc.ca/assets/gov/british-columbians-our-governments/indigenous-people/aboriginal-peoples-documents/calls_to_action_english2.pdf"
+           visual="www2.gov.bc.ca/.../calls_to_action_english2.pdf"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="cancensus2016">
+      Statistics Canada. (2016).
+      <em>Population Census</em>.
+      <url href="https://www12.statcan.gc.ca/census-recensement/2016/dp-pd/index-eng.cfm"
+           visual="www12.statcan.gc.ca/census-recensement/2016/dp-pd/index-eng.cfm"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="children2012">
+      Truth and Reconciliation Commission of Canada. (2012).
+      <em>They Came for the Children: Canada, Aboriginal Peoples, and the Residential
+      Schools</em>. Public Works &amp; Government Services Canada.
+    </biblio>
+
+    <biblio type="raw" xml:id="language2016">
+      Statistics Canada. (2016).
+      <em>The Aboriginal languages of First Nations people, M&#xe9;tis and Inuit</em>.
+      <url href="https://www12.statcan.gc.ca/census-recensement/2016/as-sa/98-200-x/2016022/98-200-x2016022-eng.cfm"
+           visual="www12.statcan.gc.ca/.../98-200-x2016022-eng.cfm"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="leek2015question">
+      Leek, J. and Peng, R. (2015).
+      What is the question?
+      <em>Science</em>, 347(6228), 1314&#x2013;1315.
+    </biblio>
+
+    <biblio type="raw" xml:id="peng2015art">
+      Peng, R. D. and Matsui, E. (2015).
+      <em>The Art of Data Science: A Guide for Anyone Who Works with Data</em>.
+      Skybrude Consulting, LLC.
+      <url href="https://bookdown.org/rdpeng/artofdatascience/"
+           visual="bookdown.org/rdpeng/artofdatascience/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="statcan2018mothertongue">
+      Statistics Canada. (2018).
+      <em>The evolution of language populations in Canada, by mother tongue, from 1901 to
+      2016</em>.
+      <url href="https://www150.statcan.gc.ca/n1/pub/11-630-x/11-630-x2018001-eng.htm"
+           visual="www150.statcan.gc.ca/n1/pub/11-630-x/11-630-x2018001-eng.htm"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="tidyverse">
+      Wickham, H. (2021).
+      <em>tidyverse R package</em>.
+      <url href="https://tidyverse.tidyverse.org/" visual="tidyverse.tidyverse.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="tidyversestyleguide">
+      Wickham, H. (2020).
+      <em>The Tidyverse Style Guide</em>.
+      <url href="https://style.tidyverse.org/" visual="style.tidyverse.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="timbers2020canlang">
+      Timbers, T. (2020).
+      <em>canlang: Canadian Census language data</em>.
+      R package version 0.0.9.
+      <url href="https://ttimbers.github.io/canlang/" visual="ttimbers.github.io/canlang/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="walker2017">
+      Walker, N. (2017).
+      Mapping indigenous languages in Canada.
+      <em>Canadian Geographic</em>.
+      The Royal Canadian Geographical Society.
+      <url href="https://www.canadiangeographic.ca/article/mapping-indigenous-languages-canada"
+           visual="www.canadiangeographic.ca/article/mapping-indigenous-languages-canada"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="wickham2019tidverse">
+      Wickham, H. et al. (2019).
+      Welcome to the tidyverse.
+      <em>Journal of Open Source Software</em>, 4(43), 1686.
+    </biblio>
+
+    <biblio type="raw" xml:id="wilson2018">
+      Wilson, K. (2018).
+      <em>Pulling Together: Foundations Guide</em>.
+      BCcampus.
+      <url href="https://opentextbc.ca/indigenizationfoundations/"
+           visual="opentextbc.ca/indigenizationfoundations/"/>
+    </biblio>
+
   </references>
   <index>
     <title>Index</title>
