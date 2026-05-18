@@ -2,11 +2,1327 @@
 <chapter xml:id="ch-viz" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Effective data visualization</title>
 
-  <introduction>
+  <section xml:id="sec-viz-overview">
+    <title>Overview</title>
     <p>
-      This chapter is a skeleton placeholder for the PreTeXt version of the book.
-      Content will be filled in from the corresponding R Markdown source file.
+      This chapter will introduce concepts and tools relating to data visualization
+      beyond what we have seen and practiced so far. We will focus on guiding
+      principles for effective data visualization and explaining visualizations
+      independent of any particular tool or programming language. In the process, we
+      will cover some specifics of creating visualizations (scatter plots, bar plots,
+      line plots, and histograms) for data using R.
     </p>
-  </introduction>
+  </section>
+
+  <section xml:id="sec-viz-objectives">
+    <title>Chapter learning objectives</title>
+    <p>By the end of the chapter, readers will be able to do the following:</p>
+    <ul>
+      <li><p>Describe when to use the following kinds of visualizations to answer specific
+        questions using a data set: scatter plots, line plots, bar plots, and histogram
+        plots.</p></li>
+      <li><p>Given a data set and a question, select from the above plot types and use R
+        to create a visualization that best answers the question.</p></li>
+      <li><p>Evaluate the effectiveness of a visualization and suggest improvements to
+        better answer a given question.</p></li>
+      <li><p>Referring to the visualization, communicate the conclusions in non-technical
+        terms.</p></li>
+      <li><p>Identify rules of thumb for creating effective visualizations.</p></li>
+      <li><p>Use the <c>ggplot2</c> package in R to create and refine the above
+        visualizations using: geometric objects (<c>geom_point</c>, <c>geom_line</c>,
+        <c>geom_histogram</c>, <c>geom_bar</c>, <c>geom_vline</c>, <c>geom_hline</c>),
+        scales (<c>xlim</c>, <c>ylim</c>), aesthetic mappings (<c>x</c>, <c>y</c>,
+        <c>fill</c>, <c>color</c>, <c>shape</c>), labeling (<c>xlab</c>, <c>ylab</c>,
+        <c>labs</c>), font control and legend positioning (<c>theme</c>), and subplots
+        (<c>facet_grid</c>).</p></li>
+      <li><p>Define the three key aspects of <c>ggplot2</c> objects: aesthetic mappings,
+        geometric objects, and scales.</p></li>
+      <li><p>Describe the difference in raster and vector output formats.</p></li>
+      <li><p>Use <c>ggsave</c> to save visualizations in <c>.png</c> and <c>.svg</c>
+        format.</p></li>
+    </ul>
+  </section>
+
+  <section xml:id="sec-viz-choosing">
+    <title>Choosing the visualization</title>
+    <p><em>Ask a question, and answer it</em></p>
+    <p>
+      The purpose of a visualization is to answer a question
+      <idx><h>question</h><h>visualization</h></idx>
+      about a data set of interest. So naturally, the first thing to do
+      <em>before</em> creating a visualization is to formulate the question about the
+      data you are trying to answer. A good visualization will clearly answer your
+      question without distraction; a <em>great</em> visualization will suggest even
+      what the question was itself without additional explanation.
+    </p>
+    <p>
+      Recall the different data analysis questions from <xref ref="ch-intro"/>. With
+      the visualizations we will cover in this chapter, we will be able to answer
+      <em>only descriptive and exploratory</em> questions. Be careful to not answer
+      any <em>predictive, inferential, causal or mechanistic</em> questions with the
+      visualizations presented here, as we have not learned the tools necessary to do
+      that properly just yet.
+    </p>
+    <p>
+      The types of plot that we introduce in this book are shown in
+      <xref ref="fig-viz-plot-sketches"/>; which one you should select depends on your
+      data and the question you want to answer. In general, the guiding principles of
+      when to use each type of plot are as follows (see also Chapter 5 of
+      <em>Fundamentals of Data Visualization</em> <xref ref="wilkeviz"/> for a
+      directory of many plot types):
+    </p>
+    <idx><h>visualization</h><h>line</h></idx>
+    <idx><h>visualization</h><h>histogram</h></idx>
+    <idx><h>visualization</h><h>scatter</h></idx>
+    <idx><h>visualization</h><h>bar</h></idx>
+    <ul>
+      <li><p><term>scatter plots</term> visualize the relationship between two
+        quantitative variables</p></li>
+      <li><p><term>line plots</term> visualize trends with respect to an independent,
+        ordered quantity (e.g., time)</p></li>
+      <li><p><term>bar plots</term> visualize comparisons of amounts</p></li>
+      <li><p><term>histograms</term> visualize the distribution of one quantitative
+        variable (i.e., all its possible values and how often they occur)
+        <idx><h>distribution</h></idx></p></li>
+    </ul>
+    <figure xml:id="fig-viz-plot-sketches">
+      <caption>Examples of scatter, line and bar plots, as well as histograms.</caption>
+      <image source="images/viz/plot-sketches.png" width="70%"/>
+    </figure>
+    <p>
+      All types of visualization have their (mis)uses, but three kinds are usually
+      hard to understand or are easily replaced with an oft-better alternative. In
+      particular, you should avoid <term>pie charts</term>; it is generally better to
+      use bars, as it is easier to compare bar heights than pie slice sizes. You
+      should also not use <term>3-D visualizations</term>, as they are typically hard
+      to understand when converted to a static 2-D image format. Finally, do not use
+      tables to make numerical comparisons; humans are much better at quickly
+      processing visual information than text and math.
+    </p>
+  </section>
+
+  <section xml:id="sec-viz-refining">
+    <title>Refining the visualization</title>
+    <p><em>Convey the message, minimize noise</em></p>
+    <p>
+      Just being able to make a visualization in R does not mean that it effectively
+      communicates your message to others. Once you have selected a broad type of
+      visualization to use, you will have to refine it to suit your particular need.
+      Some rules of thumb for doing this are listed below.
+    </p>
+    <p><term>Convey the message</term></p>
+    <ul>
+      <li><p>Make sure the visualization answers the question you have asked most
+        simply and plainly as possible.</p></li>
+      <li><p>Use legends and labels so that your visualization is understandable
+        without reading the surrounding text.</p></li>
+      <li><p>Ensure the text, symbols, lines, etc., on your visualization are big
+        enough to be easily read.</p></li>
+      <li><p>Ensure the data are clearly visible; don&#x2019;t hide the shape/distribution
+        of the data behind other objects (e.g., a bar).</p></li>
+      <li><p>Make sure to use color schemes that are understandable by those with
+        colorblindness (a surprisingly large fraction of the overall
+        population&#x2014;from about 1% to 10%, depending on sex and ancestry
+        <xref ref="deebblind"/>). For example,
+        <url href="https://colorbrewer2.org">ColorBrewer</url> and the
+        <c>RColorBrewer</c> R package <xref ref="RColorBrewer"/> provide the ability
+        to pick such color schemes.</p></li>
+      <li><p>Redundancy can be helpful; sometimes conveying the same message in
+        multiple ways reinforces it for the audience.</p></li>
+    </ul>
+    <p><term>Minimize noise</term></p>
+    <ul>
+      <li><p>Use colors sparingly. Too many different colors can be distracting,
+        create false patterns, and detract from the message.</p></li>
+      <li><p>Be wary of overplotting. Overplotting is when marks that represent the
+        data overlap, and is problematic as it prevents you from seeing how many data
+        points are represented in areas of the visualization where this
+        occurs.</p></li>
+      <li><p>Only make the plot area as big as needed. Simple plots can be made
+        small.</p></li>
+      <li><p>Don&#x2019;t adjust the axes to zoom in on small differences. If the difference
+        is small, show that it&#x2019;s small!</p></li>
+    </ul>
+  </section>
+
+  <section xml:id="sec-viz-ggplot2">
+    <title>Creating visualizations with <c>ggplot2</c></title>
+    <p><em>Build the visualization iteratively</em></p>
+    <p>
+      This section will cover examples of how to choose and refine a visualization
+      given a data set and a question that you want to answer, and then how to create
+      the visualization in R <idx><h>ggplot</h></idx> using the <c>ggplot2</c> R
+      package. Given that the <c>ggplot2</c> package is loaded by the
+      <c>tidyverse</c> metapackage, we still need to load only <c>tidyverse</c>:
+    </p>
+    <program language="r">
+      <input>
+library(tidyverse)
+      </input>
+    </program>
+
+    <subsection xml:id="sec-viz-co2">
+      <title>Scatter plots and line plots: the Mauna Loa CO<m>_2</m> data set</title>
+      <p>
+        The
+        <url href="https://www.esrl.noaa.gov/gmd/ccgg/trends/data.html">Mauna Loa
+        CO<m>_2</m> data set</url>, curated by Dr.&#xa0;Pieter Tans, NOAA/GML and
+        Dr.&#xa0;Ralph Keeling, Scripps Institution of Oceanography, records the
+        atmospheric concentration of carbon dioxide (CO<m>_2</m>, in parts per
+        million) at the Mauna Loa research station in
+        <idx><h>Mauna Loa</h></idx>
+        Hawaii from 1959 onward <xref ref="maunadata"/>. For this book, we focus on
+        the years 1980&#x2013;2020.
+      </p>
+      <p>
+        <term>Question:</term>
+        <idx><h>question</h><h>visualization</h></idx>
+        Does the concentration of atmospheric CO<m>_2</m> change over time, and are
+        there any interesting patterns to note?
+      </p>
+      <program language="r">
+        <input>
+# mauna loa carbon dioxide data
+co2_df &lt;- read_csv("data/mauna_loa_data.csv")
+co2_df
+        </input>
+      </program>
+      <pre>
+# A tibble: 489 x 2
+   date_measured   ppm
+   &lt;date&gt;        &lt;dbl&gt;
+ 1 1980-02-01     338.
+ 2 1980-03-01     340.
+...
+      </pre>
+      <note>
+        <p><c>read_csv</c> was able to parse the <c>date_measured</c> column into the
+        <c>date</c> vector type because it was entered in ISO 8601 format
+        (<c>year-month-day</c>). <c>date</c> type vectors allow functions like
+        <c>ggplot</c> to treat them as numeric dates and not as character vectors. An
+        in-depth study of dates and times is beyond the scope of the book, but
+        interested readers may consult the Dates and Times chapter of <em>R for Data
+        Science</em> <xref ref="wickham2016r"/>; see the additional resources at the
+        end of this chapter.</p>
+      </note>
+      <p>
+        Since we are investigating a relationship between two variables (CO<m>_2</m>
+        concentration and date), a scatter plot is a good place to start.
+        <idx><h>ggplot</h><h>aesthetic mapping</h></idx>
+        <idx><h>ggplot</h><h>geometric object</h></idx>
+        We create a plot object with the <c>ggplot</c> function, mapping
+        <c>date_measured</c> to the <c>x</c> axis, <c>ppm</c> to the <c>y</c> axis,
+        and using <c>geom_point</c>:
+      </p>
+      <program language="r">
+        <input>
+co2_scatter &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
+  geom_point()
+
+co2_scatter
+        </input>
+      </program>
+      <figure xml:id="fig-viz-co2-scatter">
+        <caption>Scatter plot of atmospheric concentration of CO<m>_2</m> over
+        time.</caption>
+        <image source="images/viz/co2-scatter.png" width="75%"/>
+      </figure>
+      <p>
+        <xref ref="fig-viz-co2-scatter"/> shows a clear upward trend in the
+        atmospheric concentration of CO<m>_2</m> over time. But that appears to be
+        the only conclusion one can make from the scatter visualization.
+      </p>
+      <p>
+        Because time is an ordered quantitative variable, a line plot is often a
+        better choice. Line plots connect the sequence of <c>x</c> and <c>y</c>
+        coordinates of the observations with line segments, thereby emphasizing their
+        order. We can create a line plot using the <c>geom_line</c> function:
+        <idx><h>ggplot</h><h>geom_line</h></idx>
+      </p>
+      <program language="r">
+        <input>
+co2_line &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
+  geom_line()
+
+co2_line
+        </input>
+      </program>
+      <figure xml:id="fig-viz-co2-line">
+        <caption>Line plot of atmospheric concentration of CO<m>_2</m> over
+        time.</caption>
+        <image source="images/viz/co2-line.png" width="75%"/>
+      </figure>
+      <p>
+        Aha! <xref ref="fig-viz-co2-line"/> shows us there <em>is</em> another
+        interesting phenomenon in the data: in addition to increasing over time, the
+        concentration seems to oscillate as well. The comparison between these two
+        visualizations also illustrates a common issue with scatter plots: often, the
+        points are shown too close together or even on top of one another, muddling
+        information that would otherwise be clear (<term>overplotting</term>).
+        <idx><h>overplotting</h></idx>
+      </p>
+      <p>
+        To refine the line plot, we add informative axis labels using <c>xlab</c> and
+        <c>ylab</c>, and increase font size using <c>theme</c>:
+        <idx><h>ggplot</h><h>xlab</h></idx>
+        <idx><h>ggplot</h><h>ylab</h></idx>
+        <idx><h>ggplot</h><h>theme</h></idx>
+      </p>
+      <program language="r">
+        <input>
+co2_line &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
+  geom_line() +
+  xlab("Year") +
+  ylab("Atmospheric CO2 (ppm)") +
+  theme(text = element_text(size = 12))
+
+co2_line
+        </input>
+      </program>
+      <figure xml:id="fig-viz-co2-line-labels">
+        <caption>Line plot of atmospheric concentration of CO<m>_2</m> over time with
+        clearer axes and labels.</caption>
+        <image source="images/viz/co2-line-labels.png" width="75%"/>
+      </figure>
+      <note>
+        <p>The <c>theme</c> function is quite complex and has many arguments that can
+        be specified to control many non-data aspects of a visualization. An in-depth
+        discussion of the <c>theme</c> function is beyond the scope of this book.
+        Interested readers may consult the <c>theme</c> function documentation; see
+        the additional resources section at the end of this chapter.</p>
+      </note>
+      <p>
+        Finally, let us use <c>xlim</c> to zoom in on just the years 1990&#x2013;1994 to
+        better understand the oscillation.
+        <idx><h>ggplot</h><h>scales</h></idx>
+        Note that the vector given to <c>xlim</c> must be of the same type as the
+        data mapped to that axis (here, <c>date</c> type from the <c>lubridate</c>
+        package <xref ref="lubridate"/>):
+      </p>
+      <note>
+        <p><c>lubridate</c> is installed by the <c>tidyverse</c> metapackage but
+        is not loaded by it; hence we need to load it separately.</p>
+      </note>
+      <program language="r">
+        <input>
+library(lubridate)
+
+co2_line &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
+  geom_line() +
+  xlab("Year") +
+  ylab("Atmospheric CO2 (ppm)") +
+  xlim(c(date("1990-01-01"), date("1993-12-01"))) +
+  theme(text = element_text(size = 12))
+
+co2_line
+        </input>
+      </program>
+      <figure xml:id="fig-viz-co2-line-zoom">
+        <caption>Line plot of atmospheric concentration of CO<m>_2</m> from 1990 to
+        1994.</caption>
+        <image source="images/viz/co2-line-zoom.png" width="75%"/>
+      </figure>
+      <p>
+        Interesting! It seems that each year, the atmospheric CO<m>_2</m> increases
+        until it reaches its peak somewhere around April, decreases until around late
+        September, and finally increases again until the end of the year. This
+        oscillating pattern matches up fairly closely with Hawaii&#x2019;s two seasons.
+      </p>
+    </subsection>
+
+    <subsection xml:id="sec-viz-faithful">
+      <title>Scatter plots: the Old Faithful eruption time data set</title>
+      <p>
+        The <c>faithful</c> data set
+        <idx><h>Old Faithful</h></idx>
+        contains measurements of the waiting time between eruptions and the subsequent
+        eruption duration (in minutes) of the Old Faithful geyser in Yellowstone
+        National Park, Wyoming, United States. The data set is available in base R.
+      </p>
+      <p>
+        <term>Question:</term>
+        <idx><h>question</h><h>visualization</h></idx>
+        Is there a relationship between the waiting time before an eruption and the
+        duration of the eruption?
+      </p>
+      <program language="r">
+        <input>
+faithful &lt;- as_tibble(faithful)
+faithful
+        </input>
+      </program>
+      <pre>
+# A tibble: 272 x 2
+   eruptions waiting
+       &lt;dbl&gt;   &lt;dbl&gt;
+ 1     3.6        79
+ 2     1.8        54
+...
+      </pre>
+      <p>
+        Neither variable here has a natural order, so a scatter plot is appropriate:
+      </p>
+      <program language="r">
+        <input>
+faithful_scatter &lt;- ggplot(faithful, aes(x = waiting, y = eruptions)) +
+  geom_point()
+
+faithful_scatter
+        </input>
+      </program>
+      <figure xml:id="fig-viz-faithful-scatter">
+        <caption>Scatter plot of waiting time and eruption time.</caption>
+        <image source="images/viz/faithful-scatter.png" width="65%"/>
+      </figure>
+      <p>
+        We can see in <xref ref="fig-viz-faithful-scatter"/> that the data tend to
+        fall into two groups: one with short waiting and eruption times, and one with
+        long waiting and eruption times. In order to refine the visualization, we need
+        only to add axis labels and make the font more readable:
+      </p>
+      <program language="r">
+        <input>
+faithful_scatter &lt;- ggplot(faithful, aes(x = waiting, y = eruptions)) +
+  geom_point() +
+  xlab("Waiting Time (mins)") +
+  ylab("Eruption Duration (mins)") +
+  theme(text = element_text(size = 12))
+
+faithful_scatter
+        </input>
+      </program>
+      <figure xml:id="fig-viz-faithful-scatter-labels">
+        <caption>Scatter plot of waiting time and eruption time with clearer axes and
+        labels.</caption>
+        <image source="images/viz/faithful-scatter-labels.png" width="65%"/>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="sec-viz-canlang">
+      <title>Axis transformation and colored scatter plots: the Canadian languages
+      data set</title>
+      <p>
+        Recall the <c>can_lang</c> data set <xref ref="timbers2020canlang"/> from
+        <xref ref="ch-intro"/>, <xref ref="ch-reading"/>, and
+        <xref ref="ch-wrangling"/>,
+        <idx><h>Canadian languages</h></idx>
+        which contains counts of languages from the 2016 Canadian census.
+      </p>
+      <p>
+        <term>Question:</term>
+        <idx><h>question</h><h>visualization</h></idx>
+        Is there a relationship between the percentage of people who speak a language
+        as their mother tongue and the percentage for whom that is the primary language
+        spoken at home? And is there a pattern in the strength of this relationship in
+        the higher-level language categories (Official languages, Aboriginal languages,
+        or non-official and non-Aboriginal languages)?
+      </p>
+      <program language="r">
+        <input>
+can_lang &lt;- read_csv("data/can_lang.csv")
+can_lang
+        </input>
+      </program>
+      <pre>
+# A tibble: 214 x 6
+   category             language  mother_tongue most_at_home ...
+   &lt;chr&gt;                &lt;chr&gt;             &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages Algonquin           845          295
+...
+      </pre>
+      <p>
+        We begin with a scatter plot of the <c>mother_tongue</c> and
+        <c>most_at_home</c> columns:
+        <idx><h>ggplot</h><h>geom_point</h></idx>
+      </p>
+      <program language="r">
+        <input>
+ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
+  geom_point()
+        </input>
+      </program>
+      <figure xml:id="fig-viz-canlang-scatter">
+        <caption>Scatter plot of number of Canadians reporting a language as their
+        mother tongue vs the primary language at home.</caption>
+        <image source="images/viz/canlang-scatter.png" width="65%"/>
+      </figure>
+      <p>
+        To make an initial improvement in interpretability, we replace the default
+        axis names with more informative labels. We can use <c>\n</c> to create a
+        line break in axis names.
+        <idx><h>escape character</h></idx>
+      </p>
+      <program language="r">
+        <input>
+ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
+  geom_point() +
+  xlab("Language spoken most at home \n (number of Canadian residents)") +
+  ylab("Mother tongue \n (number of Canadian residents)") +
+  theme(text = element_text(size = 12))
+        </input>
+      </program>
+      <figure xml:id="fig-viz-canlang-scatter-labs">
+        <caption>Scatter plot of number of Canadians reporting a language as their
+        mother tongue vs the primary language at home with x and y labels.</caption>
+        <image source="images/viz/canlang-scatter-labs.png" width="65%"/>
+      </figure>
+      <p>
+        Most of the 214 data points are bunched up in the lower left-hand side of
+        the visualization because many more people in Canada speak English or French
+        (the two points in the upper right corner) than other languages. We can
+        confirm this by filtering the data:
+        <idx><h>filter</h></idx>
+      </p>
+      <program language="r">
+        <input>
+can_lang |&gt;
+  filter(language == "English" | language == "French")
+        </input>
+      </program>
+      <pre>
+# A tibble: 2 x 6
+  category           language mother_tongue most_at_home
+  &lt;chr&gt;              &lt;chr&gt;           &lt;dbl&gt;        &lt;dbl&gt;
+1 Official languages English      19460850     21753155
+2 Official languages French        7166700      7309980
+      </pre>
+      <p>
+        To properly answer our question, we will need to adjust the scale of the axes
+        so that we can clearly see all of the scatter points. We will improve the plot
+        by adjusting the horizontal and vertical axes so that they are on a
+        <term>logarithmic</term> (or <term>log</term>) scale.
+        <idx><h>logarithmic scale</h></idx>
+        <idx><h>ggplot</h><h>logarithmic scaling</h></idx>
+        Log scaling is useful when your data take both <em>very large</em> and
+        <em>very small</em> values, because it helps space out small values and
+        squishes larger values together.
+      </p>
+      <p>
+        We can accomplish logarithmic scaling in <c>ggplot</c> using the
+        <c>scale_x_log10</c> and <c>scale_y_log10</c> functions. We also format axis
+        labels to include commas using <c>label_comma</c> from the <c>scales</c>
+        package.
+      </p>
+      <program language="r">
+        <input>
+library(scales)
+
+ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
+  geom_point() +
+  xlab("Language spoken most at home \n (number of Canadian residents)") +
+  ylab("Mother tongue \n (number of Canadian residents)") +
+  theme(text = element_text(size = 12)) +
+  scale_x_log10(labels = label_comma()) +
+  scale_y_log10(labels = label_comma())
+        </input>
+      </program>
+      <figure xml:id="fig-viz-canlang-scatter-log">
+        <caption>Scatter plot of number of Canadians reporting a language as their
+        mother tongue vs the primary language at home with log adjusted x and y
+        axes.</caption>
+        <image source="images/viz/canlang-scatter-log.png" width="65%"/>
+      </figure>
+      <p>
+        Similar to some of the examples in <xref ref="ch-wrangling"/>, we can convert
+        the counts to percentages using <c>mutate</c>:
+        <idx><h>mutate</h></idx>
+        <idx><h>select</h></idx>
+      </p>
+      <program language="r">
+        <input>
+can_lang &lt;- can_lang |&gt;
+  mutate(
+    mother_tongue_percent = (mother_tongue / 35151728) * 100,
+    most_at_home_percent = (most_at_home / 35151728) * 100
+  )
+
+can_lang |&gt;
+  select(mother_tongue_percent, most_at_home_percent)
+        </input>
+      </program>
+      <pre>
+# A tibble: 214 x 2
+   mother_tongue_percent most_at_home_percent
+                   &lt;dbl&gt;                &lt;dbl&gt;
+ 1             0.00240               0.000839
+ 2             0.0175                0.0155
+...
+      </pre>
+      <program language="r">
+        <input>
+ggplot(can_lang, aes(x = most_at_home_percent, y = mother_tongue_percent)) +
+  geom_point() +
+  xlab("Language spoken most at home \n (percentage of Canadian residents)") +
+  ylab("Mother tongue \n (percentage of Canadian residents)") +
+  theme(text = element_text(size = 12)) +
+  scale_x_log10(labels = comma) +
+  scale_y_log10(labels = comma)
+        </input>
+      </program>
+      <figure xml:id="fig-viz-canlang-scatter-log-pct">
+        <caption>Scatter plot of percentage of Canadians reporting a language as their
+        mother tongue vs the primary language at home.</caption>
+        <image source="images/viz/canlang-scatter-log-pct.png" width="65%"/>
+      </figure>
+      <p>
+        <xref ref="fig-viz-canlang-scatter-log-pct"/> is the appropriate
+        visualization to use to answer the first question. To fully answer it, we
+        assess a few key characteristics of the data:
+      </p>
+      <ul>
+        <li><p><term>Direction:</term> as the percentage of people who have a language
+          as their mother tongue increases, so does the percentage who speak that
+          language at home &#x2014; therefore there is a <term>positive</term>
+          relationship between these two variables.
+          <idx><h>relationship</h><h>positive</h></idx>
+          <idx><h>relationship</h><h>negative</h></idx></p></li>
+        <li><p><term>Strength:</term> because the points are fairly close together and
+          look more like a &#x201C;line&#x201D; than a &#x201C;cloud&#x201D;, we can say
+          this is a <term>strong</term> relationship.
+          <idx><h>relationship</h><h>strong</h></idx>
+          <idx><h>relationship</h><h>weak</h></idx></p></li>
+        <li><p><term>Shape:</term> because drawing a straight line through these
+          points would fit the pattern quite well, the relationship is
+          <term>linear</term>.
+          <idx><h>relationship</h><h>linear</h></idx>
+          <idx><h>relationship</h><h>nonlinear</h></idx></p></li>
+      </ul>
+      <p>
+        Onto the second part of our exploratory data analysis question! We explore
+        whether the strength of the relationship depends on the higher-level language
+        category by coloring the data points:
+      </p>
+      <program language="r">
+        <input>
+ggplot(can_lang, aes(x = most_at_home_percent,
+                     y = mother_tongue_percent,
+                     color = category)) +
+  geom_point() +
+  xlab("Language spoken most at home \n (percentage of Canadian residents)") +
+  ylab("Mother tongue \n (percentage of Canadian residents)") +
+  theme(text = element_text(size = 12)) +
+  scale_x_log10(labels = comma) +
+  scale_y_log10(labels = comma)
+        </input>
+      </program>
+      <figure xml:id="fig-viz-canlang-scatter-color">
+        <caption>Scatter plot of percentage of Canadians reporting a language as their
+        mother tongue vs the primary language at home colored by language
+        category.</caption>
+        <image source="images/viz/canlang-scatter-color.png" width="80%"/>
+      </figure>
+      <p>
+        The legend in <xref ref="fig-viz-canlang-scatter-color"/> takes up valuable
+        plot area. We can improve this by moving the legend title using the
+        <c>legend.position</c> and <c>legend.direction</c> arguments of the
+        <c>theme</c> function. Here we set <c>legend.position</c> to <c>"top"</c>
+        and <c>legend.direction</c> to <c>"vertical"</c>:
+      </p>
+      <program language="r">
+        <input>
+ggplot(can_lang, aes(x = most_at_home_percent,
+                     y = mother_tongue_percent,
+                     color = category)) +
+  geom_point() +
+  xlab("Language spoken most at home \n (percentage of Canadian residents)") +
+  ylab("Mother tongue \n (percentage of Canadian residents)") +
+  theme(text = element_text(size = 12),
+        legend.position = "top",
+        legend.direction = "vertical") +
+  scale_x_log10(labels = comma) +
+  scale_y_log10(labels = comma)
+        </input>
+      </program>
+      <figure xml:id="fig-viz-canlang-scatter-color-legend">
+        <caption>Scatter plot of percentage of Canadians reporting a language as their
+        mother tongue vs the primary language at home colored by language category
+        with the legend edited.</caption>
+        <image source="images/viz/canlang-scatter-color-legend.png" width="65%"/>
+      </figure>
+      <p>
+        In <xref ref="fig-viz-canlang-scatter-color-legend"/>, the points are colored
+        with the default <c>ggplot2</c> color palette. Packages that provide
+        alternative color palettes
+        <idx><h>color palette</h></idx>
+        include <c>RColorBrewer</c> <xref ref="RColorBrewer"/> and <c>ggthemes</c>
+        <xref ref="ggthemes"/>. You can visualize the color palettes that
+        <c>RColorBrewer</c> has to offer with the <c>display.brewer.all</c> function,
+        optionally passing <c>colorblindFriendly = TRUE</c>:
+      </p>
+      <program language="r">
+        <input>
+library(RColorBrewer)
+display.brewer.all(colorblindFriendly = TRUE)
+        </input>
+      </program>
+      <figure xml:id="fig-viz-rcolorbrewer">
+        <caption>Color palettes available from the <c>RColorBrewer</c> R
+        package.</caption>
+        <image source="images/viz/rcolorbrewer.png" width="75%"/>
+      </figure>
+      <p>
+        From <xref ref="fig-viz-rcolorbrewer"/>, we can choose the color palette we
+        want to use. To change the color palette, we add the
+        <c>scale_color_brewer</c> layer indicating the palette we want to use. Below
+        we pick the <c>"Set2"</c> palette. We also set the <c>shape</c> aesthetic
+        mapping to the <c>category</c> variable as well; this makes the scatter
+        point shapes different for each category. This kind of visual
+        redundancy&#x2014;i.e., conveying the same information with both scatter point
+        color and shape&#x2014;can further improve the clarity and accessibility of
+        your visualization:
+      </p>
+      <program language="r">
+        <input>
+ggplot(can_lang, aes(x = most_at_home_percent,
+                     y = mother_tongue_percent,
+                     color = category,
+                     shape = category)) +
+  geom_point() +
+  xlab("Language spoken most at home \n (percentage of Canadian residents)") +
+  ylab("Mother tongue \n (percentage of Canadian residents)") +
+  theme(text = element_text(size = 12),
+        legend.position = "top",
+        legend.direction = "vertical") +
+  scale_x_log10(labels = comma) +
+  scale_y_log10(labels = comma) +
+  scale_color_brewer(palette = "Set2")
+        </input>
+      </program>
+      <figure xml:id="fig-viz-canlang-scatter-color-palette">
+        <caption>Scatter plot of percentage of Canadians reporting a language as their
+        mother tongue vs the primary language at home colored by language category
+        with color-blind friendly colors.</caption>
+        <image source="images/viz/canlang-scatter-color-palette.png" width="65%"/>
+      </figure>
+      <p>
+        From <xref ref="fig-viz-canlang-scatter-color-palette"/>, we can now clearly
+        see that the vast majority of Canadians reported one of the official languages
+        as their mother tongue and as the language they speak most often at home.
+        Based on <xref ref="fig-viz-canlang-scatter-color-palette"/>, there does not
+        appear to be much of a difference in the relationship across the higher-level
+        language categories; for each, there appears to be a strong, positive, and
+        linear relationship.
+      </p>
+    </subsection>
+
+    <subsection xml:id="sec-viz-islands">
+      <title>Bar plots: the island landmass data set</title>
+      <p>
+        The <c>islands.csv</c> data set
+        <idx><h>Island landmasses</h></idx>
+        contains a list of Earth&#x2019;s landmasses as well as their area (in thousands
+        of square miles) <xref ref="islandsdata"/>.
+      </p>
+      <p>
+        <term>Question:</term>
+        <idx><h>question</h><h>visualization</h></idx>
+        Are the continents (North / South America, Africa, Europe, Asia, Australia,
+        Antarctica) Earth&#x2019;s seven largest landmasses? If so, what are the next few
+        largest landmasses after those?
+      </p>
+      <program language="r">
+        <input>
+islands_df &lt;- read_csv("data/islands.csv")
+islands_df
+        </input>
+      </program>
+      <pre>
+# A tibble: 47 x 3
+   landmass       size landmass_type
+   &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;
+ 1 Africa        11506 Continent
+ 2 Antarctica     5500 Continent
+...
+      </pre>
+      <p>
+        The right type of visualization to answer this question is a bar plot. We
+        specify that we would like to use a bar plot via the <c>geom_bar</c> function
+        in <c>ggplot2</c>. We have to pass the <c>stat = "identity"</c> argument to
+        plot exactly the values in the data frame:
+        <idx><h>ggplot</h><h>geom_bar</h></idx>
+      </p>
+      <program language="r">
+        <input>
+islands_bar &lt;- ggplot(islands_df, aes(x = landmass, y = size)) +
+  geom_bar(stat = "identity")
+
+islands_bar
+        </input>
+      </program>
+      <figure xml:id="fig-viz-islands-bar">
+        <caption>Bar plot of Earth&#x2019;s landmass sizes with squished labels.</caption>
+        <image source="images/viz/islands-bar.png" width="80%"/>
+      </figure>
+      <p>
+        Alright, not bad! The plot in <xref ref="fig-viz-islands-bar"/> is definitely
+        the right kind of visualization, as we can clearly see and compare sizes of
+        landmasses. The major issues are that the smaller landmasses&#x2019; sizes are hard
+        to distinguish, and the names of the landmasses are obscuring each other. We
+        keep only the largest 12 landmasses using the <c>slice_max</c> function and
+        use horizontal bars:
+        <idx><h>slice_max</h></idx>
+        <idx><h>slice_min</h></idx>
+      </p>
+      <note>
+        <p>Recall that in <xref ref="ch-intro"/>, we used <c>arrange</c> followed by
+        <c>slice</c> to obtain the ten rows with the largest values of a variable. We
+        could have instead used the <c>slice_max</c> function for this purpose. The
+        <c>slice_max</c> and <c>slice_min</c> functions achieve the same goal as
+        <c>arrange</c> followed by <c>slice</c>, but are slightly more efficient
+        because they are specialized for this purpose.</p>
+      </note>
+      <program language="r">
+        <input>
+islands_top12 &lt;- slice_max(islands_df, order_by = size, n = 12)
+islands_bar &lt;- ggplot(islands_top12, aes(x = size, y = landmass)) +
+  geom_bar(stat = "identity")
+
+islands_bar
+        </input>
+      </program>
+      <figure xml:id="fig-viz-islands-bar-top12">
+        <caption>Bar plot of size for Earth&#x2019;s largest 12 landmasses.</caption>
+        <image source="images/viz/islands-bar-top12.png" width="80%"/>
+      </figure>
+      <p>
+        The plot in <xref ref="fig-viz-islands-bar-top12"/> is clearer now. We could
+        still improve this visualization by coloring the bars based on whether they
+        correspond to a continent, and by organizing the bars by landmass size using
+        the <c>fct_reorder</c> function.
+        <idx><h>ggplot</h><h>reorder</h></idx>
+        We also use the <c>labs</c> function to customize axis, legend, and title
+        labels:
+        <idx><h>ggplot</h><h>labs</h></idx>
+      </p>
+      <program language="r">
+        <input>
+islands_bar &lt;- ggplot(islands_top12,
+                      aes(x = size,
+                          y = fct_reorder(landmass, size, .desc = TRUE),
+                          fill = landmass_type)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Size (1000 square mi)",
+       y = "Landmass",
+       fill = "Type",
+       title = "Earth's twelve largest landmasses") +
+  scale_fill_manual(values = c("steelblue", "darkorange")) +
+  theme(text = element_text(size = 10))
+
+islands_bar
+        </input>
+      </program>
+      <figure xml:id="fig-viz-islands-bar-colored">
+        <caption>Bar plot of size for Earth&#x2019;s largest 12 landmasses, colored by
+        landmass type, with clearer axes and labels.</caption>
+        <image source="images/viz/islands-bar-colored.png" width="80%"/>
+      </figure>
+      <p>
+        The plot in <xref ref="fig-viz-islands-bar-colored"/> is now a very effective
+        visualization for answering our original questions. Landmasses are organized
+        by their size, and continents are colored differently than other landmasses,
+        making it quite clear that continents are the largest seven landmasses.
+      </p>
+    </subsection>
+
+    <subsection xml:id="sec-viz-morley">
+      <title>Histograms: the Michelson speed of light data set</title>
+      <p>
+        The <c>morley</c> data set
+        <idx><h>Michelson speed of light</h></idx>
+        contains measurements of the speed of light collected in experiments
+        performed in 1879. Five experiments were performed, and in each experiment,
+        20 runs were performed <xref ref="lightdata"/>. The <c>morley</c> data set is
+        available in base R. Because the speed of light is a very large number (the
+        true value is 299,792.458 km/sec), the data is coded to be the measured speed
+        of light minus 299,000.
+      </p>
+      <p>
+        <term>Question:</term>
+        <idx><h>question</h><h>visualization</h></idx>
+        Given what we know now about the speed of light (299,792.458 kilometres per
+        second), how accurate were each of the experiments?
+      </p>
+      <program language="r">
+        <input>
+morley &lt;- as_tibble(morley)
+morley
+        </input>
+      </program>
+      <pre>
+# A tibble: 100 x 3
+    Expt   Run Speed
+   &lt;int&gt; &lt;int&gt; &lt;int&gt;
+ 1     1     1   850
+ 2     1     2   740
+...
+      </pre>
+      <p>
+        To tell how accurate the experiments were, we need to visualize the
+        distribution of the measurements.
+        <idx><h>distribution</h></idx>
+        We can do this using a <em>histogram</em>.
+        <idx><h>ggplot</h><h>histogram</h></idx>
+        A histogram helps us visualize how a particular variable is distributed in a
+        data set by separating the data into bins, and then using vertical bars to
+        show how many data points fell in each bin. We create a histogram using
+        <c>geom_histogram</c>:
+      </p>
+      <program language="r">
+        <input>
+morley_hist &lt;- ggplot(morley, aes(x = Speed)) +
+  geom_histogram()
+
+morley_hist
+        </input>
+      </program>
+      <figure xml:id="fig-viz-morley-hist">
+        <caption>Histogram of Michelson&#x2019;s speed of light data.</caption>
+        <image source="images/viz/morley-hist.png" width="75%"/>
+      </figure>
+      <p>
+        We cannot tell how accurate the measurements are unless we can see the true
+        value. We add a vertical line with the <c>geom_vline</c> function, setting
+        <c>xintercept</c> to 792.458 (the true value minus 299,000):
+        <idx><h>ggplot</h><h>geom_vline</h></idx>
+      </p>
+      <program language="r">
+        <input>
+morley_hist &lt;- ggplot(morley, aes(x = Speed)) +
+  geom_histogram() +
+  geom_vline(xintercept = 792.458, linetype = "dashed")
+
+morley_hist
+        </input>
+      </program>
+      <figure xml:id="fig-viz-morley-hist-vline">
+        <caption>Histogram of Michelson&#x2019;s speed of light data with vertical line
+        indicating true speed of light.</caption>
+        <image source="images/viz/morley-hist-vline.png" width="75%"/>
+      </figure>
+      <p>
+        We still cannot tell which experiments led to which measurements. We try
+        coloring the histogram by the <c>Expt</c> variable:
+      </p>
+      <program language="r">
+        <input>
+morley_hist &lt;- ggplot(morley, aes(x = Speed, fill = Expt)) +
+  geom_histogram(alpha = 0.5, position = "identity") +
+  geom_vline(xintercept = 792.458, linetype = "dashed")
+
+morley_hist
+        </input>
+      </program>
+      <figure xml:id="fig-viz-morley-hist-color">
+        <caption>Histogram of Michelson&#x2019;s speed of light data where an attempt is
+        made to color the bars by experiment.</caption>
+        <image source="images/viz/morley-hist-color.png" width="75%"/>
+      </figure>
+      <p>
+        The histogram is still all the same color! The <c>Expt</c> column is
+        currently an <em>integer</em>
+        <idx><h>integer</h></idx>
+        (you can see the label <c>&lt;int&gt;</c> in the printed data frame). We want to
+        treat it as a <em>category</em>. To fix this, we convert the <c>Expt</c>
+        variable into a <em>factor</em>
+        <idx><h>factor</h></idx>
+        by passing it to <c>as_factor</c> in the <c>fill</c> aesthetic mapping:
+        <idx><h>factor</h><h>usage in ggplot</h></idx>
+      </p>
+      <program language="r">
+        <input>
+morley_hist &lt;- ggplot(morley, aes(x = Speed, fill = as_factor(Expt))) +
+  geom_histogram(alpha = 0.5, position = "identity") +
+  geom_vline(xintercept = 792.458, linetype = "dashed")
+
+morley_hist
+        </input>
+      </program>
+      <figure xml:id="fig-viz-morley-hist-factor">
+        <caption>Histogram of Michelson&#x2019;s speed of light data colored by experiment
+        as factor.</caption>
+        <image source="images/viz/morley-hist-factor.png" width="75%"/>
+      </figure>
+      <note>
+        <p>Factors impact plots in two ways: (1) ensuring a color is mapped as
+        discretely where appropriate (as in this example) and (2) the ordering of
+        levels in a plot. <c>ggplot</c> takes into account the order of the factor
+        levels as opposed to the order of data in your data frame.</p>
+      </note>
+      <p>
+        Unfortunately, the colors are all blending together. Let us try a different
+        strategy of creating a grid of separate histogram plots using the
+        <c>facet_grid</c> function:
+        <idx><h>ggplot</h><h>facet_grid</h></idx>
+      </p>
+      <program language="r">
+        <input>
+morley_hist &lt;- ggplot(morley, aes(x = Speed, fill = as_factor(Expt))) +
+  geom_histogram() +
+  facet_grid(rows = vars(Expt)) +
+  geom_vline(xintercept = 792.458, linetype = "dashed")
+
+morley_hist
+        </input>
+      </program>
+      <figure xml:id="fig-viz-morley-hist-facets">
+        <caption>Histogram of Michelson&#x2019;s speed of light data split vertically by
+        experiment.</caption>
+        <image source="images/viz/morley-hist-facets.png" width="65%"/>
+      </figure>
+      <p>
+        The visualization in <xref ref="fig-viz-morley-hist-facets"/> now makes it
+        quite clear how accurate the different experiments were with respect to one
+        another. The most variable measurements came from Experiment 1. The least
+        variable came from Experiment 2.
+      </p>
+      <p>
+        There are two finishing touches to make this visualization even clearer. First,
+        we need to add informative axis labels using <c>labs</c> and increase the
+        font size using <c>theme</c>. Second, we&#x2019;ll use <c>mutate</c> to transform
+        our data into a relative measure of accuracy:
+        <idx><h>ggplot</h><h>labs</h></idx>
+        <idx><h>ggplot</h><h>theme</h></idx>
+      </p>
+      <program language="r">
+        <input>
+morley_rel &lt;- mutate(morley,
+                     relative_accuracy = 100 *
+                       ((299000 + Speed) - 299792.458) / (299792.458))
+
+morley_hist &lt;- ggplot(morley_rel,
+                      aes(x = relative_accuracy,
+                          fill = as_factor(Expt))) +
+  geom_histogram() +
+  facet_grid(rows = vars(Expt)) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  labs(x = "Relative Accuracy (%)",
+       y = "# Measurements",
+       fill = "Experiment ID") +
+  theme(text = element_text(size = 12))
+
+morley_hist
+        </input>
+      </program>
+      <figure xml:id="fig-viz-morley-hist-relative">
+        <caption>Histogram of relative accuracy split vertically by experiment with
+        clearer axes and labels.</caption>
+        <image source="images/viz/morley-hist-relative.png" width="65%"/>
+      </figure>
+      <p>
+        Wow, impressive! These measurements of the speed of light from 1879 had errors
+        around <em>0.05%</em> of the true speed.
+        <xref ref="fig-viz-morley-hist-relative"/> shows you that even though
+        experiments 2 and 5 were perhaps the most accurate, all of the experiments
+        did quite an admirable job given the technology available at the time.
+      </p>
+
+      <subsubsection xml:id="sec-viz-binwidth">
+        <title>Choosing a binwidth for histograms</title>
+        <p>
+          When you create a histogram in R, the default number of bins used is 30.
+          You can set the number of bins yourself by using the <c>bins</c> argument
+          in the <c>geom_histogram</c> geometric object.
+          <idx><h>ggplot</h><h>bins</h></idx>
+          You can also set the <em>width</em> of the bins using the <c>binwidth</c>
+          argument.
+          <idx><h>ggplot</h><h>binwidth</h></idx>
+          There is no hard rule for what the right bin number or width is. It depends
+          entirely on your problem; the <em>right</em> number of bins or bin width is
+          the one that <em>helps you answer the question</em> you asked.
+        </p>
+        <p>
+          To get a sense for how different bin widths affect visualizations, let&#x2019;s
+          compare the default setting with three other histograms where we set the
+          <c>binwidth</c> to 0.001, 0.01 and 0.1:
+        </p>
+        <figure xml:id="fig-viz-morley-hist-binwidth">
+          <caption>Effect of varying bin width on histograms.</caption>
+          <image source="images/viz/morley-hist-binwidth.png" width="90%"/>
+        </figure>
+        <p>
+          In this case, we can see that both the default number of bins and the
+          binwidth of 0.01 are effective for helping answer our question. On the other
+          hand, the bin widths of 0.001 and 0.1 are too small and too big,
+          respectively.
+        </p>
+      </subsubsection>
+
+      <subsubsection xml:id="sec-viz-addlayer">
+        <title>Adding layers to a <c>ggplot</c> plot object</title>
+        <p>
+          One of the powerful features of <c>ggplot</c> is that you can continue to
+          iterate on a single plot object, adding and refining one layer
+          <idx><h>ggplot</h><h>add layer</h></idx>
+          at a time. If you stored your plot as a named object using the assignment
+          symbol (<c>&lt;-</c>), you can add to it using the <c>+</c> operator. For
+          example, if we wanted to add a title to the last plot we created
+          (<c>morley_hist</c>), we can use the <c>+</c> operator to add a title
+          layer with the <c>ggtitle</c> function:
+        </p>
+        <program language="r">
+          <input>
+morley_hist_title &lt;- morley_hist +
+  ggtitle("Speed of light experiments \n were accurate to about 0.05%")
+
+morley_hist_title
+          </input>
+        </program>
+        <figure xml:id="fig-viz-morley-hist-title">
+          <caption>Histogram of relative accuracy split vertically by experiment with a
+          descriptive title highlighting the take home message of the
+          visualization.</caption>
+          <image source="images/viz/morley-hist-title.png" width="65%"/>
+        </figure>
+        <note>
+          <p>Good visualization titles clearly communicate the take home message to
+          the audience. Typically, that is the answer to the question you posed before
+          making the visualization.</p>
+        </note>
+      </subsubsection>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-viz-explaining">
+    <title>Explaining the visualization</title>
+    <p><em>Tell a story</em></p>
+    <p>
+      Typically, your visualization will not be shown entirely on its own, but rather
+      it will be part of a larger presentation. A good way to discuss your
+      visualization
+      <idx><h>visualization</h><h>explanation</h></idx>
+      is as a story:
+    </p>
+    <ol>
+      <li><p>Establish the setting and scope, and describe why you did what you
+        did.</p></li>
+      <li><p>Pose the question that your visualization answers. Justify why the
+        question is important to answer.</p></li>
+      <li><p>Answer the question using your visualization. Make sure you describe
+        <em>all</em> aspects of the visualization (including describing the axes).
+        Some aspects to describe:
+        <ul>
+          <li><p><term>trends (lines):</term> Is the trend increasing, decreasing, or
+            neither? Is there a periodic oscillation? Is the trend linear or
+            nonlinear?</p></li>
+          <li><p><term>distributions (scatters, histograms):</term> How spread out are
+            the data? Where are they centered? Are there any obvious clusters or
+            subgroups?</p></li>
+          <li><p><term>distributions of two variables (scatters):</term> Is there a
+            clear / strong relationship between the variables, a weak one, or no
+            discernible relationship?</p></li>
+          <li><p><term>amounts (bars):</term> How large are the bars relative to one
+            another? Are there patterns in different groups of bars?</p></li>
+        </ul>
+      </p></li>
+      <li><p>Summarize your findings, and use them to motivate whatever you will
+        discuss next.</p></li>
+    </ol>
+    <p>
+      Below are two examples of how one might take these four steps in describing the
+      example visualizations that appeared earlier in this chapter.
+    </p>
+    <p>
+      <term>Mauna Loa Atmospheric CO<m>_2</m> Measurements:</term>
+      <idx><h>Mauna Loa</h></idx>
+      (1) Many current forms of energy generation and conversion&#x2014;from automotive
+      engines to natural gas power plants&#x2014;rely on burning fossil fuels and produce
+      greenhouse gases, typically primarily carbon dioxide (CO<m>_2</m>), as a
+      byproduct. Too much of these gases in the Earth&#x2019;s atmosphere will cause it to
+      trap more heat from the sun, leading to global warming. (2) In order to assess
+      how quickly the atmospheric concentration of CO<m>_2</m> is increasing over
+      time, we (3) used a data set from the Mauna Loa observatory in Hawaii,
+      consisting of CO<m>_2</m> measurements from 1980 to 2020. We plotted the
+      measured concentration of CO<m>_2</m> (on the vertical axis) over time (on the
+      horizontal axis). From this plot, you can see a clear, increasing, and generally
+      linear trend over time. There is also a periodic oscillation that occurs once
+      per year and aligns with Hawaii&#x2019;s seasons, with an amplitude that is small
+      relative to the growth in the overall trend. This shows that atmospheric
+      CO<m>_2</m> is clearly increasing over time, and (4) it is perhaps worth
+      investigating more into the causes.
+    </p>
+    <p>
+      <term>Michelson Light Speed Experiments:</term>
+      <idx><h>Michelson speed of light</h></idx>
+      (1) Our modern understanding of the physics of light has advanced significantly
+      from the late 1800s when Michelson and Morley&#x2019;s experiments first demonstrated
+      that it had a finite speed. We now know that it moves at roughly 299,792.458
+      kilometers per second. (2) But how accurately were we first able to measure
+      this fundamental physical constant, and did certain experiments produce more
+      accurate results than others? (3) To better understand this, we plotted data
+      from 5 experiments by Michelson in 1879, each with 20 trials, as histograms
+      stacked on top of one another. The horizontal axis shows the accuracy of the
+      measurements relative to the true speed of light as we know it today, expressed
+      as a percentage. From this visualization, you can see that most results had
+      relative errors of at most 0.05%. You can also see that experiments 1 and 3 had
+      measurements that were the farthest from the true value, and experiment 5
+      tended to provide the most consistently accurate result. (4) It would be worth
+      further investigating the differences between these experiments to see why they
+      produced different results.
+    </p>
+  </section>
+
+  <section xml:id="sec-viz-saving">
+    <title>Saving the visualization</title>
+    <p><em>Choose the right output format for your needs</em></p>
+    <p>
+      Generally speaking, images come in two flavors: <term>raster</term>
+      <idx><h>raster graphics</h></idx>
+      formats and <term>vector</term>
+      <idx><h>vector graphics</h></idx>
+      formats.
+    </p>
+    <p>
+      <term>Raster</term> images are represented as a 2-D grid of square pixels,
+      each with its own color. Raster images are often <em>compressed</em> before
+      storing so they take up less space. A compressed format is <em>lossy</em> if
+      the image cannot be perfectly re-created when loading and displaying.
+      <em>Lossless</em> formats allow a perfect display of the original image.
+      <idx><h>raster graphics</h><h>file types</h></idx>
+    </p>
+    <ul>
+      <li><p><em>Common raster file types:</em>
+        <url href="https://en.wikipedia.org/wiki/JPEG">JPEG</url>
+        (<c>.jpg</c>, <c>.jpeg</c>): lossy, usually used for photographs;
+        <url href="https://en.wikipedia.org/wiki/Portable_Network_Graphics">PNG</url>
+        (<c>.png</c>): lossless, usually used for plots / line drawings;
+        <url href="https://en.wikipedia.org/wiki/BMP_file_format">BMP</url>
+        (<c>.bmp</c>): lossless, raw image data, no compression (rarely used);
+        <url href="https://en.wikipedia.org/wiki/TIFF">TIFF</url>
+        (<c>.tif</c>, <c>.tiff</c>): typically lossless, used mostly in graphic
+        arts, publishing.</p></li>
+      <li><p><em>Open-source software:</em>
+        <url href="https://www.gimp.org/">GIMP</url></p></li>
+    </ul>
+    <p>
+      <term>Vector</term> images are represented as a collection of mathematical
+      objects (lines, surfaces, shapes, curves). When the computer displays the
+      image, it redraws all of the elements using their mathematical formulas.
+      <idx><h>vector graphics</h><h>file types</h></idx>
+    </p>
+    <ul>
+      <li><p><em>Common vector file types:</em>
+        <url href="https://en.wikipedia.org/wiki/Scalable_Vector_Graphics">SVG</url>
+        (<c>.svg</c>): general-purpose use;
+        <url href="https://en.wikipedia.org/wiki/Encapsulated_PostScript">EPS</url>
+        (<c>.eps</c>): general-purpose use (rarely used).</p></li>
+      <li><p><em>Open-source software:</em>
+        <url href="https://inkscape.org/">Inkscape</url></p></li>
+    </ul>
+    <p>
+      Raster and vector images have opposing advantages and disadvantages. You can
+      zoom into / scale up vector graphics as much as you like without the image
+      looking bad, while raster images eventually start to look &#x201C;pixelated.&#x201D;
+    </p>
+    <note>
+      <p>The portable document format
+      <url href="https://en.wikipedia.org/wiki/PDF">PDF</url> (<c>.pdf</c>) is
+      commonly used to store <em>both</em> raster and vector formats.
+      <idx><h>PDF</h></idx></p>
+    </note>
+    <p>
+      Let us learn how to save plot images to these different file formats using a
+      scatter plot of the
+      <url href="https://www.stat.cmu.edu/~larry/all-of-statistics/=data/faithful.dat">Old
+      Faithful data set</url> <xref ref="faithfuldata"/>, shown in
+      <xref ref="fig-viz-faithful-save"/>:
+    </p>
+    <program language="r">
+      <input>
+library(svglite) # we need this to save SVG files
+faithful_plot &lt;- ggplot(data = faithful, aes(x = waiting, y = eruptions)) +
+  geom_point() +
+  labs(x = "Waiting time to next eruption \n (minutes)",
+       y = "Eruption time \n (minutes)") +
+  theme(text = element_text(size = 12))
+
+faithful_plot
+      </input>
+    </program>
+    <figure xml:id="fig-viz-faithful-save">
+      <caption>Scatter plot of waiting time and eruption time.</caption>
+      <image source="images/viz/faithful_plot.png" width="60%"/>
+    </figure>
+    <p>
+      Now that we have a named <c>ggplot</c> plot object, we can use the
+      <c>ggsave</c> function to save a file containing this image. <c>ggsave</c>
+      works by taking a file name to create for the image as its first argument, and
+      the name of the plot object to save as its second argument. The kind of image to
+      save is specified by the file extension:
+    </p>
+    <program language="r">
+      <input>
+ggsave("img/viz/faithful_plot.png", faithful_plot)
+ggsave("img/viz/faithful_plot.jpg", faithful_plot)
+ggsave("img/viz/faithful_plot.bmp", faithful_plot)
+ggsave("img/viz/faithful_plot.tiff", faithful_plot)
+ggsave("img/viz/faithful_plot.svg", faithful_plot)
+      </input>
+    </program>
+    <p>
+      Notice the difference in file sizes when you look at the files created: raster
+      formats like BMP and TIFF are much larger than compressed raster formats (PNG,
+      JPG), and vector formats (SVG) can be significantly smaller than uncompressed
+      rasters for simple plots. Also note that the JPG format is usually larger than
+      PNG for plot-type images since the JPG compression algorithm is designed for
+      natural images.
+    </p>
+    <p>
+      In <xref ref="fig-viz-raster-image"/>, we also show what the images look like
+      when we zoom in to a rectangle with only 2 data points. You can see why vector
+      graphics formats are so useful: because they are just based on mathematical
+      formulas, vector graphics can be scaled up to arbitrary sizes.
+    </p>
+    <figure xml:id="fig-viz-raster-image">
+      <caption>Zoomed in faithful scatter, raster (PNG, left) and vector (SVG, right)
+      formats.</caption>
+      <image source="images/viz/png-vs-svg.png" width="90%"/>
+    </figure>
+  </section>
+
+  <section xml:id="sec-viz-exercises">
+    <title>Exercises</title>
+    <p>
+      Practice exercises for the material covered in this chapter can be found in
+      the accompanying
+      <url href="https://worksheets.datasciencebook.ca">worksheets repository</url>
+      in the &#x201C;Effective data visualization&#x201D; row. You can launch an interactive
+      version of the worksheet in your browser by clicking the &#x201C;launch binder&#x201D;
+      button. You can also preview a non-interactive version of the worksheet by
+      clicking &#x201C;view worksheet.&#x201D; If you instead decide to download the worksheet
+      and run it on your own machine, make sure to follow the instructions for
+      computer setup found in <xref ref="ch-setup"/>.
+    </p>
+  </section>
+
+  <section xml:id="sec-viz-resources">
+    <title>Additional resources</title>
+    <ul>
+      <li><p>The
+        <url href="https://ggplot2.tidyverse.org"><c>ggplot2</c> R package page</url>
+        <xref ref="ggplot"/> is where you should look if you want to learn more about
+        the functions in this chapter, the full set of arguments you can use, and
+        other related functions. The site also provides a very nice cheat sheet that
+        summarizes many of the data visualization functions from this
+        chapter.</p></li>
+      <li><p>The <em>Fundamentals of Data Visualization</em> <xref ref="wilkeviz"/>
+        has a wealth of information on designing effective visualizations. It is not
+        specific to any particular programming language or library. If you want to
+        improve your visualization skills, this is the next place to
+        look.</p></li>
+      <li><p><em>R for Data Science</em> <xref ref="wickham2016r"/> has a
+        <url href="https://r4ds.had.co.nz/data-visualisation.html">chapter on creating
+        visualizations using <c>ggplot2</c></url>. This reference is specific to R
+        and <c>ggplot2</c>, but provides a much more detailed introduction to the full
+        set of tools that <c>ggplot2</c> provides.</p></li>
+      <li><p>The
+        <url href="https://ggplot2.tidyverse.org/reference/theme.html"><c>theme</c>
+        function documentation</url> is an excellent reference to see how you can
+        fine tune the non-data aspects of your visualization.</p></li>
+      <li><p><em>R for Data Science</em> <xref ref="wickham2016r"/> has a chapter on
+        <url href="https://r4ds.had.co.nz/dates-and-times.html">dates and times</url>.
+        This chapter is where you should look if you want to learn about <c>date</c>
+        vectors and the <c>lubridate</c> package.</p></li>
+    </ul>
+  </section>
 
 </chapter>

@@ -175,6 +175,76 @@
       <url href="https://adv-r.hadley.nz/" visual="adv-r.hadley.nz/"/>
     </biblio>
 
+    <!-- References added for Chapter 4: Effective data visualization -->
+
+    <biblio type="raw" xml:id="deebblind">
+      Deeb, S. S. (2005).
+      The molecular basis of variation in human color vision.
+      <em>Clinical Genetics</em>, 67(5), 369&#x2013;377.
+    </biblio>
+
+    <biblio type="raw" xml:id="faithfuldata">
+      H&#xe6;rdle, W. (1991).
+      <em>Smoothing Techniques with Implementation in S</em>.
+      Springer, New York.
+    </biblio>
+
+    <biblio type="raw" xml:id="ggplot">
+      Wickham, H. (2016).
+      <em>ggplot2: Elegant Graphics for Data Analysis</em>.
+      Springer-Verlag New York.
+      <url href="https://ggplot2.tidyverse.org" visual="ggplot2.tidyverse.org"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="ggthemes">
+      Arnold, J. B. (2021).
+      <em>ggthemes R package</em>.
+      <url href="https://jrnold.github.io/ggthemes/" visual="jrnold.github.io/ggthemes/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="islandsdata">
+      R Core Team. (2021).
+      <em>R: A Language and Environment for Statistical Computing</em>.
+      R Foundation for Statistical Computing, Vienna, Austria.
+      <url href="https://www.R-project.org/" visual="www.R-project.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="lightdata">
+      Michelson, A. A. (1882).
+      Experimental determination of the velocity of light made at the United States
+      Naval Academy, Annapolis.
+      <em>Astronomic Papers</em>, 1, 109&#x2013;145.
+      U.S. Nautical Almanac Office.
+    </biblio>
+
+    <biblio type="raw" xml:id="lubridate">
+      Spinu, V., Grolemund, G., and Wickham, H. (2021).
+      <em>lubridate R package</em>.
+      <url href="https://lubridate.tidyverse.org/" visual="lubridate.tidyverse.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="maunadata">
+      Tans, P. and Keeling, R. (2021).
+      Trends in Atmospheric Carbon Dioxide.
+      NOAA Global Monitoring Laboratory.
+      <url href="https://www.esrl.noaa.gov/gmd/ccgg/trends/data.html"
+           visual="www.esrl.noaa.gov/gmd/ccgg/trends/data.html"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="RColorBrewer">
+      Neuwirth, E. (2014).
+      <em>RColorBrewer R package</em>.
+      <url href="https://cran.r-project.org/package=RColorBrewer"
+           visual="cran.r-project.org/package=RColorBrewer"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="wilkeviz">
+      Wilke, C. O. (2019).
+      <em>Fundamentals of Data Visualization</em>.
+      O&#x2019;Reilly Media.
+      <url href="https://clauswilke.com/dataviz/" visual="clauswilke.com/dataviz/"/>
+    </biblio>
+
   </references>
   <index>
     <title>Index</title>
