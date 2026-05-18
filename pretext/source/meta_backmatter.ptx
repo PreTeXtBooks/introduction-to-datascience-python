@@ -95,6 +95,86 @@
            visual="opentextbc.ca/indigenizationfoundations/"/>
     </biblio>
 
+    <!-- References added for Chapter 2: Reading in data -->
+
+    <biblio type="raw" xml:id="dplyr">
+      Wickham, H., Fran&#xe7;ois, R., Henry, L., and M&#xfc;ller, K. (2021).
+      <em>dplyr R package</em>.
+      <url href="https://dplyr.tidyverse.org/" visual="dplyr.tidyverse.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="googlesearches">
+      Real Time Statistics Project. (2021).
+      Internet Live Stats: Google Search Statistics.
+      <url href="https://www.internetlivestats.com/google-search-statistics/"
+           visual="www.internetlivestats.com/google-search-statistics/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="here">
+      M&#xfc;ller, K. (2020).
+      <em>here R package</em>.
+      <url href="https://here.r-lib.org/" visual="here.r-lib.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="httr2">
+      Wickham, H. (2023).
+      <em>httr2: Perform HTTP Requests and Process the Responses</em>.
+      <url href="https://httr2.r-lib.org/" visual="httr2.r-lib.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="polite">
+      Perepolkin, D. (2021).
+      <em>polite R package</em>.
+      <url href="https://dmi3kno.github.io/polite/" visual="dmi3kno.github.io/polite/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="rhoophiuchi">
+      NASA, ESA, CSA, STScI, K. Pontoppidan (STScI), and A. Pagan (STScI). (2023).
+      Rho Ophiuchi cloud complex.
+      <url href="https://esawebb.org/images/weic2316a/" visual="esawebb.org/images/weic2316a/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="rio">
+      Leeper, T. (2021).
+      <em>rio R package</em>.
+      <url href="https://cloud.r-project.org/web/packages/rio/index.html"
+           visual="cloud.r-project.org/web/packages/rio/index.html"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="rvest">
+      Wickham, H. (2021).
+      <em>rvest R package</em>.
+      <url href="https://rvest.tidyverse.org/" visual="rvest.tidyverse.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="wickham2016r">
+      Wickham, H. and Grolemund, G. (2016).
+      <em>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data</em>.
+      O&#x2019;Reilly.
+      <url href="https://r4ds.had.co.nz/" visual="r4ds.had.co.nz/"/>
+    </biblio>
+
+    <!-- References added for Chapter 3: Cleaning and wrangling data -->
+
+    <biblio type="raw" xml:id="tidyselect">
+      Henry, L. and Wickham, H. (2021).
+      <em>tidyselect R package</em>.
+      <url href="https://tidyselect.r-lib.org/" visual="tidyselect.r-lib.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="wickham2014tidy">
+      Wickham, H. (2014).
+      Tidy data.
+      <em>Journal of Statistical Software</em>, 59(10), 1&#x2013;23.
+    </biblio>
+
+    <biblio type="raw" xml:id="wickham2019advanced">
+      Wickham, H. (2019).
+      <em>Advanced R</em>.
+      CRC Press.
+      <url href="https://adv-r.hadley.nz/" visual="adv-r.hadley.nz/"/>
+    </biblio>
+
   </references>
   <index>
     <title>Index</title>

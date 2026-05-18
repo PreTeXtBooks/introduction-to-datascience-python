@@ -2,11 +2,1314 @@
 <chapter xml:id="ch-wrangling" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Cleaning and wrangling data</title>
 
-  <introduction>
+  <section xml:id="sec-wrangling-overview">
+    <title>Overview</title>
     <p>
-      This chapter is a skeleton placeholder for the PreTeXt version of the book.
-      Content will be filled in from the corresponding R Markdown source file.
+      This chapter is centered around defining tidy data&#x2014;a data format that is suitable for
+      analysis&#x2014;and the tools needed to transform raw data into this format. This will be presented
+      in the context of a real-world data science application, providing more practice working through a
+      whole case study.
     </p>
-  </introduction>
+  </section>
+
+  <section xml:id="sec-wrangling-objectives">
+    <title>Chapter learning objectives</title>
+    <p>By the end of the chapter, readers will be able to do the following:</p>
+    <ul>
+      <li><p>Define the term &#x201C;tidy data&#x201D;.</p></li>
+      <li><p>Discuss the advantages of storing data in a tidy data format.</p></li>
+      <li><p>Define what vectors, lists, and data frames are in R, and describe how they relate to
+        each other.</p></li>
+      <li><p>Describe the common types of data in R and their uses.</p></li>
+      <li><p>Use the following functions for their intended data wrangling tasks:
+        <ul>
+          <li><p><c>c</c></p></li>
+          <li><p><c>pivot_longer</c></p></li>
+          <li><p><c>pivot_wider</c></p></li>
+          <li><p><c>separate</c></p></li>
+          <li><p><c>select</c></p></li>
+          <li><p><c>filter</c></p></li>
+          <li><p><c>mutate</c></p></li>
+          <li><p><c>summarize</c></p></li>
+          <li><p><c>map</c></p></li>
+          <li><p><c>group_by</c></p></li>
+          <li><p><c>across</c></p></li>
+          <li><p><c>rowwise</c></p></li>
+        </ul>
+      </p></li>
+      <li><p>Use the following operators for their intended data wrangling tasks:
+        <ul>
+          <li><p><c>==</c>, <c>!=</c>, <c>&lt;</c>, <c>&lt;=</c>, <c>&gt;</c>, and <c>&gt;=</c></p></li>
+          <li><p><c>%in%</c></p></li>
+          <li><p><c>!</c>, <c>&amp;</c>, and <c>|</c></p></li>
+          <li><p><c>|&gt;</c> and <c>%&gt;%</c></p></li>
+        </ul>
+      </p></li>
+    </ul>
+  </section>
+
+  <section xml:id="sec-wrangling-dataframes">
+    <title>Data frames, vectors, and lists</title>
+    <p>
+      In <xref ref="ch-intro"/> and <xref ref="ch-reading"/>, <em>data frames</em> were the focus:
+      we learned how to import data into R as a data frame, and perform basic operations on data frames
+      in R. In the remainder of this book, this pattern continues. The vast majority of tools we use
+      will require that data are represented as a data frame in R. Therefore, in this section, we will
+      dig more deeply into what data frames are and how they are represented in R.
+    </p>
+
+    <subsection xml:id="sec-wrangling-what-is-df">
+      <title>What is a data frame?</title>
+      <p>
+        A data frame
+        <idx><h>data frame</h><h>definition</h></idx>
+        is a table-like structure for storing data in R. Data frames are important to learn about because
+        most data that you will encounter in practice can be naturally stored as a table. In order to
+        define data frames precisely, we need to introduce a few technical terms:
+      </p>
+      <ul>
+        <li><p><em>variable:</em> a <idx><h>variable</h></idx> characteristic, number, or quantity that
+          can be measured.</p></li>
+        <li><p><em>observation:</em> all <idx><h>observation</h></idx> of the measurements for a given
+          entity.</p></li>
+        <li><p><em>value:</em> a <idx><h>value</h></idx> single measurement of a single variable for a
+          given entity.</p></li>
+      </ul>
+      <p>
+        Given these definitions, a <em>data frame</em> is a tabular data structure in R that is designed
+        to store observations, variables, and their values. Most commonly, each column in a data frame
+        corresponds to a variable, and each row corresponds to an observation. For example,
+        <xref ref="fig-wrangling-obs"/> displays a data set of city populations. Here, the variables are
+        &#x201C;region, year, population&#x201D;; each of these are properties that can be collected or measured.
+      </p>
+
+      <figure xml:id="fig-wrangling-obs">
+        <caption>A data frame storing data regarding the population of various regions in Canada. In this example data frame, the row that corresponds to the observation for the city of Vancouver is colored yellow, and the column that corresponds to the population variable is colored blue.</caption>
+        <image source="images/wrangling/data_frame_slides_cdn.004.png" width="100%"/>
+      </figure>
+
+      <p>
+        R stores the columns of a data frame as either <em>lists</em> or <em>vectors</em>. For example,
+        the data frame in <xref ref="fig-wrangling-vectors"/> has three vectors whose names are
+        <c>region</c>, <c>year</c> and <c>population</c>. The next two sections will explain what lists
+        and vectors are.
+      </p>
+
+      <figure xml:id="fig-wrangling-vectors">
+        <caption>Data frame with three vectors.</caption>
+        <image source="images/wrangling/data_frame_slides_cdn.005.png" width="100%"/>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-what-is-vector">
+      <title>What is a vector?</title>
+      <p>
+        In R, <em>vectors</em>
+        <idx><h>vector</h></idx>
+        <idx><h>atomic vector</h><see>vector</see></idx>
+        are objects that can contain one or more elements. The vector elements are ordered, and they must
+        all be of the same <em>data type</em>; R has several different basic data types, as shown in
+        <xref ref="tab-wrangling-datatype-table"/>. <xref ref="fig-wrangling-vector"/> provides an example
+        of a vector where all of the elements are of character type. You can create vectors in R using the
+        <c>c</c> function
+        <idx><h>c function</h></idx>
+        (<c>c</c> stands for &#x201C;concatenate&#x201D;). For example, to create the vector <c>region</c>
+        as shown in <xref ref="fig-wrangling-vector"/>, you would write:
+      </p>
+      <program language="r">
+        <input>
+region &lt;- c("Toronto", "Montreal", "Vancouver", "Calgary", "Ottawa")
+region
+        </input>
+      </program>
+      <pre>
+[1] "Toronto"   "Montreal"  "Vancouver" "Calgary"   "Ottawa"</pre>
+
+      <note>
+        <p>
+          Technically, these objects are called &#x201C;atomic vectors.&#x201D; In this book we have chosen to
+          call them &#x201C;vectors,&#x201D; which is how they are most commonly referred to in the R community.
+          To be totally precise, &#x201C;vector&#x201D; is an umbrella term that encompasses both atomic vector
+          and list objects in R. But this creates a confusing situation where the term &#x201C;vector&#x201D;
+          could mean &#x201C;atomic vector&#x201D; <em>or</em> &#x201C;the umbrella term for atomic vector and
+          list,&#x201D; depending on context. So to keep things simple, in this book we <em>always</em> use
+          the term &#x201C;vector&#x201D; to refer to &#x201C;atomic vector.&#x201D; We encourage readers who are
+          enthusiastic to learn more to read the Vectors chapter of <em>Advanced R</em>
+          <xref ref="wickham2019advanced"/>.
+        </p>
+      </note>
+
+      <figure xml:id="fig-wrangling-vector">
+        <caption>Example of a vector whose type is character.</caption>
+        <image source="images/wrangling/data_frame_slides_cdn.007.png" width="100%"/>
+      </figure>
+
+      <table xml:id="tab-wrangling-datatype-table">
+        <title>Basic data types in R</title>
+        <tabular top="major" bottom="minor" left="minor" right="minor">
+          <row header="yes" bottom="major">
+            <cell>Data type</cell>
+            <cell>Abbreviation</cell>
+            <cell>Description</cell>
+            <cell>Example</cell>
+          </row>
+          <row>
+            <cell>character</cell>
+            <cell>chr</cell>
+            <cell>letters or numbers surrounded by quotes</cell>
+            <cell><c>"1"</c>, <c>"Hello world!"</c></cell>
+          </row>
+          <row>
+            <cell>double</cell>
+            <cell>dbl</cell>
+            <cell>numbers with decimal values</cell>
+            <cell><c>1.2333</c></cell>
+          </row>
+          <row>
+            <cell>integer</cell>
+            <cell>int</cell>
+            <cell>numbers that do not contain decimals</cell>
+            <cell><c>1L</c>, <c>20L</c> (where &#x201C;L&#x201D; tells R to store as an integer)</cell>
+          </row>
+          <row>
+            <cell>logical</cell>
+            <cell>lgl</cell>
+            <cell>either true or false</cell>
+            <cell><c>TRUE</c>, <c>FALSE</c></cell>
+          </row>
+          <row bottom="major">
+            <cell>factor</cell>
+            <cell>fct</cell>
+            <cell>used to represent data with a limited number of values (usually categories)</cell>
+            <cell>a <c>color</c> variable with levels <c>red</c>, <c>green</c> and <c>orange</c></cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>
+        <idx><h>data types</h></idx>
+        <idx><h>data types</h><h>character (chr)</h></idx>
+        <idx><h>data types</h><h>integer (int)</h></idx>
+        <idx><h>data types</h><h>double (dbl)</h></idx>
+        <idx><h>data types</h><h>logical (lgl)</h></idx>
+        <idx><h>data types</h><h>factor (fct)</h></idx>
+        It is important in R to make sure you represent your data with the correct type. Many of the
+        <c>tidyverse</c> functions we use in this book treat the various data types differently. You should
+        use integers and double types (which both fall under the &#x201C;numeric&#x201D; umbrella type) to
+        represent numbers and perform arithmetic. Characters are used to represent data that should be
+        thought of as &#x201C;text&#x201D;, such as words, names, paths, URLs, and more. Factors help us encode
+        variables that represent <em>categories</em>; a factor variable takes one of a discrete set of
+        values known as <em>levels</em> (one for each category). The levels can be ordered or unordered.
+      </p>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-what-is-list">
+      <title>What is a list?</title>
+      <p>
+        Lists
+        <idx><h>list</h></idx>
+        are also objects in R that have multiple, ordered elements. Vectors and lists differ by the
+        requirement of element type consistency. All elements within a single vector must be of the same
+        type (e.g., all elements are characters), whereas elements within a single list can be of
+        different types (e.g., characters, integers, logicals, and even other lists). See
+        <xref ref="fig-wrangling-vec-vs-list"/>.
+      </p>
+
+      <figure xml:id="fig-wrangling-vec-vs-list">
+        <caption>A vector versus a list.</caption>
+        <image source="images/wrangling/data_frame_slides_cdn.008.png" width="100%"/>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-df-lists">
+      <title>What does this have to do with data frames?</title>
+      <p>
+        A data frame
+        <idx><h>data frame</h><h>definition</h></idx>
+        is really a special kind of list that follows two rules:
+      </p>
+      <ol>
+        <li><p>Each element itself must either be a vector or a list.</p></li>
+        <li><p>Each element (vector or list) must have the same length.</p></li>
+      </ol>
+      <p>
+        Not all columns in a data frame need to be of the same type. <xref ref="fig-wrangling-dataframe"/>
+        shows a data frame where the columns are vectors of different types. But remember: because the
+        columns in this example are <em>vectors</em>, the elements must be the same data type <em>within
+        each column.</em>
+      </p>
+
+      <figure xml:id="fig-wrangling-dataframe">
+        <caption>Data frame and vector types.</caption>
+        <image source="images/wrangling/data_frame_slides_cdn.009.png" width="100%"/>
+      </figure>
+
+      <p>
+        Data frames are actually included in R itself, without the need for any additional packages.
+        However, the <c>tidyverse</c> functions that we use throughout this book all work with a special
+        kind of data frame called a <em>tibble</em>.
+        <idx><h>tibble</h></idx>
+        Tibbles have some additional features and benefits over built-in data frames in R. These include
+        the ability to add useful attributes (such as grouping, which we will discuss later) and more
+        predictable type preservation when subsetting. Because a tibble is just a data frame with some
+        added features, we will collectively refer to both built-in R data frames and tibbles as
+        <em>data frames</em> in this book.
+      </p>
+      <note>
+        <p>
+          You can use the function <c>class</c>
+          <idx><h>class</h></idx>
+          on a data object to assess whether a data frame is a built-in R data frame or a tibble. If the
+          data object is a data frame, <c>class</c> will return <c>"data.frame"</c>. If the data object
+          is a tibble it will return <c>"tbl_df"  "tbl"  "data.frame"</c>. You can easily convert
+          built-in R data frames to tibbles using the <c>tidyverse</c> <c>as_tibble</c> function.
+        </p>
+        <program language="r">
+          <input>
+class(can_lang)
+          </input>
+        </program>
+        <pre>
+[1] "tbl_df"     "tbl"        "data.frame"</pre>
+      </note>
+      <p>
+        Vectors, data frames and lists are basic types of <em>data structure</em> in R, which are core
+        to most data analyses. We summarize them in <xref ref="tab-wrangling-datastructure-table"/>.
+        <idx><h>data structures</h><h>vector</h></idx>
+        <idx><h>data structures</h><h>list</h></idx>
+        <idx><h>data structures</h><h>data frame</h></idx>
+      </p>
+
+      <table xml:id="tab-wrangling-datastructure-table">
+        <title>Basic data structures in R</title>
+        <tabular top="major" bottom="minor" left="minor" right="minor">
+          <row header="yes" bottom="major">
+            <cell>Data Structure</cell>
+            <cell>Description</cell>
+          </row>
+          <row>
+            <cell>vector</cell>
+            <cell>An ordered collection of one, or more, values of the <em>same data type</em>.</cell>
+          </row>
+          <row>
+            <cell>list</cell>
+            <cell>An ordered collection of one, or more, values of <em>possibly different data types</em>.</cell>
+          </row>
+          <row bottom="major">
+            <cell>data frame</cell>
+            <cell>A list of either vectors or lists of the <em>same length</em>, with column names. We typically use a data frame to represent a data set.</cell>
+          </row>
+        </tabular>
+      </table>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-wrangling-tidy">
+    <title>Tidy data</title>
+    <p>
+      There are many ways a tabular data set can be organized. This chapter will focus on introducing
+      the <em>tidy data</em>
+      <idx><h>tidy data</h><h>definition</h></idx>
+      format of organization and how to make your raw (and likely messy) data tidy. A tidy data frame
+      satisfies the following three criteria <xref ref="wickham2014tidy"/>:
+    </p>
+    <ul>
+      <li><p>each row is a single observation,</p></li>
+      <li><p>each column is a single variable, and</p></li>
+      <li><p>each value is a single cell (i.e., its entry in the data frame is not shared with another
+        value).</p></li>
+    </ul>
+    <p>
+      <xref ref="fig-wrangling-tidy-image"/> demonstrates a tidy data set that satisfies these three
+      criteria.
+    </p>
+
+    <figure xml:id="fig-wrangling-tidy-image">
+      <caption>Tidy data satisfies three criteria.</caption>
+      <image source="images/wrangling/tidy_data.001.png" width="80%"/>
+    </figure>
+
+    <p>
+      There are many good reasons for making sure your data are tidy as a first step in your analysis.
+      The most important is that it is a single, consistent format that nearly every function in the
+      <c>tidyverse</c> recognizes. No matter what the variables and observations in your data represent,
+      as long as the data frame
+      <idx><h>tidy data</h><h>arguments for</h></idx>
+      is tidy, you can manipulate it, plot it, and analyze it using the same tools.
+    </p>
+    <note>
+      <p>
+        Is there only one shape for tidy data for a given data set? Not necessarily! It depends on the
+        statistical question you are asking and what the variables are for that question. For tidy data,
+        each variable should be its own column. So, just as it&#x2019;s essential to match your statistical
+        question with the appropriate data analysis tool, it&#x2019;s important to match your statistical
+        question with the appropriate variables and ensure they are represented as individual columns to
+        make the data tidy.
+      </p>
+    </note>
+
+    <subsection xml:id="sec-wrangling-pivot-longer">
+      <title>Tidying up: going from wide to long using <c>pivot_longer</c></title>
+      <p>
+        One task that is commonly performed to get data into a tidy format
+        <idx><h>pivot_longer</h></idx>
+        is to combine values that are stored in separate columns, but are really part of the same
+        variable, into one. Data is often stored this way because this format is sometimes more intuitive
+        for human readability and understanding, and humans create data sets. In
+        <xref ref="fig-wrangling-wide-to-long"/>, the table on the left is in an untidy, &#x201C;wide&#x201D;
+        format because the year values (2006, 2011, 2016) are stored as column names.
+      </p>
+
+      <figure xml:id="fig-wrangling-wide-to-long">
+        <caption>Pivoting data from a wide to long data format.</caption>
+        <image source="images/wrangling/pivot_functions.001.png" width="100%"/>
+      </figure>
+
+      <p>
+        We can achieve this effect in R using the <c>pivot_longer</c> function from the <c>tidyverse</c>
+        package. The <c>pivot_longer</c> function combines columns, and is usually used during tidying
+        data when we need to make the data frame longer and narrower. To learn how to use
+        <c>pivot_longer</c>, we will work through an example with the
+        <c>region_lang_top5_cities_wide.csv</c> data set. This data set contains the counts of how many
+        Canadians cited each language as their mother tongue for five major Canadian cities (Toronto,
+        Montr&#xe9;al, Vancouver, Calgary, and Edmonton) from the 2016 Canadian census.
+        <idx><h>Canadian languages</h></idx>
+        To get started, we will load the <c>tidyverse</c> package and use <c>read_csv</c> to load the
+        (untidy) data.
+      </p>
+      <program language="r">
+        <input>
+library(tidyverse)
+
+lang_wide &lt;- read_csv("data/region_lang_top5_cities_wide.csv")
+lang_wide
+        </input>
+      </program>
+      <p>
+        What is wrong with the untidy format above? The table on the left in
+        <xref ref="fig-wrangling-pivot-longer-with-table"/> represents the data in the &#x201C;wide&#x201D;
+        (messy) format. From a data analysis perspective, this format is not ideal because the values of
+        the variable <em>region</em> (Toronto, Montr&#xe9;al, Vancouver, Calgary, and Edmonton) are stored as
+        column names. Additionally, the <em>mother tongue</em> variable values are spread across multiple
+        columns, which will prevent us from doing any desired visualization or statistical tasks until we
+        combine them into one column.
+      </p>
+
+      <figure xml:id="fig-wrangling-pivot-longer-with-table">
+        <caption>Going from wide to long with the <c>pivot_longer</c> function.</caption>
+        <image source="images/wrangling/pivot_functions.003.png" width="100%"/>
+      </figure>
+
+      <p>
+        <xref ref="fig-wrangling-pivot-longer"/> details the arguments that we need to specify in the
+        <c>pivot_longer</c> function to accomplish this data transformation.
+      </p>
+
+      <figure xml:id="fig-wrangling-pivot-longer">
+        <caption>Syntax for the <c>pivot_longer</c> function.</caption>
+        <image source="images/wrangling/pivot_longer.png" width="100%"/>
+      </figure>
+
+      <p>
+        We use <c>pivot_longer</c> to combine the Toronto, Montr&#xe9;al, Vancouver, Calgary, and Edmonton
+        columns into a single column called <c>region</c>, and create a column called
+        <c>mother_tongue</c> that contains the count of how many Canadians report each language as their
+        mother tongue for each metropolitan area. We use a colon <c>:</c> between Toronto and Edmonton
+        to tell R to select all the columns between Toronto and Edmonton:
+        <idx><h>column range</h></idx>
+      </p>
+      <program language="r">
+        <input>
+lang_mother_tidy &lt;- pivot_longer(lang_wide,
+  cols = Toronto:Edmonton,
+  names_to = "region",
+  values_to = "mother_tongue"
+)
+
+lang_mother_tidy
+        </input>
+      </program>
+      <note>
+        <p>
+          In the code above, the call to the <c>pivot_longer</c> function is split across several lines.
+          This is allowed in certain cases; for example, when calling a function as above, as long as the
+          line ends with a comma <c>,</c> R knows to keep reading on the next line. Splitting long lines
+          like this across multiple lines is encouraged as it helps significantly with code readability.
+          Generally speaking, you should limit each line of code to about 80 characters.
+        </p>
+      </note>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-pivot-wider">
+      <title>Tidying up: going from long to wide using <c>pivot_wider</c></title>
+      <p>
+        Suppose we have observations spread across multiple rows rather than in a single row. For
+        example, in <xref ref="fig-wrangling-long-to-wide"/>, the table on the left is in an untidy,
+        long format because the <c>count</c> column contains three variables (population, commuter
+        count, and year the city was incorporated) and information about each observation is split across
+        three rows.
+        <idx><h>pivot_wider</h></idx>
+      </p>
+
+      <figure xml:id="fig-wrangling-long-to-wide">
+        <caption>Going from long to wide data.</caption>
+        <image source="images/wrangling/pivot_functions.002.png" width="100%"/>
+      </figure>
+
+      <p>
+        To tidy this type of data in R, we can use the <c>pivot_wider</c> function. The <c>pivot_wider</c>
+        function generally increases the number of columns (widens) and decreases the number of rows in a
+        data set. To learn how to use <c>pivot_wider</c>, we will work through an example with the
+        <c>region_lang_top5_cities_long.csv</c> data set.
+      </p>
+      <program language="r">
+        <input>
+lang_long &lt;- read_csv("data/region_lang_top5_cities_long.csv")
+lang_long
+        </input>
+      </program>
+      <p>
+        <xref ref="fig-wrangling-pivot-wider-table"/> shows how this data will be tidied using the
+        <c>pivot_wider</c> function.
+      </p>
+
+      <figure xml:id="fig-wrangling-pivot-wider-table">
+        <caption>Going from long to wide with the <c>pivot_wider</c> function.</caption>
+        <image source="images/wrangling/pivot_functions.004.png" width="100%"/>
+      </figure>
+
+      <p>
+        <xref ref="fig-wrangling-pivot-wider"/> details the arguments that we need to specify in the
+        <c>pivot_wider</c> function.
+      </p>
+
+      <figure xml:id="fig-wrangling-pivot-wider">
+        <caption>Syntax for the <c>pivot_wider</c> function.</caption>
+        <image source="images/wrangling/pivot_wider.png" width="100%"/>
+      </figure>
+
+      <p>We will apply the function as detailed in <xref ref="fig-wrangling-pivot-wider"/>:</p>
+      <program language="r">
+        <input>
+lang_home_tidy &lt;- pivot_wider(lang_long,
+  names_from = type,
+  values_from = count
+)
+lang_home_tidy
+        </input>
+      </program>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-separate">
+      <title>Tidying up: using <c>separate</c> to deal with multiple delimiters</title>
+      <p>
+        Data are also not considered tidy when multiple values are stored in the same cell. The data set
+        we show below is even messier than the ones we dealt with above: the <c>Toronto</c>,
+        <c>Montr&#xe9;al</c>, <c>Vancouver</c>, <c>Calgary</c>, and <c>Edmonton</c> columns contain the
+        number of Canadians reporting their primary language at home and work in one column separated by
+        the delimiter (<c>/</c>). The column names are the values of a variable, <em>and</em> each value
+        does not have its own cell! To turn this messy data into tidy data, we&#x2019;ll have to fix these
+        issues.
+        <idx><h>separate</h></idx>
+        <idx><h>delimiter</h></idx>
+      </p>
+      <program language="r">
+        <input>
+lang_messy &lt;- read_csv("data/region_lang_top5_cities_messy.csv")
+lang_messy
+        </input>
+      </program>
+      <p>
+        First we&#x2019;ll use <c>pivot_longer</c> to create two columns, <c>region</c> and <c>value</c>,
+        similar to what we did previously.
+      </p>
+      <program language="r">
+        <input>
+lang_messy_longer &lt;- pivot_longer(lang_messy,
+  cols = Toronto:Edmonton,
+  names_to = "region",
+  values_to = "value"
+)
+
+lang_messy_longer
+        </input>
+      </program>
+      <p>
+        Next we&#x2019;ll use <c>separate</c> to split the <c>value</c> column into two columns.
+        <xref ref="fig-wrangling-separate"/> outlines what we need to specify to use <c>separate</c>.
+      </p>
+
+      <figure xml:id="fig-wrangling-separate">
+        <caption>Syntax for the <c>separate</c> function.</caption>
+        <image source="images/wrangling/separate_function.png" width="100%"/>
+      </figure>
+
+      <program language="r">
+        <input>
+tidy_lang &lt;- separate(lang_messy_longer,
+  col = value,
+  into = c("most_at_home", "most_at_work"),
+  sep = "/"
+)
+
+tidy_lang
+        </input>
+      </program>
+      <p>
+        Notice in the table above that the word <c>&lt;chr&gt;</c> appears beneath each of the column names,
+        indicating that all variables are &#x201C;character&#x201D; data types. The <c>most_at_home</c> and
+        <c>most_at_work</c> variables should be numeric. Fortunately, the <c>separate</c> function
+        provides a natural way to fix problems like this: we can set <c>convert = TRUE</c> to convert the
+        <c>most_at_home</c> and <c>most_at_work</c> columns to the correct data type.
+      </p>
+      <program language="r">
+        <input>
+tidy_lang &lt;- separate(lang_messy_longer,
+  col = value,
+  into = c("most_at_home", "most_at_work"),
+  sep = "/",
+  convert = TRUE
+)
+
+tidy_lang
+        </input>
+      </program>
+      <p>
+        Now we see <c>&lt;int&gt;</c> appears under the <c>most_at_home</c> and <c>most_at_work</c>
+        columns, indicating they are integer data types (i.e., numbers)!
+      </p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-wrangling-select">
+    <title>Using <c>select</c> to extract a range of columns</title>
+    <p>
+      Now that the <c>tidy_lang</c> data is indeed <em>tidy</em>, we can start manipulating it using the
+      powerful suite of functions from the <c>tidyverse</c>. For the first example, recall the
+      <c>select</c> function from <xref ref="ch-intro"/>, which lets us create a subset of columns from
+      a data frame. Suppose we wanted to select only the columns <c>language</c>, <c>region</c>,
+      <c>most_at_home</c> and <c>most_at_work</c> from the <c>tidy_lang</c> data set.
+      <idx><h>select</h><h>helpers</h></idx>
+    </p>
+    <program language="r">
+      <input>
+selected_columns &lt;- select(tidy_lang,
+                           language,
+                           region,
+                           most_at_home,
+                           most_at_work)
+selected_columns
+      </input>
+    </program>
+    <p>
+      Here we wrote out the names of each of the columns. However, this method is time-consuming,
+      especially if you have a lot of columns! Another approach is to use a &#x201C;select helper&#x201D;. Select
+      helpers are operators that make it easier for us to select columns. For instance, we can use a
+      select helper to choose a range of columns rather than typing each column name out. To do this,
+      we use the colon (<c>:</c>) operator to denote the range.
+      <idx><h>column range</h></idx>
+      For example, to get all the columns in the <c>tidy_lang</c> data frame from <c>language</c> to
+      <c>most_at_work</c> we pass <c>language:most_at_work</c> as the second argument to the
+      <c>select</c> function.
+    </p>
+    <program language="r">
+      <input>
+column_range &lt;- select(tidy_lang, language:most_at_work)
+column_range
+      </input>
+    </program>
+    <p>
+      Suppose instead we wanted to extract columns that followed a particular pattern rather than just
+      selecting a range. In particular, we can use the <c>select</c> helper
+      <idx><h>select</h><h>starts_with</h></idx>
+      <c>starts_with</c> to choose only the columns that start with the word &#x201C;most&#x201D;:
+    </p>
+    <program language="r">
+      <input>
+select(tidy_lang, starts_with("most"))
+      </input>
+    </program>
+    <p>
+      We could also have chosen the columns containing an underscore <c>_</c> by adding
+      <c>contains("_")</c> as the second argument in the <c>select</c> function.
+      <idx><h>select</h><h>contains</h></idx>
+    </p>
+    <program language="r">
+      <input>
+select(tidy_lang, contains("_"))
+      </input>
+    </program>
+  </section>
+
+  <section xml:id="sec-wrangling-filter">
+    <title>Using <c>filter</c> to extract rows</title>
+    <p>
+      Next, we revisit the <c>filter</c> function from <xref ref="ch-intro"/>, which lets us create a
+      subset of rows from a data frame. Recall the two main arguments to the <c>filter</c> function:
+      the first is the name of the data frame object, and the second is a <em>logical statement</em> to
+      use when filtering the rows.
+      <idx><h>filter</h><h>logical statements</h></idx>
+      <idx><h>logical statement</h><see>logical operator</see></idx>
+      <c>filter</c> works by returning the rows where the logical statement evaluates to <c>TRUE</c>.
+    </p>
+
+    <subsection xml:id="sec-wrangling-filter-eq">
+      <title>Extracting rows that have a certain value with <c>==</c></title>
+      <p>
+        Suppose we are only interested in the subset of rows in <c>tidy_lang</c> corresponding to the
+        official languages of Canada (English and French). We can <c>filter</c> for these rows by using
+        the <em>equivalency operator</em> (<c>==</c>)
+        <idx><h>logical operator</h><h>equivalency</h></idx>
+        to compare the values of the <c>category</c> column with the value <c>"Official languages"</c>.
+      </p>
+      <program language="r">
+        <input>
+official_langs &lt;- filter(tidy_lang, category == "Official languages")
+official_langs
+        </input>
+      </program>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-filter-neq">
+      <title>Extracting rows that do not have a certain value with <c>!=</c></title>
+      <p>
+        What if we want all the other language categories in the data set <em>except</em> for those in
+        the <c>"Official languages"</c> category? We can accomplish this with the <c>!=</c>
+        <idx><h>logical operator</h><h>inequivalency</h></idx>
+        operator, which means &#x201C;not equal to&#x201D;.
+      </p>
+      <program language="r">
+        <input>
+filter(tidy_lang, category != "Official languages")
+        </input>
+      </program>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-filter-and">
+      <title>Extracting rows satisfying multiple conditions using <c>,</c> or <c>&amp;</c></title>
+      <p>
+        Suppose now we want to look at only the rows for the French language in Montr&#xe9;al. To do this,
+        we need to filter the data set to find rows that satisfy multiple conditions simultaneously. We
+        can do this with the comma symbol (<c>,</c>), which in the case of <c>filter</c> is interpreted
+        by R as &#x201C;and&#x201D;.
+        <idx><h>logical operator</h><h>and</h></idx>
+      </p>
+      <program language="r">
+        <input>
+filter(official_langs, region == "Montréal", language == "French")
+        </input>
+      </program>
+      <p>
+        We can also use the ampersand (<c>&amp;</c>) logical operator, which gives us cases where
+        <em>both</em> one condition <em>and</em> another condition are satisfied. You can use either
+        comma (<c>,</c>) or ampersand (<c>&amp;</c>) in the <c>filter</c> function interchangeably.
+      </p>
+      <program language="r">
+        <input>
+filter(official_langs, region == "Montréal" &amp; language == "French")
+        </input>
+      </program>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-filter-or">
+      <title>Extracting rows satisfying at least one condition using <c>|</c></title>
+      <p>
+        Suppose we were interested in only those rows corresponding to cities in Alberta in the
+        <c>official_langs</c> data set (Edmonton and Calgary). We can&#x2019;t use <c>,</c> as we did above
+        because <c>region</c> cannot be both Edmonton <em>and</em> Calgary simultaneously. Instead, we
+        can use the vertical pipe (<c>|</c>) logical operator, which gives us the cases where one
+        condition <em>or</em> another condition <em>or</em> both are satisfied.
+        <idx><h>logical operator</h><h>or</h></idx>
+      </p>
+      <program language="r">
+        <input>
+filter(official_langs, region == "Calgary" | region == "Edmonton")
+        </input>
+      </program>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-filter-in">
+      <title>Extracting rows with values in a vector using <c>%in%</c></title>
+      <p>
+        Next, suppose we want to see the populations of our five cities. Let&#x2019;s read in the
+        <c>region_data.csv</c> file that comes from the 2016 Canadian census, as it contains statistics
+        for number of households, land area, population and number of dwellings for different regions.
+      </p>
+      <program language="r">
+        <input>
+region_data &lt;- read_csv("data/region_data.csv")
+region_data
+        </input>
+      </program>
+      <p>
+        To get the population of the five cities we can filter the data set using the <c>%in%</c>
+        operator. The <c>%in%</c> operator is used to see if an element belongs to a vector.
+        <idx><h>logical operator</h><h>containment</h></idx>
+        Here we are filtering for rows where the value in the <c>region</c> column matches any of the
+        five cities we are interested in: Toronto, Montr&#xe9;al, Vancouver, Calgary, and Edmonton.
+      </p>
+      <program language="r">
+        <input>
+city_names &lt;- c("Toronto", "Montréal", "Vancouver", "Calgary", "Edmonton")
+five_cities &lt;- filter(region_data,
+                      region %in% city_names)
+five_cities
+        </input>
+      </program>
+      <note>
+        <p>
+          What&#x2019;s the difference between <c>==</c> and <c>%in%</c>? Suppose we have two vectors,
+          <c>vectorA</c> and <c>vectorB</c>. If you type <c>vectorA == vectorB</c> into R it will compare
+          the vectors element by element. R checks if the first element of <c>vectorA</c> equals the
+          first element of <c>vectorB</c>, the second element of <c>vectorA</c> equals the second element
+          of <c>vectorB</c>, and so on. On the other hand, <c>vectorA %in% vectorB</c> compares the first
+          element of <c>vectorA</c> to all the elements in <c>vectorB</c>. Then the second element of
+          <c>vectorA</c> is compared to all the elements in <c>vectorB</c>, and so on. Notice the
+          difference between <c>==</c> and <c>%in%</c> in the example below.
+        </p>
+        <program language="r">
+          <input>
+c("Vancouver", "Toronto") == c("Toronto", "Vancouver")
+c("Vancouver", "Toronto") %in% c("Toronto", "Vancouver")
+          </input>
+        </program>
+        <pre>
+[1] FALSE FALSE
+[1] TRUE TRUE</pre>
+      </note>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-filter-threshold">
+      <title>Extracting rows above or below a threshold using <c>&gt;</c> and <c>&lt;</c></title>
+      <p>
+        We can use the <c>&gt;</c> symbol to look for values <em>above</em> a threshold, and the <c>&lt;</c>
+        symbol to look for values <em>below</em> a threshold. The <c>&gt;=</c> and <c>&lt;=</c> symbols
+        similarly look for <em>equal to or above</em> a threshold and <em>equal to or below</em> a
+        threshold.
+        <idx><h>logical operator</h><h>greater than</h></idx>
+        <idx><h>logical operator</h><h>less than</h></idx>
+      </p>
+      <program language="r">
+        <input>
+filter(official_langs, most_at_home > 2669195)
+        </input>
+      </program>
+      <p>
+        <c>filter</c> returns a data frame with only one row, indicating that when considering the
+        official languages, only English in Toronto is reported by more people as their primary language
+        at home than French in Montr&#xe9;al according to the 2016 Canadian census.
+      </p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-wrangling-mutate">
+    <title>Using <c>mutate</c> to modify or add columns</title>
+
+    <subsection xml:id="sec-wrangling-mutate-modify">
+      <title>Using <c>mutate</c> to modify columns</title>
+      <p>
+        In <xref ref="sec-wrangling-separate"/>, when we first read in the
+        <c>"region_lang_top5_cities_messy.csv"</c> data, all of the variables were &#x201C;character&#x201D; data
+        types.
+        <idx><h>mutate</h></idx>
+        During the tidying process, we used the <c>convert</c> argument from the <c>separate</c>
+        function to convert the <c>most_at_home</c> and <c>most_at_work</c> columns to the desired
+        integer (i.e., numeric class) data types. But suppose we didn&#x2019;t use the <c>convert</c>
+        argument, and needed to modify the column type some other way. <c>mutate</c> is a useful function
+        to modify or create new data frame columns.
+      </p>
+      <program language="r">
+        <input>
+lang_messy &lt;- read_csv("data/region_lang_top5_cities_messy.csv")
+lang_messy_longer &lt;- pivot_longer(lang_messy,
+               cols = Toronto:Edmonton,
+               names_to = "region",
+               values_to = "value")
+tidy_lang_chr &lt;- separate(lang_messy_longer, col = value,
+           into = c("most_at_home", "most_at_work"),
+           sep = "/")
+official_langs_chr &lt;- filter(tidy_lang_chr, category == "Official languages")
+
+official_langs_chr
+        </input>
+      </program>
+      <p>
+        To use <c>mutate</c>, again we first specify the data set in the first argument, and in the
+        following arguments, we specify the name of the column we want to modify or create, an <c>=</c>
+        sign, and then the function we want to apply. <c>mutate</c>&#x2019;s general syntax is detailed in
+        <xref ref="fig-wrangling-mutate"/>.
+      </p>
+
+      <figure xml:id="fig-wrangling-mutate">
+        <caption>Syntax for the <c>mutate</c> function.</caption>
+        <image source="images/wrangling/mutate_function.png" width="100%"/>
+      </figure>
+
+      <p>Below we use <c>mutate</c> to convert the columns <c>most_at_home</c> and <c>most_at_work</c> to numeric data types:</p>
+      <program language="r">
+        <input>
+official_langs_numeric &lt;- mutate(official_langs_chr,
+  most_at_home = as.numeric(most_at_home),
+  most_at_work = as.numeric(most_at_work)
+)
+
+official_langs_numeric
+        </input>
+      </program>
+      <p>
+        Now we see <c>&lt;dbl&gt;</c> appears under the <c>most_at_home</c> and <c>most_at_work</c>
+        columns, indicating they are double data types (which is a numeric data type)!
+      </p>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-mutate-new">
+      <title>Using <c>mutate</c> to create new columns</title>
+      <p>
+        We can even go a step further and transform counts to a relative frequency or proportion. We can
+        do this by dividing the number of people reporting a given language as their primary language at
+        home by the number of people who live in the city. Let&#x2019;s use <c>mutate</c> to create a new column
+        in our data frame that holds the proportion of people who speak English for our five cities of
+        focus in this chapter.
+      </p>
+      <p>
+        To accomplish this, we will first create a vector containing the population values for the cities
+        (Toronto, Montr&#xe9;al, Vancouver, Calgary, Edmonton) using the <c>c</c> function:
+      </p>
+      <program language="r">
+        <input>
+city_pops &lt;- c(5928040, 4098927, 2463431, 1392609, 1321426)
+city_pops
+        </input>
+      </program>
+      <pre>
+[1] 5928040 4098927 2463431 1392609 1321426</pre>
+      <p>Next, we filter the <c>official_langs</c> data frame to keep only English rows:</p>
+      <program language="r">
+        <input>
+english_langs &lt;- filter(official_langs, language == "English")
+english_langs
+        </input>
+      </program>
+      <p>Finally, we use <c>mutate</c> to create a new column, <c>most_at_home_proportion</c>:</p>
+      <program language="r">
+        <input>
+english_langs &lt;- mutate(english_langs,
+                         most_at_home_proportion = most_at_home / city_pops)
+
+english_langs
+        </input>
+      </program>
+      <note>
+        <p>
+          In more advanced data wrangling, one might solve this problem in a less error-prone way though
+          using a technique called &#x201C;joins.&#x201D; We link to resources that discuss this in the additional
+          resources at the end of this chapter.
+        </p>
+      </note>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-wrangling-pipe">
+    <title>Combining functions using the pipe operator, <c>|&gt;</c></title>
+    <p>
+      In R, we often have to call multiple functions in a sequence to process a data frame. The basic
+      ways of doing this can become quickly unreadable if there are many steps. The <em>pipe operator</em>
+      (<c>|&gt;</c>) solves this problem, resulting in cleaner and easier-to-follow code.
+      <idx><h>pipe</h></idx>
+      <c>|&gt;</c> is built into R so you don&#x2019;t need to load any packages to use it. You can think of the
+      pipe as a physical pipe. It takes the output from the function on the left-hand side of the pipe,
+      and passes it as the first argument to the function on the right-hand side of the pipe.
+    </p>
+
+    <note>
+      <p>
+        In this textbook, we will be using the base R pipe operator syntax, <c>|&gt;</c>. This base R
+        <c>|&gt;</c> pipe operator was inspired by a previous version of the pipe operator, <c>%&gt;%</c>. The
+        <c>%&gt;%</c> pipe operator is not built into R and is from the <c>magrittr</c> R package. The
+        <c>tidyverse</c> metapackage imports the <c>%&gt;%</c> pipe operator via <c>dplyr</c>.
+        <idx><h>pipe</h></idx>
+        In most cases these two pipes are interchangeable and either can be used.
+      </p>
+    </note>
+
+    <subsection xml:id="sec-wrangling-pipe-two">
+      <title>Using <c>|&gt;</c> to combine <c>filter</c> and <c>select</c></title>
+      <p>
+        Let&#x2019;s work with the tidy <c>tidy_lang</c> data set from <xref ref="sec-wrangling-separate"/>.
+        Suppose we want to create a subset of the data with only the languages and counts of each
+        language spoken most at home for the city of Vancouver. With the pipe, we do not need to create an
+        intermediate object to store the output from <c>filter</c>. Instead, we can directly send the
+        output of <c>filter</c> to the input of <c>select</c>:
+      </p>
+      <program language="r">
+        <input>
+van_data_selected &lt;- filter(tidy_lang, region == "Vancouver") |&gt;
+        select(language, most_at_home)
+
+van_data_selected
+        </input>
+      </program>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-pipe-many">
+      <title>Using <c>|&gt;</c> with more than two functions</title>
+      <p>
+        The pipe operator (<c>|&gt;</c>) can be used with any function in R. Additionally, we can pipe
+        together more than two functions. For example, we can pipe together three functions to:
+      </p>
+      <ul>
+        <li><p><c>filter</c> rows to include only those where the counts of the language most spoken at
+          home are greater than 10,000,</p></li>
+        <li><p><c>select</c> only the columns corresponding to <c>region</c>, <c>language</c> and
+          <c>most_at_home</c>, and</p></li>
+        <li><p><c>arrange</c> the data frame rows in order by counts of the language most spoken at home
+          from smallest to largest.</p></li>
+      </ul>
+      <p>
+        As we saw in <xref ref="ch-intro"/>, we can use the <c>tidyverse</c> <c>arrange</c> function
+        <idx><h>arrange</h></idx>
+        to order the rows in the data frame by the values of one or more columns.
+      </p>
+      <program language="r">
+        <input>
+large_region_lang &lt;- tidy_lang |&gt;
+  filter(most_at_home > 10000) |&gt;
+  select(region, language, most_at_home) |&gt;
+  arrange(most_at_home)
+
+large_region_lang
+        </input>
+      </program>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-wrangling-summarize">
+    <title>Aggregating data with <c>summarize</c> and <c>map</c></title>
+
+    <subsection xml:id="sec-wrangling-summarize-whole">
+      <title>Calculating summary statistics on whole columns</title>
+      <p>
+        As a part of many data analyses, we need to calculate a summary value for the data (a <em>summary
+        statistic</em>).
+        <idx><h>summarize</h></idx>
+        Examples of summary statistics we might want to calculate are the number of observations, the
+        average/mean value for a column, the minimum value, etc. Oftentimes, this summary statistic is
+        calculated from the values in a data frame column, or columns, as shown in
+        <xref ref="fig-wrangling-summarize"/>.
+      </p>
+
+      <figure xml:id="fig-wrangling-summarize">
+        <caption><c>summarize</c> is useful for calculating summary statistics on one or more column(s). In its simplest use case, it creates a new data frame with a single row containing the summary statistic(s) for each column being summarized. The darker, top row of each table represents the column headers.</caption>
+        <image source="images/wrangling/summarize.001.png" width="85%"/>
+      </figure>
+
+      <p>
+        A useful <c>dplyr</c> function for calculating summary statistics is <c>summarize</c>, where the
+        first argument is the data frame and subsequent arguments are the summaries we want to perform.
+        Here we show how to use the <c>summarize</c> function to calculate the minimum and maximum number
+        of Canadians reporting a particular language as their primary language at home:
+      </p>
+      <program language="r">
+        <input>
+summarize(region_lang,
+          min_most_at_home = min(most_at_home),
+          max_most_at_home = max(most_at_home))
+        </input>
+      </program>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-summarize-na">
+      <title>Calculating summary statistics when there are <c>NA</c>s</title>
+      <p>
+        In data frames in R, the value <c>NA</c> is often used to denote missing data.
+        <idx><h>missing data</h></idx>
+        <idx><h>NA</h><see>missing data</see></idx>
+        Many of the base R statistical summary functions (e.g., <c>max</c>, <c>min</c>, <c>mean</c>,
+        <c>sum</c>, etc) will return <c>NA</c> when applied to columns containing <c>NA</c> values.
+        Fortunately many of these functions provide an argument <c>na.rm</c> that lets us tell the
+        function what to do when it encounters <c>NA</c> values. In particular, if we specify
+        <c>na.rm = TRUE</c>, the function will ignore missing values and return a summary of all the
+        non-missing entries.
+      </p>
+      <program language="r">
+        <input>
+summarize(region_lang_na,
+          min_most_at_home = min(most_at_home, na.rm = TRUE),
+          max_most_at_home = max(most_at_home, na.rm = TRUE))
+        </input>
+      </program>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-summarize-groups">
+      <title>Calculating summary statistics for groups of rows</title>
+      <p>
+        A common pairing with <c>summarize</c> is <c>group_by</c>. Pairing these functions together can
+        let you summarize values for subgroups within a data set, as illustrated in
+        <xref ref="fig-wrangling-summarize-groupby"/>.
+        <idx><h>group_by</h></idx>
+      </p>
+
+      <figure xml:id="fig-wrangling-summarize-groupby">
+        <caption><c>summarize</c> and <c>group_by</c> is useful for calculating summary statistics on one or more column(s) for each group. It creates a new data frame&#x2014;with one row for each group&#x2014;containing the summary statistic(s) for each column being summarized. It also creates a column listing the value of the grouping variable. The darker, top row of each table represents the column headers.</caption>
+        <image source="images/wrangling/summarize.002.png" width="85%"/>
+      </figure>
+
+      <p>
+        The <c>group_by</c> function takes at least two arguments. The first is the data frame that will
+        be grouped, and the second and onwards are columns to use in the grouping.
+      </p>
+      <program language="r">
+        <input>
+group_by(region_lang, region) |&gt;
+  summarize(
+    min_most_at_home = min(most_at_home),
+    max_most_at_home = max(most_at_home)
+    )
+        </input>
+      </program>
+    </subsection>
+
+    <subsection xml:id="sec-wrangling-summarize-many">
+      <title>Calculating summary statistics on many columns</title>
+      <p>
+        Sometimes we need to summarize statistics across many columns. An example of this is illustrated
+        in <xref ref="fig-wrangling-summarize-across"/>. In such a case, using <c>summarize</c> alone
+        means that we have to type out the name of each column we want to summarize. In this section we
+        will meet two strategies for performing this task.
+      </p>
+
+      <figure xml:id="fig-wrangling-summarize-across">
+        <caption><c>summarize</c> + <c>across</c> or <c>map</c> is useful for efficiently calculating summary statistics on many columns at once. The darker, top row of each table represents the column headers.</caption>
+        <image source="images/wrangling/summarize.003.png" width="85%"/>
+      </figure>
+
+      <p>
+        To summarize statistics across many columns, we can pair <c>summarize</c> with <c>across</c>
+        <idx><h>across</h></idx>
+        and use a colon <c>:</c> to specify a range of columns:
+        <idx><h>column range</h></idx>
+      </p>
+      <program language="r">
+        <input>
+region_lang |&gt;
+  summarize(across(mother_tongue:lang_known, max))
+        </input>
+      </program>
+      <note>
+        <p>
+          Similar to when we use base R statistical summary functions (e.g., <c>max</c>, <c>min</c>,
+          <c>mean</c>, <c>sum</c>, etc) with <c>summarize</c> alone, the use of <c>summarize</c> +
+          <c>across</c> functions paired with base R statistical summary functions also return <c>NA</c>s
+          when applied to columns that contain <c>NA</c>s.
+          <idx><h>missing data</h></idx>
+          To resolve this issue, we need to add the argument <c>na.rm = TRUE</c> using a <c>~</c> and
+          <c>.x</c> syntax:
+        </p>
+        <program language="r">
+          <input>
+region_lang_na |&gt;
+  summarize(across(mother_tongue:lang_known, ~ max(.x, na.rm = TRUE)))
+          </input>
+        </program>
+      </note>
+      <p>
+        An alternative to <c>summarize</c> and <c>across</c> for applying a function to many columns is
+        the <c>map</c> family of functions.
+        <idx><h>map</h></idx>
+        Let&#x2019;s again find the maximum value of each column of the <c>region_lang</c> data frame, but
+        using <c>map</c> with the <c>max</c> function this time. <c>map</c> takes two arguments: an
+        object (a vector, data frame or list) that you want to apply the function to, and the function
+        that you would like to apply to each column.
+      </p>
+      <program language="r">
+        <input>
+region_lang |&gt;
+  select(mother_tongue:lang_known) |&gt;
+  map(max)
+        </input>
+      </program>
+      <p>
+        The output is a list rather than a data frame. There are quite a few <c>map</c> functions to
+        choose from, and their name reflects the type of output you want.
+        <idx><h>map</h><h>map functions</h></idx>
+        <xref ref="tab-wrangling-map-table"/> lists the commonly used <c>map</c> functions as well as
+        their output type.
+      </p>
+
+      <table xml:id="tab-wrangling-map-table">
+        <title>The <c>map</c> functions in R</title>
+        <tabular top="major" bottom="minor" left="minor" right="minor">
+          <row header="yes" bottom="major">
+            <cell><c>map</c> function</cell>
+            <cell>Output</cell>
+          </row>
+          <row><cell><c>map</c></cell><cell>list</cell></row>
+          <row><cell><c>map_lgl</c></cell><cell>logical vector</cell></row>
+          <row><cell><c>map_int</c></cell><cell>integer vector</cell></row>
+          <row><cell><c>map_dbl</c></cell><cell>double vector</cell></row>
+          <row><cell><c>map_chr</c></cell><cell>character vector</cell></row>
+          <row><cell><c>map_dfc</c></cell><cell>data frame, combining column-wise</cell></row>
+          <row bottom="major"><cell><c>map_dfr</c></cell><cell>data frame, combining row-wise</cell></row>
+        </tabular>
+      </table>
+
+      <p>
+        Let&#x2019;s get the columns&#x2019; maximums again, but this time use the <c>map_dfr</c> function to return
+        the output as a data frame:
+      </p>
+      <program language="r">
+        <input>
+region_lang |&gt;
+  select(mother_tongue:lang_known) |&gt;
+  map_dfr(max)
+        </input>
+      </program>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-wrangling-mutate-across">
+    <title>Apply functions across many columns with <c>mutate</c> and <c>across</c></title>
+    <p>
+      Sometimes we need to apply a function to many columns in a data frame. We illustrate such a data
+      transformation in <xref ref="fig-wrangling-mutate-across"/>.
+    </p>
+
+    <figure xml:id="fig-wrangling-mutate-across">
+      <caption><c>mutate</c> and <c>across</c> is useful for applying functions across many columns. The darker, top row of each table represents the column headers.</caption>
+      <image source="images/wrangling/summarize.005.png" width="85%"/>
+    </figure>
+
+    <p>
+      For example, imagine that we wanted to convert all the numeric columns in the <c>region_lang</c>
+      data frame from double type to integer type using the <c>as.integer</c> function. To accomplish
+      such a task, we can use <c>mutate</c> paired with <c>across</c>:
+      <idx><h>across</h></idx>
+    </p>
+    <program language="r">
+      <input>
+region_lang |&gt;
+  mutate(across(mother_tongue:lang_known, as.integer))
+      </input>
+    </program>
+  </section>
+
+  <section xml:id="sec-wrangling-rowwise">
+    <title>Apply functions across columns within one row with <c>rowwise</c> and <c>mutate</c></title>
+    <p>
+      What if you want to apply a function across columns but within one row? We illustrate such a data
+      transformation in <xref ref="fig-wrangling-rowwise"/>.
+    </p>
+
+    <figure xml:id="fig-wrangling-rowwise">
+      <caption><c>rowwise</c> and <c>mutate</c> is useful for applying functions across columns within one row. The darker, top row of each table represents the column headers.</caption>
+      <image source="images/wrangling/summarize.004.png" width="85%"/>
+    </figure>
+
+    <p>
+      For instance, suppose we want to know the maximum value between <c>mother_tongue</c>,
+      <c>most_at_home</c>, <c>most_at_work</c> and <c>lang_known</c> for each language and region in the
+      <c>region_lang</c> data set. In other words, we want to apply the <c>max</c> function
+      <em>row-wise.</em> We will use the <c>rowwise</c> function in combination with <c>mutate</c> to
+      accomplish this task:
+      <idx><h>rowwise</h></idx>
+    </p>
+    <program language="r">
+      <input>
+region_lang |&gt;
+  select(mother_tongue:lang_known) |&gt;
+  rowwise() |&gt;
+  mutate(maximum = max(c(mother_tongue,
+                         most_at_home,
+                         most_at_work,
+                         lang_known)))
+      </input>
+    </program>
+    <p>
+      We see that we get an additional column added to the data frame, named <c>maximum</c>, which is
+      the maximum value between <c>mother_tongue</c>, <c>most_at_home</c>, <c>most_at_work</c> and
+      <c>lang_known</c> for each language and region. Notice if we used <c>mutate</c> without
+      <c>rowwise</c>, we would have computed the maximum value across <em>all</em> rows rather than
+      the maximum value for <em>each</em> row.
+    </p>
+  </section>
+
+  <section xml:id="sec-wrangling-summary">
+    <title>Summary</title>
+    <p>
+      Cleaning and wrangling data can be a very time-consuming process. However, it is a critical step
+      in any data analysis. We have explored many different functions for cleaning and wrangling data
+      into a tidy format. <xref ref="tab-wrangling-summary-functions-table"/> summarizes some of the
+      key wrangling functions we learned in this chapter.
+    </p>
+
+    <table xml:id="tab-wrangling-summary-functions-table">
+      <title>Summary of wrangling functions</title>
+      <tabular top="major" bottom="minor" left="minor" right="minor">
+        <row header="yes" bottom="major">
+          <cell>Function</cell>
+          <cell>Description</cell>
+        </row>
+        <row><cell><c>across</c></cell><cell>allows you to apply function(s) to multiple columns</cell></row>
+        <row><cell><c>filter</c></cell><cell>subsets rows of a data frame</cell></row>
+        <row><cell><c>group_by</c></cell><cell>allows you to apply function(s) to groups of rows</cell></row>
+        <row><cell><c>mutate</c></cell><cell>adds or modifies columns in a data frame</cell></row>
+        <row><cell><c>map</c></cell><cell>general iteration function</cell></row>
+        <row><cell><c>pivot_longer</c></cell><cell>generally makes the data frame longer and narrower</cell></row>
+        <row><cell><c>pivot_wider</c></cell><cell>generally makes a data frame wider and decreases the number of rows</cell></row>
+        <row><cell><c>rowwise</c></cell><cell>applies functions across columns within one row</cell></row>
+        <row><cell><c>separate</c></cell><cell>splits up a character column into multiple columns</cell></row>
+        <row><cell><c>select</c></cell><cell>subsets columns of a data frame</cell></row>
+        <row bottom="major"><cell><c>summarize</c></cell><cell>calculates summaries of inputs</cell></row>
+      </tabular>
+    </table>
+  </section>
+
+  <section xml:id="sec-wrangling-exercises">
+    <title>Exercises</title>
+    <p>
+      Practice exercises for the material covered in this chapter can be found in the accompanying
+      <url href="https://worksheets.datasciencebook.ca" visual="worksheets.datasciencebook.ca">worksheets
+      repository</url> in the &#x201C;Cleaning and wrangling data&#x201D; row. You can launch an interactive version
+      of the worksheet in your browser by clicking the &#x201C;launch binder&#x201D; button. You can also preview a
+      non-interactive version of the worksheet by clicking &#x201C;view worksheet.&#x201D;
+    </p>
+  </section>
+
+  <section xml:id="sec-wrangling-resources">
+    <title>Additional resources</title>
+    <ul>
+      <li><p>As we mentioned earlier, <c>tidyverse</c> is actually an <em>R meta package</em>: it
+        installs and loads a collection of R packages that all follow the tidy data philosophy we
+        discussed above. One of the <c>tidyverse</c> packages is <c>dplyr</c>&#x2014;a data wrangling
+        workhorse. You have already met many of <c>dplyr</c>&#x2019;s functions (<c>select</c>,
+        <c>filter</c>, <c>mutate</c>, <c>arrange</c>, <c>summarize</c>, and <c>group_by</c>). To learn
+        more about these functions and meet a few more useful functions, we recommend you check out
+        Chapters 5&#x2013;9 of the
+        <url href="https://stat545.com/" visual="stat545.com/">STAT545 online notes</url>.</p></li>
+      <li><p>The <url href="https://dplyr.tidyverse.org/" visual="dplyr.tidyverse.org/"><c>dplyr</c> R
+        package documentation</url> <xref ref="dplyr"/> is another resource to learn more about the
+        functions in this chapter, the full set of arguments you can use, and other related functions.
+        The site also provides a very nice cheat sheet that summarizes many of the data wrangling
+        functions from this chapter.</p></li>
+      <li><p>Check out the <url href="https://tidyselect.r-lib.org/index.html" visual="tidyselect.r-lib.org/"><c>tidyselect</c>
+        R package page</url> <xref ref="tidyselect"/> for a comprehensive list of <c>select</c> helpers.
+        The <url href="https://tidyselect.r-lib.org/reference/select_helpers.html" visual="tidyselect.r-lib.org/reference/select_helpers.html">documentation for <c>select</c> helpers</url>
+        is a useful reference to find the helper you need for your particular problem.</p></li>
+      <li><p><em>R for Data Science</em> <xref ref="wickham2016r"/> has a few chapters related to data
+        wrangling that go into more depth than this book. For example, the
+        <url href="https://r4ds.had.co.nz/tidy-data.html" visual="r4ds.had.co.nz/tidy-data.html">tidy
+        data chapter</url> covers tidy data, <c>pivot_longer</c>/<c>pivot_wider</c> and
+        <c>separate</c>, but also covers missing values and additional wrangling functions. The
+        <url href="https://r4ds.had.co.nz/transform.html" visual="r4ds.had.co.nz/transform.html">data
+        transformation chapter</url> covers <c>select</c>, <c>filter</c>, <c>arrange</c>,
+        <c>mutate</c>, and <c>summarize</c>. And the
+        <url href="https://r4ds.had.co.nz/iteration.html#the-map-functions" visual="r4ds.had.co.nz/iteration.html#the-map-functions"><c>map</c>
+        functions chapter</url> provides more about the <c>map</c> functions.</p></li>
+      <li><p>You will occasionally encounter a case where you need to iterate over items in a data frame,
+        but none of the above functions are flexible enough to do what you want. In that case, you may
+        consider using
+        <url href="https://r4ds.had.co.nz/iteration.html#iteration" visual="r4ds.had.co.nz/iteration.html#iteration">a for loop</url>.</p></li>
+    </ul>
+  </section>
 
 </chapter>
