@@ -39,19 +39,19 @@
       analysis of a data set relating to languages spoken at home by Canadian residents
       (<xref ref="fig-canada-map"/>). Many Indigenous peoples exist in Canada with their own
       cultures and languages; these languages are often unique to Canada and not spoken
-      anywhere else in the world <xref provisional="statcan2018mothertongue"/>. Sadly,
+      anywhere else in the world <xref ref="statcan2018mothertongue"/>. Sadly,
       colonization has led to the loss of many of these languages. For instance, generations
       of children were not allowed to speak their mother tongue (the first language an
       individual learns in childhood) in Canadian residential schools. Colonizers also renamed
-      places they had &#x201C;discovered&#x201D; <xref provisional="wilson2018"/>. Acts such
+      places they had &#x201C;discovered&#x201D; <xref ref="wilson2018"/>. Acts such
       as these have significantly harmed the continuity of Indigenous languages in Canada, and
       some languages are considered &#x201C;endangered&#x201D; as few people report speaking
       them. To learn more, please see <em>Canadian Geographic</em>&#x2019;s article,
       &#x201C;Mapping Indigenous Languages in Canada&#x201D;
-      <xref provisional="walker2017"/>, <em>They Came for the Children: Canada, Aboriginal
-      peoples, and Residential Schools</em> <xref provisional="children2012"/> and the
+      <xref ref="walker2017"/>, <em>They Came for the Children: Canada, Aboriginal
+      peoples, and Residential Schools</em> <xref ref="children2012"/> and the
       <em>Truth and Reconciliation Commission of Canada&#x2019;s Calls to Action</em>
-      <xref provisional="calls2015"/>.
+      <xref ref="calls2015"/>.
     </p>
 
     <figure xml:id="fig-canada-map">
@@ -62,9 +62,9 @@
     <p>
       The data set we will study in this chapter is taken from
       <url href="https://ttimbers.github.io/canlang/" visual="ttimbers.github.io/canlang/">the
-      <c>canlang</c> R data package</url> <xref provisional="timbers2020canlang"/>, which has
+      <c>canlang</c> R data package</url> <xref ref="timbers2020canlang"/>, which has
       population language data collected during the 2016 Canadian census
-      <xref provisional="cancensus2016"/>. In this data, there are 214 languages recorded,
+      <xref ref="cancensus2016"/>. In this data, there are 214 languages recorded,
       each having six different properties:
     </p>
     <ol>
@@ -128,8 +128,8 @@
 
     <table xml:id="tab-questions-table">
       <title>Types of data analysis question
-        <xref provisional="leek2015question"/>
-        <xref provisional="peng2015art"/>.</title>
+        <xref ref="leek2015question"/>
+        <xref ref="peng2015art"/>.</title>
       <tabular halign="left" top="minor" bottom="minor" left="minor" right="minor">
         <col width="20%"/>
         <col width="45%"/>
@@ -355,8 +355,8 @@ Non-Official &amp; Non-Aboriginal languages,Amharic,22465,12785,200,33670
       in particular, can be made accessible by loading
       <url href="https://tidyverse.tidyverse.org/" visual="tidyverse.tidyverse.org/">the
       <c>tidyverse</c> R package</url>
-      <xref provisional="tidyverse"/>
-      <xref provisional="wickham2019tidverse"/>
+      <xref ref="tidyverse"/>
+      <xref ref="wickham2019tidverse"/>
       using the <c>library</c> function.<idx><h>library</h></idx> The
       <c>tidyverse</c><idx><h>tidyverse</h></idx> package contains many functions that we
       will use throughout this book to load, clean, wrangle, and visualize data.
@@ -533,7 +533,7 @@ Error in my - number &lt;- 1 : object 'my' not found
       However, using more meaningful terms, such as <c>language_data</c>, will help you
       remember what each name in your code represents. We recommend following the Tidyverse
       naming conventions outlined in the <em>Tidyverse Style Guide</em>
-      <xref provisional="tidyversestyleguide"/>. Let&#x2019;s now use the assignment symbol
+      <xref ref="tidyversestyleguide"/>. Let&#x2019;s now use the assignment symbol
       to give the name <c>can_lang</c> to the 2016 Canadian census language data frame that
       we get from <c>read_csv</c>.
     </p>
@@ -1045,7 +1045,7 @@ ggplot(ten_lang, aes(x = mother_tongue,
           set, the Cree languages include the following categories: Cree n.o.s., Swampy Cree,
           Plains Cree, Woods Cree, and a &#x2018;Cree not included elsewhere&#x2019; category
           (which includes Moose Cree, Northern East Cree and Southern East Cree)
-          <xref provisional="language2016"/>.
+          <xref ref="language2016"/>.
         </p>
       </note>
     </subsection>
