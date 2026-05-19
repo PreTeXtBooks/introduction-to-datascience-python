@@ -345,6 +345,26 @@
       <em>PLoS ONE</em>, 9(3).
     </biblio>
 
+    <!-- References added for Chapter 11: Statistical inference -->
+
+    <biblio type="raw" xml:id="insideairbnb">
+      Inside Airbnb. <em>Inside Airbnb: Adding data to the debate</em>.
+      <url href="http://insideairbnb.com" visual="insideairbnb.com"/>, 2020.
+    </biblio>
+
+    <biblio type="raw" xml:id="openintro">
+      D. Diez, M. Cetinkaya-Rundel, and C. Barr.
+      <em>OpenIntro Statistics</em>, 4th edition.
+      OpenIntro, 2019.
+      <url href="https://www.openintro.org/book/os/" visual="www.openintro.org/book/os/"/>.
+    </biblio>
+
+    <biblio type="raw" xml:id="infer">
+      A. Bray, C. Ismay, E. Chasnovski, S. Couch, B. Baumer, and M. &#199;etinkaya-Rundel.
+      <em>infer: An R package for tidyverse-friendly statistical inference</em>.
+      Journal of Open Source Software, 6(65):3661, 2021.
+    </biblio>
+
   </references>
   <index>
     <title>Index</title>
