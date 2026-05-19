@@ -360,7 +360,7 @@
     </biblio>
 
     <biblio type="raw" xml:id="infer">
-      A. Bray, C. Ismay, E. Chasnovski, S. Couch, B. Baumer, and M. &#199;etinkaya-Rundel.
+      A. Bray, C. Ismay, E. Chasnovski, S. Couch, B. Baumer, and M. &#xC7;etinkaya-Rundel.
       <em>infer: An R package for tidyverse-friendly statistical inference</em>.
       Journal of Open Source Software, 6(65):3661, 2021.
     </biblio>
