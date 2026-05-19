@@ -2,11 +2,995 @@
 <chapter xml:id="ch-clustering" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Clustering</title>
 
-  <introduction>
+  <!-- ============================================================ -->
+  <section xml:id="sec-clustering-overview">
+    <title>Overview</title>
     <p>
-      This chapter is a skeleton placeholder for the PreTeXt version of the book.
-      Content will be filled in from the corresponding R Markdown source file.
+      As part of exploratory data analysis, it is often helpful to see if there
+      are meaningful subgroups (or <em>clusters</em>) in the data.
+      This grouping can be used for many purposes, such as generating new
+      questions or improving predictive analyses. This chapter provides an
+      introduction to clustering using the K-means algorithm, including
+      techniques to choose the number of clusters.
     </p>
-  </introduction>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-clustering-objectives">
+    <title>Chapter learning objectives</title>
+    <p>By the end of the chapter, readers will be able to do the following:</p>
+    <ul>
+      <li><p>Describe a situation in which clustering is an appropriate technique to use, and what insight it might extract from the data.</p></li>
+      <li><p>Explain the K-means clustering algorithm.</p></li>
+      <li><p>Interpret the output of a K-means analysis.</p></li>
+      <li><p>Differentiate between clustering, classification, and regression.</p></li>
+      <li><p>Identify when it is necessary to scale variables before clustering, and do this using R.</p></li>
+      <li><p>Perform K-means clustering in R using <c>tidymodels</c> workflows.</p></li>
+      <li><p>Use the elbow method to choose the number of clusters for K-means.</p></li>
+      <li><p>Visualize the output of K-means clustering in R using colored scatter plots.</p></li>
+      <li><p>Describe the advantages, limitations and assumptions of the K-means clustering algorithm.</p></li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-clustering-concept">
+    <title>Clustering</title>
+    <p>
+      Clustering
+      <idx><h>clustering</h></idx>
+      is a data analysis technique involving separating a data set into
+      subgroups of related data. For example, we might use clustering to
+      separate a data set of documents into groups that correspond to topics, a
+      data set of human genetic information into groups that correspond to
+      ancestral subpopulations, or a data set of online customers into groups
+      that correspond to purchasing behaviors. Once the data are separated, we
+      can, for example, use the subgroups to generate new questions about the
+      data and follow up with a predictive modeling exercise. In this course,
+      clustering will be used only for exploratory analysis, i.e., uncovering
+      patterns in the data.
+    </p>
+    <p>
+      Note that clustering is a fundamentally different kind of task than
+      classification or regression. In particular, both classification and
+      regression are <em>supervised tasks</em>
+      <idx><h>classification</h></idx>
+      <idx><h>regression</h></idx>
+      <idx><h>supervised</h></idx>
+      where there is a <em>response variable</em> (a category label or value),
+      and we have examples of past data with labels/values that help us predict
+      those of future data. By contrast, clustering is an <em>unsupervised
+      task</em>,
+      <idx><h>unsupervised</h></idx>
+      as we are trying to understand and examine the structure of data without
+      any response variable labels or values to help us. This approach has both
+      advantages and disadvantages. Clustering requires no additional annotation
+      or input on the data. For example, while it would be nearly impossible to
+      annotate all the articles on Wikipedia with human-made topic labels, we
+      can cluster the articles without this information to find groupings
+      corresponding to topics automatically. However, given that there is no
+      response variable, it is not as easy to evaluate the &#x201C;quality&#x201D;
+      of a clustering. With classification, we can use a test data set to assess
+      prediction performance. In clustering, there is not a single good choice
+      for evaluation. In this book, we will use visualization to ascertain the
+      quality of a clustering, and leave rigorous evaluation for more advanced
+      courses.
+    </p>
+    <p>
+      As in the case of classification, there are many possible methods that we
+      could use to cluster our observations to look for subgroups. In this book,
+      we will focus on the widely used K-means
+      <idx><h>K-means</h></idx>
+      algorithm <xref ref="kmeans"/>. In your future studies, you might
+      encounter hierarchical clustering, principal component analysis,
+      multidimensional scaling, and more; see the additional resources section
+      at the end of this chapter for where to begin learning more about these
+      other methods.
+    </p>
+    <note>
+      <p>
+        There are also so-called <em>semisupervised</em> tasks,
+        <idx><h>semisupervised</h></idx>
+        where only some of the data come with response variable labels/values,
+        but the vast majority don&#x2019;t. The goal is to try to uncover
+        underlying structure in the data that allows one to guess the missing
+        labels. This sort of task is beneficial, for example, when one has an
+        unlabeled data set that is too large to manually label, but one is
+        willing to provide a few informative example labels as a
+        &#x201C;seed&#x201D; to guess the labels for all the data.
+      </p>
+    </note>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-clustering-example">
+    <title>An illustrative example</title>
+    <p>
+      In this chapter we will focus on a data set
+      <idx><h>Palmer penguins</h></idx>
+      from the
+      <url href="https://allisonhorst.github.io/palmerpenguins/"><c>palmerpenguins</c>
+      R package</url>
+      <xref ref="palmerpenguins"/>. This data set was collected by Dr. Kristen
+      Gorman and the Palmer Station, Antarctica Long Term Ecological Research
+      Site, and includes measurements for adult penguins
+      (Figure <xref ref="fig-clustering-gentoo"/>) found near there
+      <xref ref="penguinpaper"/>. Our goal will be to use two
+      variables&#x2014;penguin bill and flipper length, both in
+      millimeters&#x2014;to determine whether there are distinct types of
+      penguins in our data. Understanding this might help us with species
+      discovery and classification in a data-driven way. Note that we have
+      reduced the size of the data set to 18 observations and 2 variables; this
+      will help us make clear visualizations that illustrate how clustering
+      works for learning purposes.
+    </p>
+
+    <figure xml:id="fig-clustering-gentoo">
+      <caption>A Gentoo penguin.</caption>
+      <image source="images/clustering/gentoo.jpg" width="60%"/>
+    </figure>
+
+    <p>
+      Before we get started, we will load the <c>tidyverse</c> metapackage as
+      well as set a random seed. This will ensure we have access to the
+      functions we need and that our analysis will be reproducible. As we will
+      learn in more detail later in the chapter, setting the seed here is
+      important because the K-means clustering algorithm uses randomness when
+      choosing a starting position for each cluster.
+    </p>
+    <idx><h>seed</h><h>set.seed</h></idx>
+
+    <program language="r">
+      <input>
+library(tidyverse)
+set.seed(1)
+      </input>
+    </program>
+
+    <p>
+      Now we can load and preview the <c>penguins</c> data.
+      <idx><h>read function</h><h>read_csv</h></idx>
+    </p>
+    <program language="r">
+      <input>
+penguins &lt;- read_csv("data/penguins.csv")
+penguins
+      </input>
+    </program>
+    <pre>
+# A tibble: 18 × 2
+   bill_length_mm flipper_length_mm
+            &lt;dbl&gt;             &lt;dbl&gt;
+ 1           39.1               181
+ 2           39.5               186
+ 3           40.3               195
+ 4           36.7               193
+ 5           39.3               190
+ ...
+    </pre>
+
+    <p>
+      We will begin by using a version of the data that we have standardized,
+      <c>penguins_standardized</c>, to illustrate how K-means clustering works
+      (recall standardization from
+      <xref ref="ch-classification1"/>). Later in this chapter, we will
+      return to the original <c>penguins</c> data to see how to include
+      standardization automatically in the clustering pipeline.
+    </p>
+
+    <program language="r">
+      <input>
+penguins_standardized &lt;- penguins |&gt;
+  mutate(bill_length_standardized = (bill_length_mm - mean(bill_length_mm))/sd(bill_length_mm)) |&gt;
+  mutate(flipper_length_standardized = (flipper_length_mm - mean(flipper_length_mm))/sd(flipper_length_mm)) |&gt;
+  select(bill_length_standardized, flipper_length_standardized)
+penguins_standardized
+      </input>
+    </program>
+    <pre>
+# A tibble: 18 × 2
+   bill_length_standardized flipper_length_standardized
+                      &lt;dbl&gt;                       &lt;dbl&gt;
+ 1               -1.19                        -1.10
+ 2               -1.08                        -1.22
+ 3               -0.854                       -0.790
+ 4               -1.39                        -1.10
+ ...
+    </pre>
+
+    <p>
+      Next, we can create a scatter plot using this data set to see if we can
+      detect subtypes or groups in our data set.
+    </p>
+
+    <program language="r">
+      <input>
+ggplot(penguins_standardized,
+       aes(x = flipper_length_standardized,
+           y = bill_length_standardized)) +
+  geom_point() +
+  xlab("Flipper Length (standardized)") +
+  ylab("Bill Length (standardized)") +
+  theme(text = element_text(size = 12))
+      </input>
+    </program>
+
+    <figure xml:id="fig-clustering-scatter">
+      <caption>Scatter plot of standardized bill length versus standardized flipper length.</caption>
+      <image source="images/clustering/penguins-scatter.png" width="60%"/>
+    </figure>
+
+    <p>
+      Based
+      <idx><h>ggplot</h></idx>
+      <idx><h>ggplot</h><h>geom_point</h></idx>
+      on the visualization in Figure <xref ref="fig-clustering-scatter"/>,
+      we might suspect there are a few subtypes of penguins within our data set.
+      We can see roughly 3 groups of observations, including:
+    </p>
+    <ol>
+      <li><p>a small flipper and bill length group,</p></li>
+      <li><p>a small flipper length, but large bill length group, and</p></li>
+      <li><p>a large flipper and bill length group.</p></li>
+    </ol>
+    <p>
+      Data visualization is a great tool to give us a rough sense of such
+      patterns when we have a small number of variables. But if we are to
+      group data&#x2014;and select the number of groups&#x2014;as part of a
+      reproducible analysis, we need something a bit more automated.
+      Additionally, finding groups via visualization becomes more difficult as
+      we increase the number of variables we consider when clustering. The way
+      to rigorously separate the data into groups is to use a clustering
+      algorithm. In this chapter, we will focus on the <em>K-means</em>
+      algorithm,
+      <idx><h>K-means</h></idx>
+      a widely used and often very effective clustering method, combined with
+      the <em>elbow method</em>
+      <idx><h>elbow method</h></idx>
+      for selecting the number of clusters. This procedure will separate the
+      data into groups; Figure <xref ref="fig-clustering-clustered"/> shows
+      these groups denoted by colored scatter points.
+    </p>
+
+    <figure xml:id="fig-clustering-clustered">
+      <caption>Scatter plot of standardized bill length versus standardized flipper length with colored groups.</caption>
+      <image source="images/clustering/penguins-clustered.png" width="70%"/>
+    </figure>
+
+    <p>
+      What are the labels for these groups? Unfortunately, we don&#x2019;t
+      have any. K-means, like almost all clustering algorithms, just outputs
+      meaningless &#x201C;cluster labels&#x201D; that are typically whole
+      numbers: 1, 2, 3, etc. But in a simple case like this, where we can
+      easily visualize the clusters on a scatter plot, we can give human-made
+      labels to the groups using their positions on the plot:
+    </p>
+    <ul>
+      <li><p>small flipper length and small bill length (orange cluster),</p></li>
+      <li><p>small flipper length and large bill length (blue cluster), and</p></li>
+      <li><p>large flipper length and large bill length (yellow cluster).</p></li>
+    </ul>
+    <p>
+      Once we have made these determinations, we can use them to inform our
+      species classifications or ask further questions about our data.
+    </p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-kmeans">
+    <title>K-means</title>
+
+    <subsection xml:id="sec-kmeans-wssd">
+      <title>Measuring cluster quality</title>
+      <p>
+        The K-means algorithm is a procedure that groups data into K clusters.
+        It starts with an initial clustering of the data, and then iteratively
+        improves it by making adjustments to the assignment of data to clusters
+        until it cannot improve any further. But how do we measure the
+        &#x201C;quality&#x201D; of a clustering, and what does it mean to
+        improve it? In K-means clustering, we measure the quality of a cluster
+        by its
+        <idx><h>within-cluster sum of squared distances</h><see>WSSD</see></idx>
+        <idx><h>WSSD</h></idx>
+        <em>within-cluster sum-of-squared-distances</em> (WSSD). Computing this
+        involves two steps. First, we find the cluster centers by computing the
+        mean of each variable over data points in the cluster. For example,
+        suppose we have a cluster containing four observations, and we are using
+        two variables, <m>x</m> and <m>y</m>, to cluster the data. Then we
+        would compute the coordinates, <m>\mu_x</m> and <m>\mu_y</m>, of the
+        cluster center via
+      </p>
+      <me>
+        \mu_x = \frac{1}{4}(x_1+x_2+x_3+x_4) \quad \mu_y = \frac{1}{4}(y_1+y_2+y_3+y_4).
+      </me>
+      <p>
+        In the first cluster from the example, there are 5 data points. These
+        are shown with their cluster center highlighted in
+        Figure <xref ref="fig-clustering-clus1-center"/>.
+      </p>
+
+      <figure xml:id="fig-clustering-clus1-center">
+        <caption>Cluster 1 from the <c>penguins_standardized</c> data set example. Observations are small blue points, with the cluster center highlighted as a large blue point with a black outline.</caption>
+        <image source="images/clustering/clus1-center.png" width="60%"/>
+      </figure>
+
+      <p>
+        The second step in computing the WSSD is to add up the squared distance
+        <idx><h>distance</h><h>K-means</h></idx>
+        between each point in the cluster and the cluster center. We use the
+        straight-line / Euclidean distance formula that we learned about in
+        <xref ref="ch-classification1"/>. In the 5-observation cluster example
+        above, we would compute the WSSD <m>S^2</m> via
+      </p>
+      <md>
+        <mrow>
+          S^2 = \left((x_1 - \mu_x)^2 + (y_1 - \mu_y)^2\right) +
+                \left((x_2 - \mu_x)^2 + (y_2 - \mu_y)^2\right) +
+        </mrow>
+        <mrow>
+                \left((x_3 - \mu_x)^2 + (y_3 - \mu_y)^2\right) +
+                \left((x_4 - \mu_x)^2 + (y_4 - \mu_y)^2\right) +
+                \left((x_5 - \mu_x)^2 + (y_5 - \mu_y)^2\right).
+        </mrow>
+      </md>
+      <p>
+        These distances are denoted by lines in
+        Figure <xref ref="fig-clustering-clus1-dists"/> for the first cluster of
+        the penguin data example.
+      </p>
+
+      <figure xml:id="fig-clustering-clus1-dists">
+        <caption>Cluster 1 from the <c>penguins_standardized</c> data set example. Observations are small blue points, with the cluster center highlighted as a large blue point with a black outline. The distances from the observations to the cluster center are represented as black lines.</caption>
+        <image source="images/clustering/clus1-dists.png" width="60%"/>
+      </figure>
+
+      <p>
+        The larger the value of <m>S^2</m>, the more spread out the cluster
+        is, since large <m>S^2</m> means that points are far from the cluster
+        center. Note, however, that &#x201C;large&#x201D; is relative to
+        <em>both</em> the scale of the variables for clustering <em>and</em>
+        the number of points in the cluster. A cluster where points are very
+        close to the center might still have a large <m>S^2</m> if there are
+        many data points in the cluster.
+      </p>
+      <p>
+        After we have calculated the WSSD for all the clusters, we sum them
+        together to get the <em>total WSSD</em>. For our example, this means
+        adding up all the squared distances for the 18 observations. These
+        distances are denoted by black lines in
+        Figure <xref ref="fig-clustering-all-clus-dists"/>.
+      </p>
+
+      <figure xml:id="fig-clustering-all-clus-dists">
+        <caption>All clusters from the <c>penguins_standardized</c> data set example. Observations are small orange, blue, and yellow points with cluster centers denoted by larger points with a black outline. The distances from the observations to each of the respective cluster centers are represented as black lines.</caption>
+        <image source="images/clustering/all-clus-dists.png" width="70%"/>
+      </figure>
+
+      <p>
+        Since K-means uses the straight-line distance to measure the quality of
+        a clustering, it is limited to clustering based on quantitative
+        variables. However, note that there are variants of the K-means
+        algorithm, as well as other clustering algorithms entirely, that use
+        other distance metrics to allow for non-quantitative data to be
+        clustered. These are beyond the scope of this book.
+      </p>
+    </subsection>
+
+    <subsection xml:id="sec-kmeans-algorithm">
+      <title>The clustering algorithm</title>
+      <p>
+        We begin the K-means
+        <idx><h>K-means</h><h>algorithm</h></idx>
+        algorithm by picking K, and randomly assigning a roughly equal number
+        of observations to each of the K clusters. An example random
+        initialization is shown in Figure <xref ref="fig-clustering-kmeans-init"/>.
+      </p>
+
+      <figure xml:id="fig-clustering-kmeans-init">
+        <caption>Random initialization of labels.</caption>
+        <image source="images/clustering/kmeans-init.png" width="65%"/>
+      </figure>
+
+      <p>
+        Then K-means consists of two major steps that attempt to minimize the
+        sum of WSSDs over all the clusters, i.e., the
+        <idx><h>WSSD</h><h>total</h></idx>
+        <em>total WSSD</em>:
+      </p>
+      <ol>
+        <li><p><term>Center update:</term> Compute the center of each cluster.</p></li>
+        <li><p><term>Label update:</term> Reassign each data point to the cluster with the nearest center.</p></li>
+      </ol>
+      <p>
+        These two steps are repeated until the cluster assignments no longer
+        change. We show what the first four iterations of K-means would look
+        like in Figure <xref ref="fig-clustering-kmeans-iter"/>. There each pair
+        of plots in each row corresponds to an iteration, where the left figure
+        in the pair depicts the center update, and the right figure in the pair
+        depicts the label update (i.e., the reassignment of data to clusters).
+      </p>
+
+      <figure xml:id="fig-clustering-kmeans-iter">
+        <caption>First four iterations of K-means clustering on the <c>penguins_standardized</c> example data set. Each pair of plots corresponds to an iteration. Within the pair, the first plot depicts the center update, and the second plot depicts the reassignment of data to clusters. Cluster centers are indicated by larger points that are outlined in black.</caption>
+        <image source="images/clustering/kmeans-iter.png" width="100%"/>
+      </figure>
+
+      <p>
+        Note that at this point, we can terminate the algorithm since none of
+        the assignments changed in the fourth iteration; both the centers and
+        labels will remain the same from this point onward.
+      </p>
+      <note>
+        <p>
+          Is K-means <em>guaranteed</em> to stop at some point, or could it
+          iterate forever? As it turns out, thankfully, the answer is that
+          K-means
+          <idx><h>K-means</h><h>termination</h></idx>
+          is guaranteed to stop after <em>some</em> number of iterations. For
+          the interested reader, the logic for this has three steps: (1) both
+          the label update and the center update decrease total WSSD in each
+          iteration, (2) the total WSSD is always greater than or equal to 0,
+          and (3) there are only a finite number of possible ways to assign the
+          data to clusters. So at some point, the total WSSD must stop
+          decreasing, which means none of the assignments are changing, and the
+          algorithm terminates.
+        </p>
+      </note>
+    </subsection>
+
+    <subsection xml:id="sec-kmeans-restarts">
+      <title>Random restarts</title>
+      <p>
+        Unlike the classification and regression models we studied in previous
+        chapters, K-means
+        <idx><h>K-means</h><h>restart</h></idx>
+        can get &#x201C;stuck&#x201D; in a bad solution. For example,
+        Figure <xref ref="fig-clustering-bad-init"/> illustrates an unlucky
+        random initialization by K-means.
+      </p>
+
+      <figure xml:id="fig-clustering-bad-init">
+        <caption>Random initialization of labels (an unlucky example).</caption>
+        <image source="images/clustering/kmeans-bad-init.png" width="65%"/>
+      </figure>
+
+      <p>
+        Figure <xref ref="fig-clustering-bad-iter"/> shows what the iterations
+        of K-means would look like with the unlucky random initialization shown
+        in Figure <xref ref="fig-clustering-bad-init"/>.
+      </p>
+
+      <figure xml:id="fig-clustering-bad-iter">
+        <caption>First five iterations of K-means clustering on the <c>penguins_standardized</c> example data set with a poor random initialization. Each pair of plots corresponds to an iteration. Within the pair, the first plot depicts the center update, and the second plot depicts the reassignment of data to clusters. Cluster centers are indicated by larger points that are outlined in black.</caption>
+        <image source="images/clustering/kmeans-bad-iter.png" width="100%"/>
+      </figure>
+
+      <p>
+        This looks like a relatively bad clustering of the data, but K-means
+        cannot improve it. To solve this problem when clustering data using
+        K-means, we should randomly re-initialize the labels a few times, run
+        K-means for each initialization, and pick the clustering that has the
+        lowest final total WSSD.
+      </p>
+    </subsection>
+
+    <subsection xml:id="sec-kmeans-choosing-k">
+      <title>Choosing K</title>
+      <p>
+        In order to cluster data using K-means, we also have to pick the number
+        of clusters, K. But unlike in classification, we have no response
+        variable and cannot perform cross-validation with some measure of model
+        prediction error. Further, if K is chosen too small, then multiple
+        clusters get grouped together; if K is too large, then clusters get
+        subdivided. In both cases, we will potentially miss interesting
+        structure in the data. Figure <xref ref="fig-clustering-vary-k"/>
+        illustrates the impact of K on K-means clustering of our penguin flipper
+        and bill length data by showing the different clusterings for K&#x2019;s
+        ranging from 1 to 9.
+      </p>
+
+      <figure xml:id="fig-clustering-vary-k">
+        <caption>Clustering of the penguin data for K clusters ranging from 1 to 9. Cluster centers are indicated by larger points that are outlined in black.</caption>
+        <image source="images/clustering/kmeans-vary-k.png" width="85%"/>
+      </figure>
+
+      <p>
+        If we set K less than 3, then the clustering merges separate groups of
+        data; this causes a large total WSSD, since the cluster center is not
+        close to any of the data in the cluster. On the other hand, if we set K
+        greater than 3, the clustering subdivides subgroups of data; this does
+        indeed still decrease the total WSSD, but by only a <em>diminishing
+        amount</em>. If we plot the total WSSD versus the number of clusters, we
+        see that the decrease in total WSSD levels off (or forms an
+        &#x201C;elbow shape&#x201D;)
+        <idx><h>elbow method</h></idx>
+        when we reach roughly the right number of clusters
+        (Figure <xref ref="fig-clustering-elbow"/>).
+      </p>
+
+      <figure xml:id="fig-clustering-elbow">
+        <caption>Total WSSD for K clusters ranging from 1 to 9.</caption>
+        <image source="images/clustering/kmeans-elbow.png" width="70%"/>
+      </figure>
+    </subsection>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-kmeans-in-r">
+    <title>K-means in R</title>
+    <p>
+      We can perform K-means clustering in R using a <c>tidymodels</c> workflow
+      similar to those in the earlier classification and regression chapters. We
+      will begin by loading the <c>tidyclust</c>
+      <idx><h>K-means</h></idx>
+      <idx><h>tidyclust</h></idx>
+      library, which contains the necessary functionality.
+    </p>
+
+    <program language="r">
+      <input>
+library(tidyclust)
+      </input>
+    </program>
+
+    <p>
+      Returning to the original (unstandardized) <c>penguins</c> data, recall
+      that K-means clustering uses straight-line distance to decide which points
+      are similar to each other. Therefore, the <em>scale</em> of each of the
+      variables in the data will influence which cluster data points end up
+      being assigned. Variables with a large scale will have a much larger
+      effect on deciding cluster assignment than variables with a small scale.
+      To address this problem, we need to create a recipe that standardizes
+      <idx><h>standardization</h><h>K-means</h></idx>
+      <idx><h>K-means</h><h>standardization</h></idx>
+      our data before clustering using the <c>step_scale</c> and
+      <c>step_center</c> preprocessing steps.
+      <idx><h>recipe</h><h>step_scale</h></idx>
+      <idx><h>recipe</h><h>step_center</h></idx>
+      Standardization will ensure that each variable has a mean of 0 and
+      standard deviation of 1 prior to clustering. We will designate that all
+      variables are to be used in clustering via the model formula <c>~ .</c>.
+    </p>
+    <note>
+      <p>
+        Recipes were originally designed specifically for <em>predictive</em>
+        data analysis problems&#x2014;like classification and
+        regression&#x2014;not clustering problems. So the functions in R that we
+        use to construct recipes are a little bit awkward in the setting of
+        clustering. In particular, we will have to treat
+        &#x201C;predictors&#x201D; here as if it meant &#x201C;variables to be
+        used in clustering&#x201D;. So the model formula <c>~ .</c> specifies
+        that all variables are &#x201C;predictors&#x201D;, i.e., all variables
+        should be used for clustering. Similarly, when we use the
+        <c>all_predictors()</c> function in the preprocessing steps, we really
+        mean &#x201C;apply this step to all variables used for clustering.&#x201D;
+      </p>
+    </note>
+
+    <program language="r">
+      <input>
+kmeans_recipe &lt;- recipe(~ ., data = penguins) |&gt;
+    step_scale(all_predictors()) |&gt;
+    step_center(all_predictors())
+kmeans_recipe
+      </input>
+    </program>
+    <pre>
+── Recipe ──────────────────────────────────────────────────────────────────────
+── Inputs
+ Number of variables by role
+ predictor: 2
+── Operations
+ • Scaling for: all_predictors()
+ • Centering for: all_predictors()
+    </pre>
+
+    <p>
+      To indicate that we are performing K-means clustering, we will use the
+      <c>k_means</c> model specification.
+      <idx><h>K-means</h><h>k_means model specification</h></idx>
+      We will use the <c>num_clusters</c> argument to specify the number of
+      clusters (here we choose K = 3), and specify that we are using the
+      <c>"stats"</c> engine.
+      <idx><h>K-means</h><h>stats engine</h></idx>
+    </p>
+
+    <program language="r">
+      <input>
+kmeans_spec &lt;- k_means(num_clusters = 3) |&gt;
+    set_engine("stats")
+kmeans_spec
+      </input>
+    </program>
+    <pre>
+K Means Cluster Specification (partition)
+
+Main Arguments:
+  num_clusters = 3
+
+Computational engine: stats
+    </pre>
+
+    <p>
+      To actually run the K-means clustering, we combine the recipe and model
+      specification in a workflow, and use the <c>fit</c> function. Note that
+      the K-means algorithm uses a random initialization of assignments; but
+      since we set the random seed earlier, the clustering will be reproducible.
+    </p>
+
+    <program language="r">
+      <input>
+kmeans_fit &lt;- workflow() |&gt;
+    add_recipe(kmeans_recipe) |&gt;
+    add_model(kmeans_spec) |&gt;
+    fit(data = penguins)
+
+kmeans_fit
+      </input>
+    </program>
+    <pre>
+══ Workflow [trained] ══════════════════════════════════════════════════════════
+Preprocessor: Recipe
+Model: k_means()
+
+── Preprocessor ────────────────────────────────────────────────────────────────
+2 Recipe Steps
+
+• step_scale()
+• step_center()
+
+── Model ────────────────────────────────────────────────────────────────────────
+K-means clustering with 3 clusters of sizes 6, 5, 7
+
+Cluster means:
+  bill_length_mm flipper_length_mm
+1      0.6484         0.8932
+2     -1.1060        -0.9978
+3      0.4853        -0.5841
+    </pre>
+
+    <p>
+      As you can see above, the fit object has a lot of information that can be
+      used to visualize the clusters, pick K, and evaluate the total WSSD.
+      Let&#x2019;s start by visualizing the clusters as a colored scatter plot!
+      In order to do that, we first need to augment our original data frame with
+      the cluster assignments. We can achieve this using the <c>augment</c>
+      function from <c>tidyclust</c>.
+      <idx><h>tidyclust</h><h>augment</h></idx>
+      <idx><h>augment</h></idx>
+    </p>
+
+    <program language="r">
+      <input>
+clustered_data &lt;- kmeans_fit |&gt;
+                    augment(penguins)
+clustered_data
+      </input>
+    </program>
+    <pre>
+# A tibble: 18 × 3
+   bill_length_mm flipper_length_mm .pred_cluster
+            &lt;dbl&gt;             &lt;dbl&gt; &lt;fct&gt;
+ 1           39.1               181 Cluster_2
+ 2           39.5               186 Cluster_2
+ 3           40.3               195 Cluster_3
+ ...
+    </pre>
+
+    <p>
+      Now that we have the cluster assignments included in the
+      <c>clustered_data</c> tidy data frame, we can visualize them as shown in
+      Figure <xref ref="fig-clustering-plot-clusters"/>. Note that we are
+      plotting the <em>un-standardized</em> data here; if we for some reason
+      wanted to visualize the <em>standardized</em> data from the recipe, we
+      would need to use the <c>bake</c> function to obtain that first.
+    </p>
+
+    <program language="r">
+      <input>
+cluster_plot &lt;- ggplot(clustered_data,
+  aes(x = flipper_length_mm,
+      y = bill_length_mm,
+      color = .pred_cluster),
+  size = 2) +
+  geom_point() +
+  labs(x = "Flipper Length",
+       y = "Bill Length",
+       color = "Cluster") +
+  scale_color_manual(values = c("steelblue",
+                                "darkorange",
+                                "goldenrod1")) +
+  theme(text = element_text(size = 12))
+
+cluster_plot
+      </input>
+    </program>
+
+    <figure xml:id="fig-clustering-plot-clusters">
+      <caption>The data colored by the cluster assignments returned by K-means.</caption>
+      <image source="images/clustering/plot-clusters-2.png" width="70%"/>
+    </figure>
+
+    <p>
+      As mentioned above, we also need to select K by finding where the
+      &#x201C;elbow&#x201D; occurs in the plot of total WSSD versus the number
+      of clusters. We can obtain the total WSSD (<c>tot.withinss</c>)
+      <idx><h>WSSD</h><h>total</h></idx>
+      from our clustering with 3 clusters using the <c>glance</c> function.
+    </p>
+
+    <program language="r">
+      <input>
+glance(kmeans_fit)
+      </input>
+    </program>
+    <pre>
+# A tibble: 1 × 3
+  tot.withinss totss betweenss
+         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+1         4.05  34.0      30.0
+    </pre>
+
+    <p>
+      To calculate the total WSSD for a variety of Ks, we will create a data
+      frame with a column named <c>num_clusters</c> with rows containing each
+      value of K we want to run K-means with (here, 1 to 9).
+    </p>
+
+    <program language="r">
+      <input>
+penguin_clust_ks &lt;- tibble(num_clusters = 1:9)
+penguin_clust_ks
+      </input>
+    </program>
+    <pre>
+# A tibble: 9 × 1
+  num_clusters
+         &lt;int&gt;
+1            1
+2            2
+3            3
+4            4
+5            5
+6            6
+7            7
+8            8
+9            9
+    </pre>
+
+    <p>
+      Then we construct our model specification again, this time specifying
+      that we want to tune the <c>num_clusters</c> parameter.
+    </p>
+
+    <program language="r">
+      <input>
+kmeans_spec &lt;- k_means(num_clusters = tune()) |&gt;
+    set_engine("stats")
+kmeans_spec
+      </input>
+    </program>
+    <pre>
+K Means Cluster Specification (partition)
+
+Main Arguments:
+  num_clusters = tune()
+
+Computational engine: stats
+    </pre>
+
+    <p>
+      We combine the recipe and specification in a workflow, and then use the
+      <c>tune_cluster</c> function
+      <idx><h>tidyclust</h><h>tune_cluster</h></idx>
+      to run K-means on each of the different settings of
+      <c>num_clusters</c>. The <c>grid</c> argument controls which values of K
+      we want to try&#x2014;in this case, the values from 1 to 9 that are
+      stored in the <c>penguin_clust_ks</c> data frame. We set the
+      <c>resamples</c> argument to <c>apparent(penguins)</c> to
+      <idx><h>tidymodels</h><h>apparent</h></idx>
+      tell K-means to run on the whole data set for each value of
+      <c>num_clusters</c>. Finally, we collect the results using the
+      <c>collect_metrics</c> function.
+      <idx><h>tidymodels</h><h>collect_metrics</h></idx>
+    </p>
+
+    <program language="r">
+      <input>
+kmeans_results &lt;- workflow() |&gt;
+    add_recipe(kmeans_recipe) |&gt;
+    add_model(kmeans_spec) |&gt;
+    tune_cluster(resamples = apparent(penguins), grid = penguin_clust_ks) |&gt;
+    collect_metrics()
+kmeans_results
+      </input>
+    </program>
+    <pre>
+# A tibble: 18 × 8
+   num_clusters .metric         .estimator    mean     n std_err .config
+          &lt;int&gt; &lt;chr&gt;           &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
+ 1            1 sse_total       standard    34.0       1      NA  Preprocessor1…
+ 2            1 sse_within_total standard   34.0       1      NA  Preprocessor1…
+ 3            2 sse_total       standard    34.0       1      NA  Preprocessor1…
+ 4            2 sse_within_total standard    9.23      1      NA  Preprocessor1…
+...
+    </pre>
+
+    <p>
+      The total WSSD results correspond to the <c>mean</c> column when the
+      <c>.metric</c> variable is equal to <c>sse_within_total</c>. We can
+      obtain a tidy data frame with this information using <c>filter</c> and
+      <c>mutate</c>.
+      <idx><h>filter</h></idx>
+      <idx><h>mutate</h></idx>
+    </p>
+
+    <program language="r">
+      <input>
+kmeans_results &lt;- kmeans_results |&gt;
+    filter(.metric == "sse_within_total") |&gt;
+    mutate(total_WSSD = mean) |&gt;
+    select(num_clusters, total_WSSD)
+kmeans_results
+      </input>
+    </program>
+    <pre>
+# A tibble: 9 × 2
+  num_clusters total_WSSD
+         &lt;int&gt;      &lt;dbl&gt;
+1            1     34.0
+2            2      9.23
+3            3      4.05
+4            4      2.69
+5            5      2.10
+6            6      1.68
+7            7      1.28
+8            8      2.45
+9            9      0.836
+    </pre>
+
+    <p>
+      Now that we have <c>total_WSSD</c> and <c>num_clusters</c> as columns in
+      a data frame, we can make a line plot
+      (Figure <xref ref="fig-clustering-plot-choose-k"/>) and search for the
+      &#x201C;elbow&#x201D; to find which value of K to use.
+      <idx><h>elbow method</h></idx>
+    </p>
+
+    <program language="r">
+      <input>
+elbow_plot &lt;- ggplot(kmeans_results, aes(x = num_clusters, y = total_WSSD)) +
+  geom_point() +
+  geom_line() +
+  xlab("K") +
+  ylab("Total within-cluster sum of squares") +
+  scale_x_continuous(breaks = 1:9) +
+  theme(text = element_text(size = 12))
+
+elbow_plot
+      </input>
+    </program>
+
+    <figure xml:id="fig-clustering-plot-choose-k">
+      <caption>A plot showing the total WSSD versus the number of clusters.</caption>
+      <image source="images/clustering/plot-choose-k.png" width="70%"/>
+    </figure>
+
+    <p>
+      It looks like 3 clusters is the right choice for this data. But why is
+      there a &#x201C;bump&#x201D; in the total WSSD plot here? Shouldn&#x2019;t
+      total WSSD always decrease as we add more clusters? Technically yes, but
+      remember: K-means can get &#x201C;stuck&#x201D; in a bad solution.
+      Unfortunately, for K = 8 we had an unlucky initialization and found a bad
+      clustering!
+      <idx><h>K-means</h><h>restart, nstart</h></idx>
+      We can help prevent finding a bad clustering by trying a few different
+      random initializations via the <c>nstart</c> argument in the model
+      specification. Here we will try using 10 restarts.
+    </p>
+
+    <program language="r">
+      <input>
+kmeans_spec &lt;- k_means(num_clusters = tune()) |&gt;
+    set_engine("stats", nstart = 10)
+kmeans_spec
+      </input>
+    </program>
+    <pre>
+K Means Cluster Specification (partition)
+
+Main Arguments:
+  num_clusters = tune()
+
+Computational engine: stats
+
+Engine-Specific Arguments:
+  nstart = 10
+    </pre>
+
+    <p>
+      Now if we rerun the same workflow with the new model specification,
+      K-means clustering will be performed <c>nstart = 10</c> times for each
+      value of K. The <c>collect_metrics</c> function will then pick the best
+      clustering of the 10 runs for each value of K, and report the results for
+      that best clustering. Figure <xref ref="fig-clustering-choose-k-nstart"/>
+      shows the resulting total WSSD plot from using 10 restarts; the bump is
+      gone and the total WSSD decreases as expected. The more times we perform
+      K-means clustering, the more likely we are to find a good clustering (if
+      one exists). What value should you choose for <c>nstart</c>? The answer
+      is that it depends on many factors: the size and characteristics of your
+      data set, as well as how powerful your computer is. The larger the
+      <c>nstart</c> value the better from an analysis perspective, but there is
+      a trade-off that doing many clusterings could take a long time. So this is
+      something that needs to be balanced.
+    </p>
+
+    <program language="r">
+      <input>
+kmeans_results &lt;- workflow() |&gt;
+    add_recipe(kmeans_recipe) |&gt;
+    add_model(kmeans_spec) |&gt;
+    tune_cluster(resamples = apparent(penguins), grid = penguin_clust_ks) |&gt;
+    collect_metrics() |&gt;
+    filter(.metric == "sse_within_total") |&gt;
+    mutate(total_WSSD = mean) |&gt;
+    select(num_clusters, total_WSSD)
+
+elbow_plot &lt;- ggplot(kmeans_results, aes(x = num_clusters, y = total_WSSD)) +
+  geom_point() +
+  geom_line() +
+  xlab("K") +
+  ylab("Total within-cluster sum of squares") +
+  scale_x_continuous(breaks = 1:9) +
+  theme(text = element_text(size = 12))
+
+elbow_plot
+      </input>
+    </program>
+
+    <figure xml:id="fig-clustering-choose-k-nstart">
+      <caption>A plot showing the total WSSD versus the number of clusters when K-means is run with 10 restarts.</caption>
+      <image source="images/clustering/choose-k-nstart.png" width="70%"/>
+    </figure>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-clustering-exercises">
+    <title>Exercises</title>
+    <p>
+      Practice exercises for the material covered in this chapter can be found
+      in the accompanying
+      <url href="https://worksheets.datasciencebook.ca">worksheets
+      repository</url> in the &#x201C;Clustering&#x201D; row. You can launch an
+      interactive version of the worksheet in your browser by clicking the
+      &#x201C;launch binder&#x201D; button. You can also preview a
+      non-interactive version of the worksheet by clicking &#x201C;view
+      worksheet.&#x201D; If you instead decide to download the worksheet and
+      run it on your own machine, make sure to follow the instructions for
+      computer setup found in <xref ref="ch-setup"/>. This will ensure that the
+      automated feedback and guidance that the worksheets provide will function
+      as intended.
+    </p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-clustering-resources">
+    <title>Additional resources</title>
+    <ul>
+      <li>
+        <p>
+          Chapter 10 of <em>An Introduction to Statistical Learning</em>
+          <xref ref="james2013introduction"/> provides a great next stop in the
+          process of learning about clustering and unsupervised learning in
+          general. In the realm of clustering specifically, it provides a great
+          companion introduction to K-means, but also covers <em>hierarchical</em>
+          clustering for when you expect there to be subgroups, and then
+          subgroups within subgroups, etc., in your data. In the realm of more
+          general unsupervised learning, it covers <em>principal components
+          analysis (PCA)</em>, which is a very popular technique for reducing
+          the number of predictors in a data set.
+        </p>
+      </li>
+    </ul>
+  </section>
 
 </chapter>

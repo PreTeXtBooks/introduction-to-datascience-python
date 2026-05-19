@@ -326,6 +326,25 @@
       <url href="https://moderndive.com/" visual="moderndive.com/"/>
     </biblio>
 
+    <biblio type="raw" xml:id="kmeans">
+      Lloyd, S. (1982).
+      Least square quantization in PCM.
+      <em>IEEE Transactions on Information Theory</em>, 28(2), 129&#x2013;137.
+    </biblio>
+
+    <biblio type="raw" xml:id="palmerpenguins">
+      Horst, A., Hill, A., and Gorman, K. (2020).
+      <em>palmerpenguins: Palmer Archipelago penguin data</em>.
+      R package version 0.1.0.
+      <url href="https://allisonhorst.github.io/palmerpenguins/" visual="allisonhorst.github.io/palmerpenguins/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="penguinpaper">
+      Gorman, K., Williams, T., and Fraser, W. (2014).
+      Ecological sexual dimorphism and environmental variability within a community of Antarctic penguins (genus Pygoscelis).
+      <em>PLoS ONE</em>, 9(3).
+    </biblio>
+
   </references>
   <index>
     <title>Index</title>
