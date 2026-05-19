@@ -319,6 +319,13 @@
       <url href="https://www.statlearning.com/" visual="statlearning.com/"/>
     </biblio>
 
+    <biblio type="raw" xml:id="moderndive">
+      Kim, A. Y. and Ismay, C. (2021).
+      <em>Statistical Inference via Data Science: A ModernDive into R and the Tidyverse</em>.
+      CRC Press.
+      <url href="https://moderndive.com/" visual="moderndive.com/"/>
+    </biblio>
+
   </references>
   <index>
     <title>Index</title>
