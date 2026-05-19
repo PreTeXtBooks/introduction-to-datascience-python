@@ -286,6 +286,39 @@
       <url href="https://recipes.tidymodels.org/" visual="recipes.tidymodels.org/"/>
     </biblio>
 
+    <biblio type="raw" xml:id="bealesubset">
+      Beale, E. M. L., Kendall, M. G., and Mann, D. W. (1967).
+      The discarding of variables in multivariate analysis.
+      <em>Biometrika</em>, 54(3&#x2013;4), 357&#x2013;366.
+    </biblio>
+
+    <biblio type="raw" xml:id="hockingsubset">
+      Hocking, R. R. and Leslie, R. N. (1967).
+      Selection of the best subset in regression analysis.
+      <em>Technometrics</em>, 9(4), 531&#x2013;540.
+    </biblio>
+
+    <biblio type="raw" xml:id="forwardefroymson">
+      Efroymson, M. A. (1960).
+      Multiple regression analysis.
+      In A. Ralston and H. S. Wilf (Eds.),
+      <em>Mathematical Methods for Digital Computers</em> (pp. 191&#x2013;203).
+      John Wiley.
+    </biblio>
+
+    <biblio type="raw" xml:id="forwarddraper">
+      Draper, N. R. and Smith, H. (1966).
+      <em>Applied Regression Analysis</em>.
+      John Wiley and Sons.
+    </biblio>
+
+    <biblio type="raw" xml:id="james2013introduction">
+      James, G., Witten, D., Hastie, T., and Tibshirani, R. (2013).
+      <em>An Introduction to Statistical Learning</em>.
+      Springer.
+      <url href="https://www.statlearning.com/" visual="statlearning.com/"/>
+    </biblio>
+
   </references>
   <index>
     <title>Index</title>
