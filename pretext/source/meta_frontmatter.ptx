@@ -71,7 +71,65 @@
       attracting excitement and interest from many different directions. The demand for
       introductory educational materials has grown concurrently with the growth of the
       field itself, leading to a proliferation of textbooks, courses, blog posts, and
-      tutorials. This book is an important contribution to this fast-growing literature.
+      tutorials. This book is an important contribution to this fast-growing literature,
+      but given the wide availability of materials, a reader should be inclined to ask,
+      <q>What is the unique contribution of <em>this</em> book?</q> In order to answer that
+      question it is useful to step back for a moment and consider the development of the
+      field of data science over the past few years.
+    </p>
+    <p>
+      When thinking about data science, it is important to consider two questions:
+      <q>What is data science?</q> and <q>How should one do data science?</q> The former
+      question is under active discussion amongst a broad community of researchers and
+      practitioners and there does not appear to be much consensus to date. However, there
+      seems a general understanding that data science focuses on the more <q>active</q>
+      elements&#x2014;data wrangling, cleaning, and analysis&#x2014;of answering questions
+      with data. These elements are often highly problem-specific and may seem difficult to
+      generalize across applications. Nevertheless, over time we have seen some core elements
+      emerge that appear to repeat themselves as useful concepts across different problems.
+      Given the lack of clear agreement over the definition of data science, there is a
+      strong need for a book like this one to propose a vision for what the field is and what
+      the implications are for the activities in which members of the field engage.
+    </p>
+    <p>
+      The first important concept addressed by this book is tidy data, which is a format for
+      tabular data formally introduced to the statistical community in a 2014 paper by Hadley
+      Wickham. The tidy data organization strategy has proven a powerful abstract concept for
+      conducting data analysis, in large part because of the vast toolchain implemented in
+      the Tidyverse collection of R packages. The second key concept is the development of
+      workflows for reproducible and auditable data analyses. Modern data analyses have only
+      grown in complexity due to the availability of data and the ease with which we can
+      implement complex data analysis procedures. Furthermore, these data analyses are often
+      part of decision-making processes that may have significant impacts on people and
+      communities. Therefore, there is a critical need to build reproducible analyses that
+      can be studied and repeated by others in a reliable manner. Statistical methods clearly
+      represent an important element of data science for building prediction and
+      classification models and for making inferences about unobserved populations. Finally,
+      because a field can succeed only if it fosters an active and collaborative community,
+      it has become clear that being fluent in the tools of collaboration is a core element
+      of data science.
+    </p>
+    <p>
+      This book takes these core concepts and focuses on how one can apply them to
+      <em>do</em> data science in a rigorous manner. Students who learn from this book will
+      be well-versed in the techniques and principles behind producing reliable evidence from
+      data. This book is centered around the use of the R programming language within the
+      tidy data framework, and as such employs the most recent advances in data analysis
+      coding. The use of Jupyter notebooks for exercises immediately places the student in
+      an environment that encourages auditability and reproducibility of analyses. The
+      integration of git and GitHub into the course is a key tool for teaching about
+      collaboration and community, key concepts that are critical to data science.
+    </p>
+    <p>
+      The demand for training in data science continues to increase. The availability of
+      large quantities of data to answer a variety of questions, the computational power
+      available to many more people than ever before, and the public awareness of the
+      importance of data for decision-making have all contributed to the need for
+      high-quality data science work. This book provides a sophisticated first introduction
+      to the field of data science and provides a balanced mix of practical skills along
+      with generalizable principles. As we continue to introduce students to data science
+      and train them to confront an expanding array of data science problems, they will be
+      well-served by the ideas presented here.
     </p>
   </preface>
 
@@ -79,13 +137,15 @@
     <title>Preface</title>
     <p>
       This textbook aims to be an approachable introduction to the world of data science.
-      In this book, we define <term>data science</term> as the process of generating
-      insight from data through <term>reproducible</term> and <term>auditable</term> processes.
+      In this book, we define <term>data science</term><idx>data science</idx> as the
+      process of generating insight from data through <term>reproducible</term><idx>reproducible</idx>
+      and <term>auditable</term><idx>auditable</idx> processes.
       If you analyze some data and give your analysis to a friend or colleague, they should
       be able to re-run the analysis from start to finish and get the same result you did
       (<em>reproducibility</em>). They should also be able to see and understand all the
       steps in the analysis, as well as the history of how the analysis developed
-      (<em>auditability</em>).
+      (<em>auditability</em>). Creating reproducible and auditable analyses allows both you
+      and others to easily double-check and validate your work.
     </p>
     <p>
       At a high level, in this book, you will learn how to
@@ -95,15 +155,47 @@
       <li><p>solve those problems with reproducible and auditable workflows.</p></li>
     </ol>
     <p>
-      Throughout, you will learn how to use the R programming language to perform all the
-      tasks associated with data analysis. You will spend the first four chapters learning
-      how to use R to load, clean, wrangle, and visualize data while answering descriptive
-      and exploratory data analysis questions. In the next six chapters, you will learn how
-      to answer predictive, exploratory, and inferential data analysis questions with common
-      methods in data science, including classification, regression, clustering, and
-      estimation. In the final chapters, you will learn how to combine R code, formatted
-      text, and images in a single coherent document with Jupyter, use version control for
-      collaborative work, and configure your computer with the tools needed for data science.
+      <xref ref="fig-chapter-overview"/> summarizes what you will learn in each chapter
+      of this book.
+      Throughout, you will learn how to use the R programming language to perform
+      all the tasks associated with data analysis. You will spend the first four chapters
+      learning how to use R to load, clean, wrangle (i.e., restructure the data into a
+      usable format) and visualize data while answering descriptive and exploratory data
+      analysis questions. In the next six chapters, you will learn how to answer
+      predictive, exploratory, and inferential data analysis questions with common methods
+      in data science, including classification, regression, clustering, and estimation.
+      In the final chapters
+      (<xref ref="jupyter"/>&#x2013;<xref ref="setup"/>),
+      you will learn how to combine R code, formatted text, and images in a single coherent
+      document with Jupyter, use version control for collaboration, and install and
+      configure the software needed for data science on your own computer. If you are
+      reading this book as part of a course that you are taking, the instructor may have set
+      up all of these tools already for you; in this case, you can continue on through the
+      book reading the chapters in order. But if you are reading this independently, you
+      may want to jump to these last three chapters early before going on to make sure your
+      computer is set up in such a way that you can try out the example code that we include
+      throughout the book.
+    </p>
+    <figure xml:id="fig-chapter-overview">
+      <caption>Where are we going?</caption>
+      <image source="images/frontmatter/chapter_overview.png" width="100%">
+        <description>A diagram showing the chapter overview of the book, illustrating the progression from introductory data science topics through to advanced methods and tools.</description>
+      </image>
+    </figure>
+    <p>
+      Each chapter in the book has an accompanying worksheet that provides exercises to
+      help you practice the concepts you will learn. We strongly recommend that you work
+      through the worksheet when you finish reading each chapter before moving on to the
+      next chapter. All of the worksheets are available at
+      <url href="https://worksheets.datasciencebook.ca" visual="worksheets.datasciencebook.ca"/>;
+      the <q>Exercises</q> section at the end of each chapter points you to the right
+      worksheet for that chapter. For each worksheet, you can either launch an interactive
+      version of the worksheet in your browser by clicking the <q>launch binder</q> button,
+      or preview a non-interactive version of the worksheet by clicking <q>view
+      worksheet.</q> If you instead decide to download the worksheet and run it on your
+      own machine, make sure to follow the instructions for computer setup found in
+      <xref ref="setup"/>. This will ensure that the automated feedback and guidance that
+      the worksheets provide will function as intended.
     </p>
   </preface>
 
@@ -111,55 +203,68 @@
     <title>Acknowledgments</title>
     <p>
       We'd like to thank everyone that has contributed to the development of
-      <em>Data Science: A First Introduction</em>.
+      <url href="https://datasciencebook.ca" visual="datasciencebook.ca"><em>Data Science: A First Introduction</em></url>.
       This is an open source textbook that began as a collection of course readings
-      for DSCI 100, a new introductory data science course
-      at the University of British Columbia (UBC).
-      Several faculty members in the UBC Department of Statistics
-      were pivotal in shaping the direction of that course,
-      and as such, contributed greatly to the broad structure and
-      list of topics in this book. We would especially like to thank
-      Matías Salibían-Barrera for his mentorship during the initial development
-      and roll-out of both DSCI 100 and this book.
+      for DSCI 100, a new introductory data science course at the University of British
+      Columbia (UBC). Several faculty members in the UBC Department of Statistics were
+      pivotal in shaping the direction of that course, and as such, contributed greatly to
+      the broad structure and list of topics in this book. We would especially like to
+      thank Matías Salibían-Barrera for his mentorship during the initial development and
+      roll-out of both DSCI 100 and this book. His door was always open when we needed to
+      chat about how to best introduce and teach data science to our first-year students.
+      We would also like to thank Gabriela Cohen Freue for her DSCI 561 (Regression I)
+      teaching materials from the UBC Master of Data Science program, as some of our
+      linear regression figures were inspired from these.
     </p>
     <p>
-      We would also like to thank all those who contributed to the process of
-      publishing this book. In particular, we would like to thank all of our reviewers
-      for their feedback and suggestions: Rohan Alexander, Isabella Ghement,
-      Virgilio Gómez Rubio, Albert Kim, Adam Loy, Maria Prokofieva, Emily Riederer,
-      and Greg Wilson. The book was improved substantially by their insights.
-      We would like to give special thanks to Jim Zidek for his support and
-      encouragement throughout the process, and to Roger Peng for graciously
-      offering to write the Foreword.
+      We would also like to thank all those who contributed to the process of publishing
+      this book. In particular, we would like to thank all of our reviewers for their
+      feedback and suggestions: Rohan Alexander, Isabella Ghement, Virgilio Gómez Rubio,
+      Albert Kim, Adam Loy, Maria Prokofieva, Emily Riederer, and Greg Wilson. The book
+      was improved substantially by their insights. We would like to give special thanks
+      to Jim Zidek for his support and encouragement throughout the process, and to
+      Roger Peng for graciously offering to write the Foreword.
     </p>
     <p>
       Finally, we owe a debt of gratitude to all of the students of DSCI 100 over the
-      past few years. They provided invaluable feedback on the book and worksheets;
-      they found bugs for us and brought a level of enthusiasm to the class that
-      sustained us during the hard work of creating a new course and writing a textbook.
+      past few years. They provided invaluable feedback on the book and worksheets; they
+      found bugs for us (and stood by very patiently in class while we frantically fixed
+      those bugs); and they brought a level of enthusiasm to the class that sustained us
+      during the hard work of creating a new course and writing a textbook. Our
+      interactions with them taught us how to teach data science, and that learning is
+      reflected in the content of this book.
     </p>
   </preface>
 
   <preface xml:id="about-the-authors">
     <title>About the Authors</title>
     <p>
-      <url href="https://tiffanytimbers.com/" visual="tiffanytimbers.com">Tiffany Timbers</url>
+      <url href="https://tiffanytimbers.com/" visual="tiffanytimbers.com"><alert>Tiffany Timbers</alert></url>
       is an Associate Professor of Teaching in the Department of Statistics and Co-Director
       for the Master of Data Science program (Vancouver Option) at the University of British
       Columbia. In these roles she teaches and develops curriculum around the responsible
-      application of Data Science to solve real-world problems.
+      application of Data Science to solve real-world problems. One of her favorite courses
+      she teaches is a graduate course on collaborative software development, which focuses
+      on teaching how to create R and Python packages using modern tools and workflows.
     </p>
     <p>
-      <url href="https://trevorcampbell.me" visual="trevorcampbell.me">Trevor Campbell</url>
+      <url href="https://trevorcampbell.me" visual="trevorcampbell.me"><alert>Trevor Campbell</alert></url>
       is an Associate Professor in the Department of Statistics at the University of British
       Columbia. His research focuses on automated, scalable Bayesian inference algorithms,
-      Bayesian nonparametrics, streaming data, and Bayesian theory.
+      Bayesian nonparametrics, streaming data, and Bayesian theory. He was previously a
+      postdoctoral associate advised by Tamara Broderick in the Computer Science and
+      Artificial Intelligence Laboratory (CSAIL) and Institute for Data, Systems, and
+      Society (IDSS) at MIT, a Ph.D. candidate under Jonathan How in the Laboratory for
+      Information and Decision Systems (LIDS) at MIT, and before that he was in the
+      Engineering Science program at the University of Toronto.
     </p>
     <p>
-      <url href="https://www.stat.ubc.ca/users/melissa-lee" visual="stat.ubc.ca/users/melissa-lee">Melissa Lee</url>
-      is an Assistant Professor of Teaching in the Department of Statistics at the University
-      of British Columbia. She teaches and develops curriculum for undergraduate statistics
-      and data science courses.
+      <url href="https://www.stat.ubc.ca/users/melissa-lee" visual="stat.ubc.ca/users/melissa-lee"><alert>Melissa Lee</alert></url>
+      is an Assistant Professor of Teaching in the Department of Statistics at the
+      University of British Columbia. She teaches and develops curriculum for
+      undergraduate statistics and data science courses. Her work focuses on
+      student-centered approaches to teaching, developing and assessing open educational
+      resources, and promoting equity, diversity, and inclusion initiatives.
     </p>
   </preface>
 
