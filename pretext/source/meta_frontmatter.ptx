@@ -239,7 +239,7 @@
   <preface xml:id="about-the-authors">
     <title>About the Authors</title>
     <p>
-      <url href="https://tiffanytimbers.com/" visual="tiffanytimbers.com"><alert>Tiffany Timbers</alert></url>
+      <url href="https://tiffanytimbers.com/" visual="tiffanytimbers.com"><em>Tiffany Timbers</em></url>
       is an Associate Professor of Teaching in the Department of Statistics and Co-Director
       for the Master of Data Science program (Vancouver Option) at the University of British
       Columbia. In these roles she teaches and develops curriculum around the responsible
@@ -248,7 +248,7 @@
       on teaching how to create R and Python packages using modern tools and workflows.
     </p>
     <p>
-      <url href="https://trevorcampbell.me" visual="trevorcampbell.me"><alert>Trevor Campbell</alert></url>
+      <url href="https://trevorcampbell.me" visual="trevorcampbell.me"><em>Trevor Campbell</em></url>
       is an Associate Professor in the Department of Statistics at the University of British
       Columbia. His research focuses on automated, scalable Bayesian inference algorithms,
       Bayesian nonparametrics, streaming data, and Bayesian theory. He was previously a
@@ -259,7 +259,7 @@
       Engineering Science program at the University of Toronto.
     </p>
     <p>
-      <url href="https://www.stat.ubc.ca/users/melissa-lee" visual="stat.ubc.ca/users/melissa-lee"><alert>Melissa Lee</alert></url>
+      <url href="https://www.stat.ubc.ca/users/melissa-lee" visual="stat.ubc.ca/users/melissa-lee"><em>Melissa Lee</em></url>
       is an Assistant Professor of Teaching in the Department of Statistics at the
       University of British Columbia. She teaches and develops curriculum for
       undergraduate statistics and data science courses. Her work focuses on
