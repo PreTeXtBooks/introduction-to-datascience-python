@@ -297,7 +297,7 @@ co2_line
         <idx><h>ggplot</h><h>scales</h></idx>
         Note that the vector given to <c>xlim</c> must be of the same type as the
         data mapped to that axis (here, <c>date</c> type from the <c>lubridate</c>
-        package <xref ref="lubridate"/>):
+        package <xref ref="lubridate"/> <xref ref="lubridatepaper"/>):
       </p>
       <note>
         <p><c>lubridate</c> is installed by the <c>tidyverse</c> metapackage but

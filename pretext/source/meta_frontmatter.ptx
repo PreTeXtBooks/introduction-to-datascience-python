@@ -212,7 +212,7 @@
     <p>
       <xref ref="fig-chapter-overview"/> summarizes what you will learn in each chapter
       of this book.
-      Throughout, you will learn how to use the R programming language to perform
+      Throughout, you will learn how to use the R programming language <xref ref="Rlanguage"/> to perform
       all the tasks associated with data analysis. You will spend the first four chapters
       learning how to use R to load, clean, wrangle (i.e., restructure the data into a
       usable format) and visualize data while answering descriptive and exploratory data

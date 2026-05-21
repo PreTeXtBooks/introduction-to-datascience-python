@@ -386,6 +386,21 @@
            visual="journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510"/>
     </biblio>
 
+    <!-- Additional references from source/references.bib used in preface and chapters -->
+
+    <biblio type="raw" xml:id="Rlanguage">
+      R Core Team.
+      <em>R: A Language and Environment for Statistical Computing</em>.
+      R Foundation for Statistical Computing, Vienna, Austria, 2021.
+      <url href="https://www.R-project.org/" visual="www.R-project.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="lubridatepaper">
+      G. Grolemund and H. Wickham.
+      Dates and times made easy with lubridate.
+      <em>Journal of Statistical Software</em>, 40(3):1&#x2013;25, 2011.
+    </biblio>
+
   </references>
   <index>
     <title>Index</title>
