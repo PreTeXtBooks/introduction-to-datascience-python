@@ -1813,7 +1813,13 @@ example_formula
       </pre>
       <p>
         Finally, we need to write some code that performs the task of
-        sequentially finding the best predictor to add to the model. Here we
+        sequentially finding the best predictor to add to the model. If you
+        recall the end of the wrangling chapter, we mentioned that sometimes
+        one needs more flexible forms of iteration than what we have used
+        earlier, and in these cases one typically resorts to a <em>for loop</em>;
+        see
+        <url href="https://r4ds.had.co.nz/iteration.html" visual="r4ds.had.co.nz/iteration.html">the chapter on iteration</url>
+        in <em>R for Data Science</em> (<xref ref="wickham2016r"/>). Here we
         will use two for loops: one over increasing predictor set sizes, and
         another to check which predictor to add in each round. For each set of
         predictors to try, we construct a model formula, pass it into a

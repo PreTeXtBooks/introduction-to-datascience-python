@@ -108,7 +108,13 @@
       Just being able to make a visualization in R does not mean that it effectively
       communicates your message to others. Once you have selected a broad type of
       visualization to use, you will have to refine it to suit your particular need.
-      Some rules of thumb for doing this are listed below.
+      Some rules of thumb for doing this are listed below. They generally fall into
+      two classes: you want to <em>make your visualization convey your message</em>,
+      and you want to <em>reduce visual noise</em> as much as possible. Humans have
+      limited cognitive ability to process information; both of these types of
+      refinement aim to reduce the mental load on your audience when viewing your
+      visualization, making it easier for them to understand and remember your
+      message quickly.
     </p>
     <p><term>Convey the message</term></p>
     <ul>
@@ -124,9 +130,11 @@
         colorblindness (a surprisingly large fraction of the overall
         population&#x2014;from about 1% to 10%, depending on sex and ancestry
         <xref ref="deebblind"/>). For example,
-        <url href="https://colorbrewer2.org">ColorBrewer</url> and the
-        <c>RColorBrewer</c> R package <xref ref="RColorBrewer"/> provide the ability
-        to pick such color schemes.</p></li>
+        <url href="https://colorbrewer2.org" visual="colorbrewer2.org">ColorBrewer</url> and the
+        <url href="https://cran.r-project.org/web/packages/RColorBrewer/index.html" visual="cran.r-project.org/web/packages/RColorBrewer/index.html"><c>RColorBrewer</c> R package</url>
+        <xref ref="RColorBrewer"/> provide the ability to pick such color schemes, and you can check
+        your visualizations after you have created them by uploading to online tools such as a
+        <url href="https://www.color-blindness.com/coblis-color-blindness-simulator/" visual="color-blindness.com/coblis-color-blindness-simulator/">color blindness simulator</url>.</p></li>
       <li><p>Redundancy can be helpful; sometimes conveying the same message in
         multiple ways reinforces it for the audience.</p></li>
     </ul>
@@ -136,8 +144,9 @@
         create false patterns, and detract from the message.</p></li>
       <li><p>Be wary of overplotting. Overplotting is when marks that represent the
         data overlap, and is problematic as it prevents you from seeing how many data
-        points are represented in areas of the visualization where this
-        occurs.</p></li>
+        points are represented in areas of the visualization where this occurs. If your
+        plot has too many dots or lines and starts to look like a mess, you need to do
+        something different.</p></li>
       <li><p>Only make the plot area as big as needed. Simple plots can be made
         small.</p></li>
       <li><p>Don&#x2019;t adjust the axes to zoom in on small differences. If the difference

@@ -913,33 +913,121 @@ english_langs
     <title>Combining functions using the pipe operator, <c>|&gt;</c></title>
     <p>
       In R, we often have to call multiple functions in a sequence to process a data frame. The basic
-      ways of doing this can become quickly unreadable if there are many steps. The <em>pipe operator</em>
-      (<c>|&gt;</c>) solves this problem, resulting in cleaner and easier-to-follow code.
+      ways of doing this can become quickly unreadable if there are many steps.
       <idx><h>pipe</h></idx>
-      <c>|&gt;</c> is built into R so you don&#x2019;t need to load any packages to use it. You can think of the
-      pipe as a physical pipe. It takes the output from the function on the left-hand side of the pipe,
-      and passes it as the first argument to the function on the right-hand side of the pipe.
+      For example, suppose we need to perform three operations on a data frame called <c>data</c>:
     </p>
+    <ol>
+      <li><p>add a new column <c>new_col</c> that is double another <c>old_col</c>,</p></li>
+      <li><p>filter for rows where another column, <c>other_col</c>, is more than 5, and</p></li>
+      <li><p>select only the new column <c>new_col</c> for those rows.</p></li>
+    </ol>
+    <p>
+      One way of performing these three steps is to write multiple lines of code, storing temporary
+      objects as you go:
+    </p>
+    <program language="r">
+      <input>
+output_1 &lt;- mutate(data, new_col = old_col * 2)
+output_2 &lt;- filter(output_1, other_col > 5)
+output &lt;- select(output_2, new_col)
+      </input>
+    </program>
+    <p>
+      This is difficult to understand for multiple reasons. The reader may be tricked into thinking the
+      named <c>output_1</c> and <c>output_2</c> objects are important for some reason, while they are
+      just temporary intermediate computations. Further, the reader has to look through and find where
+      <c>output_1</c> and <c>output_2</c> are used in each subsequent line.
+    </p>
+    <p>
+      Another option for doing this would be to <em>compose</em> the functions:
+    </p>
+    <program language="r">
+      <input>
+output &lt;- select(filter(mutate(data, new_col = old_col * 2),
+                        other_col > 5),
+                 new_col)
+      </input>
+    </program>
+    <p>
+      Code like this can also be difficult to understand. Functions compose (reading from left to right)
+      in the <em>opposite order</em> in which they are computed by R (above, <c>mutate</c> happens
+      first, then <c>filter</c>, then <c>select</c>). It is also just a really long line of code to
+      read in one go.
+    </p>
+    <p>
+      The <em>pipe operator</em> (<c>|&gt;</c>) solves this problem, resulting in cleaner and
+      easier-to-follow code. <c>|&gt;</c> is built into R so you don&#x2019;t need to load any packages to use
+      it. You can think of the pipe as a physical pipe. It takes the output from the function on the
+      left-hand side of the pipe, and passes it as the first argument to the function on the right-hand
+      side of the pipe. The code below accomplishes the same thing as the previous two code blocks:
+    </p>
+    <program language="r">
+      <input>
+output &lt;- data |&gt;
+  mutate(new_col = old_col * 2) |&gt;
+  filter(other_col > 5) |&gt;
+  select(new_col)
+      </input>
+    </program>
+
+    <note>
+      <p>
+        You might also have noticed that we split the function calls across lines after the pipe,
+        similar to when we did this earlier in the chapter for long function calls. Again, this is
+        allowed and recommended, especially when the piped function calls create a long line of code.
+        Doing this makes your code more readable. When you do this, it is important to end each line
+        with the pipe operator <c>|&gt;</c> to tell R that your code is continuing onto the next line.
+      </p>
+    </note>
 
     <note>
       <p>
         In this textbook, we will be using the base R pipe operator syntax, <c>|&gt;</c>. This base R
-        <c>|&gt;</c> pipe operator was inspired by a previous version of the pipe operator, <c>%&gt;%</c>. The
-        <c>%&gt;%</c> pipe operator is not built into R and is from the <c>magrittr</c> R package. The
-        <c>tidyverse</c> metapackage imports the <c>%&gt;%</c> pipe operator via <c>dplyr</c>.
+        <c>|&gt;</c> pipe operator was inspired by a previous version of the pipe operator, <c>%&gt;%</c>.
         <idx><h>pipe</h></idx>
-        In most cases these two pipes are interchangeable and either can be used.
+        The <c>%&gt;%</c> pipe operator is not built into R and is from the <c>magrittr</c> R package. The
+        <c>tidyverse</c> metapackage imports the <c>%&gt;%</c> pipe operator via <c>dplyr</c> (which in turn
+        imports the <c>magrittr</c> R package). There are some other differences between <c>%&gt;%</c> and
+        <c>|&gt;</c> related to more advanced R uses, such as sharing and distributing code as R packages;
+        however, these are beyond the scope of this textbook. We have this note in the book to make the
+        reader aware that <c>%&gt;%</c> exists as it is still commonly used in data analysis code and in
+        many data science books and other resources. In most cases these two pipes are interchangeable
+        and either can be used.
       </p>
     </note>
 
     <subsection xml:id="sec-wrangling-pipe-two">
       <title>Using <c>|&gt;</c> to combine <c>filter</c> and <c>select</c></title>
       <p>
-        Let&#x2019;s work with the tidy <c>tidy_lang</c> data set from <xref ref="sec-wrangling-separate"/>.
-        Suppose we want to create a subset of the data with only the languages and counts of each
-        language spoken most at home for the city of Vancouver. With the pipe, we do not need to create an
-        intermediate object to store the output from <c>filter</c>. Instead, we can directly send the
-        output of <c>filter</c> to the input of <c>select</c>:
+        Let&#x2019;s work with the tidy <c>tidy_lang</c> data set from <xref ref="sec-wrangling-separate"/>,
+        which contains the number of Canadians reporting their primary language at home and work for five
+        major cities (Toronto, Montr&#xe9;al, Vancouver, Calgary, and Edmonton). Suppose we want to create a
+        subset of the data with only the languages and counts of each language spoken most at home for
+        the city of Vancouver. To do this, we can use the functions <c>filter</c> and <c>select</c>.
+        First, we use <c>filter</c> to create a data frame called <c>van_data</c> that contains only
+        values for Vancouver:
+      </p>
+      <program language="r">
+        <input>
+van_data &lt;- filter(tidy_lang, region == "Vancouver")
+van_data
+        </input>
+      </program>
+      <p>
+        We then use <c>select</c> on this data frame to keep only the variables we want:
+      </p>
+      <program language="r">
+        <input>
+van_data_selected &lt;- select(van_data, language, most_at_home)
+van_data_selected
+        </input>
+      </program>
+      <p>
+        Although this is valid code, there is a more readable approach we could take by using the pipe,
+        <c>|&gt;</c>. With the pipe, we do not need to create an intermediate object to store the output
+        from <c>filter</c>. Instead, we can directly send the output of <c>filter</c> to the input of
+        <c>select</c>:
       </p>
       <program language="r">
         <input>
@@ -949,6 +1037,16 @@ van_data_selected &lt;- filter(tidy_lang, region == "Vancouver") |&gt;
 van_data_selected
         </input>
       </program>
+      <p>
+        But wait&#x2026;Why do the <c>select</c> function calls look different in these two examples?
+        Remember: when you use the pipe, the output of the first function is automatically provided as
+        the first argument for the function that comes after it. Therefore you do not specify the first
+        argument in that function call. The pipe passes the left-hand side (the output of <c>filter</c>)
+        to the first argument of the function on the right (<c>select</c>), so in the <c>select</c>
+        function you only see the second argument (and beyond). As you can see, both of these
+        approaches&#x2014;with and without pipes&#x2014;give us the same output, but the second approach is
+        clearer and more readable.
+      </p>
     </subsection>
 
     <subsection xml:id="sec-wrangling-pipe-many">
@@ -970,6 +1068,27 @@ van_data_selected
         <idx><h>arrange</h></idx>
         to order the rows in the data frame by the values of one or more columns.
       </p>
+      <p>
+        As we saw in <xref ref="ch-intro"/>, we can use the <c>tidyverse</c> <c>arrange</c> function
+        <idx><h>arrange</h></idx>
+        to order the rows in the data frame by the values of one or more columns.
+        Here we pass <c>tidy_lang</c> as the first argument of the <c>filter</c> function:
+      </p>
+      <program language="r">
+        <input>
+large_region_lang &lt;- filter(tidy_lang, most_at_home > 10000) |&gt;
+  select(region, language, most_at_home) |&gt;
+  arrange(most_at_home)
+
+large_region_lang
+        </input>
+      </program>
+      <p>
+        You will notice above that we passed <c>tidy_lang</c> as the first argument of the <c>filter</c>
+        function. We can also pipe the data frame into the same sequence of functions rather than using
+        it as the first argument of the first function. These two choices are equivalent, and we get the
+        same result.
+      </p>
       <program language="r">
         <input>
 large_region_lang &lt;- tidy_lang |&gt;
@@ -980,6 +1099,15 @@ large_region_lang &lt;- tidy_lang |&gt;
 large_region_lang
         </input>
       </program>
+      <p>
+        Now that we&#x2019;ve shown you the pipe operator as an alternative to storing temporary objects and
+        composing code, does this mean you should <em>never</em> store temporary objects or compose code?
+        Not necessarily! There are times when you will still want to do these things. For example, you
+        might store a temporary object before feeding it into a plot function so you can iteratively
+        change the plot without having to redo all of your data transformations. Additionally, piping
+        many functions can be overwhelming and difficult to debug; you may want to store a temporary
+        object midway through to inspect your result before moving on with further steps.
+      </p>
     </subsection>
   </section>
 
@@ -1007,7 +1135,17 @@ large_region_lang
         A useful <c>dplyr</c> function for calculating summary statistics is <c>summarize</c>, where the
         first argument is the data frame and subsequent arguments are the summaries we want to perform.
         Here we show how to use the <c>summarize</c> function to calculate the minimum and maximum number
-        of Canadians reporting a particular language as their primary language at home:
+        of Canadians reporting a particular language as their primary language at home. First a reminder
+        of what <c>region_lang</c> looks like:
+      </p>
+      <program language="r">
+        <input>
+region_lang
+        </input>
+      </program>
+      <p>
+        We apply <c>summarize</c> to calculate the minimum and maximum number of Canadians reporting a
+        particular language as their primary language at home, for any region:
       </p>
       <program language="r">
         <input>
@@ -1016,6 +1154,11 @@ summarize(region_lang,
           max_most_at_home = max(most_at_home))
         </input>
       </program>
+      <p>
+        From this we see that there are some languages in the data set that no one speaks as their
+        primary language at home. We also see that the most commonly spoken primary language at home
+        is spoken by many people.
+      </p>
     </subsection>
 
     <subsection xml:id="sec-wrangling-summarize-na">
@@ -1026,10 +1169,36 @@ summarize(region_lang,
         <idx><h>NA</h><see>missing data</see></idx>
         Many of the base R statistical summary functions (e.g., <c>max</c>, <c>min</c>, <c>mean</c>,
         <c>sum</c>, etc) will return <c>NA</c> when applied to columns containing <c>NA</c> values.
-        Fortunately many of these functions provide an argument <c>na.rm</c> that lets us tell the
-        function what to do when it encounters <c>NA</c> values. In particular, if we specify
+        Usually that is not what we want to happen; instead, we would usually like R to ignore the
+        missing entries and calculate the summary statistic using all of the other non-<c>NA</c> values
+        in the column. Fortunately many of these functions provide an argument <c>na.rm</c> that lets us
+        tell the function what to do when it encounters <c>NA</c> values. In particular, if we specify
         <c>na.rm = TRUE</c>, the function will ignore missing values and return a summary of all the
         non-missing entries.
+      </p>
+      <p>
+        First we create a new version of the <c>region_lang</c> data frame, named
+        <c>region_lang_na</c>, that has a seemingly innocuous <c>NA</c> in the first row of the
+        <c>most_at_home</c> column:
+      </p>
+      <program language="r">
+        <input>
+region_lang_na
+        </input>
+      </program>
+      <p>
+        Now if we apply the <c>summarize</c> function as above, we see that we no longer get the minimum
+        and maximum returned, but just an <c>NA</c> instead:
+      </p>
+      <program language="r">
+        <input>
+summarize(region_lang_na,
+          min_most_at_home = min(most_at_home),
+          max_most_at_home = max(most_at_home))
+        </input>
+      </program>
+      <p>
+        We can fix this by adding the <c>na.rm = TRUE</c> as explained above:
       </p>
       <program language="r">
         <input>
@@ -1056,7 +1225,8 @@ summarize(region_lang_na,
 
       <p>
         The <c>group_by</c> function takes at least two arguments. The first is the data frame that will
-        be grouped, and the second and onwards are columns to use in the grouping.
+        be grouped, and the second and onwards are columns to use in the grouping. Here we use only one
+        column for grouping (<c>region</c>), but more than one can also be used.
       </p>
       <program language="r">
         <input>
@@ -1065,6 +1235,17 @@ group_by(region_lang, region) |&gt;
     min_most_at_home = min(most_at_home),
     max_most_at_home = max(most_at_home)
     )
+        </input>
+      </program>
+      <p>
+        Notice that <c>group_by</c> on its own doesn&#x2019;t change the way the data looks. In the output
+        below, the grouped data set looks the same, and it doesn&#x2019;t <em>appear</em> to be grouped by
+        <c>region</c>. Instead, <c>group_by</c> simply changes how other functions work with the data,
+        as we saw with <c>summarize</c> above.
+      </p>
+      <program language="r">
+        <input>
+group_by(region_lang, region)
         </input>
       </program>
     </subsection>
@@ -1111,6 +1292,11 @@ region_lang_na |&gt;
   summarize(across(mother_tongue:lang_known, ~ max(.x, na.rm = TRUE)))
           </input>
         </program>
+        <p>
+          The meaning of this unusual syntax is a bit beyond the scope of this book, but interested
+          readers can look up <em>anonymous functions</em> in the <c>purrr</c> package from
+          <c>tidyverse</c>.
+        </p>
       </note>
       <p>
         An alternative to <c>summarize</c> and <c>across</c> for applying a function to many columns is
@@ -1119,7 +1305,9 @@ region_lang_na |&gt;
         Let&#x2019;s again find the maximum value of each column of the <c>region_lang</c> data frame, but
         using <c>map</c> with the <c>max</c> function this time. <c>map</c> takes two arguments: an
         object (a vector, data frame or list) that you want to apply the function to, and the function
-        that you would like to apply to each column.
+        that you would like to apply to each column. Note that <c>map</c> does not have an argument to
+        specify <em>which</em> columns to apply the function to. Therefore, we will use the <c>select</c>
+        function before calling <c>map</c> to choose the columns for which we want the maximum.
       </p>
       <program language="r">
         <input>
@@ -1128,9 +1316,31 @@ region_lang |&gt;
   map(max)
         </input>
       </program>
+      <note>
+        <p>
+          The <c>map</c> function comes from the <c>purrr</c> package. But since <c>purrr</c> is part of
+          the tidyverse, once we call <c>library(tidyverse)</c> we do not need to load the <c>purrr</c>
+          package separately.
+        </p>
+      </note>
       <p>
-        The output is a list rather than a data frame. There are quite a few <c>map</c> functions to
-        choose from, and their name reflects the type of output you want.
+        The output looks a bit unusual&#x2014;we passed in a data frame, but the output doesn&#x2019;t look like a
+        data frame. As it so happens, it is <em>not</em> a data frame, but rather a plain list:
+      </p>
+      <program language="r">
+        <input>
+region_lang |&gt;
+  select(mother_tongue:lang_known) |&gt;
+  map(max) |&gt;
+  typeof()
+        </input>
+      </program>
+      <pre>
+[1] "list"</pre>
+      <p>
+        So what do we do? Should we convert this to a data frame? We could, but a simpler alternative is
+        to just use a different <c>map</c> function. There are quite a few to choose from; they all work
+        similarly, but their name reflects the type of output you want from the mapping operation.
         <idx><h>map</h><h>map functions</h></idx>
         <xref ref="tab-wrangling-map-table"/> lists the commonly used <c>map</c> functions as well as
         their output type.
@@ -1164,6 +1374,32 @@ region_lang |&gt;
   map_dfr(max)
         </input>
       </program>
+      <note>
+        <p>
+          Similar to when we use base R statistical summary functions (e.g., <c>max</c>, <c>min</c>,
+          <c>mean</c>, <c>sum</c>, etc.) with <c>summarize</c>, <c>map</c> functions paired with base R
+          statistical summary functions also return <c>NA</c> values when we apply them to columns that
+          contain <c>NA</c> values.
+          <idx><h>missing data</h></idx>
+          To avoid this, again we need to add the argument <c>na.rm = TRUE</c>. When we use this with
+          <c>map</c>, we do this by adding a <c>,</c> and then <c>na.rm = TRUE</c> after specifying the
+          function, as illustrated below:
+        </p>
+        <program language="r">
+          <input>
+region_lang_na |&gt;
+  select(mother_tongue:lang_known) |&gt;
+  map_dfr(max, na.rm = TRUE)
+          </input>
+        </program>
+      </note>
+      <p>
+        The <c>map</c> functions are generally quite useful for solving many problems involving
+        repeatedly applying functions in R. Additionally, their use is not limited to columns of a data
+        frame; <c>map</c> family functions can be used to apply functions to elements of a vector, or a
+        list, and even to lists of (nested!) data frames. To learn more about the <c>map</c> functions,
+        see the additional resources section at the end of this chapter.
+      </p>
     </subsection>
   </section>
 
