@@ -1067,11 +1067,6 @@ van_data_selected
         As we saw in <xref ref="ch-intro"/>, we can use the <c>tidyverse</c> <c>arrange</c> function
         <idx><h>arrange</h></idx>
         to order the rows in the data frame by the values of one or more columns.
-      </p>
-      <p>
-        As we saw in <xref ref="ch-intro"/>, we can use the <c>tidyverse</c> <c>arrange</c> function
-        <idx><h>arrange</h></idx>
-        to order the rows in the data frame by the values of one or more columns.
         Here we pass <c>tidy_lang</c> as the first argument of the <c>filter</c> function:
       </p>
       <program language="r">
