@@ -744,8 +744,16 @@ islands_df
 ...
       </pre>
       <p>
-        The right type of visualization to answer this question is a bar plot. We
-        specify that we would like to use a bar plot via the <c>geom_bar</c> function
+        The right type of visualization to answer this question is a bar plot.
+        In a bar plot, the height of each bar represents the value of an <em>amount</em>
+        (a size, count, proportion, percentage, etc.).
+        They are particularly useful for comparing counts or proportions across different
+        groups of a categorical variable. Note, however, that bar plots should generally
+        not be used to display mean or median values, as they hide important information
+        about the variation of the data. Instead it&#x2019;s better to show the distribution of
+        all the individual data points, e.g., using a histogram, which we will discuss
+        further in <xref ref="sec-viz-morley"/>.
+        We specify that we would like to use a bar plot via the <c>geom_bar</c> function
         in <c>ggplot2</c>. We have to pass the <c>stat = "identity"</c> argument to
         plot exactly the values in the data frame:
         <idx><h>ggplot</h><h>geom_bar</h></idx>
@@ -927,7 +935,10 @@ morley_hist
         <image source="images/viz/morley-hist-color.png" width="75%"/>
       </figure>
       <p>
-        The histogram is still all the same color! The <c>Expt</c> column is
+        The histogram is still all the same color! What is going on here? Well, if you
+        recall from <xref ref="ch-wrangling"/>, the <em>data type</em> you use for each variable
+        can influence how R and <c>tidyverse</c> treats it. Here, we indeed have an issue
+        with the data types in the <c>morley</c> data frame. In particular, the <c>Expt</c> column is
         currently an <em>integer</em>
         <idx><h>integer</h></idx>
         (you can see the label <c>&lt;int&gt;</c> in the printed data frame). We want to

@@ -1503,6 +1503,10 @@ region_lang |&gt;
       repository</url> in the &#x201C;Cleaning and wrangling data&#x201D; row. You can launch an interactive version
       of the worksheet in your browser by clicking the &#x201C;launch binder&#x201D; button. You can also preview a
       non-interactive version of the worksheet by clicking &#x201C;view worksheet.&#x201D;
+      If you instead decide to download the worksheet and run it on your own machine,
+      make sure to follow the instructions for computer setup
+      found in <xref ref="ch-setup"/>. This will ensure that the automated feedback
+      and guidance that the worksheets provide will function as intended.
     </p>
   </section>
 

@@ -1227,8 +1227,10 @@ nasa_data_single
         </program>
         <p>
           We can obtain more records at once by using the <c>start_date</c> and <c>end_date</c> parameters.
-          Let&#x2019;s obtain all the records between May 1, 2023, and July 13, 2023; there will be 74 items
-          total, one for each day between the start and end dates:
+          Let&#x2019;s obtain all the records between May 1, 2023, and July 13, 2023; now the response
+          will take the form of an R <em>list</em> (you&#x2019;ll learn more about these in <xref ref="ch-wrangling"/>).
+          Each item in the list will correspond to a single day&#x2019;s record (just like the <c>nasa_data_single</c> object),
+          and there will be 74 items total, one for each day between the start and end dates:
         </p>
         <program language="r">
           <input>
@@ -1276,6 +1278,10 @@ nasa_df
       repository</url> in the &#x201C;Reading in data locally and from the web&#x201D; row. You can launch an
       interactive version of the worksheet in your browser by clicking the &#x201C;launch binder&#x201D; button.
       You can also preview a non-interactive version of the worksheet by clicking &#x201C;view worksheet.&#x201D;
+      If you instead decide to download the worksheet and run it on your own machine,
+      make sure to follow the instructions for computer setup
+      found in <xref ref="ch-setup"/>. This will ensure that the automated feedback
+      and guidance that the worksheets provide will function as intended.
     </p>
   </section>
 
