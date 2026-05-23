@@ -396,7 +396,7 @@ canlang_data
         etc.) are not very descriptive and will make your analysis confusing. To rename your columns, you can
         use the <c>rename</c> function
         <idx><h>rename</h></idx>
-        from the <c>dplyr</c> R package <xref ref="dplyr"/>
+        from <url href="https://dplyr.tidyverse.org/" visual="dplyr.tidyverse.org/">the <c>dplyr</c> R package</url> <xref ref="dplyr"/>
         <idx><h>dplyr</h></idx>
         (one of the packages loaded with <c>tidyverse</c>, so we don&#x2019;t need to load it separately).
         The first argument is the data set, and in the subsequent arguments you write
@@ -946,7 +946,7 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
           into something you can see; so if we are going to create our own data by scraping a website, we
           have to first understand what that data looks like! For example, let&#x2019;s say we are interested
           in knowing the average rental price (per square foot) of the most recently available one-bedroom
-          apartments in Vancouver on Craigslist. When we visit the Vancouver Craigslist website
+          apartments in Vancouver on <url href="https://vancouver.craigslist.org" visual="vancouver.craigslist.org">Craigslist</url>. When we visit the Vancouver Craigslist website
           <idx><h>Craigslist</h></idx>
           and search for one-bedroom apartments, we should see something similar to
           <xref ref="fig-reading-craigslist-human"/>.
@@ -962,7 +962,7 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
           apartment listed. But we would like to be able to obtain that information using R, without any
           manual human effort or copying and pasting. We do this by examining the <em>source code</em> that
           the web server actually sent our browser to display for us. A snippet of HTML source code is shown
-          below:
+          below (the <url href="https://github.com/UBC-DSCI/introduction-to-datascience/blob/main/img/reading/website_source.txt" visual="github.com/UBC-DSCI/introduction-to-datascience/blob/main/img/reading/website_source.txt">entire source is included with the code for this book</url>):
         </p>
         <pre>
 &lt;span class="result-meta"&gt;
@@ -1029,7 +1029,7 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
           <idx><h>web scraping</h><h>permission</h></idx>
           data from the web, you should always check whether or not you are <em>allowed</em> to scrape it!
           There are two documents that are important for this: the <c>robots.txt</c> file and the Terms of
-          Service document. If we take a look at Craigslist&#x2019;s Terms of Service document, we find the
+          Service document. If we take a look at <url href="https://www.craigslist.org/about/terms.of.use" visual="craigslist.org/about/terms.of.use">Craigslist&#x2019;s Terms of Service document</url>, we find the
           following text: <em>&#x201C;You agree not to copy/collect CL content via robots, spiders, scripts,
           scrapers, crawlers, or any automated or manual equivalent (e.g., by hand).&#x201D;</em> So
           unfortunately, without explicit permission, we are not allowed to scrape the website.
@@ -1038,7 +1038,7 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
           To continue learning how to scrape data from the web, let&#x2019;s instead scrape data on the
           population of Canadian cities from Wikipedia.
           <idx><h>Wikipedia</h></idx>
-          We have checked the Terms of Service document, and it does not mention that web scraping is
+          We have checked the <url href="https://foundation.wikimedia.org/wiki/Terms_of_Use/en" visual="foundation.wikimedia.org/wiki/Terms_of_Use/en">Terms of Service document</url>, and it does not mention that web scraping is
           disallowed. We will use the SelectorGadget tool to pick elements that we are interested in (city
           names and population counts) and deselect others to indicate that we are not interested in them
           (province names), as shown in <xref ref="fig-reading-sg4"/>.
