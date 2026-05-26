@@ -271,7 +271,10 @@ ggplot(penguins_standardized,
     </ul>
     <p>
       Once we have made these determinations, we can use them to inform our
-      species classifications or ask further questions about our data.
+      species classifications or ask further questions about our data. For
+      example, we might be interested in understanding the relationship between
+      flipper length and bill length, and that relationship may differ depending
+      on the type of penguin we have.
     </p>
   </section>
 

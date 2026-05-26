@@ -387,33 +387,6 @@ class(can_lang)
         solve both of these problems, we can reshape this data set to a tidy data format by creating a
         column called &#x201C;year&#x201D; and a column called &#x201C;population.&#x201D; This transformation&#x2014;which makes the data
         &#x201C;longer&#x201D;&#x2014;is shown as the right table in <xref ref="fig-wrangling-wide-to-long"/>.
-        And as a consequence, the values for population for the various cities
-        over these years are also split across several columns.
-      </p>
-
-      <p>
-        For humans, this table is easy to read, which is why you will often find data
-        stored in this wide format. However, this format is difficult to work with
-        when performing data visualization or statistical analysis using R. For
-        example, if we wanted to find the latest year it would be challenging because
-        the year values are stored as column names instead of as values in a single
-        column. So before we could apply a function to find the latest year (for
-        example, by using <c>max</c>), we would have to first extract the column names
-        to get them as a vector and then apply a function to extract the latest year.
-        The problem only gets worse if you would like to find the value for the
-        population for a given region for the latest year. Both of these tasks are
-        greatly simplified once the data is tidied.
-      </p>
-
-      <p>
-        Another problem with data in this format is that we don&#x2019;t know what the
-        numbers under each year actually represent. Do those numbers represent
-        population size? Land area? It&#x2019;s not clear.
-        To solve both of these problems, we can reshape this data set to a tidy
-        data format by creating a column called &#x201C;year&#x201D; and a column called
-        &#x201C;population.&#x201D; This transformation&#x2014;which makes the data
-        &#x201C;longer&#x201D;&#x2014;is shown as the right table in
-        <xref ref="fig-wrangling-wide-to-long"/>.
       </p>
 
       <figure xml:id="fig-wrangling-wide-to-long">
@@ -571,7 +544,9 @@ lang_mother_tidy
         To tidy this type of data in R, we can use the <c>pivot_wider</c> function. The <c>pivot_wider</c>
         function generally increases the number of columns (widens) and decreases the number of rows in a
         data set. To learn how to use <c>pivot_wider</c>, we will work through an example with the
-        <c>region_lang_top5_cities_long.csv</c> data set.
+        <c>region_lang_top5_cities_long.csv</c> data set. This data set contains the number of Canadians
+        reporting the primary language at home and work for five major cities (Toronto, Montr&#xe9;al,
+        Vancouver, Calgary, and Edmonton).
       </p>
       <program language="r">
         <input>
@@ -654,25 +629,6 @@ lang_home_tidy
         more than two, <c>pivot_wider</c> would have created more columns, and we would see the data set
         &#x201C;widen.&#x201D;
       </p>
-     <p>
-       The data above is now tidy! We can go through the three criteria again to check
-       that this data is a tidy data set.
-     </p>
-     <ol>
-       <li><p>All the statistical variables are their own columns in the data frame (i.e.,
-         <c>most_at_home</c>, and <c>most_at_work</c> have been separated into their own
-         columns in the data frame).</p></li>
-       <li><p>Each observation, (i.e., each language in a region) is in a single row.</p></li>
-       <li><p>Each value is a single cell (i.e., its row, column position in the data
-         frame is not shared with another value).</p></li>
-     </ol>
-     <p>
-       You might notice that we have the same number of columns in the tidy data set as
-       we did in the messy one. Therefore <c>pivot_wider</c> didn&#x2019;t really &#x201C;widen&#x201D; the data,
-       as the name suggests. This is just because the original <c>type</c> column only had
-       two categories in it. If it had more than two, <c>pivot_wider</c> would have created
-       more columns, and we would see the data set &#x201C;widen.&#x201D;
-     </p>
    </subsection>
 
     <subsection xml:id="sec-wrangling-separate">
@@ -707,7 +663,10 @@ lang_messy
       </pre>
       <p>
         First we&#x2019;ll use <c>pivot_longer</c> to create two columns, <c>region</c> and <c>value</c>,
-        similar to what we did previously.
+        similar to what we did previously. The new <c>region</c> column will contain the region names,
+        and the new column <c>value</c> will be a temporary holding place for the data that we need to
+        further separate; that is, the number of Canadians reporting their primary language at home and
+        work.
       </p>
       <program language="r">
         <input>
@@ -732,7 +691,9 @@ lang_messy_longer
 # … with 1,065 more rows
       </pre>
       <p>
-        Next we&#x2019;ll use <c>separate</c> to split the <c>value</c> column into two columns.
+        Next we&#x2019;ll use <c>separate</c> to split the <c>value</c> column into two columns. One column will
+        contain only the counts of Canadians that speak each language most at home, and the other will
+        contain the counts of Canadians that speak each language most at work for each region.
         <xref ref="fig-wrangling-separate"/> outlines what we need to specify to use <c>separate</c>.
       </p>
 
@@ -763,12 +724,31 @@ tidy_lang
  5 Aboriginal languages       Aboriginal languages,…  Edmonton  10           0           
 # … with 1,065 more rows
       </pre>
+      <p>Is this data set now tidy? If we recall the three criteria for tidy data:</p>
+      <ul>
+        <li><p>each row is a single observation,</p></li>
+        <li><p>each column is a single variable, and</p></li>
+        <li><p>each value is a single cell.</p></li>
+      </ul>
       <p>
-        Notice in the table above that the word <c>&lt;chr&gt;</c> appears beneath each of the column names,
-        indicating that all variables are &#x201C;character&#x201D; data types. The <c>most_at_home</c> and
-        <c>most_at_work</c> variables should be numeric. Fortunately, the <c>separate</c> function
-        provides a natural way to fix problems like this: we can set <c>convert = TRUE</c> to convert the
-        <c>most_at_home</c> and <c>most_at_work</c> columns to the correct data type.
+        We can see that this data now satisfies all three criteria, making it easier to analyze. But we
+        aren&#x2019;t done yet! Notice in the table above that the word <c>&lt;chr&gt;</c> appears beneath each of
+        the column names. The word under the column name indicates the data type of each column. Here all
+        of the variables are &#x201C;character&#x201D; data types. Recall, character data types are letter(s) or
+        digit(s) surrounded by quotes. In the previous example in <xref ref="sec-wrangling-pivot-wider"/>,
+        the <c>most_at_home</c> and <c>most_at_work</c> variables were <c>&lt;dbl&gt;</c> (double), which is a
+        type of numeric data. This change is due to the delimiter (<c>/</c>) when we read in this messy
+        data set. R read these columns in as character types, and by default, <c>separate</c> will
+        return columns as character data types.
+      </p>
+      <p>
+        It makes sense for <c>region</c>, <c>category</c>, and <c>language</c> to be stored as a
+        character (or perhaps factor) type. However, suppose we want to apply any functions that treat
+        the <c>most_at_home</c> and <c>most_at_work</c> columns as a number (e.g., finding rows above a
+        numeric threshold of a column). In that case, it won&#x2019;t be possible to do if the variable is
+        stored as a <c>character</c>. Fortunately, the <c>separate</c> function provides a natural way to
+        fix problems like this: we can set <c>convert = TRUE</c> to convert the <c>most_at_home</c> and
+        <c>most_at_work</c> columns to the correct data type.
       </p>
       <program language="r">
         <input>
@@ -860,13 +840,14 @@ column_range
 # … with 1,065 more rows
     </pre>
     <p>
-     Notice that we get the same output as we did above,
-     but with less (and clearer!) code. This type of operator
-     is especially handy for large data sets.
-   </p>
-   <p>
-     Suppose instead we wanted to extract columns that followed a particular pattern rather than just
-     selecting a range. In particular, we can use the <c>select</c> helper
+      Notice that we get the same output as we did above, but with less (and clearer!) code. This type
+      of operator is especially handy for large data sets.
+    </p>
+    <p>
+      Suppose instead we wanted to extract columns that followed a particular pattern rather than just
+      selecting a range. For example, let&#x2019;s say we wanted only to select the columns
+      <c>most_at_home</c> and <c>most_at_work</c>. There are other helpers that allow us to select
+      variables based on their names. In particular, we can use the <c>select</c> helper
       <idx><h>select</h><h>starts_with</h></idx>
       <c>starts_with</c> to choose only the columns that start with the word &#x201C;most&#x201D;:
     </p>
@@ -888,7 +869,8 @@ select(tidy_lang, starts_with("most"))
     </pre>
     <p>
       We could also have chosen the columns containing an underscore <c>_</c> by adding
-      <c>contains("_")</c> as the second argument in the <c>select</c> function.
+      <c>contains("_")</c> as the second argument in the <c>select</c> function, since we notice the
+      columns we want contain underscores and the others don&#x2019;t.
       <idx><h>select</h><h>contains</h></idx>
     </p>
     <program language="r">
@@ -907,6 +889,11 @@ select(tidy_lang, contains("_"))
  5           10            0
 # … with 1,065 more rows
     </pre>
+    <p>
+      There are many different <c>select</c> helpers that select variables based on certain criteria.
+      The additional resources section at the end of this chapter provides a comprehensive resource on
+      <c>select</c> helpers.
+    </p>
   </section>
 
   <section xml:id="sec-wrangling-filter">
@@ -919,6 +906,9 @@ select(tidy_lang, contains("_"))
       <idx><h>filter</h><h>logical statements</h></idx>
       <idx><h>logical statement</h><see>logical operator</see></idx>
       <c>filter</c> works by returning the rows where the logical statement evaluates to <c>TRUE</c>.
+      This section will highlight more advanced usage of the <c>filter</c> function. In particular, this
+      section provides an in-depth treatment of the variety of logical statements one can use in the
+      <c>filter</c> function to select subsets of rows.
     </p>
 
     <subsection xml:id="sec-wrangling-filter-eq">
@@ -929,6 +919,10 @@ select(tidy_lang, contains("_"))
         the <em>equivalency operator</em> (<c>==</c>)
         <idx><h>logical operator</h><h>equivalency</h></idx>
         to compare the values of the <c>category</c> column with the value <c>"Official languages"</c>.
+        With these arguments, <c>filter</c> returns a data frame with all the columns of the input data
+        frame but only the rows we asked for in the logical statement; that is, those where the
+        <c>category</c> column holds the value <c>"Official languages"</c>. We name this data frame
+        <c>official_langs</c>.
       </p>
       <program language="r">
         <input>
@@ -959,7 +953,8 @@ official_langs
         What if we want all the other language categories in the data set <em>except</em> for those in
         the <c>"Official languages"</c> category? We can accomplish this with the <c>!=</c>
         <idx><h>logical operator</h><h>inequivalency</h></idx>
-        operator, which means &#x201C;not equal to&#x201D;.
+        operator, which means &#x201C;not equal to&#x201D;. So if we want to find all the rows where the
+        <c>category</c> does <em>not</em> equal <c>"Official languages"</c> we write the code below.
       </p>
       <program language="r">
         <input>
@@ -985,7 +980,9 @@ filter(tidy_lang, category != "Official languages")
         Suppose now we want to look at only the rows for the French language in Montr&#xe9;al. To do this,
         we need to filter the data set to find rows that satisfy multiple conditions simultaneously. We
         can do this with the comma symbol (<c>,</c>), which in the case of <c>filter</c> is interpreted
-        by R as &#x201C;and&#x201D;.
+        by R as &#x201C;and&#x201D;. We write the code as shown below to filter the <c>official_langs</c> data
+        frame to subset the rows where <c>region == "Montr&#xe9;al"</c> <em>and</em> the
+        <c>language == "French"</c>.
         <idx><h>logical operator</h><h>and</h></idx>
       </p>
       <program language="r">
@@ -1024,7 +1021,9 @@ filter(official_langs, region == "Montréal" &amp; language == "French")
         <c>official_langs</c> data set (Edmonton and Calgary). We can&#x2019;t use <c>,</c> as we did above
         because <c>region</c> cannot be both Edmonton <em>and</em> Calgary simultaneously. Instead, we
         can use the vertical pipe (<c>|</c>) logical operator, which gives us the cases where one
-        condition <em>or</em> another condition <em>or</em> both are satisfied.
+        condition <em>or</em> another condition <em>or</em> both are satisfied. In the code below, we ask R
+        to return the rows where the <c>region</c> column is equal to <c>"Calgary"</c> <em>or</em>
+        <c>"Edmonton"</c>.
         <idx><h>logical operator</h><h>or</h></idx>
       </p>
       <program language="r">
@@ -1118,10 +1117,14 @@ c("Vancouver", "Toronto") %in% c("Toronto", "Vancouver")
     <subsection xml:id="sec-wrangling-filter-threshold">
       <title>Extracting rows above or below a threshold using <c>&gt;</c> and <c>&lt;</c></title>
       <p>
-        We can use the <c>&gt;</c> symbol to look for values <em>above</em> a threshold, and the <c>&lt;</c>
-        symbol to look for values <em>below</em> a threshold. The <c>&gt;=</c> and <c>&lt;=</c> symbols
-        similarly look for <em>equal to or above</em> a threshold and <em>equal to or below</em> a
-        threshold.
+        We saw in <xref ref="sec-wrangling-filter-and"/> that <c>2669195</c> people reported speaking
+        French in Montr&#xe9;al as their primary language at home. If we are interested in finding the
+        official languages in regions with higher numbers of people who speak it as their primary
+        language at home compared to French in Montr&#xe9;al, then we can use <c>filter</c> to obtain rows
+        where the value of <c>most_at_home</c> is greater than <c>2669195</c>. We use the <c>&gt;</c>
+        symbol to look for values <em>above</em> a threshold, and the <c>&lt;</c> symbol to look for values
+        <em>below</em> a threshold. The <c>&gt;=</c> and <c>&lt;=</c> symbols similarly look for <em>equal to
+        or above</em> a threshold and <em>equal to or below</em> a threshold.
         <idx><h>logical operator</h><h>greater than</h></idx>
         <idx><h>logical operator</h><h>less than</h></idx>
       </p>
@@ -1192,9 +1195,15 @@ official_langs_chr
       </pre>
       <p>
         To use <c>mutate</c>, again we first specify the data set in the first argument, and in the
-        following arguments, we specify the name of the column we want to modify or create, an <c>=</c>
-        sign, and then the function we want to apply. <c>mutate</c>&#x2019;s general syntax is detailed in
-        <xref ref="fig-wrangling-mutate"/>.
+        following arguments, we specify the name of the column we want to modify or create (here
+        <c>most_at_home</c> and <c>most_at_work</c>), an <c>=</c> sign, and then the function we want to
+        apply (here <c>as.numeric</c>). In the function we want to apply, we refer directly to the column
+        name upon which we want it to act (here <c>most_at_home</c> and <c>most_at_work</c>). In our
+        example, we are naming the columns the same names as columns that already exist in the data frame
+        (<c>most_at_home</c>, <c>most_at_work</c>) and this will cause <c>mutate</c> to <em>overwrite</em>
+        those columns (also referred to as modifying those columns <em>in-place</em>). If we were to give
+        the columns new names, then <c>mutate</c> would create new columns with the names we specified.
+        <c>mutate</c>&#x2019;s general syntax is detailed in <xref ref="fig-wrangling-mutate"/>.
       </p>
 
       <figure xml:id="fig-wrangling-mutate">
@@ -1237,15 +1246,27 @@ official_langs_numeric
     <subsection xml:id="sec-wrangling-mutate-new">
       <title>Using <c>mutate</c> to create new columns</title>
       <p>
-        We can even go a step further and transform counts to a relative frequency or proportion. We can
-        do this by dividing the number of people reporting a given language as their primary language at
-        home by the number of people who live in the city. Let&#x2019;s use <c>mutate</c> to create a new column
-        in our data frame that holds the proportion of people who speak English for our five cities of
-        focus in this chapter.
+        We can see in the table that <c>3836770</c> people reported speaking English in Toronto as their
+        primary language at home, according to the 2016 Canadian census. What does this number mean to
+        us? To understand this number, we need context. In particular, how many people were in Toronto
+        when this data was collected? From the 2016 Canadian census profile, the population of Toronto
+        was reported to be <c>5928040</c> people. The number of people who report that English is their
+        primary language at home is much more meaningful when we report it in this context. We can even
+        go a step further and transform this count to a relative frequency or proportion. We can do this
+        by dividing the number of people reporting a given language as their primary language at home by
+        the number of people who live in Toronto. For example, the proportion of people who reported
+        that their primary language at home was English in the 2016 Canadian census was <c>0.65</c> in
+        Toronto.
       </p>
+      <p>Let&#x2019;s use <c>mutate</c> to create a new column in our data frame that holds the proportion of people who speak English for our five cities of focus in this chapter. To accomplish this, we will need to do two tasks beforehand:</p>
+      <ol>
+        <li><p>Create a vector containing the population values for the cities.</p></li>
+        <li><p>Filter the <c>official_langs</c> data frame so that we only keep the rows where the language is English.</p></li>
+      </ol>
       <p>
-        To accomplish this, we will first create a vector containing the population values for the cities
-        (Toronto, Montr&#xe9;al, Vancouver, Calgary, Edmonton) using the <c>c</c> function:
+        To create a vector containing the population values for the five cities (Toronto, Montr&#xe9;al,
+        Vancouver, Calgary, Edmonton), we will use the <c>c</c> function (recall that <c>c</c> stands for
+        &#x201C;concatenate&#x201D;):
       </p>
       <program language="r">
         <input>
@@ -1255,7 +1276,11 @@ city_pops
       </program>
       <pre>
 [1] 5928040 4098927 2463431 1392609 1321426</pre>
-      <p>Next, we filter the <c>official_langs</c> data frame to keep only English rows:</p>
+      <p>
+        And next, we will filter the <c>official_langs</c> data frame so that we only keep the rows
+        where the language is English. We will name the new data frame we get from this
+        <c>english_langs</c>:
+      </p>
       <program language="r">
         <input>
 english_langs &lt;- filter(official_langs, language == "English")
@@ -1272,7 +1297,12 @@ english_langs
 4 Official languages English  Calgary        1065070       844740
 5 Official languages English  Edmonton       1050410       792700
       </pre>
-      <p>Finally, we use <c>mutate</c> to create a new column, <c>most_at_home_proportion</c>:</p>
+      <p>
+        Finally, we can use <c>mutate</c> to create a new column, named
+        <c>most_at_home_proportion</c>, that will have the value that corresponds to the proportion of
+        people reporting English as their primary language at home. We will compute this by dividing the
+        column by our vector of city populations.
+      </p>
       <program language="r">
         <input>
 english_langs &lt;- mutate(english_langs,
@@ -1291,6 +1321,13 @@ english_langs
 4 Official languages English  Calgary        1065070       844740                   0.765
 5 Official languages English  Edmonton       1050410       792700                   0.795
       </pre>
+      <p>
+        In the computation above, we had to ensure that we ordered the <c>city_pops</c> vector in the
+        same order as the cities were listed in the <c>english_langs</c> data frame. This is because R
+        will perform the division computation we did by dividing each element of the
+        <c>most_at_home</c> column by each element of the <c>city_pops</c> vector, matching them up by
+        position. Failing to do this would have resulted in the incorrect math being performed.
+      </p>
       <note>
         <p>
           In more advanced data wrangling, one might solve this problem in a less error-prone way though

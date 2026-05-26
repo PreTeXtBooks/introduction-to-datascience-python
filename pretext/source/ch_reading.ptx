@@ -157,12 +157,33 @@ happy_data &lt;- read_csv("data/happiness_report.csv")
       <c>project3</c> folder, we could use the relative path <c>../project2/bike_share.csv</c>.
     </p>
     <p>
+      We can even combine these two; for example, we could reach the <c>bike_share.csv</c> file using
+      the (very silly) path <c>../project2/../project2/./bike_share.csv</c> with quite a few redundant
+      directions: it says to go back a folder, then open <c>project2</c>, then go back a folder again,
+      then open <c>project2</c> again, then stay in the current directory, then finally get to
+      <c>bike_share.csv</c>. Whew, what a long trip!
+    </p>
+    <p>
       So which kind of path should you use: relative, or absolute? Generally speaking, you should use
       relative paths. Using a relative path helps ensure that your code can be run on a different computer
       (and as an added bonus, relative paths are often shorter&#x2014;easier to type!). This is because a
       file&#x2019;s relative path is often the same across different computers, while a file&#x2019;s absolute path
       (the names of all of the folders between the computer&#x2019;s root, represented by <c>/</c>, and the file)
       isn&#x2019;t usually the same across different computers.
+    </p>
+    <p>
+      For example, suppose Fatima and Jayden are working on a project together on the
+      <c>happiness_report.csv</c> data. Fatima&#x2019;s file is stored at
+      <c>/home/Fatima/project3/data/happiness_report.csv</c>, while Jayden&#x2019;s is stored at
+      <c>/home/Jayden/project3/data/happiness_report.csv</c>. Even though Fatima and Jayden stored their
+      files in the same place on their computers (in their home folders), the absolute paths are different
+      due to their different usernames. If Jayden has code that loads the <c>happiness_report.csv</c>
+      data using an absolute path, the code won&#x2019;t work on Fatima&#x2019;s computer. But the relative path
+      from inside the <c>project3</c> folder (<c>data/happiness_report.csv</c>) is the same on both
+      computers; any code that uses relative paths will work on both! In the additional resources
+      section, we include a link to a short video on the difference between absolute and relative paths.
+      You can also check out the <c>here</c> package, which provides methods for finding and constructing
+      file paths in R.
     </p>
     <p>
       Beyond files stored on your computer (i.e., locally), we also need a way to locate resources
@@ -272,6 +293,11 @@ canlang_data
         Oftentimes, information about how data was collected, or other relevant information, is included
         at the top of the data file. This information is usually written in sentence and paragraph form,
         with no delimiter because it is not organized into columns. An example of this is shown below.
+      </p>
+      <p>
+        This information gives the data scientist useful context and information about the data; however,
+        it is not well formatted or intended to be read into a data frame cell along with the tabular data
+        that follows later in the file.
       </p>
       <pre>
 Data source: https://ttimbers.github.io/canlang/
@@ -487,6 +513,11 @@ canlang_data
         Here, we provide the URL of a remote file to <c>read_*</c>, instead of a path to a local file on
         our computer.
       </p>
+      <p>
+        We need to surround the URL with quotes similar to when we specify a path on our local computer.
+        All other arguments that we use are the same as when using these functions with a local file on
+        our computer.
+      </p>
       <program language="r">
         <input>
 url &lt;- "https://raw.githubusercontent.com/UBC-DSCI/data/main/can_lang.csv"
@@ -562,6 +593,12 @@ canlang_data
       the data themselves are stored completely differently. While <c>.csv</c> files are plain text files,
       where the characters you see when you open the file in a text editor are exactly the data they
       represent, this is not the case for <c>.xlsx</c> files.
+    </p>
+    <p>
+      This type of file representation allows Excel files to store additional things that plain text
+      files cannot, such as images, equations, multiple sheets, and formatting of the data. However,
+      if we want to analyze the data, we don&#x2019;t need most of these things, and it can actually get in
+      our way. We need special functions to read <c>.xlsx</c> files into R.
     </p>
     <p>
       Despite looking odd in a plain text editor, we can read Excel spreadsheets into R using the
@@ -744,6 +781,13 @@ lang_db
         data sets than R.
       </p>
       <p>
+        And typically the database will not even be stored on your computer, but rather a more powerful
+        machine somewhere on the web. So R is lazy and waits to bring this data into memory until you
+        explicitly tell it to using the <c>collect</c>
+        <idx><h>database</h><h>collect</h></idx>
+        function.
+      </p>
+      <p>
         Figure <xref ref="fig-reading-ref-vs-tibble"/> highlights the difference between a <c>tibble</c>
         object in R and the output we just created. Notice in the table on the right, the first two lines
         of the output indicate the source is SQL. The last line doesn&#x2019;t show how many rows there are
@@ -771,6 +815,13 @@ show_query(tbl(canlang_conn, "lang"))
 &lt;SQL&gt;
 SELECT *
 FROM `lang`</pre>
+      <p>
+        The output above shows the SQL code that is sent to the database. When we write
+        <c>tbl(canlang_conn, "lang")</c> in R, in the background, the function is translating the R code
+        into SQL, sending that SQL to the database, and then translating the response for us. So
+        <c>dbplyr</c> does all the hard work of translating from R to SQL and back for us; we can just
+        stick with R!
+      </p>
       <p>
         With our <c>lang_db</c> table reference for the 2016 Canadian Census data in hand, we can mostly
         continue onward as if it were a regular data frame. For example, let&#x2019;s do the same exercise
@@ -804,8 +855,9 @@ aboriginal_lang_db
       <p>
         We didn&#x2019;t use the <c>collect</c> function because we are not ready to bring the data into R yet.
         <idx><h>collect</h></idx>
-        Let&#x2019;s add the second part of our database query: selecting only the <c>language</c> and
-        <c>mother_tongue</c> columns using the <c>select</c> function.
+        We can still use the database to do some work to obtain <em>only</em> the small amount of data we
+        want to work with locally in R. Let&#x2019;s add the second part of our database query: selecting only
+        the <c>language</c> and <c>mother_tongue</c> columns using the <c>select</c> function.
       </p>
       <program language="r">
         <input>
@@ -850,6 +902,13 @@ aboriginal_lang_data
  5 Blackfoot                                 2765
 # … with 62 more rows
       </pre>
+      <p>
+        Aside from knowing the number of rows, the data looks pretty similar in both outputs shown above.
+        And <c>dbplyr</c> provides many more functions (not just <c>filter</c>) that you can use to
+        directly feed the database reference (<c>lang_db</c>) into downstream analysis functions
+        (e.g., <c>ggplot2</c> for data visualization). But <c>dbplyr</c> does not provide <em>every</em>
+        function that we need for analysis; we do eventually need to call <c>collect</c>.
+      </p>
       <p>
         For example, look what happens when we try to use <c>nrow</c> to count rows in a data frame:
         <idx><h>nrow</h></idx>
@@ -1067,7 +1126,9 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
       <idx><h>API</h></idx>
       which provides a programmatic way to ask for subsets of a data set. This allows the website owner to
       control <em>who</em> has access to the data, <em>what portion</em> of the data they have access to,
-      and <em>how much</em> data they can access.
+      and <em>how much</em> data they can access. Typically, the website owner will give you a
+      <em>token</em> or <em>key</em> (a secret string of characters somewhat like a password) that you
+      have to provide when accessing the API.
     </p>
     <p>
       Another interesting thought: websites themselves <em>are</em> data! When you type a URL into your
@@ -1077,6 +1138,22 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
       from what a website displays is called
       <idx><h>web scraping</h></idx>
       <em>web scraping</em> (or sometimes <em>screen scraping</em>).
+    </p>
+    <p>
+      If the website shows you some information that you&#x2019;re interested in, you could <em>create</em> a
+      data set for yourself by copying and pasting that information into a file. Now, of course, copying
+      and pasting information manually is a painstaking and error-prone process, especially when there is
+      a lot of information to gather. So instead of asking your browser to translate the information that
+      the web server provides into something you can see, you can collect that data programmatically&#x2014;in
+      the form of <em>hypertext markup language (HTML)</em>
+      <idx><h>hypertext markup language</h><see>HTML</see></idx>
+      <idx><h>cascading style sheet</h><see>CSS</see></idx>
+      <idx><h>CSS</h></idx>
+      <idx><h>HTML</h></idx>
+      and <em>cascading style sheet (CSS)</em> code&#x2014;and process it to extract useful information.
+      HTML provides the basic structure of a site and tells the webpage how to display the content
+      (e.g., titles, paragraphs, bullet lists etc.), whereas CSS helps style the content and tells the
+      webpage how the HTML elements should be presented (e.g., colors, layouts, fonts etc.).
     </p>
     <p>
       This subsection will show you the basics of both web scraping with the
@@ -1301,8 +1378,12 @@ head(population_text)
         API
         <idx><h>API</h></idx>
         that must be accessed through a programming language like R. The benefit of using an API is that
-        data owners have much more control over the data they provide to users. In particular, in this book
-        we will show you the basics of how to use the <c>httr2</c> package in R
+        data owners have much more control over the data they provide to users. However, unlike web
+        scraping, there is no consistent way to access an API across websites. Every website typically has
+        its own API designed especially for its own use case. Therefore we will just provide one example of
+        accessing data through an API in this book, with the hope that it gives you enough of a basic idea
+        that you can learn how to use another API if needed. In particular, in this book we will show you
+        the basics of how to use the <c>httr2</c> package in R
         <idx><h>API</h><h>httr2</h></idx>
         <idx><h>httr2</h></idx>
         <idx><h>NASA</h></idx>
@@ -1333,16 +1414,26 @@ head(population_text)
       <p>
         When you access an API, you are initiating a transfer of data from a web server to your computer.
         Web servers are expensive to run and do not have infinite resources. If you try to ask for
-        <em>too much data</em> at once, you can use up a huge amount of the server&#x2019;s bandwidth. Most
-        servers have mechanisms to revoke your access if you are not careful. So <em>before</em> we try to
-        use the API, we will first visit the NASA website to see what limits we should abide by when using
-        the API. These limits are outlined in <xref ref="fig-reading-nasa-limits"/>.
+        <em>too much data</em> at once, you can use up a huge amount of the server&#x2019;s bandwidth. If you
+        try to ask for data <em>too frequently</em>&#x2014;e.g., if you make many requests to the server in
+        quick succession&#x2014;you can also bog the server down and make it unable to talk to anyone else.
+        Most servers have mechanisms to revoke your access if you are not careful, but you should try to
+        prevent issues from happening in the first place by being extra careful with how you write and run
+        your code. You should also keep in mind that when a website owner grants you API access, they also
+        usually specify a limit (or <em>quota</em>) of how much data you can ask for. Be careful not to
+        overrun your quota! So <em>before</em> we try to use the API, we will first visit the NASA website
+        to see what limits we should abide by when using the API. These limits are outlined in
+        <xref ref="fig-reading-nasa-limits"/>.
       </p>
 
       <figure xml:id="fig-reading-nasa-limits">
         <caption>The NASA website specifies an hourly limit of 1,000 requests.</caption>
         <image source="images/reading/NASA-API-limits.png" width="100%"/>
       </figure>
+      <p>
+        After checking the NASA website, it seems like we can send at most 1,000 requests per hour. That
+        should be more than enough for our purposes in this section.
+      </p>
 
       <subsubsection xml:id="sec-reading-nasa-api">
         <title>Accessing the NASA API</title>
@@ -1368,16 +1459,30 @@ head(population_text)
 
         <p>
           So for example, to obtain the image of the day from July 13, 2023, the API query would have two
-          parameters: <c>api_key=YOUR_API_KEY</c> and <c>date=2023-07-13</c>. Putting it all together, the
-          query will look like the following:
+          parameters: <c>api_key=YOUR_API_KEY</c> and <c>date=2023-07-13</c>. Remember to replace
+          <c>YOUR_API_KEY</c> with the API key you received from NASA in your email! Putting it all
+          together, the query will look like the following:
         </p>
         <pre>
 https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY&amp;date=2023-07-13</pre>
         <p>
+          If you try putting this URL into your web browser, you&#x2019;ll actually find that the server
+          responds to your request with some text.
+        </p>
+        <p>
+          Neat! There is definitely some data there, but it&#x2019;s a bit hard to see what it all is. As it
+          turns out, this is a common format for data called <em>JSON</em> (JavaScript Object Notation).
+          <idx><h>JSON</h></idx>
+          <idx><h>JavaScript Object Notation</h><see>JSON</see></idx>
+          We won&#x2019;t encounter this kind of data much in this book, but for now you can interpret this data
+          as <c>key : value</c> pairs separated by commas.
+        </p>
+        <p>
           So now our job is to do all of this programmatically in R. We will load the <c>httr2</c> package,
-          and construct the query using the <c>request</c> function, which takes a single URL argument. We
-          will then send the query using the <c>req_perform</c> function, and finally obtain a JSON
-          representation of the response using the <c>resp_body_json</c> function.
+          and construct the query using the <c>request</c> function, which takes a single URL argument;
+          you will recognize the same query URL that we pasted into the browser earlier. We will then send
+          the query using the <c>req_perform</c> function, and finally obtain a JSON representation of the
+          response using the <c>resp_body_json</c> function.
           <idx><h>httr2</h><h>req_perform</h></idx>
           <idx><h>httr2</h><h>resp_body_json</h></idx>
         </p>
