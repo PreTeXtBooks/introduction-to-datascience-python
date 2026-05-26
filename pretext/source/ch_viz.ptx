@@ -1278,13 +1278,49 @@ ggsave("img/viz/faithful_plot.tiff", faithful_plot)
 ggsave("img/viz/faithful_plot.svg", faithful_plot)
       </input>
     </program>
+    <table xml:id="tab-viz-filesizes">
+      <title>File sizes of the scatter plot of the Old Faithful data set when saved as
+      different file formats.</title>
+      <tabular top="minor" bottom="minor" left="minor" right="minor">
+        <row header="yes" bottom="medium">
+          <cell>Image type</cell>
+          <cell>File type</cell>
+          <cell>Image size</cell>
+        </row>
+        <row>
+          <cell>Raster</cell>
+          <cell>PNG</cell>
+          <cell>0.15 MB</cell>
+        </row>
+        <row>
+          <cell>Raster</cell>
+          <cell>JPG</cell>
+          <cell>0.42 MB</cell>
+        </row>
+        <row>
+          <cell>Raster</cell>
+          <cell>BMP</cell>
+          <cell>3.15 MB</cell>
+        </row>
+        <row>
+          <cell>Raster</cell>
+          <cell>TIFF</cell>
+          <cell>9.44 MB</cell>
+        </row>
+        <row>
+          <cell>Vector</cell>
+          <cell>SVG</cell>
+          <cell>0.03 MB</cell>
+        </row>
+      </tabular>
+    </table>
     <p>
-      Notice the difference in file sizes when you look at the files created: raster
-      formats like BMP and TIFF are much larger than compressed raster formats (PNG,
-      JPG), and vector formats (SVG) can be significantly smaller than uncompressed
-      rasters for simple plots. Also note that the JPG format is usually larger than
-      PNG for plot-type images since the JPG compression algorithm is designed for
-      natural images.
+      Take a look at the file sizes in <xref ref="tab-viz-filesizes"/>. Wow, that's
+      quite a difference! Notice that for such a simple plot with few graphical elements
+      (points), the vector graphics format (SVG) is over 100 times smaller than the
+      uncompressed raster images (BMP, TIFF). Also, note that the JPG format is twice as
+      large as the PNG format since the JPG compression algorithm is designed for natural
+      images (not plots).
     </p>
     <p>
       In <xref ref="fig-viz-raster-image"/>, we also show what the images look like
