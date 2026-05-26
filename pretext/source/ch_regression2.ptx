@@ -562,6 +562,14 @@ mcoeffs
 lm_mult_test_results
       </input>
     </program>
+    <pre>
+# A tibble: 3 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rmse    standard   83297.
+2 rsq     standard       0.518
+3 mae     standard   59532.
+    </pre>
   </section>
 
   <!-- ============================================================ -->

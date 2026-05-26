@@ -294,6 +294,24 @@ canlang_data &lt;- read_csv("data/can_lang_meta-data.csv")
 canlang_data
         </input>
       </program>
+      <pre>
+Warning message:
+One or more parsing issues, see `problems()` for details.
+# A tibble: 217 × 1
+   `Data source: https://ttimbers.github.io/canlang/`                          
+   &lt;chr&gt;                                                                        
+ 1 Data originally published in: Statistics Canada Census of Population 2016.  
+ 2 Reproduced and distributed on an as-is basis with their permission.         
+ 3 category                                                                     
+ 4 Aboriginal languages                                                         
+ 5 Non-Official &amp; Non-Aboriginal languages                                  
+ 6 Non-Official &amp; Non-Aboriginal languages                                  
+ 7 Non-Official &amp; Non-Aboriginal languages                                  
+ 8 Non-Official &amp; Non-Aboriginal languages                                  
+ 9 Aboriginal languages                                                         
+10 Aboriginal languages                                                         
+# … with 207 more rows
+      </pre>
       <p>
         To successfully read data like this into R, the <c>skip</c> argument
         <idx><h>read function</h><h>skip argument</h></idx>
@@ -307,6 +325,17 @@ canlang_data &lt;- read_csv("data/can_lang_meta-data.csv",
 canlang_data
         </input>
       </program>
+      <pre>
+# A tibble: 214 × 6
+   category                   language                mother_tongue most_at_home
+   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…             590          235
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
+ 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
+# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
       <p>
         How did we know to skip three lines? We looked at the data! The first three lines of the data
         had information we didn&#x2019;t need to import:
@@ -341,6 +370,17 @@ canlang_data &lt;- read_tsv("data/can_lang.tsv")
 canlang_data
         </input>
       </program>
+      <pre>
+# A tibble: 214 × 6
+   category                   language                mother_tongue most_at_home
+   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…             590          235
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
+ 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
+# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
       <p>
         If you compare the data frame here to the data frame we obtained in
         <xref ref="sec-reading-readcsv"/> using <c>read_csv</c>, you&#x2019;ll notice that they look
@@ -389,6 +429,17 @@ canlang_data &lt;- read_delim("data/can_lang_no_names.tsv",
 canlang_data
         </input>
       </program>
+      <pre>
+# A tibble: 214 × 6
+   X1                                     X2                              X3    X4    X5    X6
+   &lt;chr&gt;                                  &lt;chr&gt;                        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 Aboriginal languages                   Aboriginal languages, n.o.s.   590   235    30   665
+ 2 Non-Official &amp; Non-Aboriginal langua… Afrikaans                  10260  4785    85 23415
+ 3 Non-Official &amp; Non-Aboriginal langua… Afro-Asiatic languages, n.…  1150   445    10  2775
+ 4 Non-Official &amp; Non-Aboriginal langua… Akan (Twi)                 13460  5985    25 22150
+ 5 Non-Official &amp; Non-Aboriginal langua… Albanian                   26895 13135   345 31930
+# … with 209 more rows
+      </pre>
       <p>
         Data frames in R need to have column names. Thus if you read in data without column names, R will
         assign names automatically. In this example, R assigns the column names <c>X1, X2, X3, X4, X5, X6</c>.
@@ -414,6 +465,17 @@ canlang_data &lt;- rename(canlang_data,
 canlang_data
         </input>
       </program>
+      <pre>
+# A tibble: 214 × 6
+   category                   language                mother_tongue most_at_home
+   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…             590          235
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
+ 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
+# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
     </subsection>
 
     <subsection xml:id="sec-reading-url">
@@ -432,6 +494,17 @@ canlang_data &lt;- read_csv(url)
 canlang_data
         </input>
       </program>
+      <pre>
+# A tibble: 214 × 6
+   category                   language                mother_tongue most_at_home
+   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…             590          235
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
+ 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
+# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
     </subsection>
 
     <subsection xml:id="sec-reading-download">
@@ -450,6 +523,17 @@ canlang_data &lt;- read_csv("data/can_lang.csv")
 canlang_data
         </input>
       </program>
+      <pre>
+# A tibble: 214 × 6
+   category                   language                mother_tongue most_at_home
+   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…             590          235
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
+ 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
+# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
     </subsection>
 
     <subsection xml:id="sec-reading-preview">
@@ -493,6 +577,17 @@ canlang_data &lt;- read_excel("data/can_lang.xlsx")
 canlang_data
       </input>
     </program>
+    <pre>
+# A tibble: 214 × 6
+   category                   language                mother_tongue most_at_home
+   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…             590          235
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
+ 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
+# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+    </pre>
     <p>
       If the <c>.xlsx</c> file has multiple sheets, you have to use the <c>sheet</c> argument to specify
       the sheet number or name. You can also specify cell ranges using the <c>range</c> argument. This
@@ -630,6 +725,18 @@ lang_db &lt;- tbl(canlang_conn, "lang")
 lang_db
         </input>
       </program>
+      <pre>
+# Source:   table&lt;lang&gt; [?? x 6]
+# Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
+   category                                language                     mother_tongue most_at_home
+   &lt;chr&gt;                                   &lt;chr&gt;                                &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages                    Aboriginal languages, n.o.s.           590          235
+ 2 Non-Official &amp; Non-Aboriginal langua… Afrikaans                          10260         4785
+ 3 Non-Official &amp; Non-Aboriginal langua… Afro-Asiatic languages, n.i…         1150          445
+ 4 Non-Official &amp; Non-Aboriginal langua… Akan (Twi)                         13460         5985
+ 5 Non-Official &amp; Non-Aboriginal langua… Albanian                           26895        13135
+# … with more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
       <p>
         Although it looks like we just got a data frame from the database, we didn&#x2019;t! It&#x2019;s a
         <em>reference</em>; the data is still stored only in the SQLite database. The <c>dbplyr</c> package
@@ -677,6 +784,18 @@ aboriginal_lang_db &lt;- filter(lang_db, category == "Aboriginal languages")
 aboriginal_lang_db
         </input>
       </program>
+      <pre>
+# Source:   SQL [?? x 6]
+# Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
+   category             language                     mother_tongue most_at_home most_at_work lang_known
+   &lt;chr&gt;                &lt;chr&gt;                                &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+ 1 Aboriginal languages Aboriginal languages, n.o.s.           590          235           30        665
+ 2 Aboriginal languages Algonquian languages, n.i.e.            45           10            0        120
+ 3 Aboriginal languages Algonquin                             1260          370           40       2480
+ 4 Aboriginal languages Atikamekw                             5765         4505           85       6455
+ 5 Aboriginal languages Blackfoot                             2765         1560           25       3040
+# … with more rows
+      </pre>
       <p>
         Above you can again see the hints that this data is not actually stored in R yet: the source is
         <c>SQL [?? x 6]</c> and the output says <c>... more rows</c> at the end (both indicating that R
@@ -694,6 +813,18 @@ aboriginal_lang_selected_db &lt;- select(aboriginal_lang_db, language, mother_to
 aboriginal_lang_selected_db
         </input>
       </program>
+      <pre>
+# Source:   SQL [?? x 2]
+# Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
+   language                         mother_tongue
+   &lt;chr&gt;                                    &lt;dbl&gt;
+ 1 Aboriginal languages, n.o.s.               590
+ 2 Algonquian languages, n.i.e.                45
+ 3 Algonquin                                 1260
+ 4 Atikamekw                                 5765
+ 5 Blackfoot                                 2765
+# … with more rows
+      </pre>
       <p>
         Now you can see that the database will return only the two columns we asked for with the
         <c>select</c> function. In order to actually retrieve this data in R as a data frame, we use the
@@ -708,6 +839,17 @@ aboriginal_lang_data &lt;- collect(aboriginal_lang_selected_db)
 aboriginal_lang_data
         </input>
       </program>
+      <pre>
+# A tibble: 67 × 2
+   language                         mother_tongue
+   &lt;chr&gt;                                    &lt;dbl&gt;
+ 1 Aboriginal languages, n.o.s.               590
+ 2 Algonquian languages, n.i.e.                45
+ 3 Algonquin                                 1260
+ 4 Atikamekw                                 5765
+ 5 Blackfoot                                 2765
+# … with 62 more rows
+      </pre>
       <p>
         For example, look what happens when we try to use <c>nrow</c> to count rows in a data frame:
         <idx><h>nrow</h></idx>
@@ -820,6 +962,18 @@ avg_rating_db &lt;- select(ratings_db, average_rating)
 avg_rating_db
         </input>
       </program>
+      <pre>
+# Source:   SQL [?? x 1]
+# Database: postgres [user0001@fakeserver.stat.ubc.ca:5432/can_mov_db]
+   average_rating
+            &lt;dbl&gt;
+ 1            5.8
+ 2            7.1
+ 3            6.5
+ 4            8.2
+ 5            6.8
+# … with more rows
+      </pre>
       <p>
         Next we use <c>min</c> to find the minimum rating in that column:
         <idx><h>min</h></idx>
@@ -1095,6 +1249,15 @@ population_nodes &lt;- html_nodes(page, selectors)
 head(population_nodes)
           </input>
         </program>
+        <pre>
+{xml_nodeset (6)}
+[1] &lt;td style="text-align:left;background:#f0f0f0;"&gt;\n&lt;a href="/wiki/Toronto" title="Toron…
+[2] &lt;td style="text-align:right;background:#f0f0f0;"&gt;5,928,040&lt;/td&gt;                       
+[3] &lt;td style="text-align:left;background:#f0f0f0;"&gt;\n&lt;a href="/wiki/Montr%C3%A9al" title=…
+[4] &lt;td style="text-align:right;background:#f0f0f0;"&gt;4,098,927&lt;/td&gt;                       
+[5] &lt;td style="text-align:left;background:#f0f0f0;"&gt;\n&lt;a href="/wiki/Calgary" title="Calga…
+[6] &lt;td style="text-align:right;background:#f0f0f0;"&gt;1,392,609&lt;/td&gt;
+        </pre>
         <note>
           <p>
             <c>head</c> is a function that is often useful for viewing only a short summary of an R
@@ -1117,6 +1280,9 @@ population_text &lt;- html_text(population_nodes)
 head(population_text)
           </input>
         </program>
+        <pre>
+[1] "Toronto"     "5,928,040"   "Montréal"    "4,098,927"   "Calgary"     "1,392,609"
+        </pre>
         <p>
           Fantastic! We seem to have extracted the data of interest from the raw HTML source code. But we
           are not quite done; the data is not yet in an optimal format for data analysis. Both the city
@@ -1225,6 +1391,31 @@ nasa_data_single &lt;- resp_body_json(resp)
 nasa_data_single
           </input>
         </program>
+        <pre>
+$copyright
+[1] "Rheinhold Wittich"
+
+$date
+[1] "2023-07-13"
+
+$explanation
+[1] "A mere 390 light years away, MC Snefru is a multistar system..."
+
+$hdurl
+[1] "https://apod.nasa.gov/apod/image/2307/RhoOph_Jwst_4066.jpg"
+
+$media_type
+[1] "image"
+
+$service_version
+[1] "v1"
+
+$title
+[1] "Rho Ophiuchi Wide Field"
+
+$url
+[1] "https://apod.nasa.gov/apod/image/2307/RhoOph_Jwst_960.jpg"
+        </pre>
         <p>
           We can obtain more records at once by using the <c>start_date</c> and <c>end_date</c> parameters.
           Let&#x2019;s obtain all the records between May 1, 2023, and July 13, 2023; now the response
@@ -1261,6 +1452,17 @@ nasa_df &lt;- select(nasa_df_all, date, title, copyright, url)
 nasa_df
           </input>
         </program>
+        <pre>
+# A tibble: 74 × 4
+   date       title                                       copyright            url                    
+   &lt;chr&gt;      &lt;chr&gt;                                       &lt;chr&gt;                &lt;chr&gt;                  
+ 1 2023-05-01 Streaks of Noctilucent Clouds               Ruslan Merzlyakov   https://apod.nasa.gov/…
+ 2 2023-05-02 A Total Solar Eclipse Close-Up in Real Time NA                  https://apod.nasa.gov/…
+ 3 2023-05-03 Milky Way above Tres Marias Reservoire      Leandro Ferreira…   https://apod.nasa.gov/…
+ 4 2023-05-04 Thor&#x27;s Helmet                               Vikas Chander       https://apod.nasa.gov/…
+ 5 2023-05-05 M14: Globular Cluster of the Milky Way      Greg Polanski       https://apod.nasa.gov/…
+# … with 69 more rows
+        </pre>
         <p>
           Success&#x2014;we have created a small data set using the NASA API! From this point onward, the
           <c>nasa_df</c> data frame is stored on your machine, and you can play with it to your heart&#x2019;s

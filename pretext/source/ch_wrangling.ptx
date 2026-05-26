@@ -385,6 +385,17 @@ lang_wide &lt;- read_csv("data/region_lang_top5_cities_wide.csv")
 lang_wide
         </input>
       </program>
+      <pre>
+# A tibble: 214 × 7
+   category                   language                Toronto Montréal Vancouver
+   &lt;chr&gt;                      &lt;chr&gt;                     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…       80       30        70
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                  985       90      1435
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…      360      240        45
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                8485     1015       400
+ 5 Non-Official &amp; Non-Aborigi… Albanian                 13260     2450      1090
+# … with 209 more rows, and 2 more variables: Calgary &lt;dbl&gt;, Edmonton &lt;dbl&gt;
+      </pre>
       <p>
         What is wrong with the untidy format above? The table on the left in
         <xref ref="fig-wrangling-pivot-longer-with-table"/> represents the data in the &#x201C;wide&#x201D;
@@ -429,6 +440,17 @@ lang_mother_tidy &lt;- pivot_longer(lang_wide,
 lang_mother_tidy
         </input>
       </program>
+      <pre>
+# A tibble: 1,070 × 4
+   category                   language                region    mother_tongue
+   &lt;chr&gt;                      &lt;chr&gt;                   &lt;chr&gt;             &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…  Toronto              80
+ 2 Aboriginal languages       Aboriginal languages,…  Montréal             30
+ 3 Aboriginal languages       Aboriginal languages,…  Vancouver            70
+ 4 Aboriginal languages       Aboriginal languages,…  Calgary              20
+ 5 Aboriginal languages       Aboriginal languages,…  Edmonton             25
+# … with 1,065 more rows
+      </pre>
       <note>
         <p>
           In the code above, the call to the <c>pivot_longer</c> function is split across several lines.
@@ -468,6 +490,17 @@ lang_long &lt;- read_csv("data/region_lang_top5_cities_long.csv")
 lang_long
         </input>
       </program>
+      <pre>
+# A tibble: 2,140 × 5
+   region   category             language                type          count
+   &lt;chr&gt;    &lt;chr&gt;                &lt;chr&gt;                   &lt;chr&gt;         &lt;dbl&gt;
+ 1 Montréal Aboriginal languages Aboriginal languages,…  most_at_home     15
+ 2 Montréal Aboriginal languages Aboriginal languages,…  most_at_work      0
+ 3 Toronto  Aboriginal languages Aboriginal languages,…  most_at_home     50
+ 4 Toronto  Aboriginal languages Aboriginal languages,…  most_at_work      0
+ 5 Calgary  Aboriginal languages Aboriginal languages,…  most_at_home      5
+# … with 2,135 more rows
+      </pre>
       <p>
         <xref ref="fig-wrangling-pivot-wider-table"/> shows how this data will be tidied using the
         <c>pivot_wider</c> function.
@@ -498,6 +531,17 @@ lang_home_tidy &lt;- pivot_wider(lang_long,
 lang_home_tidy
         </input>
       </program>
+      <pre>
+# A tibble: 1,070 × 5
+   region   category             language                most_at_home most_at_work
+   &lt;chr&gt;    &lt;chr&gt;                &lt;chr&gt;                          &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Montréal Aboriginal languages Aboriginal languages,…             15            0
+ 2 Toronto  Aboriginal languages Aboriginal languages,…             50            0
+ 3 Calgary  Aboriginal languages Aboriginal languages,…              5            0
+ 4 Edmonton Aboriginal languages Aboriginal languages,…             10            0
+ 5 Vancouver Aboriginal languages Aboriginal languages,…            15            0
+# … with 1,065 more rows
+      </pre>
     </subsection>
 
     <subsection xml:id="sec-wrangling-separate">
@@ -519,6 +563,17 @@ lang_messy &lt;- read_csv("data/region_lang_top5_cities_messy.csv")
 lang_messy
         </input>
       </program>
+      <pre>
+# A tibble: 214 × 7
+   category                   language                Toronto  Montréal Vancouver
+   &lt;chr&gt;                      &lt;chr&gt;                   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;    
+ 1 Aboriginal languages       Aboriginal languages,…  50/0     15/0     15/0     
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans               265/0    10/0     520/10   
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…   185/10   65/0     10/0     
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)              4045/20  440/0    125/10   
+ 5 Non-Official &amp; Non-Aborigi… Albanian                6380/215 1445/20  530/10   
+# … with 209 more rows, and 2 more variables: Calgary &lt;chr&gt;, Edmonton &lt;chr&gt;
+      </pre>
       <p>
         First we&#x2019;ll use <c>pivot_longer</c> to create two columns, <c>region</c> and <c>value</c>,
         similar to what we did previously.
@@ -534,6 +589,17 @@ lang_messy_longer &lt;- pivot_longer(lang_messy,
 lang_messy_longer
         </input>
       </program>
+      <pre>
+# A tibble: 1,070 × 4
+   category                   language                region   value  
+   &lt;chr&gt;                      &lt;chr&gt;                   &lt;chr&gt;    &lt;chr&gt;  
+ 1 Aboriginal languages       Aboriginal languages,…  Toronto  50/0   
+ 2 Aboriginal languages       Aboriginal languages,…  Montréal 15/0   
+ 3 Aboriginal languages       Aboriginal languages,…  Vancouver 15/0  
+ 4 Aboriginal languages       Aboriginal languages,…  Calgary  5/0    
+ 5 Aboriginal languages       Aboriginal languages,…  Edmonton 10/0   
+# … with 1,065 more rows
+      </pre>
       <p>
         Next we&#x2019;ll use <c>separate</c> to split the <c>value</c> column into two columns.
         <xref ref="fig-wrangling-separate"/> outlines what we need to specify to use <c>separate</c>.
@@ -555,6 +621,17 @@ tidy_lang &lt;- separate(lang_messy_longer,
 tidy_lang
         </input>
       </program>
+      <pre>
+# A tibble: 1,070 × 5
+   category                   language                region    most_at_home most_at_work
+   &lt;chr&gt;                      &lt;chr&gt;                   &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;       
+ 1 Aboriginal languages       Aboriginal languages,…  Toronto   50           0           
+ 2 Aboriginal languages       Aboriginal languages,…  Montréal  15           0           
+ 3 Aboriginal languages       Aboriginal languages,…  Vancouver 15           0           
+ 4 Aboriginal languages       Aboriginal languages,…  Calgary   5            0           
+ 5 Aboriginal languages       Aboriginal languages,…  Edmonton  10           0           
+# … with 1,065 more rows
+      </pre>
       <p>
         Notice in the table above that the word <c>&lt;chr&gt;</c> appears beneath each of the column names,
         indicating that all variables are &#x201C;character&#x201D; data types. The <c>most_at_home</c> and
@@ -574,6 +651,17 @@ tidy_lang &lt;- separate(lang_messy_longer,
 tidy_lang
         </input>
       </program>
+      <pre>
+# A tibble: 1,070 × 5
+   category                   language                region    most_at_home most_at_work
+   &lt;chr&gt;                      &lt;chr&gt;                   &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;
+ 1 Aboriginal languages       Aboriginal languages,…  Toronto             50            0
+ 2 Aboriginal languages       Aboriginal languages,…  Montréal            15            0
+ 3 Aboriginal languages       Aboriginal languages,…  Vancouver           15            0
+ 4 Aboriginal languages       Aboriginal languages,…  Calgary              5            0
+ 5 Aboriginal languages       Aboriginal languages,…  Edmonton            10            0
+# … with 1,065 more rows
+      </pre>
       <p>
         Now we see <c>&lt;int&gt;</c> appears under the <c>most_at_home</c> and <c>most_at_work</c>
         columns, indicating they are integer data types (i.e., numbers)!
@@ -601,6 +689,17 @@ selected_columns &lt;- select(tidy_lang,
 selected_columns
       </input>
     </program>
+    <pre>
+# A tibble: 1,070 × 4
+   language                region    most_at_home most_at_work
+   &lt;chr&gt;                   &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;
+ 1 Aboriginal languages,…  Toronto             50            0
+ 2 Aboriginal languages,…  Montréal            15            0
+ 3 Aboriginal languages,…  Vancouver           15            0
+ 4 Aboriginal languages,…  Calgary              5            0
+ 5 Aboriginal languages,…  Edmonton            10            0
+# … with 1,065 more rows
+    </pre>
     <p>
       Here we wrote out the names of each of the columns. However, this method is time-consuming,
       especially if you have a lot of columns! Another approach is to use a &#x201C;select helper&#x201D;. Select
@@ -618,6 +717,17 @@ column_range &lt;- select(tidy_lang, language:most_at_work)
 column_range
       </input>
     </program>
+    <pre>
+# A tibble: 1,070 × 4
+   language                region    most_at_home most_at_work
+   &lt;chr&gt;                   &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;
+ 1 Aboriginal languages,…  Toronto             50            0
+ 2 Aboriginal languages,…  Montréal            15            0
+ 3 Aboriginal languages,…  Vancouver           15            0
+ 4 Aboriginal languages,…  Calgary              5            0
+ 5 Aboriginal languages,…  Edmonton            10            0
+# … with 1,065 more rows
+    </pre>
     <p>
       Suppose instead we wanted to extract columns that followed a particular pattern rather than just
       selecting a range. In particular, we can use the <c>select</c> helper
@@ -629,6 +739,17 @@ column_range
 select(tidy_lang, starts_with("most"))
       </input>
     </program>
+    <pre>
+# A tibble: 1,070 × 2
+   most_at_home most_at_work
+          &lt;int&gt;        &lt;int&gt;
+ 1           50            0
+ 2           15            0
+ 3           15            0
+ 4            5            0
+ 5           10            0
+# … with 1,065 more rows
+    </pre>
     <p>
       We could also have chosen the columns containing an underscore <c>_</c> by adding
       <c>contains("_")</c> as the second argument in the <c>select</c> function.
@@ -639,6 +760,17 @@ select(tidy_lang, starts_with("most"))
 select(tidy_lang, contains("_"))
       </input>
     </program>
+    <pre>
+# A tibble: 1,070 × 2
+   most_at_home most_at_work
+          &lt;int&gt;        &lt;int&gt;
+ 1           50            0
+ 2           15            0
+ 3           15            0
+ 4            5            0
+ 5           10            0
+# … with 1,065 more rows
+    </pre>
   </section>
 
   <section xml:id="sec-wrangling-filter">
@@ -668,6 +800,21 @@ official_langs &lt;- filter(tidy_lang, category == "Official languages")
 official_langs
         </input>
       </program>
+      <pre>
+# A tibble: 10 × 5
+   category           language region    most_at_home most_at_work
+   &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;
+ 1 Official languages English  Toronto        3836770      3218725
+ 2 Official languages English  Montréal        620510       412120
+ 3 Official languages English  Vancouver      1622735      1330555
+ 4 Official languages English  Calgary        1065070       844740
+ 5 Official languages English  Edmonton       1050410       792700
+ 6 Official languages French   Toronto          29800        11940
+ 7 Official languages French   Montréal       2669195      1607550
+ 8 Official languages French   Vancouver         8630         3245
+ 9 Official languages French   Calgary           8630         2140
+10 Official languages French   Edmonton         10950         2520
+      </pre>
     </subsection>
 
     <subsection xml:id="sec-wrangling-filter-neq">
@@ -683,6 +830,17 @@ official_langs
 filter(tidy_lang, category != "Official languages")
         </input>
       </program>
+      <pre>
+# A tibble: 1,060 × 5
+   category                   language                region    most_at_home most_at_work
+   &lt;chr&gt;                      &lt;chr&gt;                   &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;
+ 1 Aboriginal languages       Aboriginal languages,…  Toronto             50            0
+ 2 Aboriginal languages       Aboriginal languages,…  Montréal            15            0
+ 3 Aboriginal languages       Aboriginal languages,…  Vancouver           15            0
+ 4 Aboriginal languages       Aboriginal languages,…  Calgary              5            0
+ 5 Aboriginal languages       Aboriginal languages,…  Edmonton            10            0
+# … with 1,055 more rows
+      </pre>
     </subsection>
 
     <subsection xml:id="sec-wrangling-filter-and">
@@ -699,6 +857,12 @@ filter(tidy_lang, category != "Official languages")
 filter(official_langs, region == "Montréal", language == "French")
         </input>
       </program>
+      <pre>
+# A tibble: 1 × 5
+  category           language region   most_at_home most_at_work
+  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;           &lt;int&gt;        &lt;int&gt;
+1 Official languages French   Montréal      2669195      1607550
+      </pre>
       <p>
         We can also use the ampersand (<c>&amp;</c>) logical operator, which gives us cases where
         <em>both</em> one condition <em>and</em> another condition are satisfied. You can use either
@@ -709,6 +873,12 @@ filter(official_langs, region == "Montréal", language == "French")
 filter(official_langs, region == "Montréal" &amp; language == "French")
         </input>
       </program>
+      <pre>
+# A tibble: 1 × 5
+  category           language region   most_at_home most_at_work
+  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;           &lt;int&gt;        &lt;int&gt;
+1 Official languages French   Montréal      2669195      1607550
+      </pre>
     </subsection>
 
     <subsection xml:id="sec-wrangling-filter-or">
@@ -726,6 +896,15 @@ filter(official_langs, region == "Montréal" &amp; language == "French")
 filter(official_langs, region == "Calgary" | region == "Edmonton")
         </input>
       </program>
+      <pre>
+# A tibble: 4 × 5
+  category           language region   most_at_home most_at_work
+  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;           &lt;int&gt;        &lt;int&gt;
+1 Official languages English  Calgary       1065070       844740
+2 Official languages English  Edmonton      1050410       792700
+3 Official languages French   Calgary          8630         2140
+4 Official languages French   Edmonton        10950         2520
+      </pre>
     </subsection>
 
     <subsection xml:id="sec-wrangling-filter-in">
@@ -741,6 +920,17 @@ region_data &lt;- read_csv("data/region_data.csv")
 region_data
         </input>
       </program>
+      <pre>
+# A tibble: 35 × 5
+   region          households    area population dwellings
+   &lt;chr&gt;                &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;
+ 1 Belleville           43002  1355.       103472     45050
+ 2 Lethbridge           45696  3047.       117394     48317
+ 3 Thunder Bay          52545  2618.       121621     57146
+ 4 Peterborough         50533  1637.       121721     55662
+ 5 Saint John           52872  3793.       126202     58398
+# … with 30 more rows
+      </pre>
       <p>
         To get the population of the five cities we can filter the data set using the <c>%in%</c>
         operator. The <c>%in%</c> operator is used to see if an element belongs to a vector.
@@ -756,6 +946,16 @@ five_cities &lt;- filter(region_data,
 five_cities
         </input>
       </program>
+      <pre>
+# A tibble: 5 × 5
+  region    households     area population dwellings
+  &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;
+1 Edmonton      502143   9858.     1321426    537634
+2 Calgary       519693   5242.     1392609    544870
+3 Vancouver     960894   3040.     2463431   1027613
+4 Montréal     1727310   4638.     4098927   1823281
+5 Toronto      2135909   6270.     5928040   2235145
+      </pre>
       <note>
         <p>
           What&#x2019;s the difference between <c>==</c> and <c>%in%</c>? Suppose we have two vectors,
@@ -794,6 +994,12 @@ c("Vancouver", "Toronto") %in% c("Toronto", "Vancouver")
 filter(official_langs, most_at_home > 2669195)
         </input>
       </program>
+      <pre>
+# A tibble: 1 × 5
+  category           language region  most_at_home most_at_work
+  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;          &lt;int&gt;        &lt;int&gt;
+1 Official languages English  Toronto      3836770      3218725
+      </pre>
       <p>
         <c>filter</c> returns a data frame with only one row, indicating that when considering the
         official languages, only English in Toronto is reported by more people as their primary language
@@ -833,6 +1039,21 @@ official_langs_chr &lt;- filter(tidy_lang_chr, category == "Official languages")
 official_langs_chr
         </input>
       </program>
+      <pre>
+# A tibble: 10 × 5
+   category           language region    most_at_home most_at_work
+   &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;       
+ 1 Official languages English  Toronto   3836770      3218725     
+ 2 Official languages English  Montréal  620510       412120      
+ 3 Official languages English  Vancouver 1622735      1330555     
+ 4 Official languages English  Calgary   1065070      844740      
+ 5 Official languages English  Edmonton  1050410      792700      
+ 6 Official languages French   Toronto   29800        11940       
+ 7 Official languages French   Montréal  2669195      1607550     
+ 8 Official languages French   Vancouver 8630         3245        
+ 9 Official languages French   Calgary   8630         2140        
+10 Official languages French   Edmonton  10950        2520        
+      </pre>
       <p>
         To use <c>mutate</c>, again we first specify the data set in the first argument, and in the
         following arguments, we specify the name of the column we want to modify or create, an <c>=</c>
@@ -856,6 +1077,21 @@ official_langs_numeric &lt;- mutate(official_langs_chr,
 official_langs_numeric
         </input>
       </program>
+      <pre>
+# A tibble: 10 × 5
+   category           language region    most_at_home most_at_work
+   &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Official languages English  Toronto        3836770      3218725
+ 2 Official languages English  Montréal        620510       412120
+ 3 Official languages English  Vancouver      1622735      1330555
+ 4 Official languages English  Calgary        1065070       844740
+ 5 Official languages English  Edmonton       1050410       792700
+ 6 Official languages French   Toronto          29800        11940
+ 7 Official languages French   Montréal       2669195      1607550
+ 8 Official languages French   Vancouver         8630         3245
+ 9 Official languages French   Calgary           8630         2140
+10 Official languages French   Edmonton         10950         2520
+      </pre>
       <p>
         Now we see <c>&lt;dbl&gt;</c> appears under the <c>most_at_home</c> and <c>most_at_work</c>
         columns, indicating they are double data types (which is a numeric data type)!
@@ -890,6 +1126,16 @@ english_langs &lt;- filter(official_langs, language == "English")
 english_langs
         </input>
       </program>
+      <pre>
+# A tibble: 5 × 5
+  category           language region    most_at_home most_at_work
+  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;
+1 Official languages English  Toronto        3836770      3218725
+2 Official languages English  Montréal        620510       412120
+3 Official languages English  Vancouver      1622735      1330555
+4 Official languages English  Calgary        1065070       844740
+5 Official languages English  Edmonton       1050410       792700
+      </pre>
       <p>Finally, we use <c>mutate</c> to create a new column, <c>most_at_home_proportion</c>:</p>
       <program language="r">
         <input>
@@ -899,6 +1145,16 @@ english_langs &lt;- mutate(english_langs,
 english_langs
         </input>
       </program>
+      <pre>
+# A tibble: 5 × 6
+  category           language region    most_at_home most_at_work most_at_home_proportion
+  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;                   &lt;dbl&gt;
+1 Official languages English  Toronto        3836770      3218725                   0.647
+2 Official languages English  Montréal        620510       412120                   0.151
+3 Official languages English  Vancouver      1622735      1330555                   0.659
+4 Official languages English  Calgary        1065070       844740                   0.765
+5 Official languages English  Edmonton       1050410       792700                   0.795
+      </pre>
       <note>
         <p>
           In more advanced data wrangling, one might solve this problem in a less error-prone way though
@@ -1014,6 +1270,17 @@ van_data &lt;- filter(tidy_lang, region == "Vancouver")
 van_data
         </input>
       </program>
+      <pre>
+# A tibble: 214 × 5
+   category                   language                region    most_at_home most_at_work
+   &lt;chr&gt;                      &lt;chr&gt;                   &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;
+ 1 Aboriginal languages       Aboriginal languages,…  Vancouver           15            0
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans               Vancouver          520           10
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…   Vancouver           10            0
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)              Vancouver          125           10
+ 5 Non-Official &amp; Non-Aborigi… Albanian                Vancouver          530           10
+# … with 209 more rows
+      </pre>
       <p>
         We then use <c>select</c> on this data frame to keep only the variables we want:
       </p>
@@ -1023,6 +1290,17 @@ van_data_selected &lt;- select(van_data, language, most_at_home)
 van_data_selected
         </input>
       </program>
+      <pre>
+# A tibble: 214 × 2
+   language                most_at_home
+   &lt;chr&gt;                          &lt;int&gt;
+ 1 Aboriginal languages,…            15
+ 2 Afrikaans                        520
+ 3 Afro-Asiatic languag…             10
+ 4 Akan (Twi)                       125
+ 5 Albanian                         530
+# … with 209 more rows
+      </pre>
       <p>
         Although this is valid code, there is a more readable approach we could take by using the pipe,
         <c>|&gt;</c>. With the pipe, we do not need to create an intermediate object to store the output
@@ -1037,6 +1315,17 @@ van_data_selected &lt;- filter(tidy_lang, region == "Vancouver") |&gt;
 van_data_selected
         </input>
       </program>
+      <pre>
+# A tibble: 214 × 2
+   language                most_at_home
+   &lt;chr&gt;                          &lt;int&gt;
+ 1 Aboriginal languages,…            15
+ 2 Afrikaans                        520
+ 3 Afro-Asiatic languag…             10
+ 4 Akan (Twi)                       125
+ 5 Albanian                         530
+# … with 209 more rows
+      </pre>
       <p>
         But wait&#x2026;Why do the <c>select</c> function calls look different in these two examples?
         Remember: when you use the pipe, the output of the first function is automatically provided as
@@ -1078,6 +1367,17 @@ large_region_lang &lt;- filter(tidy_lang, most_at_home > 10000) |&gt;
 large_region_lang
         </input>
       </program>
+      <pre>
+# A tibble: 67 × 3
+   region    language most_at_home
+   &lt;chr&gt;     &lt;chr&gt;           &lt;int&gt;
+ 1 Edmonton  Arabic          10590
+ 2 Montréal  Tamil           10670
+ 3 Vancouver Russian         10795
+ 4 Edmonton  Spanish         10880
+ 5 Edmonton  French          10950
+# … with 62 more rows
+      </pre>
       <p>
         You will notice above that we passed <c>tidy_lang</c> as the first argument of the <c>filter</c>
         function. We can also pipe the data frame into the same sequence of functions rather than using
@@ -1094,6 +1394,17 @@ large_region_lang &lt;- tidy_lang |&gt;
 large_region_lang
         </input>
       </program>
+      <pre>
+# A tibble: 67 × 3
+   region    language most_at_home
+   &lt;chr&gt;     &lt;chr&gt;           &lt;int&gt;
+ 1 Edmonton  Arabic          10590
+ 2 Montréal  Tamil           10670
+ 3 Vancouver Russian         10795
+ 4 Edmonton  Spanish         10880
+ 5 Edmonton  French          10950
+# … with 62 more rows
+      </pre>
       <p>
         Now that we&#x2019;ve shown you the pipe operator as an alternative to storing temporary objects and
         composing code, does this mean you should <em>never</em> store temporary objects or compose code?
@@ -1138,6 +1449,17 @@ large_region_lang
 region_lang
         </input>
       </program>
+      <pre>
+# A tibble: 7,490 × 7
+   region     category             language              mother_tongue most_at_home
+   &lt;chr&gt;      &lt;chr&gt;                &lt;chr&gt;                         &lt;dbl&gt;        &lt;dbl&gt;
+ 1 St. John's Aboriginal languages Aboriginal languages…              5            0
+ 2 Halifax    Aboriginal languages Aboriginal languages…              5            0
+ 3 Moncton    Aboriginal languages Aboriginal languages…              0            0
+ 4 Saint John Aboriginal languages Aboriginal languages…              0            0
+ 5 Saguenay   Aboriginal languages Aboriginal languages…              5            5
+# … with 7,485 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
       <p>
         We apply <c>summarize</c> to calculate the minimum and maximum number of Canadians reporting a
         particular language as their primary language at home, for any region:
@@ -1149,6 +1471,12 @@ summarize(region_lang,
           max_most_at_home = max(most_at_home))
         </input>
       </program>
+      <pre>
+# A tibble: 1 × 2
+  min_most_at_home max_most_at_home
+             &lt;dbl&gt;            &lt;dbl&gt;
+1                0          3836770
+      </pre>
       <p>
         From this we see that there are some languages in the data set that no one speaks as their
         primary language at home. We also see that the most commonly spoken primary language at home
@@ -1181,6 +1509,17 @@ summarize(region_lang,
 region_lang_na
         </input>
       </program>
+      <pre>
+# A tibble: 7,490 × 7
+   region     category             language              mother_tongue most_at_home
+   &lt;chr&gt;      &lt;chr&gt;                &lt;chr&gt;                         &lt;dbl&gt;        &lt;dbl&gt;
+ 1 St. John's Aboriginal languages Aboriginal languages…              5           NA
+ 2 Halifax    Aboriginal languages Aboriginal languages…              5            0
+ 3 Moncton    Aboriginal languages Aboriginal languages…              0            0
+ 4 Saint John Aboriginal languages Aboriginal languages…              0            0
+ 5 Saguenay   Aboriginal languages Aboriginal languages…              5            5
+# … with 7,485 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
       <p>
         Now if we apply the <c>summarize</c> function as above, we see that we no longer get the minimum
         and maximum returned, but just an <c>NA</c> instead:
@@ -1192,6 +1531,12 @@ summarize(region_lang_na,
           max_most_at_home = max(most_at_home))
         </input>
       </program>
+      <pre>
+# A tibble: 1 × 2
+  min_most_at_home max_most_at_home
+             &lt;dbl&gt;            &lt;dbl&gt;
+1               NA               NA
+      </pre>
       <p>
         We can fix this by adding the <c>na.rm = TRUE</c> as explained above:
       </p>
@@ -1202,6 +1547,12 @@ summarize(region_lang_na,
           max_most_at_home = max(most_at_home, na.rm = TRUE))
         </input>
       </program>
+      <pre>
+# A tibble: 1 × 2
+  min_most_at_home max_most_at_home
+             &lt;dbl&gt;            &lt;dbl&gt;
+1                0          3836770
+      </pre>
     </subsection>
 
     <subsection xml:id="sec-wrangling-summarize-groups">
@@ -1232,6 +1583,17 @@ group_by(region_lang, region) |&gt;
     )
         </input>
       </program>
+      <pre>
+# A tibble: 35 × 3
+   region         min_most_at_home max_most_at_home
+   &lt;chr&gt;                     &lt;dbl&gt;            &lt;dbl&gt;
+ 1 St. John's                    0           198640
+ 2 Halifax                       0           371215
+ 3 Moncton                       0            96160
+ 4 Saint John                    0           118520
+ 5 Saguenay                      0           157095
+# … with 30 more rows
+      </pre>
       <p>
         Notice that <c>group_by</c> on its own doesn&#x2019;t change the way the data looks. In the output
         below, the grouped data set looks the same, and it doesn&#x2019;t <em>appear</em> to be grouped by
@@ -1243,6 +1605,18 @@ group_by(region_lang, region) |&gt;
 group_by(region_lang, region)
         </input>
       </program>
+      <pre>
+# A tibble: 7,490 × 7
+# Groups:   region [35]
+   region     category             language              mother_tongue most_at_home
+   &lt;chr&gt;      &lt;chr&gt;                &lt;chr&gt;                         &lt;dbl&gt;        &lt;dbl&gt;
+ 1 St. John's Aboriginal languages Aboriginal languages…              5            0
+ 2 Halifax    Aboriginal languages Aboriginal languages…              5            0
+ 3 Moncton    Aboriginal languages Aboriginal languages…              0            0
+ 4 Saint John Aboriginal languages Aboriginal languages…              0            0
+ 5 Saguenay   Aboriginal languages Aboriginal languages…              5            5
+# … with 7,485 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
     </subsection>
 
     <subsection xml:id="sec-wrangling-summarize-many">
@@ -1271,6 +1645,12 @@ region_lang |&gt;
   summarize(across(mother_tongue:lang_known, max))
         </input>
       </program>
+      <pre>
+# A tibble: 1 × 4
+  mother_tongue most_at_home most_at_work lang_known
+          &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+1       3061820      3836770      3218725    5600480
+      </pre>
       <note>
         <p>
           Similar to when we use base R statistical summary functions (e.g., <c>max</c>, <c>min</c>,
@@ -1287,6 +1667,12 @@ region_lang_na |&gt;
   summarize(across(mother_tongue:lang_known, ~ max(.x, na.rm = TRUE)))
           </input>
         </program>
+        <pre>
+# A tibble: 1 × 4
+  mother_tongue most_at_home most_at_work lang_known
+          &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+1       3061820      3836770      3218725    5600480
+        </pre>
         <p>
           The meaning of this unusual syntax is a bit beyond the scope of this book, but interested
           readers can look up <em>anonymous functions</em> in the <c>purrr</c> package from
@@ -1311,6 +1697,19 @@ region_lang |&gt;
   map(max)
         </input>
       </program>
+      <pre>
+$mother_tongue
+[1] 3061820
+
+$most_at_home
+[1] 3836770
+
+$most_at_work
+[1] 3218725
+
+$lang_known
+[1] 5600480
+      </pre>
       <note>
         <p>
           The <c>map</c> function comes from the <c>purrr</c> package. But since <c>purrr</c> is part of
@@ -1369,6 +1768,12 @@ region_lang |&gt;
   map_dfr(max)
         </input>
       </program>
+      <pre>
+# A tibble: 1 × 4
+  mother_tongue most_at_home most_at_work lang_known
+          &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+1       3061820      3836770      3218725    5600480
+      </pre>
       <note>
         <p>
           Similar to when we use base R statistical summary functions (e.g., <c>max</c>, <c>min</c>,
@@ -1387,6 +1792,12 @@ region_lang_na |&gt;
   map_dfr(max, na.rm = TRUE)
           </input>
         </program>
+        <pre>
+# A tibble: 1 × 4
+  mother_tongue most_at_home most_at_work lang_known
+          &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+1       3061820      3836770      3218725    5600480
+        </pre>
       </note>
       <p>
         The <c>map</c> functions are generally quite useful for solving many problems involving
@@ -1422,6 +1833,17 @@ region_lang |&gt;
   mutate(across(mother_tongue:lang_known, as.integer))
       </input>
     </program>
+    <pre>
+# A tibble: 7,490 × 7
+   region     category             language              mother_tongue most_at_home
+   &lt;chr&gt;      &lt;chr&gt;                &lt;chr&gt;                         &lt;int&gt;        &lt;int&gt;
+ 1 St. John's Aboriginal languages Aboriginal languages…              5            0
+ 2 Halifax    Aboriginal languages Aboriginal languages…              5            0
+ 3 Moncton    Aboriginal languages Aboriginal languages…              0            0
+ 4 Saint John Aboriginal languages Aboriginal languages…              0            0
+ 5 Saguenay   Aboriginal languages Aboriginal languages…              5            5
+# … with 7,485 more rows, and 2 more variables: most_at_work &lt;int&gt;, lang_known &lt;int&gt;
+    </pre>
   </section>
 
   <section xml:id="sec-wrangling-rowwise">
@@ -1455,6 +1877,18 @@ region_lang |&gt;
                          lang_known)))
       </input>
     </program>
+    <pre>
+# A tibble: 7,490 × 5
+# Rowwise: 
+   mother_tongue most_at_home most_at_work lang_known maximum
+           &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+ 1             5            0            0          0       5
+ 2             5            0            0          0       5
+ 3             0            0            0          0       0
+ 4             0            0            0          0       0
+ 5             5            5            0          0       5
+# … with 7,485 more rows
+    </pre>
     <p>
       We see that we get an additional column added to the data frame, named <c>maximum</c>, which is
       the maximum value between <c>mother_tongue</c>, <c>most_at_home</c>, <c>most_at_work</c> and
