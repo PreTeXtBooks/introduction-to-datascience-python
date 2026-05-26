@@ -81,6 +81,9 @@
         corresponds to a variable, and each row corresponds to an observation. For example,
         <xref ref="fig-wrangling-obs"/> displays a data set of city populations. Here, the variables are
         &#x201C;region, year, population&#x201D;; each of these are properties that can be collected or measured.
+        The first observation is &#x201C;Toronto, 2016, 2235145&#x201D;; these are the values that the three variables
+        take for the first entity in the data set. There are 13 entities in the data set in total,
+        corresponding to the 13 rows in <xref ref="fig-wrangling-obs"/>.
       </p>
 
       <figure xml:id="fig-wrangling-obs">
@@ -337,6 +340,14 @@ class(can_lang)
       <idx><h>tidy data</h><h>arguments for</h></idx>
       is tidy, you can manipulate it, plot it, and analyze it using the same tools.
     </p>
+    <p>
+      If your data is <em>not</em> tidy, you will have to write special bespoke code in your analysis that
+      will not only be error-prone, but hard for others to understand. Beyond making your analysis more
+      accessible to others and less error-prone, tidy data is also typically easy for humans to
+      interpret. Given these benefits, it is well worth spending the time to get your data into a tidy
+      format upfront. Fortunately, there are many well-designed <c>tidyverse</c> data cleaning/wrangling
+      tools to help you easily tidy your data. Let&#x2019;s explore them below!
+    </p>
     <note>
       <p>
         Is there only one shape for tidy data for a given data set? Not necessarily! It depends on the
@@ -358,6 +369,51 @@ class(can_lang)
         for human readability and understanding, and humans create data sets. In
         <xref ref="fig-wrangling-wide-to-long"/>, the table on the left is in an untidy, &#x201C;wide&#x201D;
         format because the year values (2006, 2011, 2016) are stored as column names.
+      </p>
+      <p>
+        For humans, this table is easy to read, which is why you will often find data stored in this
+        wide format. However, this format is difficult to work with when performing data visualization or
+        statistical analysis using R. For example, if we wanted to find the latest year it would be
+        challenging because the year values are stored as column names instead of as values in a single
+        column. So before we could apply a function to find the latest year (for example, by using
+        <c>max</c>), we would have to first extract the column names to get them as a vector and then
+        apply a function to extract the latest year. The problem only gets worse if you would like to
+        find the value for the population for a given region for the latest year. Both of these tasks are
+        greatly simplified once the data is tidied.
+      </p>
+      <p>
+        Another problem with data in this format is that we don&#x2019;t know what the numbers under each year
+        actually represent. Do those numbers represent population size? Land area? It&#x2019;s not clear. To
+        solve both of these problems, we can reshape this data set to a tidy data format by creating a
+        column called &#x201C;year&#x201D; and a column called &#x201C;population.&#x201D; This transformation&#x2014;which makes the data
+        &#x201C;longer&#x201D;&#x2014;is shown as the right table in <xref ref="fig-wrangling-wide-to-long"/>.
+        And as a consequence, the values for population for the various cities
+        over these years are also split across several columns.
+      </p>
+
+      <p>
+        For humans, this table is easy to read, which is why you will often find data
+        stored in this wide format. However, this format is difficult to work with
+        when performing data visualization or statistical analysis using R. For
+        example, if we wanted to find the latest year it would be challenging because
+        the year values are stored as column names instead of as values in a single
+        column. So before we could apply a function to find the latest year (for
+        example, by using <c>max</c>), we would have to first extract the column names
+        to get them as a vector and then apply a function to extract the latest year.
+        The problem only gets worse if you would like to find the value for the
+        population for a given region for the latest year. Both of these tasks are
+        greatly simplified once the data is tidied.
+      </p>
+
+      <p>
+        Another problem with data in this format is that we don&#x2019;t know what the
+        numbers under each year actually represent. Do those numbers represent
+        population size? Land area? It&#x2019;s not clear.
+        To solve both of these problems, we can reshape this data set to a tidy
+        data format by creating a column called &#x201C;year&#x201D; and a column called
+        &#x201C;population.&#x201D; This transformation&#x2014;which makes the data
+        &#x201C;longer&#x201D;&#x2014;is shown as the right table in
+        <xref ref="fig-wrangling-wide-to-long"/>.
       </p>
 
       <figure xml:id="fig-wrangling-wide-to-long">
@@ -401,9 +457,16 @@ lang_wide
         <xref ref="fig-wrangling-pivot-longer-with-table"/> represents the data in the &#x201C;wide&#x201D;
         (messy) format. From a data analysis perspective, this format is not ideal because the values of
         the variable <em>region</em> (Toronto, Montr&#xe9;al, Vancouver, Calgary, and Edmonton) are stored as
-        column names. Additionally, the <em>mother tongue</em> variable values are spread across multiple
+        column names. Thus they are not easily accessible to the data analysis functions we will apply to
+        our data set. Additionally, the <em>mother tongue</em> variable values are spread across multiple
         columns, which will prevent us from doing any desired visualization or statistical tasks until we
-        combine them into one column.
+        combine them into one column. For instance, suppose we want to know the languages with the
+        highest number of Canadians reporting it as their mother tongue among all five regions. This
+        question would be tough to answer with the data in its current format. We <em>could</em> find the
+        answer with the data in this format, though it would be much easier to answer if we tidy our data
+        first. If mother tongue were instead stored as one column, as shown in the tidy data on the right
+        in <xref ref="fig-wrangling-pivot-longer-with-table"/>, we could simply use the <c>max</c>
+        function in one line of code to get the maximum value.
       </p>
 
       <figure xml:id="fig-wrangling-pivot-longer-with-table">
@@ -460,6 +523,17 @@ lang_mother_tidy
           Generally speaking, you should limit each line of code to about 80 characters.
         </p>
       </note>
+      <p>
+        The data above is now tidy because all three criteria for tidy data have now
+        been met:
+      </p>
+      <ol>
+        <li><p>All the variables (<c>category</c>, <c>language</c>, <c>region</c> and <c>mother_tongue</c>) are
+          now their own columns in the data frame.</p></li>
+        <li><p>Each observation, (i.e., each language in a region) is in a single row.</p></li>
+        <li><p>Each value is a single cell, i.e., its row, column position in the data
+          frame is not shared with another value.</p></li>
+      </ol>
     </subsection>
 
     <subsection xml:id="sec-wrangling-pivot-wider">
@@ -468,9 +542,24 @@ lang_mother_tidy
         Suppose we have observations spread across multiple rows rather than in a single row. For
         example, in <xref ref="fig-wrangling-long-to-wide"/>, the table on the left is in an untidy,
         long format because the <c>count</c> column contains three variables (population, commuter
-        count, and year the city was incorporated) and information about each observation is split across
-        three rows.
+        count, and year the city was incorporated) and information about each observation
+        (here, population, commuter, and incorporated values for a region) is split across three rows.
+        Remember: one of the criteria for tidy data
+        is that each observation must be in a single row.
         <idx><h>pivot_wider</h></idx>
+      </p>
+
+      <p>
+        Using data in this format&#x2014;where two or more variables are mixed together
+        in a single column&#x2014;makes it harder to apply many usual <c>tidyverse</c> functions.
+        For example, finding the maximum number of commuters
+        would require an additional step of filtering for the commuter values
+        before the maximum can be computed.
+        In comparison, if the data were tidy,
+        all we would have to do is compute the maximum value for the commuter column.
+        To reshape this untidy data set to a tidy (and in this case, wider) format,
+        we need to create columns called &#x201C;population&#x201D;, &#x201C;commuters&#x201D;, and &#x201C;incorporated.&#x201D;
+        This is illustrated in the right table of <xref ref="fig-wrangling-long-to-wide"/>.
       </p>
 
       <figure xml:id="fig-wrangling-long-to-wide">
@@ -502,8 +591,18 @@ lang_long
 # … with 2,135 more rows
       </pre>
       <p>
-        <xref ref="fig-wrangling-pivot-wider-table"/> shows how this data will be tidied using the
-        <c>pivot_wider</c> function.
+        What makes the data set shown above untidy?
+        In this example, each observation is a language in a region.
+        However, each observation is split across multiple rows:
+        one where the count for <c>most_at_home</c> is recorded,
+        and the other where the count for <c>most_at_work</c> is recorded.
+        Suppose the goal with this data was to
+        visualize the relationship between the number of
+        Canadians reporting their primary language at home and work.
+        Doing that would be difficult with this data in its current form,
+        since these two variables are stored in the same column.
+        <xref ref="fig-wrangling-pivot-wider-table"/> shows how this data
+        will be tidied using the <c>pivot_wider</c> function.
       </p>
 
       <figure xml:id="fig-wrangling-pivot-wider-table">
@@ -542,7 +641,39 @@ lang_home_tidy
  5 Vancouver Aboriginal languages Aboriginal languages,…            15            0
 # … with 1,065 more rows
       </pre>
-    </subsection>
+      <p>The data above is now tidy! We can go through the three criteria again to check that this data is a tidy data set.</p>
+      <ol>
+        <li><p>All the statistical variables are their own columns in the data frame (i.e., <c>most_at_home</c> and <c>most_at_work</c> have been separated into their own columns in the data frame).</p></li>
+        <li><p>Each observation (i.e., each language in a region) is in a single row.</p></li>
+        <li><p>Each value is a single cell (i.e., its row, column position in the data frame is not shared with another value).</p></li>
+      </ol>
+      <p>
+        You might notice that we have the same number of columns in the tidy data set as we did in the
+        messy one. Therefore <c>pivot_wider</c> didn&#x2019;t really &#x201C;widen&#x201D; the data, as the name suggests.
+        This is just because the original <c>type</c> column only had two categories in it. If it had
+        more than two, <c>pivot_wider</c> would have created more columns, and we would see the data set
+        &#x201C;widen.&#x201D;
+      </p>
+     <p>
+       The data above is now tidy! We can go through the three criteria again to check
+       that this data is a tidy data set.
+     </p>
+     <ol>
+       <li><p>All the statistical variables are their own columns in the data frame (i.e.,
+         <c>most_at_home</c>, and <c>most_at_work</c> have been separated into their own
+         columns in the data frame).</p></li>
+       <li><p>Each observation, (i.e., each language in a region) is in a single row.</p></li>
+       <li><p>Each value is a single cell (i.e., its row, column position in the data
+         frame is not shared with another value).</p></li>
+     </ol>
+     <p>
+       You might notice that we have the same number of columns in the tidy data set as
+       we did in the messy one. Therefore <c>pivot_wider</c> didn&#x2019;t really &#x201C;widen&#x201D; the data,
+       as the name suggests. This is just because the original <c>type</c> column only had
+       two categories in it. If it had more than two, <c>pivot_wider</c> would have created
+       more columns, and we would see the data set &#x201C;widen.&#x201D;
+     </p>
+   </subsection>
 
     <subsection xml:id="sec-wrangling-separate">
       <title>Tidying up: using <c>separate</c> to deal with multiple delimiters</title>
@@ -729,8 +860,13 @@ column_range
 # … with 1,065 more rows
     </pre>
     <p>
-      Suppose instead we wanted to extract columns that followed a particular pattern rather than just
-      selecting a range. In particular, we can use the <c>select</c> helper
+     Notice that we get the same output as we did above,
+     but with less (and clearer!) code. This type of operator
+     is especially handy for large data sets.
+   </p>
+   <p>
+     Suppose instead we wanted to extract columns that followed a particular pattern rather than just
+     selecting a range. In particular, we can use the <c>select</c> helper
       <idx><h>select</h><h>starts_with</h></idx>
       <c>starts_with</c> to choose only the columns that start with the word &#x201C;most&#x201D;:
     </p>

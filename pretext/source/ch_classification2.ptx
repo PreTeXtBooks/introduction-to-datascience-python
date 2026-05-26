@@ -703,8 +703,9 @@ cancer_test_predictions |&gt;
       </pre>
       <p>
         In the metrics data frame, we filtered the <c>.metric</c> column
-        since we are interested in the <c>accuracy</c> row. Looking at the
-        value of the <c>.estimate</c> variable shows that the estimated
+        since we are interested in the <c>accuracy</c> row. Other entries
+        involve other metrics that are beyond the scope of this book. Looking
+        at the value of the <c>.estimate</c> variable shows that the estimated
         accuracy of the classifier on the test data was approximately 86%.
         To compute the precision and recall, we can use the <c>precision</c>
         and <c>recall</c> functions from <c>tidymodels</c>. We first check
@@ -724,7 +725,8 @@ cancer_test_predictions |&gt; pull(Class) |&gt; levels()
         will set the <c>truth</c> and <c>estimate</c> arguments to
         <c>Class</c> and <c>.pred_class</c> as before, but also specify that
         the <q>positive</q> class corresponds to the first factor level via
-        <c>event_level="first"</c>.
+        <c>event_level="first"</c>. If the labels were in the other order,
+        we would have had to use <c>event_level="second"</c> instead.
       </p>
       <program language="r">
         <input>
@@ -769,6 +771,13 @@ Prediction Malignant Benign
  Malignant        40      8
  Benign           15     80
       </pre>
+      <p>
+        The confusion matrix shows 40 observations were correctly predicted as
+        malignant, and 80 were correctly predicted as benign. It also shows
+        that the classifier made some mistakes; in particular, it classified 15
+        observations as benign when they were actually malignant, and 8
+        observations as malignant when they were actually benign.
+      </p>
     </subsection>
 
     <subsection xml:id="subsec-classif2-critical-analysis">
@@ -790,8 +799,18 @@ Prediction Malignant Benign
         time, a classifier with 99% accuracy is not terribly impressive (just
         always guess benign!). And beyond just accuracy, we need to consider
         the precision and recall: as mentioned earlier, the <em>kind</em> of
-        mistake the classifier makes is important in many applications as
-        well.
+        mistake the classifier makes is important in many applications as well.
+        In the previous example with 99% benign observations, it might be very
+        bad for the classifier to predict <q>benign</q> when the actual class is
+        <q>malignant</q> (a false negative), as this might result in a patient
+        not receiving appropriate medical attention. In other words, in this
+        context, we need the classifier to have a <em>high recall</em>. On the
+        other hand, it might be less bad for the classifier to guess
+        <q>malignant</q> when the actual class is <q>benign</q> (a false
+        positive), as the patient will then likely see a doctor who can provide
+        an expert diagnosis. In other words, we are fine with sacrificing some
+        precision in the interest of achieving high recall. This is why it is
+        important not only to look at accuracy, but also the confusion matrix.
       </p>
       <p>
         However, there is always an easy baseline that you can compare to for
@@ -834,14 +853,15 @@ cancer_proportions
         neighbors classifier we built does quite a bit better than this, with
         an accuracy of approximately 86%. This means that from the perspective
         of accuracy, the K-nearest neighbors classifier improved quite a bit
-        on the basic majority classifier. However, we still need to be
+        on the basic majority classifier. Hooray! But we still need to be
         cautious; in this application, it is likely very important not to
-        misdiagnose any malignant tumors. The confusion matrix above shows
-        that the classifier does, indeed, misdiagnose a significant number of
-        malignant tumors as benign. Therefore, even though the accuracy
-        improved upon the majority classifier, our critical analysis suggests
-        that this classifier may not have appropriate performance for the
-        application.
+        misdiagnose any malignant tumors to avoid missing patients who actually
+        need medical care. The confusion matrix above shows that the classifier
+        does, indeed, misdiagnose a significant number of malignant tumors as
+        benign (15 out of 55 malignant tumors, or about 27%). Therefore, even
+        though the accuracy improved upon the majority classifier, our critical
+        analysis suggests that this classifier may not have appropriate
+        performance for the application.
       </p>
     </subsection>
   </section>
@@ -902,7 +922,13 @@ cancer_proportions
         produce multiple different classifiers. But while we are tuning the
         classifier, we are free to create multiple classifiers based on
         multiple splits of the training data, evaluate them, and then choose a
-        parameter value based on <em>all</em> of the different results.
+        parameter value based on <em>all</em> of the different results. If we
+        just split our overall training data once, our best parameter choice
+        will depend strongly on whatever data was lucky enough to end up in the
+        validation set. Perhaps using multiple different train/validation
+        splits, we'll get a better estimate of accuracy, which will lead to a
+        better choice of the number of neighbors <m>K</m> for the overall set
+        of training data.
       </p>
       <p>
         Let's investigate this idea in R! In particular, we will generate five
@@ -1215,7 +1241,9 @@ accuracy_vs_k
         We can also obtain the number of neighbours with the highest accuracy
         programmatically by accessing the <c>neighbors</c> variable in the
         <c>accuracies</c> data frame where the <c>mean</c> variable is
-        highest.
+        highest. Note that it is still useful to visualize the results as we
+        did above since this provides additional information on how the model
+        performance varies.
       </p>
       <program language="r">
         <input>
@@ -1252,6 +1280,15 @@ best_k
           situation, if <m>K</m> is too large, predicting becomes
           expensive!).</p></li>
       </ul>
+      <p>
+        We know that <m>K = 36</m> provides the highest estimated accuracy.
+        Further, <xref ref="fig-classif2-accuracy-vs-k"/> shows that the
+        estimated accuracy changes by only a small amount if we increase or
+        decrease <m>K</m> near <m>K = 36</m>. And finally, <m>K = 36</m> does
+        not create a prohibitively expensive computational cost of training.
+        Considering these three points, we would indeed select <m>K = 36</m>
+        for the classifier.
+      </p>
     </subsection>
 
     <subsection xml:id="subsec-classif2-underfitting-overfitting">

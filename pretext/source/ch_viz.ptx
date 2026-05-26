@@ -64,12 +64,14 @@
       that properly just yet.
     </p>
     <p>
-      The types of plot that we introduce in this book are shown in
-      <xref ref="fig-viz-plot-sketches"/>; which one you should select depends on your
-      data and the question you want to answer. In general, the guiding principles of
-      when to use each type of plot are as follows (see also Chapter 5 of
-      <em>Fundamentals of Data Visualization</em> <xref ref="wilkeviz"/> for a
-      directory of many plot types):
+      As with most coding tasks, it is totally fine (and quite common) to make
+      mistakes and iterate a few times before you find the right visualization for
+      your data and question. There are many different kinds of plotting graphics
+      available to use (see Chapter 5 of <em>Fundamentals of Data Visualization</em>
+      <xref ref="wilkeviz"/> for a directory). The types of plot that we introduce
+      in this book are shown in <xref ref="fig-viz-plot-sketches"/>; which one you
+      should select depends on your data and the question you want to answer. In
+      general, the guiding principles of when to use each type of plot are as follows:
     </p>
     <idx><h>visualization</h><h>line</h></idx>
     <idx><h>visualization</h><h>histogram</h></idx>

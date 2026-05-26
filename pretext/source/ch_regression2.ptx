@@ -121,9 +121,18 @@
       in this particular problem, the idea of a 0 square-foot house is a bit
       silly; but you can think of <m>\beta_0</m> here as the &#x201C;base
       price,&#x201D; and <m>\beta_1</m> as the increase in price for each
-      square foot of space. You should only make predictions roughly within the
-      range of your original data, and perhaps a bit beyond it only if it makes
-      sense.
+      square foot of space. Let&#x2019;s push this thought even further: what
+      would happen in the equation for the line if you tried to evaluate the
+      price of a house with size 6 <em>million</em> square feet? Or what about
+      <em>negative</em> 2,000 square feet? As it turns out, nothing in the
+      formula breaks; linear regression will happily make predictions for
+      nonsensical predictor values if you ask it to. But even though you
+      <em>can</em> make these wild predictions, you shouldn&#x2019;t. You
+      should only make predictions roughly within the range of your original
+      data, and perhaps a bit beyond it only if it makes sense. For example,
+      the data in <xref ref="fig-regression2-lin-reg1"/> only reaches around
+      800 square feet on the low end, but it would probably be reasonable to use
+      the linear regression model to make a prediction at 600 square feet, say.
     </p>
     <p>
       Once we have the coefficients <m>\beta_0</m> and <m>\beta_1</m>, we can
@@ -261,9 +270,10 @@ Coefficients:
     </p>
     <me>\text{house sale price} = -14{,}648 + 147 \cdot (\text{house size}).</me>
     <p>
-      In other words, the model predicts that every extra square foot increases
-      the cost of the house by approximately $147. Finally, we predict on the
-      test data set to assess how well our model does:
+      In other words, the model predicts that houses start at $-14,648 for 0
+      square feet, and that every extra square foot increases the cost of the
+      house by approximately $147. Finally, we predict on the test data set to
+      assess how well our model does:
     </p>
     <program language="r">
       <input>
@@ -286,12 +296,17 @@ lm_test_results
     <p>
       Our final model&#x2019;s test error as assessed by RMSPE
       <idx>RMSPE</idx>
-      is approximately $83,437. To visualize the simple linear regression
-      model, we can plot the predicted house sale price across all possible
-      house sizes we might encounter. Since our model is linear, we only need
-      to compute the predicted price of the minimum and maximum house size,
-      and then connect them with a straight line. We superimpose this
-      prediction line on a scatter plot of the original housing price data.
+      is approximately $83,437. Remember that this is in units of the response
+      variable, and here that is US Dollars (USD). Does this mean our model is
+      &#x201C;good&#x201D; at predicting house sale price based off of the
+      predictor of home size? Again, answering this is tricky and requires
+      knowledge of how you intend to use the prediction. To visualize the simple
+      linear regression model, we can plot the predicted house sale price across
+      all possible house sizes we might encounter. Since our model is linear, we
+      only need to compute the predicted price of the minimum and maximum house
+      size, and then connect them with a straight line. We superimpose this
+      prediction line on a scatter plot of the original housing price data, so
+      that we can qualitatively assess if the model seems to fit the data well.
       <xref ref="fig-regression2-lm-predict-all"/> displays the result.
     </p>
     <program language="r">
@@ -393,7 +408,12 @@ coeffs
       model from a simple linear regression will underfit,
       <idx><h>underfitting</h><h>regression</h></idx>
       meaning that model/predicted values do not match the actual observed
-      values very well. On such a data set, K-NN regression may fare better.
+      values very well. Such a model would probably have a quite high RMSE when
+      assessing model goodness of fit on the training data and a quite high
+      RMSPE when assessing model prediction quality on a test data set. On such
+      a data set, K-NN regression may fare better. Additionally, there are
+      other types of regression you can learn about in future books that may do
+      even better at predicting with such data.
     </p>
     <p>
       How do these two models compare on the Sacramento house prices data set?
@@ -411,6 +431,14 @@ coeffs
       data is known as <term>extrapolation</term>;
       <idx>extrapolation</idx>
       K-NN and linear models behave quite differently when extrapolating.
+      Depending on the application, the flat or constant slope trend may make
+      more sense. For example, if our housing data were slightly different, the
+      linear model may have actually predicted a <em>negative</em> price for a
+      small house (if the intercept <m>\beta_0</m> was negative), which
+      obviously does not match reality. On the other hand, the trend of
+      increasing house size corresponding to increasing house price probably
+      continues for large houses, so the &#x201C;flat&#x201D; extrapolation of
+      K-NN likely does not match reality.
     </p>
   </section>
 
@@ -429,7 +457,9 @@ coeffs
       the data for linear regression. Note once again that we have the same
       concerns regarding multiple predictors as in the settings of multivariable
       K-NN regression and classification: having more predictors is <em>not</em>
-      always better.
+      always better. But because the same predictor selection algorithm from the
+      classification chapter extends to the setting of linear regression, it
+      will not be covered again in this chapter.
     </p>
     <p>
       We will demonstrate multivariable linear regression using the Sacramento
@@ -507,8 +537,10 @@ lm_mult_test_results
       We see that the predictions from linear regression with two predictors
       form a flat plane. This is the hallmark of linear regression, and differs
       from the wiggly, flexible surface we get from other methods such as K-NN
-      regression. We can extract the slope values from our model object
-      as shown below:
+      regression. As discussed, this can be advantageous in one aspect, which
+      is that for each predictor, we can get slopes/intercept from linear
+      regression, and thus describe the plane mathematically. We can extract the
+      slope values from our model object as shown below:
     </p>
     <program language="r">
       <input>
@@ -548,11 +580,24 @@ mcoeffs
       model; we can write a mathematical equation that explains how each
       predictor is affecting the predictions. But as always, we should question
       how well multivariable linear regression is doing compared to the other
-      tools we have. The RMSPE for the multivariable linear regression model
-      is approximately $83,297, which is less than the prediction error for the
-      multivariable K-NN regression model, indicating that we should likely
-      choose linear regression for predictions of house sale price on this
-      data set.
+      tools we have, such as simple linear regression and multivariable K-NN
+      regression. If this comparison is part of the model tuning process&#x2014;for
+      example, if we are trying out many different sets of predictors for
+      multivariable linear and K-NN regression&#x2014;we must perform this
+      comparison using cross-validation on only our training data. But if we
+      have already decided on a small number (e.g., 2 or 3) of tuned candidate
+      models and we want to make a final comparison, we can do so by comparing
+      the prediction error of the methods on the test data. The RMSPE for the
+      multivariable linear regression model is approximately $83,297, which is
+      less than the prediction error for the multivariable K-NN regression
+      model, indicating that we should likely choose linear regression for
+      predictions of house sale price on this data set. Revisiting the simple
+      linear regression model with only a single predictor from earlier in this
+      chapter, we see that the RMSPE for that model was $83,437, which is
+      almost the same as that of our more complex model. As mentioned earlier,
+      this is not always the case: often including more predictors will either
+      positively or negatively impact the prediction performance on unseen test
+      data.
     </p>
     <p>
       We obtain the RMSPE for the multivariable model via:
@@ -575,6 +620,12 @@ lm_mult_test_results
   <!-- ============================================================ -->
   <section xml:id="sec-regression2-multicollinearity">
     <title>Multicollinearity and outliers</title>
+    <p>
+      What can go wrong when performing (possibly multivariable) linear
+      regression? This section will introduce two common issues&#x2014;<em>outliers</em>
+      and <em>collinear predictors</em>&#x2014;and illustrate their impact on
+      predictions.
+    </p>
 
     <subsection xml:id="subsec-regression2-outliers">
       <title>Outliers</title>
@@ -584,19 +635,24 @@ lm_mult_test_results
         regression, these are points that have a vertical distance to the line
         of best fit that is either much higher or much lower than you might
         expect based on the rest of the data. The problem with outliers is that
-        they can have <em>too much influence</em> on the line of best fit.
+        they can have <em>too much influence</em> on the line of best fit. In
+        general, it is very difficult to judge accurately which data are
+        outliers without advanced techniques that are beyond the scope of this
+        book.
       </p>
       <p>
         To illustrate what can happen when you have outliers,
         <xref ref="fig-regression2-outlier-small"/> shows a small subset of
         the Sacramento housing data, except we have added a <em>single</em>
         data point (highlighted in red). This house is 5,000 square feet in
-        size, and sold for only $50,000. This is not representative of the
-        real housing market values that the other data points follow; the data
-        point is an <em>outlier</em>. In blue we plot the original line of best
-        fit, and in red we plot the new line of best fit including the outlier.
-        You can see how different the red line is from the blue line, which is
-        entirely caused by that one extra outlier data point.
+        size, and sold for only $50,000. Unbeknownst to the data analyst, this
+        house was sold by a parent to their child for an absurdly low price.
+        This is not representative of the real housing market values that the
+        other data points follow; the data point is an <em>outlier</em>. In blue
+        we plot the original line of best fit, and in red we plot the new line
+        of best fit including the outlier. You can see how different the red
+        line is from the blue line, which is entirely caused by that one extra
+        outlier data point.
       </p>
 
       <figure xml:id="fig-regression2-outlier-small">
@@ -680,9 +736,14 @@ lm_mult_test_results
       relationship with our response variable (sale price). But what should we
       do if we cannot immediately find such a nice variable? Well, sometimes it
       is just a fact that the variables in the data do not have enough of a
-      relationship with the response variable to provide useful predictions.
-      In cases like these, the only option is to obtain measurements of more
-      useful variables.
+      relationship with the response variable to provide useful predictions. For
+      example, if the only available predictor was <q>the current house
+      owner&#x2019;s favorite ice cream flavor,</q> we likely would have little
+      hope of using that variable to predict the house&#x2019;s sale price
+      (barring any future remarkable scientific discoveries about the
+      relationship between the housing market and homeowner ice cream
+      preferences). In cases like these, the only option is to obtain
+      measurements of more useful variables.
     </p>
     <p>
       There are, however, a wide variety of cases where the predictor variables
@@ -745,7 +806,11 @@ df &lt;- df |&gt;
       variable <c>z</c>, as shown in
       <xref ref="fig-regression2-curve-transformed"/>.
       Here you can see that the transformed predictor <c>z</c> helps the
-      linear regression model make more accurate predictions.
+      linear regression model make more accurate predictions. Note that none of
+      the <c>y</c> response values have changed between
+      <xref ref="fig-regression2-curve"/> and
+      <xref ref="fig-regression2-curve-transformed"/>; the only change is that
+      the <c>x</c> values have been replaced by <c>z</c> values.
     </p>
 
     <figure xml:id="fig-regression2-curve-transformed">
