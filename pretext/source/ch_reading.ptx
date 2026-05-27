@@ -155,8 +155,6 @@ happy_data &lt;- read_csv("data/happiness_report.csv")
       We indicate the current working directory with a single dot <c>.</c>, and the previous directory with
       two dots <c>..</c>. So for instance, if we wanted to reach the <c>bike_share.csv</c> file from the
       <c>project3</c> folder, we could use the relative path <c>../project2/bike_share.csv</c>.
-    </p>
-    <p>
       We can even combine these two; for example, we could reach the <c>bike_share.csv</c> file using
       the (very silly) path <c>../project2/../project2/./bike_share.csv</c> with quite a few redundant
       directions: it says to go back a folder, then open <c>project2</c>, then go back a folder again,
@@ -170,12 +168,16 @@ happy_data &lt;- read_csv("data/happiness_report.csv")
       file&#x2019;s relative path is often the same across different computers, while a file&#x2019;s absolute path
       (the names of all of the folders between the computer&#x2019;s root, represented by <c>/</c>, and the file)
       isn&#x2019;t usually the same across different computers.
-    </p>
-    <p>
       For example, suppose Fatima and Jayden are working on a project together on the
       <c>happiness_report.csv</c> data. Fatima&#x2019;s file is stored at
-      <c>/home/Fatima/project3/data/happiness_report.csv</c>, while Jayden&#x2019;s is stored at
-      <c>/home/Jayden/project3/data/happiness_report.csv</c>. Even though Fatima and Jayden stored their
+</p><p>
+      <c>/home/Fatima/project3/data/happiness_report.csv</c>,
+</p><p>
+      while Jayden&#x2019;s is stored at
+</p><p>
+      <c>/home/Jayden/project3/data/happiness_report.csv</c>.
+</p><p>
+      Even though Fatima and Jayden stored their
       files in the same place on their computers (in their home folders), the absolute paths are different
       due to their different usernames. If Jayden has code that loads the <c>happiness_report.csv</c>
       data using an absolute path, the code won&#x2019;t work on Fatima&#x2019;s computer. But the relative path
@@ -189,7 +191,7 @@ happy_data &lt;- read_csv("data/happiness_report.csv")
       Beyond files stored on your computer (i.e., locally), we also need a way to locate resources
       stored elsewhere on the internet (i.e., remotely). For this purpose we use a
       <em>Uniform Resource Locator (URL)</em>, i.e., a web address that looks something
-      like <url href="https://datasciencebook.ca/" visual="datasciencebook.ca/"/>. URLs indicate the
+      like <url href="https://datasciencebook.ca/">https://datasciencebook.ca/</url>. URLs indicate the
       location of a resource on the internet, and start with a web domain, followed by a forward slash
       <c>/</c>, and then a path to where the resource is located on the remote machine.
       <idx><h>URL</h></idx>
@@ -279,14 +281,21 @@ canlang_data
       </program>
       <pre>
 # A tibble: 214 × 6
-   category                   language                mother_tongue most_at_home
-   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
- 1 Aboriginal languages       Aboriginal languages,…             590          235
- 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
- 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
- 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
- 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
-# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;</pre>
+## # A tibble: 214 × 6
+##    category          language mother_tongue most_at_home most_at_work lang_known
+##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+##  1 Aboriginal langu… Aborigi…           590          235           30        665
+##  2 Non-Official & N… Afrikaa…         10260         4785           85      23415
+##  3 Non-Official & N… Afro-As…          1150          445           10       2775
+##  4 Non-Official & N… Akan (T…         13460         5985           25      22150
+##  5 Non-Official & N… Albanian         26895        13135          345      31930
+##  6 Aboriginal langu… Algonqu…            45           10            0        120
+##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
+##  8 Non-Official & N… America…          2685         3020         1145      21930
+##  9 Non-Official & N… Amharic          22465        12785          200      33670
+## 10 Non-Official & N… Arabic          419890       223535         5585     629055
+## # ℹ 204 more rows
+     </pre>
     </subsection>
 
     <subsection xml:id="sec-reading-skip">
