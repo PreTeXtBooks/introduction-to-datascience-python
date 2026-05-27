@@ -2,11 +2,942 @@
 <chapter xml:id="ch-regression1" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Regression I: K-nearest neighbors</title>
 
-  <introduction>
+  <!-- ============================================================ -->
+  <section xml:id="sec-regression1-overview">
+    <title>Overview</title>
     <p>
-      This chapter is a skeleton placeholder for the PreTeXt version of the book.
-      Content will be filled in from the corresponding R Markdown source file.
+      This chapter continues our foray into answering predictive questions.
+      Here we will focus on predicting <em>numerical</em> variables
+      and will use <em>regression</em> to perform this task.
+      This is unlike the past two chapters, which focused on predicting categorical
+      variables via classification. However, regression does have many similarities
+      to classification: for example, just as in the case of classification,
+      we will split our data into training, validation, and test sets, we will
+      use <c>tidymodels</c> workflows, we will use a K-nearest neighbors (K-NN)
+      approach to make predictions, and we will use cross-validation to choose K.
+      Because of how similar these procedures are, make sure to read
+      <xref ref="ch-classification1"/> and <xref ref="ch-classification2"/>
+      before reading this one&#x2014;we will move a little bit faster here with the
+      concepts that have already been covered.
+      This chapter will primarily focus on the case where there is a single predictor,
+      but the end of the chapter shows how to perform
+      regression with more than one predictor variable, i.e.,
+      <em>multivariable regression</em>.
+      It is important to note that regression
+      can also be used to answer inferential and causal questions,
+      however that is beyond the scope of this book.
     </p>
-  </introduction>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-regression1-objectives">
+    <title>Chapter learning objectives</title>
+    <p>
+      By the end of the chapter, readers will be able to do the following:
+    </p>
+    <ul>
+      <li><p>Recognize situations where a regression analysis would be appropriate for making predictions.</p></li>
+      <li><p>Explain the K-nearest neighbors (K-NN) regression algorithm and describe how it differs from K-NN classification.</p></li>
+      <li><p>Interpret the output of a K-NN regression.</p></li>
+      <li><p>In a data set with two or more variables, perform K-nearest neighbors regression in R.</p></li>
+      <li><p>Evaluate K-NN regression prediction quality in R using the root mean squared prediction error (RMSPE).</p></li>
+      <li><p>Estimate the RMSPE in R using cross-validation or a test set.</p></li>
+      <li><p>Choose the number of neighbors in K-nearest neighbors regression by minimizing estimated cross-validation RMSPE.</p></li>
+      <li><p>Describe underfitting and overfitting, and relate it to the number of neighbors in K-nearest neighbors regression.</p></li>
+      <li><p>Describe the advantages and disadvantages of K-nearest neighbors regression.</p></li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-regression1-problem">
+    <title>The regression problem</title>
+    <p>
+      Regression, like classification, is a predictive <idx>predictive question</idx>
+      problem setting where we want
+      to use past information to predict future observations. But in the case of
+      regression, the goal is to predict <em>numerical</em> values instead of
+      <em>categorical</em> values.
+      The variable that you want to predict is often called the
+      <em>response variable</em>. <idx>response variable</idx>
+      For example, we could try to use the number of hours a person spends on
+      exercise each week to predict their race time in the annual Boston marathon. As
+      another example, we could try to use the size of a house to
+      predict its sale price. Both of these response variables&#x2014;race time and
+      sale price&#x2014;are numerical, and so predicting them given past data is
+      considered a regression problem.
+    </p>
+    <p>
+      Just like in the <idx><h>classification</h><h>comparison to regression</h></idx>
+      <idx><h>regression</h><h>comparison to classification</h></idx>
+      classification setting, there are many possible methods that we can use
+      to predict numerical response variables. In this chapter we will
+      focus on the <term>K-nearest neighbors</term> algorithm
+      (<xref ref="knnfix"/>, <xref ref="knncover"/>),
+      and in the next chapter we will study <term>linear regression</term>.
+      In your future studies, you might encounter regression trees, splines,
+      and general local regression methods; see the additional resources
+      section at the end of the next chapter for where to begin learning more about
+      these other methods.
+    </p>
+    <p>
+      Many of the concepts from classification map over to the setting of regression.
+      For example, a regression model predicts a new observation's response variable
+      based on the response variables for similar observations in the data set of
+      past observations. When building a regression model, we first split the data
+      into training and test sets, in order to ensure that we assess the performance
+      of our method on observations not seen during training. And finally, we can
+      use cross-validation to evaluate different choices of model parameters
+      (e.g., K in a K-nearest neighbors model). The major difference is that we
+      are now predicting numerical variables instead of categorical variables.
+    </p>
+    <note>
+      <p>
+        You can usually tell whether a <idx>categorical variable</idx>
+        <idx>numerical variable</idx> variable is numerical or
+        categorical&#x2014;and therefore whether you need to perform regression or
+        classification&#x2014;by taking the response variable for two observations
+        X and Y from your data, and asking the question, <q>is response variable X
+        <em>more</em> than response variable Y?</q> If the variable is categorical,
+        the question will make no sense. (Is blue more than red? Is benign more
+        than malignant?) If the variable is numerical, it will make sense. (Is 1.5
+        hours more than 2.25 hours? Is $500,000 more than $400,000?) Be careful
+        when applying this heuristic, though: sometimes categorical variables will
+        be encoded as numbers in your data (e.g., <q>1</q> represents
+        <q>benign</q>, and <q>0</q> represents <q>malignant</q>). In these cases
+        you have to ask the question about the <em>meaning</em> of the labels
+        (<q>benign</q> and <q>malignant</q>), not their values
+        (<q>1</q> and <q>0</q>).
+      </p>
+    </note>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-regression1-eda">
+    <title>Exploring a data set</title>
+    <p>
+      In this chapter and the next, we will study a data set
+      <idx>Sacramento real estate</idx> of
+      <url href="https://support.spatialkey.com/spatialkey-sample-csv-data/">932 real
+      estate transactions in Sacramento, California</url>
+      originally reported in the <em>Sacramento Bee</em> newspaper.
+      We first need to formulate a precise question that we want to answer.
+      In this example, our question is again predictive:
+      <idx><h>question</h><h>regression</h></idx>
+      Can we use the size of a house in the Sacramento, CA area to predict
+      its sale price? A rigorous, quantitative answer to this question might help
+      a realtor advise a client as to whether the price of a particular listing
+      is fair, or perhaps how to set the price of a new listing.
+      We begin the analysis by loading and examining the data, and setting the
+      seed value.
+    </p>
+    <idx><h>seed</h><h>set.seed</h></idx>
+    <program language="r">
+      <input>
+library(tidyverse)
+library(tidymodels)
+library(gridExtra)
+
+set.seed(5)
+
+sacramento &lt;- read_csv("data/sacramento.csv")
+sacramento
+      </input>
+    </program>
+    <pre>
+# A tibble: 932 x 9
+   city           zip      beds baths  sqft type           price latitude longitude
+   &lt;chr&gt;          &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+ 1 CITRUS HEIGHTS 95610       3     1   836 Residential    59222     38.6     -121.
+ 2 CITRUS HEIGHTS 95610       3     1   799 Residential    68212     38.6     -121.
+ 3 CITRUS HEIGHTS 95610       3     1  1193 Residential    68880     38.6     -121.
+ 4 CITRUS HEIGHTS 95610       3     2  1635 Residential   167500     38.6     -121.
+ 5 CITRUS HEIGHTS 95610       4     2  2688 Residential   239000     38.6     -121.
+ 6 ANTELOPE       95843       3     1  1077 Residential    68500     38.7     -121.
+ 7 ANTELOPE       95843       3     2  1200 Residential   171000     38.7     -121.
+ 8 ANTELOPE       95843       4     2  1560 Residential   220000     38.7     -121.
+ 9 ANTELOPE       95843       4     2  1957 Residential   250000     38.7     -121.
+10 ANTELOPE       95843       3     2  1575 Residential   192000     38.7     -121.
+# i 922 more rows
+    </pre>
+    <p>
+      The scientific question guides our initial exploration: the columns in the
+      data that we are interested in are <c>sqft</c> (house size, in livable
+      square feet) and <c>price</c> (house sale price, in US dollars (USD)).
+      The first step is to visualize the data as a scatter plot where we place
+      the predictor variable (house size) on the x-axis, and we place the
+      response variable that we want to predict (sale price) on the y-axis.
+      <idx><h>ggplot</h><h>geom_point</h></idx>
+      <idx><h>visualization</h><h>scatter</h></idx>
+    </p>
+    <note>
+      <p>
+        Given that the y-axis unit is dollars, we format the axis labels to put
+        dollar signs in front of the house prices, as well as commas to increase
+        the readability of the larger numbers. We can do this in R by passing the
+        <c>dollar_format</c> function (from the <c>scales</c> package) to the
+        <c>labels</c> argument of the <c>scale_y_continuous</c> function.
+      </p>
+    </note>
+    <program language="r">
+      <input>
+eda &lt;- ggplot(sacramento, aes(x = sqft, y = price)) +
+  geom_point(alpha = 0.4) +
+  xlab("House size (square feet)") +
+  ylab("Price (USD)") +
+  scale_y_continuous(labels = dollar_format()) +
+  theme(text = element_text(size = 12))
+
+eda
+      </input>
+    </program>
+    <figure xml:id="fig-sacr-eda">
+      <caption>Scatter plot of price (USD) versus house size (square feet).</caption>
+      <image source="images/regression1/sacr-eda.png" width="60%"/>
+    </figure>
+    <p>
+      The plot is shown in <xref ref="fig-sacr-eda"/>.
+      We can see that in Sacramento, CA, as the size of a house increases, so
+      does its sale price. Thus, we can reason that we may be able to use the
+      size of a not-yet-sold house (for which we don't know the sale price) to
+      predict its final sale price. Note that we do not suggest here that a
+      larger house size <em>causes</em> a higher sale price; just that house
+      price tends to increase with house size, and that we may be able to use
+      the latter to predict the former.
+    </p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-regression1-knn">
+    <title>K-nearest neighbors regression</title>
+    <p>
+      Much like in the case of classification, we can use a K-nearest
+      neighbors-based <idx><h>K-nearest neighbors</h><h>regression</h></idx>
+      approach in regression to make predictions.
+      Let's take a small sample of the data in
+      <xref ref="fig-sacr-eda"/> and walk through how K-nearest neighbors (K-NN)
+      works in a regression context before we dive in to creating our model
+      and assessing how well it predicts house sale price. This subsample is
+      taken to allow us to illustrate the mechanics of K-NN regression with a
+      few data points; later in this chapter we will use all the data.
+    </p>
+    <p>
+      To take a small random sample of size 30, we'll use the function
+      <c>slice_sample</c>, and input the data frame to sample from and the
+      number of rows to randomly select.
+      <idx>slice_sample</idx>
+    </p>
+    <program language="r">
+      <input>
+small_sacramento &lt;- slice_sample(sacramento, n = 30)
+      </input>
+    </program>
+    <p>
+      Next let's say we come across a 2,000 square-foot house in Sacramento we
+      are interested in purchasing, with an advertised list price of $350,000.
+      Should we offer to pay the asking price for this house, or is it
+      overpriced and we should offer less? Absent any other information, we can
+      get a sense for a good answer to this question by using the data we have
+      to predict the sale price given the sale prices we have already observed.
+      But in <xref ref="fig-sacr-small-eda"/>, you can see that we have no
+      observations of a house of size <em>exactly</em> 2,000 square feet.
+      How can we predict the sale price?
+    </p>
+    <program language="r">
+      <input>
+small_plot &lt;- ggplot(small_sacramento, aes(x = sqft, y = price)) +
+  geom_point() +
+  xlab("House size (square feet)") +
+  ylab("Price (USD)") +
+  scale_y_continuous(labels = dollar_format()) +
+  geom_vline(xintercept = 2000, linetype = "dashed") +
+  theme(text = element_text(size = 12))
+
+small_plot
+      </input>
+    </program>
+    <figure xml:id="fig-sacr-small-eda">
+      <caption>Scatter plot of price (USD) versus house size (square feet) with vertical line indicating 2,000 square feet on x-axis.</caption>
+      <image source="images/regression1/sacr-small-eda.png" width="60%"/>
+    </figure>
+    <p>
+      We will employ the same intuition from the classification chapter, and
+      use the neighboring points to the new point of interest to suggest/predict
+      what its sale price might be. For the example shown in
+      <xref ref="fig-sacr-small-eda"/>, we find and label the 5 nearest
+      neighbors to our observation of a house that is 2,000 square feet.
+      <idx>mutate</idx> <idx>slice_min</idx> <idx>abs</idx>
+    </p>
+    <program language="r">
+      <input>
+nearest_neighbors &lt;- small_sacramento |&gt;
+  mutate(diff = abs(2000 - sqft)) |&gt;
+  slice_min(diff, n = 5)
+
+nearest_neighbors
+      </input>
+    </program>
+    <pre>
+# A tibble: 5 x 10
+  city        zip    beds baths  sqft type          price latitude longitude  diff
+  &lt;chr&gt;       &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
+1 SACRAMENTO  95820     3     2  1963 Residential  155000     38.5     -121.    37
+2 SACRAMENTO  95820     4     2  2017 Residential  197000     38.5     -121.    17
+3 ELK GROVE   95624     3     2  1990 Residential  224900     38.4     -121.    10
+4 ELK GROVE   95624     4     2  2100 Residential  259000     38.4     -121.   100
+5 SACRAMENTO  95833     3     2  1905 Residential  189000     38.6     -121.    95
+    </pre>
+    <figure xml:id="fig-sacr-knn-example">
+      <caption>Scatter plot of price (USD) versus house size (square feet) with lines to 5 nearest neighbors (highlighted in orange).</caption>
+      <image source="images/regression1/sacr-knn-example.png" width="60%"/>
+    </figure>
+    <p>
+      <xref ref="fig-sacr-knn-example"/> illustrates the difference between the
+      house sizes of the 5 nearest neighbors (in terms of house size) to our
+      new 2,000 square-foot house of interest. Now that we have obtained these
+      nearest neighbors, we can use their values to predict the sale price for
+      the new home. Specifically, we can take the mean (or average) of these 5
+      values as our predicted value, as illustrated by the red point in
+      <xref ref="fig-sacr-predicted-viz"/>.
+    </p>
+    <program language="r">
+      <input>
+prediction &lt;- nearest_neighbors |&gt;
+  summarise(predicted = mean(price))
+
+prediction
+      </input>
+    </program>
+    <pre>
+# A tibble: 1 x 1
+  predicted
+      &lt;dbl&gt;
+1   204980
+    </pre>
+    <figure xml:id="fig-sacr-predicted-viz">
+      <caption>Scatter plot of price (USD) versus house size (square feet) with predicted price for a 2,000 square-foot house based on 5 nearest neighbors represented as a red dot.</caption>
+      <image source="images/regression1/sacr-predicted-viz.png" width="60%"/>
+    </figure>
+    <p>
+      Our predicted price is $204,980 (shown as a red point in
+      <xref ref="fig-sacr-predicted-viz"/>), which is much less than $350,000;
+      perhaps we might want to offer less than the list price at which the house
+      is advertised. But this is only the very beginning of the story. We still
+      have all the same unanswered questions here with K-NN regression that we
+      had with K-NN classification: which <m>K</m> do we choose, and is our
+      model any good at making predictions? In the next few sections, we will
+      address these questions in the context of K-NN regression.
+    </p>
+    <p>
+      One strength of the K-NN regression algorithm that we would like to draw
+      attention to at this point is its ability to work well with non-linear
+      relationships (i.e., if the relationship is not a straight line). This
+      stems from the use of nearest neighbors to predict values. The algorithm
+      really has very few assumptions about what the data must look like for it
+      to work.
+    </p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-regression1-training">
+    <title>Training, evaluating, and tuning the model</title>
+    <p>
+      As usual, we must start by putting some test data away in a lock box that
+      we will come back to only after we choose our final model. Let's take care
+      of that now. Note that for the remainder of the chapter we'll be working
+      with the entire Sacramento data set, as opposed to the smaller sample of
+      30 points that we used earlier in the chapter
+      (<xref ref="fig-sacr-small-eda"/>).
+      <idx>training set</idx> <idx>test set</idx>
+    </p>
+    <program language="r">
+      <input>
+sacramento_split &lt;- initial_split(sacramento, prop = 0.75, strata = price)
+sacramento_train &lt;- training(sacramento_split)
+sacramento_test  &lt;- testing(sacramento_split)
+      </input>
+    </program>
+    <p>
+      Next, we'll use cross-validation <idx>cross-validation</idx> to choose
+      <m>K</m>. In K-NN classification, we used accuracy to see how well our
+      predictions matched the true labels. We cannot use the same metric in the
+      regression setting, since our predictions will almost never
+      <em>exactly</em> match the true response variable values. Therefore in
+      the context of K-NN regression we will use root mean square prediction
+      error <idx><h>root mean square prediction error</h><see>RMSPE</see></idx>
+      <idx>RMSPE</idx> (RMSPE) instead. The mathematical formula for calculating
+      RMSPE is:
+    </p>
+    <me>
+      \text{RMSPE} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}
+    </me>
+    <p>where:</p>
+    <ul>
+      <li><p><m>n</m> is the number of observations,</p></li>
+      <li><p><m>y_i</m> is the observed value for the <m>i^\text{th}</m> observation, and</p></li>
+      <li><p><m>\hat{y}_i</m> is the forecasted/predicted value for the <m>i^\text{th}</m> observation.</p></li>
+    </ul>
+    <p>
+      In other words, we compute the <em>squared</em> difference between the
+      predicted and true response value for each observation in our test (or
+      validation) set, compute the average, and then finally take the square
+      root. The reason we use the <em>squared</em> difference (and not just the
+      difference) is that the differences can be positive or negative, i.e., we
+      can overshoot or undershoot the true response value.
+      <xref ref="fig-sacr-verticalerrors"/> illustrates both positive and
+      negative differences between predicted and true response values. So if
+      we want to measure error&#x2014;a notion of distance between our predicted
+      and true response values&#x2014;we want to make sure that we are only
+      adding up positive values, with larger positive values representing larger
+      mistakes. If the predictions are very close to the true values, then RMSPE
+      will be small. If, on the other hand, the predictions are very different
+      from the true values, then RMSPE will be quite large. When we use
+      cross-validation, we will choose the <m>K</m> that gives us the smallest
+      RMSPE.
+    </p>
+    <figure xml:id="fig-sacr-verticalerrors">
+      <caption>Scatter plot of price (USD) versus house size (square feet) with example predictions (blue line) and the error in those predictions compared with true response values (vertical lines).</caption>
+      <image source="images/regression1/sacr-verticalerrors.png" width="60%"/>
+    </figure>
+    <note>
+      <p>
+        When using many code packages (<c>tidymodels</c> included), the
+        evaluation output we will get to assess the prediction quality of our
+        K-NN regression models is labeled <q>RMSE</q>, or <q>root mean squared
+        error</q>. Why is this so, and why not RMSPE?
+        <idx><h>RMSPE</h><h>comparison with RMSE</h></idx>
+        In statistics, we try to be very precise with our language to indicate
+        whether we are calculating the prediction error on the training data
+        (<em>in-sample</em> prediction) versus on the testing data
+        (<em>out-of-sample</em> prediction). When predicting and evaluating
+        prediction quality on the training data, we say RMSE. By contrast, when
+        predicting and evaluating prediction quality on the testing or validation
+        data, we say RMSPE. The equation for calculating RMSE and RMSPE is
+        exactly the same; all that changes is whether the <m>y</m>s are training
+        or testing data. But many people just use RMSE for both, and rely on
+        context to denote which data the root mean squared error is being
+        calculated on.
+      </p>
+    </note>
+    <p>
+      Now that we know how we can assess how well our model predicts a numerical
+      value, let's use R to perform cross-validation and to choose the optimal
+      <m>K</m>. First, we will create a recipe for preprocessing our data.
+      Note that we include standardization in our preprocessing to build good
+      habits, but since we only have one predictor, it is technically not
+      necessary; there is no risk of comparing two predictors of different
+      scales. Next we create a model specification for K-nearest neighbors
+      regression. Note that we use <c>set_mode("regression")</c> now in the
+      model specification to denote a regression problem, as opposed to the
+      classification problems from the previous chapters. The use of
+      <c>set_mode("regression")</c> essentially tells <c>tidymodels</c> that we
+      need to use different metrics (RMSPE, not accuracy) for tuning and
+      evaluation. Then we create a 5-fold cross-validation object, and put the
+      recipe and model specification together in a workflow.
+      <idx>tidymodels</idx> <idx>recipe</idx> <idx>workflow</idx>
+    </p>
+    <program language="r">
+      <input>
+sacr_recipe &lt;- recipe(price ~ sqft, data = sacramento_train) |&gt;
+  step_scale(all_predictors()) |&gt;
+  step_center(all_predictors())
+
+sacr_spec &lt;- nearest_neighbor(weight_func = "rectangular",
+                              neighbors = tune()) |&gt;
+  set_engine("kknn") |&gt;
+  set_mode("regression")
+
+sacr_vfold &lt;- vfold_cv(sacramento_train, v = 5, strata = price)
+
+sacr_wkflw &lt;- workflow() |&gt;
+  add_recipe(sacr_recipe) |&gt;
+  add_model(sacr_spec)
+
+sacr_wkflw
+      </input>
+    </program>
+    <pre>
+== Workflow =================================================
+Preprocessor: Recipe
+Model: nearest_neighbor()
+
+-- Preprocessor ---------------------------------------------
+2 Recipe Steps
+
+* step_scale()
+* step_center()
+
+-- Model ----------------------------------------------------
+K-Nearest Neighbor Model Specification (regression)
+
+Main Arguments:
+  neighbors = tune()
+  weight_func = rectangular
+
+Computational engine: kknn
+    </pre>
+    <p>
+      Next we run cross-validation for a grid of numbers of neighbors ranging
+      from 1 to 200. The following code tunes the model and returns the RMSPE
+      for each number of neighbors. In the output of the <c>sacr_results</c>
+      results data frame, we see that the <c>neighbors</c> variable contains
+      the value of <m>K</m>, the mean (<c>mean</c>) contains the value of the
+      RMSPE estimated via cross-validation, and the standard error
+      (<c>std_err</c>) contains a value corresponding to a measure of how
+      uncertain we are in the mean value. A detailed treatment of this is beyond
+      the scope of this chapter; but roughly, if your estimated mean RMSPE is
+      $100,000 and standard error is $1,000, you can expect the <em>true</em>
+      RMSPE to be somewhere roughly between $99,000 and $101,000 (although it
+      may fall outside this range). You may ignore the other columns in the
+      metrics data frame, as they do not provide any additional insight.
+      <idx><h>cross-validation</h><h>collect_metrics</h></idx>
+    </p>
+    <program language="r">
+      <input>
+gridvals &lt;- tibble(neighbors = seq(from = 1, to = 200, by = 3))
+
+sacr_results &lt;- sacr_wkflw |&gt;
+  tune_grid(resamples = sacr_vfold, grid = gridvals) |&gt;
+  collect_metrics() |&gt;
+  filter(.metric == "rmse")
+
+# show the results
+sacr_results
+      </input>
+    </program>
+    <pre>
+# A tibble: 67 x 7
+   neighbors .metric .estimator    mean     n std_err .config
+       &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
+ 1         1 rmse    standard   104489.     5   5811. Preprocessor1_Model01
+ 2         4 rmse    standard    94527.     5   4694. Preprocessor1_Model02
+ 3         7 rmse    standard    91238.     5   4263. Preprocessor1_Model03
+ 4        10 rmse    standard    89503.     5   4125. Preprocessor1_Model04
+ 5        13 rmse    standard    88519.     5   4067. Preprocessor1_Model05
+ 6        16 rmse    standard    88042.     5   4053. Preprocessor1_Model06
+ 7        19 rmse    standard    87717.     5   4040. Preprocessor1_Model07
+ 8        22 rmse    standard    87571.     5   4035. Preprocessor1_Model08
+ 9        25 rmse    standard    87422.     5   4028. Preprocessor1_Model09
+10        28 rmse    standard    87397.     5   4025. Preprocessor1_Model10
+# i 57 more rows
+    </pre>
+    <figure xml:id="fig-sacr-tunek-plot">
+      <caption>Effect of the number of neighbors on the RMSPE.</caption>
+      <image source="images/regression1/sacr-tunek-plot.png" width="60%"/>
+    </figure>
+    <p>
+      <xref ref="fig-sacr-tunek-plot"/> visualizes how the RMSPE varies with
+      the number of neighbors <m>K</m>. We take the <em>minimum</em> RMSPE to
+      find the best setting for the number of neighbors:
+    </p>
+    <program language="r">
+      <input>
+# show only the row of minimum RMSPE
+sacr_min &lt;- sacr_results |&gt;
+  filter(mean == min(mean))
+
+sacr_min
+      </input>
+    </program>
+    <pre>
+# A tibble: 1 x 7
+  neighbors .metric .estimator   mean     n std_err .config
+      &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
+1        46 rmse    standard   87164.     5   3976. Preprocessor1_Model16
+    </pre>
+    <p>
+      The smallest RMSPE occurs when <m>K = 46</m>.
+    </p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-regression1-overfitting">
+    <title>Underfitting and overfitting</title>
+    <p>
+      Similar to the setting of classification, by setting the number of
+      neighbors to be too small or too large, we cause the RMSPE to increase,
+      as shown in <xref ref="fig-sacr-tunek-plot"/>. What is happening here?
+    </p>
+    <p>
+      <xref ref="fig-sacr-howK"/> visualizes the effect of different settings
+      of <m>K</m> on the regression model. Each plot shows the predicted values
+      for house sale price from our K-NN regression model on the training data
+      for 6 different values for <m>K</m>: 1, 3, 25, 46, 250, and 680 (almost
+      the entire training set). For each model, we predict prices for the range
+      of possible home sizes we observed in the data set (here 500 to 5,000
+      square feet) and we plot the predicted prices as a blue line.
+    </p>
+    <figure xml:id="fig-sacr-howK">
+      <caption>Predicted values for house price (represented as a blue line) from K-NN regression models for six different values for <m>K</m>.</caption>
+      <image source="images/regression1/sacr-howK.png" width="90%"/>
+    </figure>
+    <p>
+      <xref ref="fig-sacr-howK"/> shows that when <m>K = 1</m>, the blue line
+      runs perfectly through (almost) all of our training observations. This
+      happens because our predicted values for a given region (typically) depend
+      on just a single observation. In general, when <m>K</m> is too small, the
+      line follows the training data quite closely, even if it does not match it
+      perfectly. If we used a different training data set of house prices and
+      sizes from the Sacramento real estate market, we would end up with
+      completely different predictions. In other words, the model is
+      <em>influenced too much</em> by the data. Because the model follows the
+      training data so closely, it will not make accurate predictions on new
+      observations which, generally, will not have the same fluctuations as the
+      original training data. Recall from the classification chapters that this
+      behavior&#x2014;where the model is influenced too much by the noisy
+      data&#x2014;is called <em>overfitting</em>; we use this same term in the
+      context of regression. <idx><h>overfitting</h><h>regression</h></idx>
+    </p>
+    <p>
+      What about the plots in <xref ref="fig-sacr-howK"/> where <m>K</m> is
+      quite large, say, <m>K = 250</m> or 680? In this case the blue line
+      becomes extremely smooth, and actually becomes flat once <m>K</m> is equal
+      to the number of datapoints in the training set. This happens because our
+      predicted values for a given x value (here, home size), depend on many
+      neighboring observations; in the case where <m>K</m> is equal to the size
+      of the training set, the prediction is just the mean of the house prices
+      (completely ignoring the house size). In contrast to the <m>K=1</m>
+      example, the smooth, inflexible blue line does not follow the training
+      observations very closely. In other words, the model is <em>not influenced
+      enough</em> by the training data. Recall from the classification chapters
+      that this behavior is called <em>underfitting</em>; we again use this same
+      term in the context of regression.
+      <idx><h>underfitting</h><h>regression</h></idx>
+    </p>
+    <p>
+      Ideally, what we want is neither of the two situations discussed above.
+      Instead, we would like a model that (1) follows the overall
+      <q>trend</q> in the training data, so the model actually uses the training
+      data to learn something useful, and (2) does not follow the noisy
+      fluctuations, so that we can be confident that our model will
+      transfer/generalize well to other new data. If we explore the other values
+      for <m>K</m>, in particular <m>K = 46</m> (as suggested by
+      cross-validation), we can see it achieves this goal: it follows the
+      increasing trend of house price versus house size, but is not influenced
+      too much by the idiosyncratic variations in price. All of this is similar
+      to how the choice of <m>K</m> affects K-nearest neighbors classification,
+      as discussed in the previous chapter.
+    </p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-regression1-testset">
+    <title>Evaluating on the test set</title>
+    <p>
+      To assess how well our model might do at predicting on unseen data, we
+      will assess its RMSPE on the test data. To do this, we will first
+      re-train our K-NN regression model on the entire training data set, using
+      <m>K = 46</m> neighbors. Then we will use <c>predict</c> to make
+      predictions on the test data, and use the <c>metrics</c> function again
+      to compute the summary of regression quality. Because we specify that we
+      are performing regression in <c>set_mode</c>, the <c>metrics</c> function
+      knows to output a quality summary related to regression, and not, say,
+      classification.
+    </p>
+    <program language="r">
+      <input>
+kmin &lt;- sacr_min |&gt; pull(neighbors)
+
+sacr_spec &lt;- nearest_neighbor(weight_func = "rectangular", neighbors = kmin) |&gt;
+  set_engine("kknn") |&gt;
+  set_mode("regression")
+
+sacr_fit &lt;- workflow() |&gt;
+  add_recipe(sacr_recipe) |&gt;
+  add_model(sacr_spec) |&gt;
+  fit(data = sacramento_train)
+
+sacr_summary &lt;- sacr_fit |&gt;
+  predict(sacramento_test) |&gt;
+  bind_cols(sacramento_test) |&gt;
+  metrics(truth = price, estimate = .pred) |&gt;
+  filter(.metric == 'rmse')
+
+sacr_summary
+      </input>
+    </program>
+    <pre>
+# A tibble: 1 x 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rmse    standard      89479.
+    </pre>
+    <p>
+      Our final model's test error as assessed by RMSPE is $89,479. Note that
+      RMSPE is measured in the same units as the response variable. In other
+      words, on new observations, we expect the error in our prediction to be
+      <em>roughly</em> $89,479. From one perspective, this is good news: this
+      is about the same as the cross-validation RMSPE estimate of our tuned
+      model, so we can say that the model appears to generalize well to new data
+      that it has never seen before. However, much like in the case of K-NN
+      classification, whether this value for RMSPE is <em>good</em>&#x2014;i.e.,
+      whether an error of around $89,479 is acceptable&#x2014;depends entirely
+      on the application. In this application, this error is not prohibitively
+      large, but it is not negligible either; $89,479 might represent a
+      substantial fraction of a home buyer's budget, and could make or break
+      whether or not they could afford to put an offer on a house.
+    </p>
+    <p>
+      Finally, <xref ref="fig-sacr-predict-all"/> shows the predictions that
+      our final model makes across the range of house sizes we might encounter
+      in the Sacramento area. Note that instead of predicting the house price
+      only for those house sizes that happen to appear in our data, we predict
+      it for evenly spaced values between the minimum and maximum in the data
+      set (roughly 500 to 5000 square feet). We superimpose this prediction
+      line on a scatter plot of the original housing price data, so that we can
+      qualitatively assess if the model seems to fit the data well. You have
+      already seen a few plots like this in this chapter, but here we also
+      provide the code that generated it as a learning opportunity.
+    </p>
+    <program language="r">
+      <input>
+sqft_prediction_grid &lt;- tibble(
+    sqft = seq(
+        from = sacramento |&gt; select(sqft) |&gt; min(),
+        to   = sacramento |&gt; select(sqft) |&gt; max(),
+        by   = 10
+    )
+)
+
+sacr_preds &lt;- sacr_fit |&gt;
+  predict(sqft_prediction_grid) |&gt;
+  bind_cols(sqft_prediction_grid)
+
+plot_final &lt;- ggplot(sacramento, aes(x = sqft, y = price)) +
+  geom_point(alpha = 0.4) +
+  geom_line(data = sacr_preds,
+            mapping = aes(x = sqft, y = .pred),
+            color = "steelblue",
+            linewidth = 1) +
+  xlab("House size (square feet)") +
+  ylab("Price (USD)") +
+  scale_y_continuous(labels = dollar_format()) +
+  ggtitle(paste0("K = ", kmin)) +
+  theme(text = element_text(size = 12))
+
+plot_final
+      </input>
+    </program>
+    <figure xml:id="fig-sacr-predict-all">
+      <caption>Predicted values of house price (blue line) for the final K-NN regression model.</caption>
+      <image source="images/regression1/sacr-predict-all.png" width="60%"/>
+    </figure>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-regression1-multivariable">
+    <title>Multivariable K-NN regression</title>
+    <p>
+      As in K-NN classification, we can use multiple predictors in K-NN
+      regression. <idx><h>K-nearest neighbors</h><h>multivariable regression</h></idx>
+      In this setting, we have the same concerns regarding the scale of the
+      predictors. Once again, predictions are made by identifying the <m>K</m>
+      observations that are nearest to the new point we want to predict; any
+      variables that are on a large scale will have a much larger effect than
+      variables on a small scale. But since the <c>recipe</c> we built above
+      scales and centers all predictor variables, this is handled for us.
+    </p>
+    <p>
+      Note that we also have the same concern regarding the selection of
+      predictors in K-NN regression as in K-NN classification: having more
+      predictors is <alert>not</alert> always better, and the choice of which
+      predictors to use has a potentially large influence on the quality of
+      predictions. Fortunately, we can use the predictor selection algorithm
+      from the classification chapter in K-NN regression as well. As the
+      algorithm is the same, we will not cover it again in this chapter.
+    </p>
+    <p>
+      We will now demonstrate a multivariable K-NN regression analysis of the
+      Sacramento real estate <idx>Sacramento real estate</idx> data using
+      <c>tidymodels</c>. This time we will use house size (measured in square
+      feet) as well as number of bedrooms as our predictors, and continue to
+      use house sale price as our response variable that we are trying to
+      predict. It is always a good practice to do exploratory data analysis,
+      such as visualizing the data, before we start modeling the data.
+      <xref ref="fig-sacr-bedscatter"/> shows that the number of bedrooms
+      might provide useful information to help predict the sale price of a house.
+    </p>
+    <program language="r">
+      <input>
+plot_beds &lt;- sacramento |&gt;
+  ggplot(aes(x = beds, y = price)) +
+  geom_point(alpha = 0.4) +
+  labs(x = 'Number of Bedrooms', y = 'Price (USD)') +
+  theme(text = element_text(size = 12))
+plot_beds
+      </input>
+    </program>
+    <figure xml:id="fig-sacr-bedscatter">
+      <caption>Scatter plot of the sale price of houses versus the number of bedrooms.</caption>
+      <image source="images/regression1/sacr-bedscatter.png" width="60%"/>
+    </figure>
+    <p>
+      <xref ref="fig-sacr-bedscatter"/> shows that as the number of bedrooms
+      increases, the house sale price tends to increase as well, but that the
+      relationship is quite weak. Does adding the number of bedrooms to our
+      model improve our ability to predict price? To answer that question, we
+      will have to create a new K-NN regression model using house size and
+      number of bedrooms, and then we can compare it to the model we previously
+      came up with that only used house size. Let's do that now!
+    </p>
+    <p>
+      First we'll build a new model specification and recipe for the analysis.
+      Note that we use the formula <c>price ~ sqft + beds</c> to denote that
+      we have two predictors, and set <c>neighbors = tune()</c> to tell
+      <c>tidymodels</c> to tune the number of neighbors for us.
+    </p>
+    <program language="r">
+      <input>
+sacr_recipe &lt;- recipe(price ~ sqft + beds, data = sacramento_train) |&gt;
+  step_scale(all_predictors()) |&gt;
+  step_center(all_predictors())
+sacr_spec &lt;- nearest_neighbor(weight_func = "rectangular",
+                              neighbors = tune()) |&gt;
+  set_engine("kknn") |&gt;
+  set_mode("regression")
+      </input>
+    </program>
+    <p>
+      Next, we'll use 5-fold cross-validation to choose the number of neighbors
+      via the minimum RMSPE:
+    </p>
+    <program language="r">
+      <input>
+gridvals &lt;- tibble(neighbors = seq(1, 200))
+
+sacr_multi &lt;- workflow() |&gt;
+  add_recipe(sacr_recipe) |&gt;
+  add_model(sacr_spec) |&gt;
+  tune_grid(sacr_vfold, grid = gridvals) |&gt;
+  collect_metrics() |&gt;
+  filter(.metric == "rmse") |&gt;
+  filter(mean == min(mean))
+
+sacr_k &lt;- sacr_multi |&gt;
+              pull(neighbors)
+sacr_multi
+      </input>
+    </program>
+    <pre>
+# A tibble: 1 x 7
+  neighbors .metric .estimator   mean     n std_err .config
+      &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
+1        58 rmse    standard   87052.     5   3946. Preprocessor1_Model058
+    </pre>
+    <p>
+      Here we see that the smallest estimated RMSPE from cross-validation
+      occurs when <m>K = 58</m>. If we want to compare this multivariable K-NN
+      regression model to the model with only a single predictor <em>as part
+      of the model tuning process</em> (e.g., if we are running forward
+      selection as described in the chapter on evaluating and tuning
+      classification models), then we must compare the RMSPE estimated using
+      only the training data via cross-validation. Looking back, the estimated
+      cross-validation RMSPE for the single-predictor model was $87,164. The
+      estimated cross-validation RMSPE for the multivariable model is $87,052.
+      Thus in this case, we did not improve the model by a large amount by
+      adding this additional predictor.
+    </p>
+    <p>
+      Regardless, let's continue the analysis to see how we can make
+      predictions with a multivariable K-NN regression model and evaluate its
+      performance on test data. We first need to re-train the model on the
+      entire training data set with <m>K = 58</m>, and then use that model to
+      make predictions on the test data.
+    </p>
+    <program language="r">
+      <input>
+sacr_spec &lt;- nearest_neighbor(weight_func = "rectangular",
+                              neighbors = sacr_k) |&gt;
+  set_engine("kknn") |&gt;
+  set_mode("regression")
+
+knn_mult_fit &lt;- workflow() |&gt;
+  add_recipe(sacr_recipe) |&gt;
+  add_model(sacr_spec) |&gt;
+  fit(data = sacramento_train)
+
+knn_mult_preds &lt;- knn_mult_fit |&gt;
+  predict(sacramento_test) |&gt;
+  bind_cols(sacramento_test)
+
+knn_mult_mets &lt;- metrics(knn_mult_preds, truth = price, estimate = .pred) |&gt;
+                     filter(.metric == 'rmse')
+
+knn_mult_mets
+      </input>
+    </program>
+    <pre>
+# A tibble: 1 x 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rmse    standard      90343.
+    </pre>
+    <p>
+      This time, when we performed K-NN regression on the same data set, but
+      also included number of bedrooms as a predictor, we obtained a RMSPE test
+      error of $90,343. <xref ref="fig-sacr-3d-mult-viz"/> visualizes the
+      model's predictions overlaid on top of the data. This time the
+      predictions are a surface in 3D space, instead of a line in 2D space, as
+      we have 2 predictors instead of 1.
+    </p>
+    <figure xml:id="fig-sacr-3d-mult-viz">
+      <caption>K-NN regression model's predictions represented as a surface in 3D space overlaid on top of the data using three predictors (price, house size, and the number of bedrooms). Note that in general we recommend against using 3D visualizations; here we use a 3D visualization only to illustrate what the surface of predictions looks like for learning purposes.</caption>
+      <image source="images/regression1/plot3d_knn_regression.png" width="90%"/>
+    </figure>
+    <p>
+      We can see that the predictions in this case, where we have 2 predictors,
+      form a surface instead of a line. Because the newly added predictor
+      (number of bedrooms) is related to price (as price changes, so does number
+      of bedrooms) and is not totally determined by house size (our other
+      predictor), we get additional and useful information for making our
+      predictions. For example, in this model we would predict that the cost of
+      a house with a size of 2,500 square feet generally increases slightly as
+      the number of bedrooms increases. Without having the additional predictor
+      of number of bedrooms, we would predict the same price for these two
+      houses.
+    </p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-regression1-strengths">
+    <title>Strengths and limitations of K-NN regression</title>
+    <p>
+      As with K-NN classification (or any prediction algorithm for that matter),
+      K-NN regression has both strengths and weaknesses. Some are listed here:
+    </p>
+    <p>
+      <alert>Strengths:</alert> K-nearest neighbors regression
+    </p>
+    <ol>
+      <li><p>is a simple, intuitive algorithm,</p></li>
+      <li><p>requires few assumptions about what the data must look like, and</p></li>
+      <li><p>works well with non-linear relationships (i.e., if the relationship is not a straight line).</p></li>
+    </ol>
+    <p>
+      <alert>Weaknesses:</alert> K-nearest neighbors regression
+    </p>
+    <ol>
+      <li><p>becomes very slow as the training data gets larger,</p></li>
+      <li><p>may not perform well with a large number of predictors, and</p></li>
+      <li><p>may not predict well beyond the range of values input in your training data.</p></li>
+    </ol>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-regression1-exercises">
+    <title>Exercises</title>
+    <p>
+      Practice exercises for the material covered in this chapter
+      can be found in the accompanying
+      <url href="https://worksheets.datasciencebook.ca">worksheets repository</url>
+      in the <q>Regression I: K-nearest neighbors</q> row.
+      You can launch an interactive version of the worksheet in your browser
+      by clicking the <q>launch binder</q> button. You can also preview a
+      non-interactive version of the worksheet by clicking <q>view worksheet.</q>
+      If you instead decide to download the worksheet and run it on your own
+      machine, make sure to follow the instructions for computer setup found in
+      <xref ref="ch-setup"/>. This will ensure that the automated feedback and
+      guidance that the worksheets provide will function as intended.
+    </p>
+  </section>
 
 </chapter>

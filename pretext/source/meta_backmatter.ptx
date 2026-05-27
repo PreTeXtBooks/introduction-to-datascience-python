@@ -2,9 +2,405 @@
 <backmatter xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="meta-back">
   <references xml:id="references">
     <title>References</title>
-    <p>
-      References will be populated here as the book content is filled in.
-    </p>
+
+    <biblio type="raw" xml:id="calls2015">
+      Truth and Reconciliation Commission of Canada. (2015).
+      <em>Calls to Action</em>.
+      Public Works &amp; Government Services Canada.
+      <url href="https://www2.gov.bc.ca/assets/gov/british-columbians-our-governments/indigenous-people/aboriginal-peoples-documents/calls_to_action_english2.pdf"
+           visual="www2.gov.bc.ca/.../calls_to_action_english2.pdf"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="cancensus2016">
+      Statistics Canada. (2016).
+      <em>Population Census</em>.
+      <url href="https://www12.statcan.gc.ca/census-recensement/2016/dp-pd/index-eng.cfm"
+           visual="www12.statcan.gc.ca/census-recensement/2016/dp-pd/index-eng.cfm"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="children2012">
+      Truth and Reconciliation Commission of Canada. (2012).
+      <em>They Came for the Children: Canada, Aboriginal Peoples, and the Residential
+      Schools</em>. Public Works &amp; Government Services Canada.
+    </biblio>
+
+    <biblio type="raw" xml:id="language2016">
+      Statistics Canada. (2016).
+      <em>The Aboriginal languages of First Nations people, M&#xe9;tis and Inuit</em>.
+      <url href="https://www12.statcan.gc.ca/census-recensement/2016/as-sa/98-200-x/2016022/98-200-x2016022-eng.cfm"
+           visual="www12.statcan.gc.ca/.../98-200-x2016022-eng.cfm"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="leek2015question">
+      Leek, J. and Peng, R. (2015).
+      What is the question?
+      <em>Science</em>, 347(6228), 1314&#x2013;1315.
+    </biblio>
+
+    <biblio type="raw" xml:id="peng2015art">
+      Peng, R. D. and Matsui, E. (2015).
+      <em>The Art of Data Science: A Guide for Anyone Who Works with Data</em>.
+      Skybrude Consulting, LLC.
+      <url href="https://bookdown.org/rdpeng/artofdatascience/"
+           visual="bookdown.org/rdpeng/artofdatascience/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="statcan2018mothertongue">
+      Statistics Canada. (2018).
+      <em>The evolution of language populations in Canada, by mother tongue, from 1901 to
+      2016</em>.
+      <url href="https://www150.statcan.gc.ca/n1/pub/11-630-x/11-630-x2018001-eng.htm"
+           visual="www150.statcan.gc.ca/n1/pub/11-630-x/11-630-x2018001-eng.htm"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="tidyverse">
+      Wickham, H. (2021).
+      <em>tidyverse R package</em>.
+      <url href="https://tidyverse.tidyverse.org/" visual="tidyverse.tidyverse.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="tidyversestyleguide">
+      Wickham, H. (2020).
+      <em>The Tidyverse Style Guide</em>.
+      <url href="https://style.tidyverse.org/" visual="style.tidyverse.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="timbers2020canlang">
+      Timbers, T. (2020).
+      <em>canlang: Canadian Census language data</em>.
+      R package version 0.0.9.
+      <url href="https://ttimbers.github.io/canlang/" visual="ttimbers.github.io/canlang/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="walker2017">
+      Walker, N. (2017).
+      Mapping indigenous languages in Canada.
+      <em>Canadian Geographic</em>.
+      The Royal Canadian Geographical Society.
+      <url href="https://www.canadiangeographic.ca/article/mapping-indigenous-languages-canada"
+           visual="www.canadiangeographic.ca/article/mapping-indigenous-languages-canada"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="wickham2019tidverse">
+      Wickham, H. et al. (2019).
+      Welcome to the tidyverse.
+      <em>Journal of Open Source Software</em>, 4(43), 1686.
+    </biblio>
+
+    <biblio type="raw" xml:id="wilson2018">
+      Wilson, K. (2018).
+      <em>Pulling Together: Foundations Guide</em>.
+      BCcampus.
+      <url href="https://opentextbc.ca/indigenizationfoundations/"
+           visual="opentextbc.ca/indigenizationfoundations/"/>
+    </biblio>
+
+    <!-- References added for Chapter 2: Reading in data -->
+
+    <biblio type="raw" xml:id="dplyr">
+      Wickham, H., Fran&#xe7;ois, R., Henry, L., and M&#xfc;ller, K. (2021).
+      <em>dplyr R package</em>.
+      <url href="https://dplyr.tidyverse.org/" visual="dplyr.tidyverse.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="googlesearches">
+      Real Time Statistics Project. (2021).
+      Internet Live Stats: Google Search Statistics.
+      <url href="https://www.internetlivestats.com/google-search-statistics/"
+           visual="www.internetlivestats.com/google-search-statistics/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="here">
+      M&#xfc;ller, K. (2020).
+      <em>here R package</em>.
+      <url href="https://here.r-lib.org/" visual="here.r-lib.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="httr2">
+      Wickham, H. (2023).
+      <em>httr2: Perform HTTP Requests and Process the Responses</em>.
+      <url href="https://httr2.r-lib.org/" visual="httr2.r-lib.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="polite">
+      Perepolkin, D. (2021).
+      <em>polite R package</em>.
+      <url href="https://dmi3kno.github.io/polite/" visual="dmi3kno.github.io/polite/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="rhoophiuchi">
+      NASA, ESA, CSA, STScI, K. Pontoppidan (STScI), and A. Pagan (STScI). (2023).
+      Rho Ophiuchi cloud complex.
+      <url href="https://esawebb.org/images/weic2316a/" visual="esawebb.org/images/weic2316a/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="rio">
+      Leeper, T. (2021).
+      <em>rio R package</em>.
+      <url href="https://cloud.r-project.org/web/packages/rio/index.html"
+           visual="cloud.r-project.org/web/packages/rio/index.html"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="rvest">
+      Wickham, H. (2021).
+      <em>rvest R package</em>.
+      <url href="https://rvest.tidyverse.org/" visual="rvest.tidyverse.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="wickham2016r">
+      Wickham, H. and Grolemund, G. (2016).
+      <em>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data</em>.
+      O&#x2019;Reilly.
+      <url href="https://r4ds.had.co.nz/" visual="r4ds.had.co.nz/"/>
+    </biblio>
+
+    <!-- References added for Chapter 3: Cleaning and wrangling data -->
+
+    <biblio type="raw" xml:id="tidyselect">
+      Henry, L. and Wickham, H. (2021).
+      <em>tidyselect R package</em>.
+      <url href="https://tidyselect.r-lib.org/" visual="tidyselect.r-lib.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="wickham2014tidy">
+      Wickham, H. (2014).
+      Tidy data.
+      <em>Journal of Statistical Software</em>, 59(10), 1&#x2013;23.
+    </biblio>
+
+    <biblio type="raw" xml:id="wickham2019advanced">
+      Wickham, H. (2019).
+      <em>Advanced R</em>.
+      CRC Press.
+      <url href="https://adv-r.hadley.nz/" visual="adv-r.hadley.nz/"/>
+    </biblio>
+
+    <!-- References added for Chapter 4: Effective data visualization -->
+
+    <biblio type="raw" xml:id="deebblind">
+      Deeb, S. S. (2005).
+      The molecular basis of variation in human color vision.
+      <em>Clinical Genetics</em>, 67(5), 369&#x2013;377.
+    </biblio>
+
+    <biblio type="raw" xml:id="faithfuldata">
+      H&#xe6;rdle, W. (1991).
+      <em>Smoothing Techniques with Implementation in S</em>.
+      Springer, New York.
+    </biblio>
+
+    <biblio type="raw" xml:id="ggplot">
+      Wickham, H. (2016).
+      <em>ggplot2: Elegant Graphics for Data Analysis</em>.
+      Springer-Verlag New York.
+      <url href="https://ggplot2.tidyverse.org" visual="ggplot2.tidyverse.org"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="ggthemes">
+      Arnold, J. B. (2021).
+      <em>ggthemes R package</em>.
+      <url href="https://jrnold.github.io/ggthemes/" visual="jrnold.github.io/ggthemes/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="islandsdata">
+      R Core Team. (2021).
+      <em>R: A Language and Environment for Statistical Computing</em>.
+      R Foundation for Statistical Computing, Vienna, Austria.
+      <url href="https://www.R-project.org/" visual="www.R-project.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="lightdata">
+      Michelson, A. A. (1882).
+      Experimental determination of the velocity of light made at the United States
+      Naval Academy, Annapolis.
+      <em>Astronomic Papers</em>, 1, 109&#x2013;145.
+      U.S. Nautical Almanac Office.
+    </biblio>
+
+    <biblio type="raw" xml:id="lubridate">
+      Spinu, V., Grolemund, G., and Wickham, H. (2021).
+      <em>lubridate R package</em>.
+      <url href="https://lubridate.tidyverse.org/" visual="lubridate.tidyverse.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="maunadata">
+      Tans, P. and Keeling, R. (2021).
+      Trends in Atmospheric Carbon Dioxide.
+      NOAA Global Monitoring Laboratory.
+      <url href="https://www.esrl.noaa.gov/gmd/ccgg/trends/data.html"
+           visual="www.esrl.noaa.gov/gmd/ccgg/trends/data.html"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="RColorBrewer">
+      Neuwirth, E. (2014).
+      <em>RColorBrewer R package</em>.
+      <url href="https://cran.r-project.org/package=RColorBrewer"
+           visual="cran.r-project.org/package=RColorBrewer"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="wilkeviz">
+      Wilke, C. O. (2019).
+      <em>Fundamentals of Data Visualization</em>.
+      O&#x2019;Reilly Media.
+      <url href="https://clauswilke.com/dataviz/" visual="clauswilke.com/dataviz/"/>
+    </biblio>
+
+    <!-- References added for Chapter 5: Classification I -->
+
+    <biblio type="raw" xml:id="knnfix">
+      Fix, E. and Hodges, J. L. (1951).
+      Discriminatory analysis&#x2014;nonparametric discrimination: consistency
+      properties.
+      <em>USAF School of Aviation Medicine</em>, 4(3), 477&#x2013;496.
+    </biblio>
+
+    <biblio type="raw" xml:id="knncover">
+      Cover, T. and Hart, P. (1967).
+      Nearest neighbor pattern classification.
+      <em>IEEE Transactions on Information Theory</em>, 13(1), 21&#x2013;27.
+    </biblio>
+
+    <biblio type="raw" xml:id="streetbreastcancer">
+      Street, W. N., Wolberg, W. H., and Mangasarian, O. L. (1993).
+      Nuclear feature extraction for breast tumor diagnosis.
+      <em>IS&amp;T/SPIE 1993 International Symposium on Electronic Imaging:
+      Science and Technology</em>, 1905, 861&#x2013;870.
+    </biblio>
+
+    <biblio type="raw" xml:id="stanfordhealthcare">
+      Stanford Health Care. (2021).
+      <em>Tumor: benign vs. malignant</em>.
+      <url href="https://stanfordhealthcare.org/medical-conditions/cancer/cancer/cancer-causes/tumors.html"
+           visual="stanfordhealthcare.org/medical-conditions/cancer/cancer-causes/tumors.html"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="parsnip">
+      Kuhn, M. and Vaughan, D. (2021).
+      <em>parsnip R package</em>.
+      <url href="https://parsnip.tidymodels.org/" visual="parsnip.tidymodels.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="recipes">
+      Kuhn, M. and Wickham, H. (2021).
+      <em>recipes R package</em>.
+      <url href="https://recipes.tidymodels.org/" visual="recipes.tidymodels.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="bealesubset">
+      Beale, E. M. L., Kendall, M. G., and Mann, D. W. (1967).
+      The discarding of variables in multivariate analysis.
+      <em>Biometrika</em>, 54(3&#x2013;4), 357&#x2013;366.
+    </biblio>
+
+    <biblio type="raw" xml:id="hockingsubset">
+      Hocking, R. R. and Leslie, R. N. (1967).
+      Selection of the best subset in regression analysis.
+      <em>Technometrics</em>, 9(4), 531&#x2013;540.
+    </biblio>
+
+    <biblio type="raw" xml:id="forwardefroymson">
+      Efroymson, M. A. (1960).
+      Multiple regression analysis.
+      In A. Ralston and H. S. Wilf (Eds.),
+      <em>Mathematical Methods for Digital Computers</em> (pp. 191&#x2013;203).
+      John Wiley.
+    </biblio>
+
+    <biblio type="raw" xml:id="forwarddraper">
+      Draper, N. R. and Smith, H. (1966).
+      <em>Applied Regression Analysis</em>.
+      John Wiley and Sons.
+    </biblio>
+
+    <biblio type="raw" xml:id="james2013introduction">
+      James, G., Witten, D., Hastie, T., and Tibshirani, R. (2013).
+      <em>An Introduction to Statistical Learning</em>.
+      Springer.
+      <url href="https://www.statlearning.com/" visual="statlearning.com/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="moderndive">
+      Kim, A. Y. and Ismay, C. (2021).
+      <em>Statistical Inference via Data Science: A ModernDive into R and the Tidyverse</em>.
+      CRC Press.
+      <url href="https://moderndive.com/" visual="moderndive.com/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="kmeans">
+      Lloyd, S. (1982).
+      Least square quantization in PCM.
+      <em>IEEE Transactions on Information Theory</em>, 28(2), 129&#x2013;137.
+    </biblio>
+
+    <biblio type="raw" xml:id="palmerpenguins">
+      Horst, A., Hill, A., and Gorman, K. (2020).
+      <em>palmerpenguins: Palmer Archipelago penguin data</em>.
+      R package version 0.1.0.
+      <url href="https://allisonhorst.github.io/palmerpenguins/" visual="allisonhorst.github.io/palmerpenguins/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="penguinpaper">
+      Gorman, K., Williams, T., and Fraser, W. (2014).
+      Ecological sexual dimorphism and environmental variability within a community of Antarctic penguins (genus Pygoscelis).
+      <em>PLoS ONE</em>, 9(3).
+    </biblio>
+
+    <!-- References added for Chapter 10: Statistical inference -->
+
+    <biblio type="raw" xml:id="insideairbnb">
+      Inside Airbnb. <em>Inside Airbnb: Adding data to the debate</em>.
+      <url href="http://insideairbnb.com" visual="insideairbnb.com"/>, 2020.
+    </biblio>
+
+    <biblio type="raw" xml:id="openintro">
+      D. Diez, M. Cetinkaya-Rundel, and C. Barr.
+      <em>OpenIntro Statistics</em>, 4th edition.
+      OpenIntro, 2019.
+      <url href="https://www.openintro.org/book/os/" visual="www.openintro.org/book/os/"/>.
+    </biblio>
+
+    <biblio type="raw" xml:id="infer">
+      A. Bray, C. Ismay, E. Chasnovski, S. Couch, B. Baumer, and M. &#xC7;etinkaya-Rundel.
+      <em>infer: An R package for tidyverse-friendly statistical inference</em>.
+      Journal of Open Source Software, 6(65):3661, 2021.
+    </biblio>
+
+    <!-- References added for Chapter 11: Combining code and text with Jupyter -->
+
+    <biblio type="raw" xml:id="kluyver2016jupyter">
+      T. Kluyver, B. Ragan-Kelley, F. P&#xe9;rez, B. Granger, M. Bussonnier, J. Frederic,
+      K. Kelley, J. Hamrick, J. Grout, S. Corlay, P. Ivanov, D. Avila, S. Abdalla,
+      C. Willing, and Jupyter Development Team.
+      Jupyter Notebooks: a publishing format for reproducible computational workflows.
+      In <em>Positioning and Power in Academic Publishing: Players, Agents and Agendas</em>,
+      volume 87. IOS Press, Amsterdam, 2016.
+    </biblio>
+
+    <!-- References added for Chapter 12: Collaboration with version control -->
+
+    <biblio type="raw" xml:id="wilson2014best">
+      G. Wilson, J. Bryan, K. Cranston, J. Kitzes, L. Nederbragt, and T. Teal.
+      Good enough practices in scientific computing.
+      <em>PLoS Computational Biology</em>, 13(6), 2017.
+      <url href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510"
+           visual="journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510"/>
+    </biblio>
+
+    <!-- Additional references from source/references.bib used in preface and chapters -->
+
+    <biblio type="raw" xml:id="Rlanguage">
+      R Core Team.
+      <em>R: A Language and Environment for Statistical Computing</em>.
+      R Foundation for Statistical Computing, Vienna, Austria, 2021.
+      <url href="https://www.R-project.org/" visual="www.R-project.org/"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="lubridatepaper">
+      G. Grolemund and H. Wickham.
+      Dates and times made easy with lubridate.
+      <em>Journal of Statistical Software</em>, 40(3):1&#x2013;25, 2011.
+    </biblio>
+
   </references>
   <index>
     <title>Index</title>

@@ -2,11 +2,1701 @@
 <chapter xml:id="ch-reading" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Reading in data locally and from the web</title>
 
-  <introduction>
+  <section xml:id="sec-reading-overview">
+    <title>Overview</title>
     <p>
-      This chapter is a skeleton placeholder for the PreTeXt version of the book.
-      Content will be filled in from the corresponding R Markdown source file.
+      In this chapter, you'll learn to read tabular data of various formats into R
+      from your local device (e.g., your laptop) and the web.
+      <idx><h>loading</h><see>reading</see></idx>
+      <idx><h>reading</h><h>definition</h></idx>
+      &#x201C;Reading&#x201D; (or &#x201C;loading&#x201D;) is the process of
+      converting data (stored as plain text, a database, HTML, etc.) into an object
+      (e.g., a data frame) that R can easily access and manipulate. Thus reading data
+      is the gateway to any data analysis; you won&#x2019;t be able to analyze data unless
+      you&#x2019;ve loaded it first. And because there are many ways to store data, there
+      are similarly many ways to read data into R. The more time you spend upfront
+      matching the data reading method to the type of data you have, the less time
+      you will have to devote to re-formatting, cleaning and wrangling your data (the
+      second step to all data analyses). It&#x2019;s like making sure your shoelaces are
+      tied well before going for a run so that you don&#x2019;t trip later on!
     </p>
-  </introduction>
+  </section>
+
+  <section xml:id="sec-reading-objectives">
+    <title>Chapter learning objectives</title>
+    <p>By the end of the chapter, readers will be able to do the following:</p>
+    <ul>
+      <li><p>Define the types of path and use them to locate files:
+        <ul>
+          <li><p>absolute file path</p></li>
+          <li><p>relative file path</p></li>
+          <li><p>Uniform Resource Locator (URL)</p></li>
+        </ul>
+      </p></li>
+      <li><p>Read data into R from various types of path using:
+        <ul>
+          <li><p><c>read_csv</c></p></li>
+          <li><p><c>read_tsv</c></p></li>
+          <li><p><c>read_csv2</c></p></li>
+          <li><p><c>read_delim</c></p></li>
+          <li><p><c>read_excel</c></p></li>
+        </ul>
+      </p></li>
+      <li><p>Compare and contrast the <c>read_*</c> functions.</p></li>
+      <li><p>Describe when to use the following <c>read_*</c> function arguments:
+        <ul>
+          <li><p><c>skip</c></p></li>
+          <li><p><c>delim</c></p></li>
+          <li><p><c>col_names</c></p></li>
+        </ul>
+      </p></li>
+      <li><p>Choose the appropriate <c>tidyverse</c> <c>read_*</c> function and function
+        arguments to load a given plain text tabular data set into R.</p></li>
+      <li><p>Use the <c>rename</c> function to rename columns in a data frame.</p></li>
+      <li><p>Use <c>read_excel</c> function and arguments to load a sheet from an excel
+        file into R.</p></li>
+      <li><p>Work with databases using functions from <c>dbplyr</c> and <c>DBI</c>:
+        <ul>
+          <li><p>Connect to a database with <c>dbConnect</c>.</p></li>
+          <li><p>List tables in the database with <c>dbListTables</c>.</p></li>
+          <li><p>Create a reference to a database table with <c>tbl</c>.</p></li>
+          <li><p>Bring data from a database into R using <c>collect</c>.</p></li>
+        </ul>
+      </p></li>
+      <li><p>Use <c>write_csv</c> to save a data frame to a <c>.csv</c> file.</p></li>
+      <li><p>(<em>Optional</em>) Obtain data from the web using scraping and application
+        programming interfaces (APIs):
+        <ul>
+          <li><p>Read HTML source code from a URL using the <c>rvest</c> package.</p></li>
+          <li><p>Read data from the NASA &#x201C;Astronomy Picture of the Day&#x201D; API
+            using the <c>httr2</c> package.</p></li>
+          <li><p>Compare downloading tabular data from a plain text file (e.g., <c>.csv</c>),
+            accessing data from an API, and scraping the HTML source code from a website.</p></li>
+        </ul>
+      </p></li>
+    </ul>
+  </section>
+
+  <section xml:id="sec-reading-paths">
+    <title>Absolute and relative file paths</title>
+    <p>
+      This chapter will discuss the different functions we can use to import data
+      into R, but before we can talk about <em>how</em> we read the data into R with these
+      functions, we first need to talk about <em>where</em> the data lives. When you load a
+      data set into R, you first need to tell R where those files live. The file
+      could live on your computer (<em>local</em>)
+      <idx><h>location</h><see>path</see></idx>
+      <idx><h>path</h><h>local</h></idx>
+      <idx><h>path</h><h>remote</h></idx>
+      <idx><h>path</h><h>relative</h></idx>
+      <idx><h>path</h><h>absolute</h></idx>
+      or somewhere on the internet (<em>remote</em>).
+    </p>
+    <p>
+      The place where the file lives on your computer is referred to as its &#x201C;path&#x201D;. You can
+      think of the path as directions to the file. There are two kinds of paths:
+      <em>relative</em> paths and <em>absolute</em> paths. A relative path indicates where the file is
+      with respect to your <em>working directory</em> (i.e., &#x201C;where you are currently&#x201D;) on the computer.
+      On the other hand, an absolute path indicates where the file is
+      with respect to the computer&#x2019;s filesystem base (or <em>root</em>) folder, regardless of where you are working.
+    </p>
+    <p>
+      Suppose our computer&#x2019;s filesystem looks like the picture in
+      <xref ref="fig-reading-filesystem"/>. We are working in a file titled
+      <c>project3.ipynb</c>, and our current working directory is <c>project3</c>;
+      typically, as is the case here, the working directory is the directory containing
+      the file you are currently working on.
+    </p>
+
+    <figure xml:id="fig-reading-filesystem">
+      <caption>Example file system.</caption>
+      <image source="images/reading/filesystem.png" width="100%"/>
+    </figure>
+
+    <p>
+      Let&#x2019;s say we wanted to open the <c>happiness_report.csv</c> file. We have two options to indicate
+      where the file is: using a relative path, or using an absolute path.
+      The absolute path of the file always starts with a slash <c>/</c>&#x2014;representing the root folder on
+      the computer&#x2014;and proceeds by listing out the sequence of folders you would have to enter to reach
+      the file, each separated by another slash <c>/</c>. So in this case, <c>happiness_report.csv</c> would be
+      reached by starting at the root, and entering the <c>home</c> folder, then the <c>dsci-100</c> folder,
+      then the <c>project3</c> folder, and then finally the <c>data</c> folder. So its absolute path would be
+      <c>/home/dsci-100/project3/data/happiness_report.csv</c>. We can load the file using its absolute path
+      as a string passed to the <c>read_csv</c> function.
+    </p>
+    <program language="r">
+      <input>
+happy_data &lt;- read_csv("/home/dsci-100/project3/data/happiness_report.csv")
+      </input>
+    </program>
+    <p>
+      If we instead wanted to use a relative path, we would need to list out the sequence of steps needed
+      to get from our current working directory to the file, with slashes <c>/</c> separating each step.
+      Since we are currently in the <c>project3</c> folder, we just need to enter the <c>data</c> folder
+      to reach our desired file. Hence the relative path is <c>data/happiness_report.csv</c>, and we can
+      load the file using its relative path as a string passed to <c>read_csv</c>.
+    </p>
+    <program language="r">
+      <input>
+happy_data &lt;- read_csv("data/happiness_report.csv")
+      </input>
+    </program>
+    <p>
+      Note that there is no forward slash at the beginning of a relative path; if we accidentally typed
+      <c>"/data/happiness_report.csv"</c>, R would look for a folder named <c>data</c> in the root folder
+      of the computer&#x2014;but that doesn&#x2019;t exist!
+    </p>
+    <p>
+      Aside from specifying places to go in a path using folder names (like <c>data</c> and <c>project3</c>),
+      we can also specify two additional special places: the <em>current directory</em>
+      <idx><h>path</h><h>current</h></idx>
+      and the <em>previous directory</em>.
+      <idx><h>path</h><h>previous</h></idx>
+      We indicate the current working directory with a single dot <c>.</c>, and the previous directory with
+      two dots <c>..</c>. So for instance, if we wanted to reach the <c>bike_share.csv</c> file from the
+      <c>project3</c> folder, we could use the relative path <c>../project2/bike_share.csv</c>.
+    </p>
+    <p>
+      We can even combine these two; for example, we could reach the <c>bike_share.csv</c> file using
+      the (very silly) path <c>../project2/../project2/./bike_share.csv</c> with quite a few redundant
+      directions: it says to go back a folder, then open <c>project2</c>, then go back a folder again,
+      then open <c>project2</c> again, then stay in the current directory, then finally get to
+      <c>bike_share.csv</c>. Whew, what a long trip!
+    </p>
+    <p>
+      So which kind of path should you use: relative, or absolute? Generally speaking, you should use
+      relative paths. Using a relative path helps ensure that your code can be run on a different computer
+      (and as an added bonus, relative paths are often shorter&#x2014;easier to type!). This is because a
+      file&#x2019;s relative path is often the same across different computers, while a file&#x2019;s absolute path
+      (the names of all of the folders between the computer&#x2019;s root, represented by <c>/</c>, and the file)
+      isn&#x2019;t usually the same across different computers.
+    </p>
+    <p>
+      For example, suppose Fatima and Jayden are working on a project together on the
+      <c>happiness_report.csv</c> data. Fatima&#x2019;s file is stored at
+      <c>/home/Fatima/project3/data/happiness_report.csv</c>, while Jayden&#x2019;s is stored at
+      <c>/home/Jayden/project3/data/happiness_report.csv</c>. Even though Fatima and Jayden stored their
+      files in the same place on their computers (in their home folders), the absolute paths are different
+      due to their different usernames. If Jayden has code that loads the <c>happiness_report.csv</c>
+      data using an absolute path, the code won&#x2019;t work on Fatima&#x2019;s computer. But the relative path
+      from inside the <c>project3</c> folder (<c>data/happiness_report.csv</c>) is the same on both
+      computers; any code that uses relative paths will work on both! In the additional resources
+      section, we include a link to a short video on the difference between absolute and relative paths.
+      You can also check out the <c>here</c> package, which provides methods for finding and constructing
+      file paths in R.
+    </p>
+    <p>
+      Beyond files stored on your computer (i.e., locally), we also need a way to locate resources
+      stored elsewhere on the internet (i.e., remotely). For this purpose we use a
+      <em>Uniform Resource Locator (URL)</em>, i.e., a web address that looks something
+      like <url href="https://datasciencebook.ca/" visual="datasciencebook.ca/"/>. URLs indicate the
+      location of a resource on the internet, and start with a web domain, followed by a forward slash
+      <c>/</c>, and then a path to where the resource is located on the remote machine.
+      <idx><h>URL</h></idx>
+    </p>
+  </section>
+
+  <section xml:id="sec-reading-plain-text">
+    <title>Reading tabular data from a plain text file into R</title>
+
+    <subsection xml:id="sec-reading-readcsv">
+      <title><c>read_csv</c> to read in comma-separated values files</title>
+      <p>
+        Now that we have learned about <em>where</em> data could be, we will learn about <em>how</em>
+        to import data into R using various functions. Specifically, we will learn how to <em>read</em>
+        tabular data from a plain text file (a document containing only text) <em>into</em> R and
+        <em>write</em> tabular data to a file <em>out of</em> R. The function we use to do this depends
+        on the file&#x2019;s format. For example, in the last chapter, we learned about using the
+        <c>tidyverse</c> <c>read_csv</c> function when reading <c>.csv</c>
+        (<em>c</em>omma-<em>s</em>eparated <em>v</em>alues) files.
+        <idx><h>csv</h></idx>
+        In that case, the separator or <em>delimiter</em>
+        <idx><h>reading</h><h>delimiter</h></idx>
+        that divided our columns was a comma (<c>,</c>). We only learned the case where the data
+        matched the expected defaults of the <c>read_csv</c> function
+        <idx><h>read function</h><h>read_csv</h></idx>
+        (column names are present, and commas are used as the delimiter between columns).
+        In this section, we will learn how to read files that do not satisfy the default expectations
+        of <c>read_csv</c>.
+      </p>
+      <p>
+        Before we jump into the cases where the data aren&#x2019;t in the expected default format for
+        <c>tidyverse</c> and <c>read_csv</c>, let&#x2019;s revisit the more straightforward case where the
+        defaults hold, and the only argument we need to give to the function is the path to the file,
+        <c>data/can_lang.csv</c>. The <c>can_lang</c> data set contains language data from the 2016
+        Canadian census.
+        <idx><h>Canadian languages</h><h>canlang data</h></idx>
+        We put <c>data/</c> before the file&#x2019;s name when we are loading the data set because this data
+        set is located in a sub-folder, named <c>data</c>, relative to where we are running our R code.
+        Here is what the text in the file <c>data/can_lang.csv</c> looks like.
+      </p>
+      <pre>
+category,language,mother_tongue,most_at_home,most_at_work,lang_known
+Aboriginal languages,"Aboriginal languages, n.o.s.",590,235,30,665
+Non-Official &amp; Non-Aboriginal languages,Afrikaans,10260,4785,85,23415
+Non-Official &amp; Non-Aboriginal languages,"Afro-Asiatic languages, n.i.e.",1150,445,10,2775
+Non-Official &amp; Non-Aboriginal languages,Akan (Twi),13460,5985,25,22150
+Non-Official &amp; Non-Aboriginal languages,Albanian,26895,13135,345,31930</pre>
+      <p>
+        And here is a review of how we can use <c>read_csv</c> to load it into R. First we load the
+        <c>tidyverse</c>
+        <idx><h>tidyverse</h></idx>
+        package to gain access to useful functions for reading the data.
+      </p>
+      <program language="r">
+        <input>
+library(tidyverse)
+        </input>
+      </program>
+      <p>
+        Next we use <c>read_csv</c> to load the data into R, and in that call we specify the relative path
+        to the file. Note that it is normal and expected that a message is printed out after using the
+        <c>read_csv</c> and related functions. This message lets you know the data types of each of the
+        columns that R inferred while reading the data into R. In the future when we use this and related
+        functions to load data in this book, we will silence these messages to help with the readability of
+        the book.
+      </p>
+      <program language="r">
+        <input>
+canlang_data &lt;- read_csv("data/can_lang.csv")
+        </input>
+      </program>
+      <pre>
+Rows: 214 Columns: 6
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (2): category, language
+dbl (4): mother_tongue, most_at_home, most_at_work, lang_known
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</pre>
+      <p>
+        Finally, to view the first 10 rows of the data frame, we must call it:
+      </p>
+      <program language="r">
+        <input>
+canlang_data
+        </input>
+      </program>
+      <pre>
+# A tibble: 214 × 6
+   category                   language                mother_tongue most_at_home
+   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…             590          235
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
+ 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
+# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;</pre>
+    </subsection>
+
+    <subsection xml:id="sec-reading-skip">
+      <title>Skipping rows when reading in data</title>
+      <p>
+        Oftentimes, information about how data was collected, or other relevant information, is included
+        at the top of the data file. This information is usually written in sentence and paragraph form,
+        with no delimiter because it is not organized into columns. An example of this is shown below.
+      </p>
+      <p>
+        This information gives the data scientist useful context and information about the data; however,
+        it is not well formatted or intended to be read into a data frame cell along with the tabular data
+        that follows later in the file.
+      </p>
+      <pre>
+Data source: https://ttimbers.github.io/canlang/
+Data originally published in: Statistics Canada Census of Population 2016.
+Reproduced and distributed on an as-is basis with their permission.
+category,language,mother_tongue,most_at_home,most_at_work,lang_known
+Aboriginal languages,"Aboriginal languages, n.o.s.",590,235,30,665
+Non-Official &amp; Non-Aboriginal languages,Afrikaans,10260,4785,85,23415</pre>
+      <p>
+        With this extra information being present at the top of the file, using <c>read_csv</c> as we
+        did previously does not allow us to correctly load the data into R. In the case of this file we
+        end up only reading in one column of the data set. In contrast to the normal and expected messages
+        above, this time R prints out a warning for us indicating that there might be a problem with how
+        our data is being read in.
+        <idx><h>warning</h></idx>
+      </p>
+      <program language="r">
+        <input>
+canlang_data &lt;- read_csv("data/can_lang_meta-data.csv")
+canlang_data
+        </input>
+      </program>
+      <pre>
+Warning message:
+One or more parsing issues, see `problems()` for details.
+# A tibble: 217 × 1
+   `Data source: https://ttimbers.github.io/canlang/`                          
+   &lt;chr&gt;                                                                        
+ 1 Data originally published in: Statistics Canada Census of Population 2016.  
+ 2 Reproduced and distributed on an as-is basis with their permission.         
+ 3 category                                                                     
+ 4 Aboriginal languages                                                         
+ 5 Non-Official &amp; Non-Aboriginal languages                                  
+ 6 Non-Official &amp; Non-Aboriginal languages                                  
+ 7 Non-Official &amp; Non-Aboriginal languages                                  
+ 8 Non-Official &amp; Non-Aboriginal languages                                  
+ 9 Aboriginal languages                                                         
+10 Aboriginal languages                                                         
+# … with 207 more rows
+      </pre>
+      <p>
+        To successfully read data like this into R, the <c>skip</c> argument
+        <idx><h>read function</h><h>skip argument</h></idx>
+        can be useful to tell R how many lines to skip before it should start reading in the data.
+        In the example above, we would set this value to 3.
+      </p>
+      <program language="r">
+        <input>
+canlang_data &lt;- read_csv("data/can_lang_meta-data.csv",
+                         skip = 3)
+canlang_data
+        </input>
+      </program>
+      <pre>
+# A tibble: 214 × 6
+   category                   language                mother_tongue most_at_home
+   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…             590          235
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
+ 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
+# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
+      <p>
+        How did we know to skip three lines? We looked at the data! The first three lines of the data
+        had information we didn&#x2019;t need to import:
+      </p>
+      <pre>
+Data source: https://ttimbers.github.io/canlang/
+Data originally published in: Statistics Canada Census of Population 2016.
+Reproduced and distributed on an as-is basis with their permission.</pre>
+      <p>The column names began at line 4, so we skipped the first three lines.</p>
+    </subsection>
+
+    <subsection xml:id="sec-reading-tsv">
+      <title><c>read_tsv</c> to read in tab-separated values files</title>
+      <p>
+        Another common way data is stored is with tabs as the delimiter. Notice the data file,
+        <c>can_lang.tsv</c>, has tabs in between the columns instead of commas.
+      </p>
+      <pre>
+category    language    mother_tongue   most_at_home    most_at_work    lang_known
+Aboriginal languages    Aboriginal languages, n.o.s.    590 235 30  665
+Non-Official &amp; Non-Aboriginal languages Afrikaans   10260   4785    85  23415</pre>
+      <p>
+        We can use the <c>read_tsv</c> function
+        <idx><h>tab-separated values</h><see>tsv</see></idx>
+        <idx><h>tsv</h></idx>
+        <idx><h>read function</h><h>read_tsv</h></idx>
+        to read in <c>.tsv</c> (<em>t</em>ab <em>s</em>eparated <em>v</em>alues) files.
+      </p>
+      <program language="r">
+        <input>
+canlang_data &lt;- read_tsv("data/can_lang.tsv")
+canlang_data
+        </input>
+      </program>
+      <pre>
+# A tibble: 214 × 6
+   category                   language                mother_tongue most_at_home
+   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…             590          235
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
+ 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
+# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
+      <p>
+        If you compare the data frame here to the data frame we obtained in
+        <xref ref="sec-reading-readcsv"/> using <c>read_csv</c>, you&#x2019;ll notice that they look
+        identical: they have the same number of columns and rows, the same column names, and the same
+        entries! So even though we needed to use a different function depending on the file format, our
+        resulting data frame (<c>canlang_data</c>) in both cases was the same.
+      </p>
+    </subsection>
+
+    <subsection xml:id="sec-reading-delim">
+      <title><c>read_delim</c> as a more flexible method to get tabular data into R</title>
+      <p>
+        The <c>read_csv</c> and <c>read_tsv</c> functions are actually just special cases of the more
+        general <c>read_delim</c> function.
+        <idx><h>read function</h><h>read_delim</h></idx>
+        We can use <c>read_delim</c> to import both comma and tab-separated values files, and more; we
+        just have to specify the delimiter. For example, the <c>can_lang_no_names.tsv</c> file contains
+        a different version of this same data set with no column names and uses tabs as the delimiter
+        <idx><h>reading</h><h>delimiter</h></idx>
+        instead of commas. Here is how the file would look in a plain text editor:
+      </p>
+      <pre>
+Aboriginal languages    Aboriginal languages, n.o.s.    590 235 30  665
+Non-Official &amp; Non-Aboriginal languages Afrikaans   10260   4785    85  23415</pre>
+      <p>
+        To read this into R using the <c>read_delim</c> function, we specify the path to the file as the
+        first argument, provide the tab character <c>"\t"</c> as the <c>delim</c> argument, and set the
+        <c>col_names</c> argument
+        <idx><h>read function</h><h>col_names argument</h></idx>
+        to <c>FALSE</c> to denote that there are no column names provided in the data. Note that the
+        <c>read_csv</c>, <c>read_tsv</c>, and <c>read_delim</c> functions all have a <c>col_names</c>
+        argument with the default value <c>TRUE</c>.
+      </p>
+      <note>
+        <p>
+          <c>\t</c> is an example of an <em>escaped character</em>, which always starts with a backslash
+          (<c>\</c>).
+          <idx><h>escape character</h></idx>
+          Escaped characters are used to represent non-printing characters (like the tab) or those with
+          special meanings (such as quotation marks).
+        </p>
+      </note>
+      <program language="r">
+        <input>
+canlang_data &lt;- read_delim("data/can_lang_no_names.tsv",
+                           delim = "\t",
+                           col_names = FALSE)
+canlang_data
+        </input>
+      </program>
+      <pre>
+# A tibble: 214 × 6
+   X1                                     X2                              X3    X4    X5    X6
+   &lt;chr&gt;                                  &lt;chr&gt;                        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 Aboriginal languages                   Aboriginal languages, n.o.s.   590   235    30   665
+ 2 Non-Official &amp; Non-Aboriginal langua… Afrikaans                  10260  4785    85 23415
+ 3 Non-Official &amp; Non-Aboriginal langua… Afro-Asiatic languages, n.…  1150   445    10  2775
+ 4 Non-Official &amp; Non-Aboriginal langua… Akan (Twi)                 13460  5985    25 22150
+ 5 Non-Official &amp; Non-Aboriginal langua… Albanian                   26895 13135   345 31930
+# … with 209 more rows
+      </pre>
+      <p>
+        Data frames in R need to have column names. Thus if you read in data without column names, R will
+        assign names automatically. In this example, R assigns the column names <c>X1, X2, X3, X4, X5, X6</c>.
+        It is best to rename your columns manually in this scenario. The current column names (<c>X1, X2</c>,
+        etc.) are not very descriptive and will make your analysis confusing. To rename your columns, you can
+        use the <c>rename</c> function
+        <idx><h>rename</h></idx>
+        from <url href="https://dplyr.tidyverse.org/" visual="dplyr.tidyverse.org/">the <c>dplyr</c> R package</url> <xref ref="dplyr"/>
+        <idx><h>dplyr</h></idx>
+        (one of the packages loaded with <c>tidyverse</c>, so we don&#x2019;t need to load it separately).
+        The first argument is the data set, and in the subsequent arguments you write
+        <c>new_name = old_name</c> for the selected variables to rename.
+      </p>
+      <program language="r">
+        <input>
+canlang_data &lt;- rename(canlang_data,
+       category = X1,
+       language = X2,
+       mother_tongue = X3,
+       most_at_home = X4,
+       most_at_work = X5,
+       lang_known = X6)
+canlang_data
+        </input>
+      </program>
+      <pre>
+# A tibble: 214 × 6
+   category                   language                mother_tongue most_at_home
+   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…             590          235
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
+ 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
+# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
+    </subsection>
+
+    <subsection xml:id="sec-reading-url">
+      <title>Reading tabular data directly from a URL</title>
+      <p>
+        We can also use <c>read_csv</c>, <c>read_tsv</c>, or <c>read_delim</c> (and related functions)
+        to read in data directly from a <em>Uniform Resource Locator (URL)</em> that contains tabular data.
+        <idx><h>URL</h><h>reading from</h></idx>
+        Here, we provide the URL of a remote file to <c>read_*</c>, instead of a path to a local file on
+        our computer.
+      </p>
+      <p>
+        We need to surround the URL with quotes similar to when we specify a path on our local computer.
+        All other arguments that we use are the same as when using these functions with a local file on
+        our computer.
+      </p>
+      <program language="r">
+        <input>
+url &lt;- "https://raw.githubusercontent.com/UBC-DSCI/data/main/can_lang.csv"
+canlang_data &lt;- read_csv(url)
+canlang_data
+        </input>
+      </program>
+      <pre>
+# A tibble: 214 × 6
+   category                   language                mother_tongue most_at_home
+   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…             590          235
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
+ 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
+# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
+    </subsection>
+
+    <subsection xml:id="sec-reading-download">
+      <title>Downloading data from a URL</title>
+      <p>
+        Occasionally the data available at a URL is not formatted nicely enough to use <c>read_csv</c>,
+        <c>read_tsv</c>, <c>read_delim</c>, or other related functions to read the data directly into R.
+        In situations where it is necessary to download a file to our local computer prior to working with
+        it in R, we can use the <c>download.file</c> function. The first argument is the URL, and the
+        second is a path where we would like to store the downloaded file.
+      </p>
+      <program language="r">
+        <input>
+download.file(url, "data/can_lang.csv")
+canlang_data &lt;- read_csv("data/can_lang.csv")
+canlang_data
+        </input>
+      </program>
+      <pre>
+# A tibble: 214 × 6
+   category                   language                mother_tongue most_at_home
+   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…             590          235
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
+ 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
+# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
+    </subsection>
+
+    <subsection xml:id="sec-reading-preview">
+      <title>Previewing a data file before reading it into R</title>
+      <p>
+        In many of the examples above, we gave you previews of the data file before we read it into R.
+        Previewing data is essential to see whether or not there are column names, what the delimiters are,
+        and if there are lines you need to skip. You should do this yourself when trying to read in data
+        files: open the file in whichever text editor you prefer to inspect its contents prior to reading
+        it into R.
+      </p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-reading-excel">
+    <title>Reading tabular data from a Microsoft Excel file</title>
+    <p>
+      There are many other ways to store tabular data sets beyond plain text files, and similarly, many
+      ways to load those data sets into R. For example, it is very common to encounter, and need to load
+      into R, data stored as a Microsoft Excel
+      <idx><h>Excel spreadsheet</h></idx>
+      <idx><h>Microsoft Excel</h><see>Excel spreadsheet</see></idx>
+      <idx><h>xlsx</h><see>Excel spreadsheet</see></idx>
+      spreadsheet (with the file name extension <c>.xlsx</c>). To be able to do this, a key thing to know
+      is that even though <c>.csv</c> and <c>.xlsx</c> files look almost identical when loaded into Excel,
+      the data themselves are stored completely differently. While <c>.csv</c> files are plain text files,
+      where the characters you see when you open the file in a text editor are exactly the data they
+      represent, this is not the case for <c>.xlsx</c> files.
+    </p>
+    <p>
+      This type of file representation allows Excel files to store additional things that plain text
+      files cannot, such as images, equations, multiple sheets, and formatting of the data. However,
+      if we want to analyze the data, we don&#x2019;t need most of these things, and it can actually get in
+      our way. We need special functions to read <c>.xlsx</c> files into R.
+    </p>
+    <p>
+      Despite looking odd in a plain text editor, we can read Excel spreadsheets into R using the
+      <c>readxl</c> package developed specifically for this purpose.
+      <idx><h>readxl</h></idx>
+      <idx><h>read function</h><h>read_excel</h></idx>
+    </p>
+    <program language="r">
+      <input>
+library(readxl)
+
+canlang_data &lt;- read_excel("data/can_lang.xlsx")
+canlang_data
+      </input>
+    </program>
+    <pre>
+# A tibble: 214 × 6
+   category                   language                mother_tongue most_at_home
+   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages       Aboriginal languages,…             590          235
+ 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
+ 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
+ 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
+ 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
+# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+    </pre>
+    <p>
+      If the <c>.xlsx</c> file has multiple sheets, you have to use the <c>sheet</c> argument to specify
+      the sheet number or name. You can also specify cell ranges using the <c>range</c> argument. This
+      functionality is useful when a single sheet contains multiple tables (a sad thing that happens to
+      many Excel spreadsheets since this makes reading in data more difficult).
+    </p>
+    <p>
+      As with plain text files, you should always explore the data file before importing it into R.
+      Exploring the data beforehand helps you decide which arguments you need to load the data into R
+      successfully. If you do not have the Excel program on your computer, you can use other programs to
+      preview the file. Examples include Google Sheets and Libre Office.
+    </p>
+    <p>
+      In <xref ref="tab-reading-read-table"/> we summarize the <c>read_*</c> functions we covered in
+      this chapter. We also include the <c>read_csv2</c> function for data separated by semicolons
+      <c>;</c>, which you may run into with data sets where the decimal is represented by a comma instead
+      of a period (as with some data sets from European countries).
+    </p>
+
+    <table xml:id="tab-reading-read-table">
+      <title>Summary of <c>read_*</c> functions</title>
+      <tabular top="major" bottom="minor" left="minor" right="minor">
+        <row header="yes" bottom="major">
+          <cell>Data File Type</cell>
+          <cell>R Function</cell>
+          <cell>R Package</cell>
+        </row>
+        <row>
+          <cell>Comma (<c>,</c>) separated files</cell>
+          <cell><c>read_csv</c></cell>
+          <cell><c>readr</c></cell>
+        </row>
+        <row>
+          <cell>Tab (<c>\t</c>) separated files</cell>
+          <cell><c>read_tsv</c></cell>
+          <cell><c>readr</c></cell>
+        </row>
+        <row>
+          <cell>Semicolon (<c>;</c>) separated files</cell>
+          <cell><c>read_csv2</c></cell>
+          <cell><c>readr</c></cell>
+        </row>
+        <row>
+          <cell>Various formats (<c>.csv</c>, <c>.tsv</c>)</cell>
+          <cell><c>read_delim</c></cell>
+          <cell><c>readr</c></cell>
+        </row>
+        <row bottom="major">
+          <cell>Excel files (<c>.xlsx</c>)</cell>
+          <cell><c>read_excel</c></cell>
+          <cell><c>readxl</c></cell>
+        </row>
+      </tabular>
+    </table>
+
+    <note>
+      <p>
+        <c>readr</c> is a part of the <c>tidyverse</c> package so we did not need to load this package
+        separately since we loaded <c>tidyverse</c>.
+      </p>
+    </note>
+  </section>
+
+  <section xml:id="sec-reading-databases">
+    <title>Reading data from a database</title>
+    <p>
+      Another very common form of data storage is the relational database. Databases
+      <idx><h>database</h></idx>
+      are great when you have large data sets or multiple users working on a project. There are many
+      relational database management systems, such as SQLite, MySQL, PostgreSQL, Oracle, and many more.
+      These different relational database management systems each have their own advantages and
+      limitations. Almost all employ SQL (<em>structured query language</em>) to obtain data from the
+      database. But you don&#x2019;t need to know SQL to analyze data from a database; several packages have
+      been written that allow you to connect to relational databases and use the R programming language
+      to obtain data. In this book, we will give examples of how to do this using R with SQLite and
+      PostgreSQL databases.
+    </p>
+
+    <subsection xml:id="sec-reading-sqlite">
+      <title>Reading data from a SQLite database</title>
+      <p>
+        SQLite
+        <idx><h>database</h><h>SQLite</h></idx>
+        is probably the simplest relational database system that one can use in combination with R.
+        SQLite databases are self-contained, and are usually stored and accessed locally on one computer
+        from a file with a <c>.db</c> extension (or sometimes an <c>.sqlite</c> extension). Similar to
+        Excel files, these are not plain text files and cannot be read in a plain text editor.
+      </p>
+      <p>
+        The first thing you need to do to read data into R from a database is to connect to the database.
+        We do that using the <c>dbConnect</c> function from the <c>DBI</c> (database interface) package.
+        <idx><h>database</h><h>connect</h></idx>
+        This does not read in the data, but simply tells R where the database is and opens up a
+        communication channel that R can use to send SQL commands to the database.
+      </p>
+      <program language="r">
+        <input>
+library(DBI)
+
+canlang_conn &lt;- dbConnect(RSQLite::SQLite(), "data/can_lang.db")
+        </input>
+      </program>
+      <p>
+        Often relational databases have many tables; thus, in order to retrieve data from a database,
+        you need to know the name of the table in which the data is stored. You can get the names of all
+        the tables in the database using the <c>dbListTables</c>
+        <idx><h>database</h><h>tables</h></idx>
+        function:
+      </p>
+      <program language="r">
+        <input>
+tables &lt;- dbListTables(canlang_conn)
+tables
+        </input>
+      </program>
+      <pre>
+[1] "lang"</pre>
+      <p>
+        The <c>dbListTables</c> function returned only one name, which tells us that there is only one
+        table in this database. To reference a table in the database (so that we can perform operations
+        like selecting columns and filtering rows), we use the <c>tbl</c> function
+        <idx><h>database</h><h>tbl</h></idx>
+        from the <c>dbplyr</c> package.
+        <idx><h>dbplyr</h><see>database</see></idx>
+        <idx><h>database</h><h>dbplyr</h></idx>
+        The object returned by the <c>tbl</c> function allows us to work with data stored in databases as
+        if they were just regular data frames; but secretly, behind the scenes, <c>dbplyr</c> is turning
+        your function calls (e.g., <c>select</c> and <c>filter</c>) into SQL queries!
+      </p>
+      <program language="r">
+        <input>
+library(dbplyr)
+
+lang_db &lt;- tbl(canlang_conn, "lang")
+lang_db
+        </input>
+      </program>
+      <pre>
+# Source:   table&lt;lang&gt; [?? x 6]
+# Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
+   category                                language                     mother_tongue most_at_home
+   &lt;chr&gt;                                   &lt;chr&gt;                                &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Aboriginal languages                    Aboriginal languages, n.o.s.           590          235
+ 2 Non-Official &amp; Non-Aboriginal langua… Afrikaans                          10260         4785
+ 3 Non-Official &amp; Non-Aboriginal langua… Afro-Asiatic languages, n.i…         1150          445
+ 4 Non-Official &amp; Non-Aboriginal langua… Akan (Twi)                         13460         5985
+ 5 Non-Official &amp; Non-Aboriginal langua… Albanian                           26895        13135
+# … with more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+      </pre>
+      <p>
+        Although it looks like we just got a data frame from the database, we didn&#x2019;t! It&#x2019;s a
+        <em>reference</em>; the data is still stored only in the SQLite database. The <c>dbplyr</c> package
+        works this way because databases are often more efficient at selecting, filtering and joining large
+        data sets than R.
+      </p>
+      <p>
+        And typically the database will not even be stored on your computer, but rather a more powerful
+        machine somewhere on the web. So R is lazy and waits to bring this data into memory until you
+        explicitly tell it to using the <c>collect</c>
+        <idx><h>database</h><h>collect</h></idx>
+        function.
+      </p>
+      <p>
+        Figure <xref ref="fig-reading-ref-vs-tibble"/> highlights the difference between a <c>tibble</c>
+        object in R and the output we just created. Notice in the table on the right, the first two lines
+        of the output indicate the source is SQL. The last line doesn&#x2019;t show how many rows there are
+        (R is trying to avoid performing expensive query operations), whereas the output for the
+        <c>tibble</c> object does.
+      </p>
+
+      <figure xml:id="fig-reading-ref-vs-tibble">
+        <caption>Comparison of a reference to data in a database and a tibble in R.</caption>
+        <image source="images/reading/ref_vs_tibble.001.jpeg" width="80%"/>
+      </figure>
+
+      <p>
+        We can look at the SQL commands that are sent to the database when we write
+        <c>tbl(canlang_conn, "lang")</c> in R with the <c>show_query</c> function from the <c>dbplyr</c>
+        package.
+        <idx><h>database</h><h>show_query</h></idx>
+      </p>
+      <program language="r">
+        <input>
+show_query(tbl(canlang_conn, "lang"))
+        </input>
+      </program>
+      <pre>
+&lt;SQL&gt;
+SELECT *
+FROM `lang`</pre>
+      <p>
+        The output above shows the SQL code that is sent to the database. When we write
+        <c>tbl(canlang_conn, "lang")</c> in R, in the background, the function is translating the R code
+        into SQL, sending that SQL to the database, and then translating the response for us. So
+        <c>dbplyr</c> does all the hard work of translating from R to SQL and back for us; we can just
+        stick with R!
+      </p>
+      <p>
+        With our <c>lang_db</c> table reference for the 2016 Canadian Census data in hand, we can mostly
+        continue onward as if it were a regular data frame. For example, let&#x2019;s do the same exercise
+        from <xref ref="ch-intro"/>: we will obtain only those rows corresponding to Aboriginal languages,
+        and keep only the <c>language</c> and <c>mother_tongue</c> columns. We can use the <c>filter</c>
+        function to obtain only certain rows. Below we filter the data to include only Aboriginal languages.
+      </p>
+      <program language="r">
+        <input>
+aboriginal_lang_db &lt;- filter(lang_db, category == "Aboriginal languages")
+aboriginal_lang_db
+        </input>
+      </program>
+      <pre>
+# Source:   SQL [?? x 6]
+# Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
+   category             language                     mother_tongue most_at_home most_at_work lang_known
+   &lt;chr&gt;                &lt;chr&gt;                                &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+ 1 Aboriginal languages Aboriginal languages, n.o.s.           590          235           30        665
+ 2 Aboriginal languages Algonquian languages, n.i.e.            45           10            0        120
+ 3 Aboriginal languages Algonquin                             1260          370           40       2480
+ 4 Aboriginal languages Atikamekw                             5765         4505           85       6455
+ 5 Aboriginal languages Blackfoot                             2765         1560           25       3040
+# … with more rows
+      </pre>
+      <p>
+        Above you can again see the hints that this data is not actually stored in R yet: the source is
+        <c>SQL [?? x 6]</c> and the output says <c>... more rows</c> at the end (both indicating that R
+        does not know how many rows there are in total!), and a database type <c>sqlite</c> is listed.
+      </p>
+      <p>
+        We didn&#x2019;t use the <c>collect</c> function because we are not ready to bring the data into R yet.
+        <idx><h>collect</h></idx>
+        We can still use the database to do some work to obtain <em>only</em> the small amount of data we
+        want to work with locally in R. Let&#x2019;s add the second part of our database query: selecting only
+        the <c>language</c> and <c>mother_tongue</c> columns using the <c>select</c> function.
+      </p>
+      <program language="r">
+        <input>
+aboriginal_lang_selected_db &lt;- select(aboriginal_lang_db, language, mother_tongue)
+aboriginal_lang_selected_db
+        </input>
+      </program>
+      <pre>
+# Source:   SQL [?? x 2]
+# Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
+   language                         mother_tongue
+   &lt;chr&gt;                                    &lt;dbl&gt;
+ 1 Aboriginal languages, n.o.s.               590
+ 2 Algonquian languages, n.i.e.                45
+ 3 Algonquin                                 1260
+ 4 Atikamekw                                 5765
+ 5 Blackfoot                                 2765
+# … with more rows
+      </pre>
+      <p>
+        Now you can see that the database will return only the two columns we asked for with the
+        <c>select</c> function. In order to actually retrieve this data in R as a data frame, we use the
+        <c>collect</c> function.
+        <idx><h>filter</h></idx>
+        Below you will see that after running <c>collect</c>, R knows that the retrieved data has 67
+        rows, and there is no database listed any more.
+      </p>
+      <program language="r">
+        <input>
+aboriginal_lang_data &lt;- collect(aboriginal_lang_selected_db)
+aboriginal_lang_data
+        </input>
+      </program>
+      <pre>
+# A tibble: 67 × 2
+   language                         mother_tongue
+   &lt;chr&gt;                                    &lt;dbl&gt;
+ 1 Aboriginal languages, n.o.s.               590
+ 2 Algonquian languages, n.i.e.                45
+ 3 Algonquin                                 1260
+ 4 Atikamekw                                 5765
+ 5 Blackfoot                                 2765
+# … with 62 more rows
+      </pre>
+      <p>
+        Aside from knowing the number of rows, the data looks pretty similar in both outputs shown above.
+        And <c>dbplyr</c> provides many more functions (not just <c>filter</c>) that you can use to
+        directly feed the database reference (<c>lang_db</c>) into downstream analysis functions
+        (e.g., <c>ggplot2</c> for data visualization). But <c>dbplyr</c> does not provide <em>every</em>
+        function that we need for analysis; we do eventually need to call <c>collect</c>.
+      </p>
+      <p>
+        For example, look what happens when we try to use <c>nrow</c> to count rows in a data frame:
+        <idx><h>nrow</h></idx>
+      </p>
+      <program language="r">
+        <input>
+nrow(aboriginal_lang_selected_db)
+        </input>
+      </program>
+      <pre>
+[1] NA</pre>
+      <p>or <c>tail</c>
+        <idx><h>tail</h></idx>
+        to preview the last six rows of a data frame:
+      </p>
+      <program language="r">
+        <input>
+tail(aboriginal_lang_selected_db)
+        </input>
+      </program>
+      <pre>
+Error: tail() is not supported by sql sources</pre>
+      <p>
+        Additionally, some operations will not work to extract columns or single values from the reference
+        given by the <c>tbl</c> function. Thus, once you have finished your data wrangling of the
+        <c>tbl</c> database reference object, it is advisable to bring it into R as a data frame using
+        <c>collect</c>. But be very careful using <c>collect</c>: databases are often <em>very</em> big,
+        and reading an entire table into R might take a long time to run or even possibly crash your
+        machine. So make sure you use <c>filter</c> and <c>select</c> on the database table to reduce the
+        data to a reasonable size before using <c>collect</c> to read it into R!
+      </p>
+    </subsection>
+
+    <subsection xml:id="sec-reading-postgresql">
+      <title>Reading data from a PostgreSQL database</title>
+      <p>
+        PostgreSQL (also called Postgres)
+        <idx><h>database</h><h>PostgreSQL</h></idx>
+        is a very popular and open-source option for relational database software. Unlike SQLite,
+        PostgreSQL uses a client&#x2013;server database engine, as it was designed to be used and accessed
+        on a network. This means that you have to provide more information to R when connecting to Postgres
+        databases. The additional information that you need to include when you call the <c>dbConnect</c>
+        function is listed below:
+      </p>
+      <ul>
+        <li><p><c>dbname</c>: the name of the database (a single PostgreSQL instance can host more than
+          one database)</p></li>
+        <li><p><c>host</c>: the URL pointing to where the database is located</p></li>
+        <li><p><c>port</c>: the communication endpoint between R and the PostgreSQL database (usually
+          <c>5432</c>)</p></li>
+        <li><p><c>user</c>: the username for accessing the database</p></li>
+        <li><p><c>password</c>: the password for accessing the database</p></li>
+      </ul>
+      <p>
+        Additionally, we must use the <c>RPostgres</c> package instead of <c>RSQLite</c> in the
+        <c>dbConnect</c> function call. Below we demonstrate how to connect to a version of the
+        <c>can_mov_db</c> database, which contains information about Canadian movies. Note that the
+        <c>host</c>, <c>user</c>, and <c>password</c> below are <em>not real</em>; you will not actually
+        be able to connect to a database using this information.
+      </p>
+      <program language="r">
+        <input>
+library(RPostgres)
+canmov_conn &lt;- dbConnect(RPostgres::Postgres(), dbname = "can_mov_db",
+                        host = "fakeserver.stat.ubc.ca", port = 5432,
+                        user = "user0001", password = "abc123")
+        </input>
+      </program>
+      <p>
+        After opening the connection, everything looks and behaves almost identically to when we were
+        using an SQLite database in R. For example, we can again use <c>dbListTables</c> to find out what
+        tables are in the <c>can_mov_db</c> database:
+      </p>
+      <program language="r">
+        <input>
+dbListTables(canmov_conn)
+        </input>
+      </program>
+      <pre>
+ [1] "themes"            "medium"            "titles"            "title_aliases"
+ [5] "forms"             "episodes"          "names"             "names_occupations"
+ [9] "occupation"        "ratings"</pre>
+      <p>
+        We see that there are 10 tables in this database. Let&#x2019;s first look at the <c>"ratings"</c> table
+        to find the lowest rating that exists in the <c>can_mov_db</c> database:
+      </p>
+      <program language="r">
+        <input>
+ratings_db &lt;- tbl(canmov_conn, "ratings")
+ratings_db
+        </input>
+      </program>
+      <pre>
+# Source:   table&lt;ratings&gt; [?? x 3]
+# Database: postgres [user0001@fakeserver.stat.ubc.ca:5432/can_mov_db]
+   title              average_rating num_votes
+   &lt;chr&gt;                       &lt;dbl&gt;     &lt;int&gt;
+ 1 The Grand Seduction           6.6       150
+ 2 Rhymes for Young Ghouls       6.3      1685
+ 3 Mommy                         7.5      1060
+# … with more rows</pre>
+      <p>
+        To find the lowest rating that exists in the data base, we first need to extract the
+        <c>average_rating</c> column using <c>select</c>:
+        <idx><h>select</h></idx>
+      </p>
+      <program language="r">
+        <input>
+avg_rating_db &lt;- select(ratings_db, average_rating)
+avg_rating_db
+        </input>
+      </program>
+      <pre>
+# Source:   SQL [?? x 1]
+# Database: postgres [user0001@fakeserver.stat.ubc.ca:5432/can_mov_db]
+   average_rating
+            &lt;dbl&gt;
+ 1            5.8
+ 2            7.1
+ 3            6.5
+ 4            8.2
+ 5            6.8
+# … with more rows
+      </pre>
+      <p>
+        Next we use <c>min</c> to find the minimum rating in that column:
+        <idx><h>min</h></idx>
+      </p>
+      <program language="r">
+        <input>
+min(avg_rating_db)
+        </input>
+      </program>
+      <pre>
+Error in min(avg_rating_db) : invalid 'type' (list) of argument</pre>
+      <p>
+        Instead of the minimum, we get an error! This is another example of when we need to use the
+        <c>collect</c> function to bring the data into R for further computation:
+      </p>
+      <program language="r">
+        <input>
+avg_rating_data &lt;- collect(avg_rating_db)
+min(avg_rating_data)
+        </input>
+      </program>
+      <pre>
+[1] 1</pre>
+      <p>We see the lowest rating given to a movie is 1, indicating that it must have been a really bad movie...</p>
+    </subsection>
+
+    <subsection xml:id="sec-reading-why-databases">
+      <title>Why should we bother with databases at all?</title>
+      <p>
+        Opening a database
+        <idx><h>database</h><h>reasons to use</h></idx>
+        involved a lot more effort than just opening a <c>.csv</c>, <c>.tsv</c>, or any of the other
+        plain text or Excel formats. We had to open a connection to the database, then use <c>dbplyr</c>
+        to translate <c>tidyverse</c>-like commands (<c>filter</c>, <c>select</c> etc.) into SQL commands
+        that the database understands, and then finally <c>collect</c> the results. And not all
+        <c>tidyverse</c> commands can currently be translated to work with databases. For example, we
+        can compute a mean with a database but can&#x2019;t easily compute a median. So you might be wondering:
+        why should we use databases at all?
+      </p>
+      <p>Databases are beneficial in a large-scale setting:</p>
+      <ul>
+        <li><p>They enable storing large data sets across multiple computers with backups.</p></li>
+        <li><p>They provide mechanisms for ensuring data integrity and validating input.</p></li>
+        <li><p>They provide security and data access control.</p></li>
+        <li><p>They allow multiple users to access data simultaneously and remotely without conflicts and
+          errors. For example, there are billions of Google searches conducted daily in 2021
+          <xref ref="googlesearches"/>. Can you imagine if Google stored all of the data from those
+          searches in a single <c>.csv</c> file!? Chaos would ensue!</p></li>
+      </ul>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-reading-write-csv">
+    <title>Writing data from R to a <c>.csv</c> file</title>
+    <p>
+      At the middle and end of a data analysis, we often want to write a data frame that has changed
+      (either through filtering, selecting, mutating or summarizing) to a file to share it with others
+      or use it for another step in the analysis. The most straightforward way to do this is to use the
+      <c>write_csv</c> function
+      <idx><h>write function</h><h>write_csv</h></idx>
+      from the <c>tidyverse</c> package. The default arguments for this file are to use a comma
+      (<c>,</c>) as the delimiter and include column names. Below we demonstrate creating a new version
+      of the Canadian languages data set without the official languages category according to the
+      Canadian 2016 Census, and then writing this to a <c>.csv</c> file:
+    </p>
+    <program language="r">
+      <input>
+no_official_lang_data &lt;- filter(can_lang, category != "Official languages")
+write_csv(no_official_lang_data, "data/no_official_languages.csv")
+      </input>
+    </program>
+  </section>
+
+  <section xml:id="sec-reading-web">
+    <title>Obtaining data from the web</title>
+    <note>
+      <p>
+        This section is not required reading for the remainder of the textbook. It is included for those
+        readers interested in learning a little bit more about how to obtain different types of data from
+        the web.
+      </p>
+    </note>
+    <p>
+      Data doesn&#x2019;t just magically appear on your computer; you need to get it from somewhere. Earlier
+      in the chapter we showed you how to access data stored in a plain text, spreadsheet-like format
+      (e.g., comma- or tab-separated) from a web URL using one of the <c>read_*</c> functions from the
+      <c>tidyverse</c>. But as time goes on, it is increasingly uncommon to find data (especially large
+      amounts of data) in this format available for download from a URL. Instead, websites now often offer
+      something known as an <em>application programming interface (API)</em>,
+      <idx><h>application programming interface</h><see>API</see></idx>
+      <idx><h>API</h></idx>
+      which provides a programmatic way to ask for subsets of a data set. This allows the website owner to
+      control <em>who</em> has access to the data, <em>what portion</em> of the data they have access to,
+      and <em>how much</em> data they can access. Typically, the website owner will give you a
+      <em>token</em> or <em>key</em> (a secret string of characters somewhat like a password) that you
+      have to provide when accessing the API.
+    </p>
+    <p>
+      Another interesting thought: websites themselves <em>are</em> data! When you type a URL into your
+      browser window, your browser asks the <em>web server</em> (another computer on the internet whose
+      job it is to respond to requests for the website) to give it the website&#x2019;s data, and then your
+      browser translates that data into something you can see. This process of taking information directly
+      from what a website displays is called
+      <idx><h>web scraping</h></idx>
+      <em>web scraping</em> (or sometimes <em>screen scraping</em>).
+    </p>
+    <p>
+      If the website shows you some information that you&#x2019;re interested in, you could <em>create</em> a
+      data set for yourself by copying and pasting that information into a file. Now, of course, copying
+      and pasting information manually is a painstaking and error-prone process, especially when there is
+      a lot of information to gather. So instead of asking your browser to translate the information that
+      the web server provides into something you can see, you can collect that data programmatically&#x2014;in
+      the form of <em>hypertext markup language (HTML)</em>
+      <idx><h>hypertext markup language</h><see>HTML</see></idx>
+      <idx><h>cascading style sheet</h><see>CSS</see></idx>
+      <idx><h>CSS</h></idx>
+      <idx><h>HTML</h></idx>
+      and <em>cascading style sheet (CSS)</em> code&#x2014;and process it to extract useful information.
+      HTML provides the basic structure of a site and tells the webpage how to display the content
+      (e.g., titles, paragraphs, bullet lists etc.), whereas CSS helps style the content and tells the
+      webpage how the HTML elements should be presented (e.g., colors, layouts, fonts etc.).
+    </p>
+    <p>
+      This subsection will show you the basics of both web scraping with the
+      <url href="https://rvest.tidyverse.org/" visual="rvest.tidyverse.org/"><c>rvest</c> R package</url>
+      <xref ref="rvest"/> and accessing the NASA &#x201C;Astronomy Picture of the Day&#x201D; API
+      using the <url href="https://httr2.r-lib.org/" visual="httr2.r-lib.org/"><c>httr2</c> R package</url>
+      <xref ref="httr2"/>.
+    </p>
+
+    <subsection xml:id="sec-reading-scraping">
+      <title>Web scraping</title>
+
+      <subsubsection xml:id="sec-reading-html-css">
+        <title>HTML and CSS selectors</title>
+        <p>
+          When you enter a URL into your browser, your browser connects to the web server at that URL and
+          asks for the <em>source code</em> for the website. This is the data that the browser translates
+          <idx><h>web scraping</h></idx>
+          <idx><h>HTML</h><h>selector</h></idx>
+          <idx><h>CSS</h><h>selector</h></idx>
+          into something you can see; so if we are going to create our own data by scraping a website, we
+          have to first understand what that data looks like! For example, let&#x2019;s say we are interested
+          in knowing the average rental price (per square foot) of the most recently available one-bedroom
+          apartments in Vancouver on <url href="https://vancouver.craigslist.org" visual="vancouver.craigslist.org">Craigslist</url>. When we visit the Vancouver Craigslist website
+          <idx><h>Craigslist</h></idx>
+          and search for one-bedroom apartments, we should see something similar to
+          <xref ref="fig-reading-craigslist-human"/>.
+        </p>
+
+        <figure xml:id="fig-reading-craigslist-human">
+          <caption>Craigslist webpage of advertisements for one-bedroom apartments.</caption>
+          <image source="images/reading/craigslist_human.png" width="100%"/>
+        </figure>
+
+        <p>
+          Based on what our browser shows us, it&#x2019;s pretty easy to find the size and price for each
+          apartment listed. But we would like to be able to obtain that information using R, without any
+          manual human effort or copying and pasting. We do this by examining the <em>source code</em> that
+          the web server actually sent our browser to display for us. A snippet of HTML source code is shown
+          below (the <url href="https://github.com/UBC-DSCI/introduction-to-datascience/blob/main/img/reading/website_source.txt" visual="github.com/UBC-DSCI/introduction-to-datascience/blob/main/img/reading/website_source.txt">entire source is included with the code for this book</url>):
+        </p>
+        <pre>
+&lt;span class="result-meta"&gt;
+    &lt;span class="result-price"&gt;$800&lt;/span&gt;
+    &lt;span class="housing"&gt;
+        1br -
+    &lt;/span&gt;
+    &lt;span class="result-hood"&gt; (13768 108th Avenue)&lt;/span&gt;
+    &lt;span class="result-price"&gt;$2285&lt;/span&gt;
+&lt;/span&gt;</pre>
+        <p>
+          Oof...you can tell that the source code for a web page is not really designed for humans to
+          understand easily. However, if you look through it closely, you will find that the information
+          we&#x2019;re interested in is hidden among the muck.
+        </p>
+        <p>
+          Near the top of the snippet above you can see a line that looks like
+          <c>&lt;span class="result-price"&gt;$800&lt;/span&gt;</c>. That snippet is definitely storing
+          the price of a particular apartment. With some more investigation, you should be able to find
+          things like the date and time of the listing, the address of the listing, and more. So this
+          source code most likely contains all the information we are interested in!
+        </p>
+        <p>
+          Let&#x2019;s dig into that line
+          <idx><h>HTML</h><h>tag</h></idx>
+          above a bit more. You can see that that bit of code has an <em>opening tag</em> (words between
+          <c>&lt;</c> and <c>&gt;</c>, like <c>&lt;span&gt;</c>) and a <em>closing tag</em> (the same with
+          a slash, like <c>&lt;/span&gt;</c>). HTML source code generally stores its data between opening and
+          closing tags like these. Tags are keywords that tell the web browser how to display or format the
+          content. Above you can see that the information we want (<c>$800</c>) is stored between an opening
+          and closing tag (<c>&lt;span&gt;</c> and <c>&lt;/span&gt;</c>). In the opening tag, you can also see
+          a very useful &#x201C;class&#x201D;: <c>class="result-price"</c>. Since we want R to
+          programmatically sort through all of the source code for the website to find apartment prices,
+          maybe we can look for all the tags with the <c>"result-price"</c> class, and grab the
+          information between the opening and closing tag.
+        </p>
+        <p>
+          It&#x2019;s yet another price for an apartment listing, and the tags surrounding it have the
+          <c>"result-price"</c> class. Wonderful! Now that we know what pattern we are looking for&#x2014;a
+          dollar amount between opening and closing tags that have the <c>"result-price"</c>
+          class&#x2014;we should be able to use code to pull out all of the matching patterns from the
+          source code to obtain our data. This sort of &#x201C;pattern&#x201D; is known as a <em>CSS
+          selector</em>.
+        </p>
+        <p>
+          The above was a simple example of &#x201C;finding the pattern to look for&#x201D;; many websites are
+          quite a bit larger and more complex, and so is their website source code. Fortunately, there are
+          tools available to make this process easier. For example,
+          <url href="https://selectorgadget.com/">SelectorGadget</url> is an open-source tool that
+          simplifies identifying the generating and finding of CSS selectors. At the end of the chapter in
+          the additional resources section, we include a link to a short video on how to install and use the
+          SelectorGadget tool to obtain CSS selectors for use in web scraping. After installing and enabling
+          the tool, you can click the website element for which you want an appropriate selector. For
+          example, if we click the price of an apartment listing, we find that SelectorGadget shows us the
+          selector <c>.result-price</c> in its toolbar, and highlights all the other apartment prices that
+          would be obtained using that selector (<xref ref="fig-reading-sg1"/>).
+        </p>
+
+        <figure xml:id="fig-reading-sg1">
+          <caption>Using the SelectorGadget on a Craigslist webpage to obtain the CSS selector useful for obtaining apartment prices.</caption>
+          <image source="images/reading/sg1.png" width="100%"/>
+        </figure>
+
+        <p>
+          If we then click the size of an apartment listing, SelectorGadget shows us the <c>span</c>
+          selector, and highlights many of the lines on the page; this indicates that the <c>span</c>
+          selector is not specific enough to capture only apartment sizes (<xref ref="fig-reading-sg3"/>).
+        </p>
+
+        <figure xml:id="fig-reading-sg3">
+          <caption>Using the SelectorGadget on a Craigslist webpage to obtain a CSS selector useful for obtaining apartment sizes.</caption>
+          <image source="images/reading/sg3.png" width="100%"/>
+        </figure>
+
+        <p>
+          To narrow the selector, we can click one of the highlighted elements that we <em>do not</em>
+          want. For example, we can deselect the &#x201C;pic/map&#x201D; links, resulting in only the data we
+          want highlighted using the <c>.housing</c> selector (<xref ref="fig-reading-sg2"/>).
+        </p>
+
+        <figure xml:id="fig-reading-sg2">
+          <caption>Using the SelectorGadget on a Craigslist webpage to refine the CSS selector to one that is most useful for obtaining apartment sizes.</caption>
+          <image source="images/reading/sg2.png" width="100%"/>
+        </figure>
+
+        <p>
+          So to scrape information about the square footage and rental price of apartment listings, we need
+          to use the two CSS selectors <c>.housing</c> and <c>.result-price</c>, respectively. The
+          SelectorGadget returns them to us as a comma-separated list (here <c>.housing , .result-price</c>),
+          which is exactly the format we need to provide to R if we are using more than one CSS selector.
+        </p>
+        <p>
+          <em>Before</em> scraping
+          <idx><h>web scraping</h><h>permission</h></idx>
+          data from the web, you should always check whether or not you are <em>allowed</em> to scrape it!
+          There are two documents that are important for this: the <c>robots.txt</c> file and the Terms of
+          Service document. If we take a look at <url href="https://www.craigslist.org/about/terms.of.use" visual="craigslist.org/about/terms.of.use">Craigslist&#x2019;s Terms of Service document</url>, we find the
+          following text: <em>&#x201C;You agree not to copy/collect CL content via robots, spiders, scripts,
+          scrapers, crawlers, or any automated or manual equivalent (e.g., by hand).&#x201D;</em> So
+          unfortunately, without explicit permission, we are not allowed to scrape the website.
+        </p>
+        <p>
+          What to do now? Well, we <em>could</em> ask the owner of Craigslist for permission to scrape.
+          However, we are not likely to get a response, and even if we did they would not likely give us
+          permission. The more realistic answer is that we simply cannot scrape Craigslist. If we still want
+          to find data about rental prices in Vancouver, we must go elsewhere.
+        </p>
+        <p>
+          To continue learning how to scrape data from the web, let&#x2019;s instead scrape data on the
+          population of Canadian cities from Wikipedia.
+          <idx><h>Wikipedia</h></idx>
+          We have checked the <url href="https://foundation.wikimedia.org/wiki/Terms_of_Use/en" visual="foundation.wikimedia.org/wiki/Terms_of_Use/en">Terms of Service document</url>, and it does not mention that web scraping is
+          disallowed. We will use the SelectorGadget tool to pick elements that we are interested in (city
+          names and population counts) and deselect others to indicate that we are not interested in them
+          (province names), as shown in <xref ref="fig-reading-sg4"/>.
+        </p>
+
+        <figure xml:id="fig-reading-sg4">
+          <caption>Using the SelectorGadget on a Wikipedia webpage.</caption>
+          <image source="images/reading/sg4.png" width="100%"/>
+        </figure>
+
+        <p>
+          We include a link to a short video tutorial on this process at the end of the chapter in the
+          additional resources section. SelectorGadget provides in its toolbar the following list of CSS
+          selectors to use:
+        </p>
+        <pre>
+td:nth-child(8) ,
+td:nth-child(4) ,
+.largestCities-cell-background+ td a</pre>
+        <p>
+          Now that we have the CSS selectors that describe the properties of the elements that we want to
+          target, we can use them to find certain elements in web pages and extract data.
+        </p>
+      </subsubsection>
+
+      <subsubsection xml:id="sec-reading-rvest">
+        <title>Using <c>rvest</c></title>
+        <p>
+          We will use the <c>rvest</c> R package
+          <idx><h>rvest</h></idx>
+          to scrape data from the Wikipedia page. We start by loading the <c>rvest</c> package:
+        </p>
+        <program language="r">
+          <input>
+library(rvest)
+          </input>
+        </program>
+        <p>
+          Next, we tell R what page we want to scrape by providing the webpage&#x2019;s URL in quotations to
+          the function <c>read_html</c>:
+        </p>
+        <program language="r">
+          <input>
+page &lt;- read_html("https://en.wikipedia.org/wiki/Canada")
+          </input>
+        </program>
+        <p>
+          The <c>read_html</c> function
+          <idx><h>read function</h><h>read_html</h></idx>
+          directly downloads the source code for the page at the URL you specify, just like your browser
+          would if you navigated to that site. But instead of displaying the website to you, the
+          <c>read_html</c> function just returns the HTML source code itself, which we have stored in the
+          <c>page</c> variable. Next, we send the page object to the <c>html_nodes</c> function, along with
+          the CSS selectors we obtained from the SelectorGadget tool. Make sure to surround the selectors
+          with quotation marks; the function <c>html_nodes</c> expects that argument is a string. We store
+          the result of the <c>html_nodes</c> function in the <c>population_nodes</c> variable. Note that
+          below we use the <c>paste</c> function with a comma separator (<c>sep=","</c>) to build the list
+          of selectors. The <c>paste</c> function converts elements to characters and combines the values
+          into a list. We use this function to build the list of selectors to maintain code readability;
+          this avoids having a very long line of code.
+        </p>
+        <program language="r">
+          <input>
+selectors &lt;- paste("td:nth-child(8)",
+             "td:nth-child(4)",
+             ".largestCities-cell-background+ td a", sep = ",")
+
+population_nodes &lt;- html_nodes(page, selectors)
+head(population_nodes)
+          </input>
+        </program>
+        <pre>
+{xml_nodeset (6)}
+[1] &lt;td style="text-align:left;background:#f0f0f0;"&gt;\n&lt;a href="/wiki/Toronto" title="Toron…
+[2] &lt;td style="text-align:right;background:#f0f0f0;"&gt;5,928,040&lt;/td&gt;                       
+[3] &lt;td style="text-align:left;background:#f0f0f0;"&gt;\n&lt;a href="/wiki/Montr%C3%A9al" title=…
+[4] &lt;td style="text-align:right;background:#f0f0f0;"&gt;4,098,927&lt;/td&gt;                       
+[5] &lt;td style="text-align:left;background:#f0f0f0;"&gt;\n&lt;a href="/wiki/Calgary" title="Calga…
+[6] &lt;td style="text-align:right;background:#f0f0f0;"&gt;1,392,609&lt;/td&gt;
+        </pre>
+        <note>
+          <p>
+            <c>head</c> is a function that is often useful for viewing only a short summary of an R
+            object, rather than the whole thing (which may be quite a lot to look at). For example, here
+            <c>head</c> shows us only the first 6 items in the <c>population_nodes</c> object. Note that
+            some R objects by default print only a small summary. For example, <c>tibble</c> data frames
+            only show you the first 10 rows. But not <em>all</em> R objects do this, and that&#x2019;s where
+            the <c>head</c> function helps summarize things for you.
+          </p>
+        </note>
+        <p>
+          Each of the items in the <c>population_nodes</c> list is a <em>node</em> from the HTML document
+          that matches the CSS selectors you specified. A <em>node</em> is an HTML tag pair (e.g.,
+          <c>&lt;td&gt;</c> and <c>&lt;/td&gt;</c>, which defines the cell of a table) combined with the
+          content stored between the tags. For our CSS selector <c>td:nth-child(4)</c>, an example node
+          that would be selected would be the node containing <c>London</c>. Next we extract the meaningful
+          data&#x2014;in other words, we get rid of the HTML code syntax and tags&#x2014;from the nodes using the
+          <c>html_text</c> function. In the case of the example node above, <c>html_text</c> returns
+          <c>"London"</c>.
+        </p>
+        <program language="r">
+          <input>
+population_text &lt;- html_text(population_nodes)
+head(population_text)
+          </input>
+        </program>
+        <pre>
+[1] "Toronto"     "5,928,040"   "Montréal"    "4,098,927"   "Calgary"     "1,392,609"
+        </pre>
+        <p>
+          Fantastic! We seem to have extracted the data of interest from the raw HTML source code. But we
+          are not quite done; the data is not yet in an optimal format for data analysis. Both the city
+          names and population are encoded as characters in a single vector, instead of being in a data
+          frame with one character column for city and one numeric column for population. In
+          <xref ref="ch-wrangling"/>, we will learn more about how to <em>wrangle</em> data such as this
+          into a more useful format for data analysis using R.
+        </p>
+      </subsubsection>
+    </subsection>
+
+    <subsection xml:id="sec-reading-api">
+      <title>Using an API</title>
+      <p>
+        Rather than posting a data file at a URL for you to download, many websites these days provide an
+        API
+        <idx><h>API</h></idx>
+        that must be accessed through a programming language like R. The benefit of using an API is that
+        data owners have much more control over the data they provide to users. However, unlike web
+        scraping, there is no consistent way to access an API across websites. Every website typically has
+        its own API designed especially for its own use case. Therefore we will just provide one example of
+        accessing data through an API in this book, with the hope that it gives you enough of a basic idea
+        that you can learn how to use another API if needed. In particular, in this book we will show you
+        the basics of how to use the <c>httr2</c> package in R
+        <idx><h>API</h><h>httr2</h></idx>
+        <idx><h>httr2</h></idx>
+        <idx><h>NASA</h></idx>
+        to access data from the NASA &#x201C;Astronomy Picture of the Day&#x201D; API. Take a look at the
+        stunning picture of the Rho-Ophiuchi cloud complex <xref ref="rhoophiuchi"/> in
+        <xref ref="fig-reading-nasa-rho-ophiuchi"/> from July 13, 2023!
+      </p>
+
+      <figure xml:id="fig-reading-nasa-rho-ophiuchi">
+        <caption>The James Webb Space Telescope&#x2019;s NIRCam image of the Rho Ophiuchi molecular cloud complex.</caption>
+        <image source="images/reading/NASA-API-Rho-Ophiuchi.png" width="60%"/>
+      </figure>
+
+      <p>
+        First, you will need to visit the <url href="https://api.nasa.gov/" visual="api.nasa.gov/">NASA
+        APIs page</url> and generate an API key (i.e., a password used to identify you when accessing
+        the API). Note that a valid email address is required to associate with the key. The signup form
+        looks something like <xref ref="fig-reading-nasa-signup"/>. After filling out the basic
+        information, you will receive the token via email. Make sure to store the key in a safe place, and
+        keep it private.
+      </p>
+
+      <figure xml:id="fig-reading-nasa-signup">
+        <caption>Generating the API access token for the NASA API.</caption>
+        <image source="images/reading/NASA-API-signup.png" width="100%"/>
+      </figure>
+
+      <p>
+        When you access an API, you are initiating a transfer of data from a web server to your computer.
+        Web servers are expensive to run and do not have infinite resources. If you try to ask for
+        <em>too much data</em> at once, you can use up a huge amount of the server&#x2019;s bandwidth. If you
+        try to ask for data <em>too frequently</em>&#x2014;e.g., if you make many requests to the server in
+        quick succession&#x2014;you can also bog the server down and make it unable to talk to anyone else.
+        Most servers have mechanisms to revoke your access if you are not careful, but you should try to
+        prevent issues from happening in the first place by being extra careful with how you write and run
+        your code. You should also keep in mind that when a website owner grants you API access, they also
+        usually specify a limit (or <em>quota</em>) of how much data you can ask for. Be careful not to
+        overrun your quota! So <em>before</em> we try to use the API, we will first visit the NASA website
+        to see what limits we should abide by when using the API. These limits are outlined in
+        <xref ref="fig-reading-nasa-limits"/>.
+      </p>
+
+      <figure xml:id="fig-reading-nasa-limits">
+        <caption>The NASA website specifies an hourly limit of 1,000 requests.</caption>
+        <image source="images/reading/NASA-API-limits.png" width="100%"/>
+      </figure>
+      <p>
+        After checking the NASA website, it seems like we can send at most 1,000 requests per hour. That
+        should be more than enough for our purposes in this section.
+      </p>
+
+      <subsubsection xml:id="sec-reading-nasa-api">
+        <title>Accessing the NASA API</title>
+        <p>
+          The NASA API is what is known as an <em>HTTP API</em>:
+          <idx><h>API</h><h>HTTP</h></idx>
+          this is a particularly common kind of API, where you can obtain data simply by accessing a
+          particular URL as if it were a regular website. To make a query to the NASA API, we need to
+          specify three things. First, we specify the URL <em>endpoint</em> of
+          <idx><h>API</h><h>endpoint</h></idx>
+          the API: <c>https://api.nasa.gov/planetary/apod</c>. Second, we write <c>?</c>, which denotes
+          that a list of <em>query parameters</em>
+          <idx><h>API</h><h>query parameters</h></idx>
+          will follow. And finally, we specify a list of query parameters of the form
+          <c>parameter=value</c>, separated by <c>&amp;</c> characters. The NASA &#x201C;Astronomy Picture of
+          the Day&#x201D; API accepts the parameters shown in <xref ref="fig-reading-nasa-parameters"/>.
+        </p>
+
+        <figure xml:id="fig-reading-nasa-parameters">
+          <caption>The set of parameters that you can specify when querying the NASA &#x201C;Astronomy Picture of the Day&#x201D; API.</caption>
+          <image source="images/reading/NASA-API-parameters.png" width="100%"/>
+        </figure>
+
+        <p>
+          So for example, to obtain the image of the day from July 13, 2023, the API query would have two
+          parameters: <c>api_key=YOUR_API_KEY</c> and <c>date=2023-07-13</c>. Remember to replace
+          <c>YOUR_API_KEY</c> with the API key you received from NASA in your email! Putting it all
+          together, the query will look like the following:
+        </p>
+        <pre>
+https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY&amp;date=2023-07-13</pre>
+        <p>
+          If you try putting this URL into your web browser, you&#x2019;ll actually find that the server
+          responds to your request with some text.
+        </p>
+        <p>
+          Neat! There is definitely some data there, but it&#x2019;s a bit hard to see what it all is. As it
+          turns out, this is a common format for data called <em>JSON</em> (JavaScript Object Notation).
+          <idx><h>JSON</h></idx>
+          <idx><h>JavaScript Object Notation</h><see>JSON</see></idx>
+          We won&#x2019;t encounter this kind of data much in this book, but for now you can interpret this data
+          as <c>key : value</c> pairs separated by commas.
+        </p>
+        <p>
+          So now our job is to do all of this programmatically in R. We will load the <c>httr2</c> package,
+          and construct the query using the <c>request</c> function, which takes a single URL argument;
+          you will recognize the same query URL that we pasted into the browser earlier. We will then send
+          the query using the <c>req_perform</c> function, and finally obtain a JSON representation of the
+          response using the <c>resp_body_json</c> function.
+          <idx><h>httr2</h><h>req_perform</h></idx>
+          <idx><h>httr2</h><h>resp_body_json</h></idx>
+        </p>
+        <program language="r">
+          <input>
+library(httr2)
+
+req &lt;- request("https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY&amp;date=2023-07-13")
+resp &lt;- req_perform(req)
+nasa_data_single &lt;- resp_body_json(resp)
+nasa_data_single
+          </input>
+        </program>
+        <pre>
+$copyright
+[1] "Rheinhold Wittich"
+
+$date
+[1] "2023-07-13"
+
+$explanation
+[1] "A mere 390 light years away, MC Snefru is a multistar system..."
+
+$hdurl
+[1] "https://apod.nasa.gov/apod/image/2307/RhoOph_Jwst_4066.jpg"
+
+$media_type
+[1] "image"
+
+$service_version
+[1] "v1"
+
+$title
+[1] "Rho Ophiuchi Wide Field"
+
+$url
+[1] "https://apod.nasa.gov/apod/image/2307/RhoOph_Jwst_960.jpg"
+        </pre>
+        <p>
+          We can obtain more records at once by using the <c>start_date</c> and <c>end_date</c> parameters.
+          Let&#x2019;s obtain all the records between May 1, 2023, and July 13, 2023; now the response
+          will take the form of an R <em>list</em> (you&#x2019;ll learn more about these in <xref ref="ch-wrangling"/>).
+          Each item in the list will correspond to a single day&#x2019;s record (just like the <c>nasa_data_single</c> object),
+          and there will be 74 items total, one for each day between the start and end dates:
+        </p>
+        <program language="r">
+          <input>
+req &lt;- request("https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY&amp;start_date=2023-05-01&amp;end_date=2023-07-13")
+resp &lt;- req_perform(req)
+nasa_data &lt;- resp_body_json(resp)
+length(nasa_data)
+          </input>
+        </program>
+        <pre>
+[1] 74</pre>
+        <p>
+          For further data processing using the techniques in this book, you&#x2019;ll need to turn this list
+          of items into a data frame. Here we will extract the <c>date</c>, <c>title</c>, <c>copyright</c>,
+          and <c>url</c> variables from the JSON data, and construct a data frame using the extracted
+          information.
+        </p>
+        <note>
+          <p>
+            Understanding this code is not required for the remainder of the textbook. It is included for
+            those readers who would like to parse JSON data into a data frame in their own data analyses.
+          </p>
+        </note>
+        <program language="r">
+          <input>
+nasa_df_all &lt;- tibble(bind_rows(lapply(nasa_data, as.data.frame.list)))
+nasa_df &lt;- select(nasa_df_all, date, title, copyright, url)
+nasa_df
+          </input>
+        </program>
+        <pre>
+# A tibble: 74 × 4
+   date       title                                       copyright            url                    
+   &lt;chr&gt;      &lt;chr&gt;                                       &lt;chr&gt;                &lt;chr&gt;                  
+ 1 2023-05-01 Streaks of Noctilucent Clouds               Ruslan Merzlyakov   https://apod.nasa.gov/…
+ 2 2023-05-02 A Total Solar Eclipse Close-Up in Real Time NA                  https://apod.nasa.gov/…
+ 3 2023-05-03 Milky Way above Tres Marias Reservoire      Leandro Ferreira…   https://apod.nasa.gov/…
+ 4 2023-05-04 Thor&#x27;s Helmet                               Vikas Chander       https://apod.nasa.gov/…
+ 5 2023-05-05 M14: Globular Cluster of the Milky Way      Greg Polanski       https://apod.nasa.gov/…
+# … with 69 more rows
+        </pre>
+        <p>
+          Success&#x2014;we have created a small data set using the NASA API! This data is also quite different
+          from what we obtained from web scraping; the extracted information is readily available in a JSON
+          format, as opposed to raw HTML code (although not <em>every</em> API will provide data in such a
+          nice format). From this point onward, the <c>nasa_df</c> data frame is stored on your machine, and
+          you can play with it to your heart&#x2019;s content. For example, you can use <c>write_csv</c> to
+          save it to a file and <c>read_csv</c> to read it into R again later; and after reading the next
+          few chapters you will have the skills to do even more interesting things! If you decide that you
+          want to ask any of the various NASA APIs for more data (see <url href="https://api.nasa.gov/"
+          visual="api.nasa.gov/">the list of awesome NASA APIs here</url> for more examples of what is
+          possible), just be mindful as usual about how much data you are requesting and how frequently you
+          are making requests.
+        </p>
+      </subsubsection>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-reading-exercises">
+    <title>Exercises</title>
+    <p>
+      Practice exercises for the material covered in this chapter can be found in the accompanying
+      <url href="https://worksheets.datasciencebook.ca" visual="worksheets.datasciencebook.ca">worksheets
+      repository</url> in the &#x201C;Reading in data locally and from the web&#x201D; row. You can launch an
+      interactive version of the worksheet in your browser by clicking the &#x201C;launch binder&#x201D; button.
+      You can also preview a non-interactive version of the worksheet by clicking &#x201C;view worksheet.&#x201D;
+      If you instead decide to download the worksheet and run it on your own machine,
+      make sure to follow the instructions for computer setup
+      found in <xref ref="ch-setup"/>. This will ensure that the automated feedback
+      and guidance that the worksheets provide will function as intended.
+    </p>
+  </section>
+
+  <section xml:id="sec-reading-resources">
+    <title>Additional resources</title>
+    <ul>
+      <li><p>The <url href="https://readr.tidyverse.org/" visual="readr.tidyverse.org/"><c>readr</c>
+        documentation</url> provides the documentation for many of the reading functions we cover in this
+        chapter. It is where you should look if you want to learn more about the functions in this chapter,
+        the full set of arguments you can use, and other related functions. The site also provides a very
+        nice cheat sheet that summarizes many of the data wrangling functions from this chapter.</p></li>
+      <li><p>Sometimes you might run into data in such poor shape that none of the reading functions we
+        cover in this chapter work. In that case, you can consult the
+        <url href="https://r4ds.had.co.nz/data-import.html" visual="r4ds.had.co.nz/data-import.html">data
+        import chapter</url> from <em>R for Data Science</em> <xref ref="wickham2016r"/>, which goes into a
+        lot more detail about how R parses text from files into data frames.</p></li>
+      <li><p>The <url href="https://here.r-lib.org/" visual="here.r-lib.org/"><c>here</c> R package</url>
+        <xref ref="here"/> provides a way for you to construct or find your files&#x2019; paths.</p></li>
+      <li><p>The <url href="https://readxl.tidyverse.org/" visual="readxl.tidyverse.org/"><c>readxl</c>
+        documentation</url> provides more details on reading data from Excel, such as reading in data with
+        multiple sheets, or specifying the cells to read in.</p></li>
+      <li><p>The <url href="https://github.com/leeper/rio" visual="github.com/leeper/rio"><c>rio</c> R
+        package</url> <xref ref="rio"/> provides an alternative set of tools for reading and writing data
+        in R. It aims to be a &#x201C;Swiss army knife&#x201D; for data reading/writing/converting, and supports a
+        wide variety of data types (including data formats generated by other statistical software like
+        SPSS and SAS).</p></li>
+      <li><p>A <url href="https://www.youtube.com/embed/ephId3mYu9o" visual="youtube.com/embed/ephId3mYu9o">video</url>
+        from the Udacity course <em>Linux Command Line Basics</em> provides a good explanation of absolute
+        versus relative paths.</p></li>
+      <li><p>If you read the subsection on obtaining data from the web via scraping and APIs, we provide
+        two companion tutorial video links for how to use the SelectorGadget tool to obtain desired CSS
+        selectors for:
+        <ul>
+          <li><p><url href="https://www.youtube.com/embed/YdIWI6K64zo" visual="youtube.com/embed/YdIWI6K64zo">extracting the data for apartment listings on Craigslist</url>, and</p></li>
+          <li><p><url href="https://www.youtube.com/embed/O9HKbdhqYzk" visual="youtube.com/embed/O9HKbdhqYzk">extracting Canadian city names and populations from Wikipedia</url>.</p></li>
+        </ul>
+      </p></li>
+      <li><p>The <url href="https://dmi3kno.github.io/polite/" visual="dmi3kno.github.io/polite/"><c>polite</c>
+        R package</url> <xref ref="polite"/> provides a set of tools for responsibly scraping data from
+        websites.</p></li>
+    </ul>
+  </section>
 
 </chapter>

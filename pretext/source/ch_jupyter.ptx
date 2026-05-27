@@ -4,9 +4,610 @@
 
   <introduction>
     <p>
-      This chapter is a skeleton placeholder for the PreTeXt version of the book.
-      Content will be filled in from the corresponding R Markdown source file.
+      A typical data analysis involves not only writing and executing code, but also
+      writing text and displaying images that help tell the story of the analysis.
+      In fact, ideally, we would like to <em>interleave</em> these three media,
+      with the text and images serving as narration for the code and its output.
+      In this chapter we will show you how to accomplish this using Jupyter notebooks,
+      a common coding platform in data science. Jupyter notebooks do precisely what
+      we need: they let you combine text, images, and (executable!) code in a single
+      document. In this chapter, we will focus on the <em>use</em> of Jupyter notebooks
+      to program in R and write text via a web interface.
+      These skills are essential to getting your analysis running; think of it like
+      getting dressed in the morning!
+      Note that we assume that you already have Jupyter set up and ready to use.
+      If that is not the case, please first read
+      <xref ref="ch-setup"/> to learn how to install and configure Jupyter on your
+      own computer.
     </p>
   </introduction>
+
+  <!-- ============================================================ -->
+  <section xml:id="jupyter-learning-objectives">
+    <title>Chapter learning objectives</title>
+    <p>
+      By the end of the chapter, readers will be able to do the following:
+    </p>
+    <ul>
+      <li><p>Create new Jupyter notebooks.</p></li>
+      <li><p>Write, edit, and execute R code in a Jupyter notebook.</p></li>
+      <li><p>Write, edit, and view text in a Jupyter notebook.</p></li>
+      <li><p>Open and view plain text data files in Jupyter.</p></li>
+      <li><p>Export Jupyter notebooks to other standard file types (e.g., <c>.html</c>, <c>.pdf</c>).</p></li>
+    </ul>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="jupyter-what-is">
+    <title>Jupyter</title>
+    <idx>Jupyter notebook</idx>
+
+    <p>
+      Jupyter <xref ref="kluyver2016jupyter"/> is a web-based interactive development
+      environment for creating, editing, and executing documents called Jupyter notebooks.
+      Jupyter notebooks <idx>Jupyter notebook</idx> are documents that contain a mix of
+      computer code (and its output) and formattable text. Given that they combine these
+      two analysis artifacts in a single document&#x2014;code is not separate from the
+      output or written report&#x2014;notebooks are one of the leading tools to create
+      reproducible data analyses. Reproducible data analysis
+      <idx>reproducible</idx> is one where you can reliably and easily re-create the same
+      results when analyzing the same data. Although this sounds like something that should
+      always be true of any data analysis, in reality, this is not often the case; one
+      needs to make a conscious effort to perform data analysis in a reproducible manner.
+      An example of what a Jupyter notebook looks like is shown in
+      <xref ref="fig-jupyter"/>.
+    </p>
+
+    <figure xml:id="fig-jupyter">
+      <caption>A screenshot of a Jupyter Notebook.</caption>
+      <image source="images/jupyter/jupyter.png" width="100%">
+        <description>Screenshot of a Jupyter Notebook showing code cells and output.</description>
+      </image>
+    </figure>
+
+    <subsection xml:id="jupyter-accessing">
+      <title>Accessing Jupyter</title>
+      <idx>JupyterHub</idx>
+
+      <p>
+        One of the easiest ways to start working with Jupyter is to use a
+        web-based platform called <idx>JupyterHub</idx> JupyterHub. JupyterHubs often
+        have Jupyter, R, a number of R packages, and collaboration tools installed,
+        configured and ready to use. JupyterHubs are usually created and provisioned
+        by organizations, and require authentication to gain access. For example, if
+        you are reading this book as part of a course, your instructor may have a
+        JupyterHub already set up for you to use! Jupyter can also be installed on
+        your own computer; see <xref ref="ch-setup"/> for instructions.
+      </p>
+    </subsection>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="jupyter-code-cells">
+    <title>Code cells</title>
+    <idx>Jupyter notebook!code cell</idx>
+
+    <p>
+      The sections of a Jupyter notebook that contain code are referred to as code
+      cells. A code cell <idx>Jupyter notebook!code cell</idx> that has not yet been
+      executed has no number inside the square brackets to the left of the cell
+      (<xref ref="fig-code-cell-not-run"/>). Running a code cell will execute all of
+      the code it contains, and the output (if any exists) will be displayed directly
+      underneath the code that generated it. Outputs may include printed text or
+      numbers, data frames and data visualizations. Cells that have been executed also
+      have a number inside the square brackets to the left of the cell. This number
+      indicates the order in which the cells were run
+      (<xref ref="fig-code-cell-run"/>).
+    </p>
+
+    <figure xml:id="fig-code-cell-not-run">
+      <caption>A code cell in Jupyter that has not yet been executed.</caption>
+      <image source="images/jupyter/code-cell-not-run.png" width="100%">
+        <description>A Jupyter code cell showing empty square brackets indicating it has not been run.</description>
+      </image>
+    </figure>
+
+    <figure xml:id="fig-code-cell-run">
+      <caption>A code cell in Jupyter that has been executed.</caption>
+      <image source="images/jupyter/code-cell-run.png" width="100%">
+        <description>A Jupyter code cell with a number in square brackets indicating it has been executed, showing output below.</description>
+      </image>
+    </figure>
+
+    <subsection xml:id="jupyter-executing-cells">
+      <title>Executing code cells</title>
+      <idx>Jupyter notebook!cell execution</idx>
+
+      <p>
+        Code cells <idx>Jupyter notebook!cell execution</idx> can be run independently
+        or as part of executing the entire notebook using one of the
+        <q>Run all</q> commands found in the <em>Run</em> or <em>Kernel</em> menus
+        in Jupyter. Running a single code cell independently is a workflow typically
+        used when editing or writing your own R code. Executing an entire notebook is
+        a workflow typically used to ensure that your analysis runs in its entirety
+        before sharing it with others, and when using a notebook as part of an
+        automated process.
+      </p>
+      <p>
+        To run a code cell independently, the cell needs to first be activated. This
+        is done by clicking on it with the cursor. Jupyter will indicate a cell has
+        been activated by highlighting it with a blue rectangle to its left. After the
+        cell has been activated (<xref ref="fig-activate-and-run-button"/>), the cell
+        can be run by either pressing the <em>Run</em> (&#x25B6;) button in the
+        toolbar, or by using the keyboard shortcut <c>Shift + Enter</c>.
+      </p>
+
+      <figure xml:id="fig-activate-and-run-button">
+        <caption>An activated cell that is ready to be run. The blue rectangle to the
+        cell's left (annotated by a red arrow) indicates that it is ready to be run.
+        The cell can be run by clicking the run button (circled in red).</caption>
+        <image source="images/jupyter/activate-and-run-button-annotated.png" width="100%">
+          <description>A Jupyter code cell highlighted in blue with the Run button circled in red.</description>
+        </image>
+      </figure>
+
+      <p>
+        To execute all of the code cells in an entire notebook, you have three options:
+      </p>
+      <ol>
+        <li><p>Select <em>Run</em> &gt;&gt; <em>Run All Cells</em> from the menu.</p></li>
+        <li><p>Select <em>Kernel</em> &gt;&gt; <em>Restart Kernel and Run All Cells...</em>
+          from the menu (<xref ref="fig-restart-kernel-run-all"/>).</p></li>
+        <li><p>Click the (&#x23ED;) button in the tool bar.</p></li>
+      </ol>
+      <p>
+        All of these commands result in all of the code cells in a notebook being run.
+        However, there is a slight difference between them. In particular, only
+        options 2 and 3 above will restart the R session before running all of the
+        cells; option 1 will not restart the session. Restarting the R session means
+        that all previous objects that were created from running cells before this
+        command was run will be deleted. In other words, restarting the session and
+        then running all cells (options 2 or 3) emulates how your notebook code would
+        run if you completely restarted Jupyter before executing your entire notebook.
+      </p>
+
+      <figure xml:id="fig-restart-kernel-run-all">
+        <caption>Restarting the R session can be accomplished by clicking
+        <q>Restart Kernel and Run All Cells...</q></caption>
+        <image source="images/jupyter/restart-kernel-run-all.png" width="100%">
+          <description>The Jupyter Kernel menu showing the Restart Kernel and Run All Cells option.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="jupyter-kernel">
+      <title>The Kernel</title>
+      <idx>kernel</idx>
+      <idx>Jupyter notebook!kernel</idx>
+
+      <p>
+        The kernel <idx>kernel</idx> is a program that executes the code inside your
+        notebook and outputs the results. Kernels for many different programming
+        languages have been created for Jupyter, which means that Jupyter can interpret
+        and execute the code of many different programming languages. To run R code,
+        your notebook will need an R kernel. In the top right of your window, you can
+        see a circle that indicates the status of your kernel. If the circle is empty
+        (&#x25EF;) the kernel is idle and ready to execute code. If the circle is
+        filled in (&#x2B24;) the kernel is busy running some code.
+      </p>
+      <p>
+        You may run into problems where your kernel <idx>kernel!interrupt, restart</idx>
+        is stuck for an excessive amount of time, your notebook is very slow and
+        unresponsive, or your kernel loses its connection. If this happens, try the
+        following steps:
+      </p>
+      <ol>
+        <li><p>At the top of your screen, click <em>Kernel</em>, then <em>Interrupt
+          Kernel</em>.</p></li>
+        <li><p>If that doesn't help, click <em>Kernel</em>, then <em>Restart
+          Kernel...</em> If you do this, you will have to run your code cells from the
+          start of your notebook up until where you paused your work.</p></li>
+        <li><p>If that still doesn't help, restart Jupyter. First, save your work by
+          clicking <em>File</em> at the top left of your screen, then <em>Save
+          Notebook</em>. Next, if you are accessing Jupyter using a JupyterHub server,
+          from the <em>File</em> menu click <em>Hub Control Panel</em>. Choose
+          <em>Stop My Server</em> to shut it down, then the <em>My Server</em> button
+          to start it back up. If you are running Jupyter on your own computer, from
+          the <em>File</em> menu click <em>Shut Down</em>, then start Jupyter again.
+          Finally, navigate back to the notebook you were working on.</p></li>
+      </ol>
+    </subsection>
+
+    <subsection xml:id="jupyter-new-code-cells">
+      <title>Creating new code cells</title>
+
+      <p>
+        To create a new code cell in Jupyter
+        (<xref ref="fig-create-new-code-cell"/>), click the <c>+</c> button in the
+        toolbar. By default, all new cells in Jupyter start out as code cells, so after
+        this, all you have to do is write R code within the new cell you just created!
+      </p>
+
+      <figure xml:id="fig-create-new-code-cell">
+        <caption>New cells can be created by clicking the <c>+</c> button, and are by
+        default code cells.</caption>
+        <image source="images/jupyter/create-new-code-cell.png" width="100%">
+          <description>Jupyter toolbar showing the + button for creating new cells, with a new empty code cell below.</description>
+        </image>
+      </figure>
+    </subsection>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="jupyter-markdown-cells">
+    <title>Markdown cells</title>
+    <idx>markdown</idx>
+    <idx>Jupyter notebook!markdown cell</idx>
+
+    <p>
+      Text cells inside a Jupyter notebook are <idx>markdown</idx>
+      <idx>Jupyter notebook!markdown cell</idx> called Markdown cells. Markdown cells
+      are rich formatted text cells, which means you can <em>bold</em> and
+      <em>italicize</em> text, create subject headers, create bullet and numbered
+      lists, and more. These cells are given the name <q>Markdown</q> because they
+      use <em>Markdown language</em> to specify the rich text formatting.
+      You do not need to learn Markdown to write text in the Markdown cells in
+      Jupyter; plain text will work just fine. However, you might want to learn a bit
+      about Markdown eventually to enable you to create nicely formatted analyses.
+      See the additional resources at the end of this chapter to find out where you
+      can start learning Markdown.
+    </p>
+
+    <subsection xml:id="jupyter-editing-markdown">
+      <title>Editing Markdown cells</title>
+
+      <p>
+        To edit a Markdown cell in Jupyter, you need to double click on the cell.
+        Once you do this, the unformatted (or <em>unrendered</em>) version of the text
+        will be shown (<xref ref="fig-markdown-cell-not-run"/>). You can then use your
+        keyboard to edit the text. To view the formatted (or <em>rendered</em>) text
+        (<xref ref="fig-markdown-cell-run"/>), click the <em>Run</em> (&#x25B6;)
+        button in the toolbar, or use the <c>Shift + Enter</c> keyboard shortcut.
+      </p>
+
+      <figure xml:id="fig-markdown-cell-not-run">
+        <caption>A Markdown cell in Jupyter that has not yet been rendered and can
+        be edited.</caption>
+        <image source="images/jupyter/markdown-cell-not-run.png" width="100%">
+          <description>A Jupyter Markdown cell showing raw unrendered Markdown text.</description>
+        </image>
+      </figure>
+
+      <figure xml:id="fig-markdown-cell-run">
+        <caption>A Markdown cell in Jupyter that has been rendered and exhibits rich
+        text formatting.</caption>
+        <image source="images/jupyter/markdown-cell-run.png" width="100%">
+          <description>A Jupyter Markdown cell showing rendered formatted text with headings and bold text.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="jupyter-new-markdown-cells">
+      <title>Creating new Markdown cells</title>
+
+      <p>
+        To create a new Markdown cell in Jupyter, click the <c>+</c> button in the
+        toolbar. By default, all new cells in Jupyter start as code cells, so the cell
+        format needs to be changed to be recognized and rendered as a Markdown cell.
+        To do this, click on the cell with your cursor to ensure it is activated. Then
+        click on the drop-down box on the toolbar that says <q>Code</q> (it is next to
+        the &#x23ED; button), and change it from <em>Code</em> to <em>Markdown</em>
+        (<xref ref="fig-convert-to-markdown-cell"/>).
+      </p>
+
+      <figure xml:id="fig-convert-to-markdown-cell">
+        <caption>New cells are by default code cells. To create Markdown cells, the
+        cell format must be changed.</caption>
+        <image source="images/jupyter/convert-to-markdown-cell.png" width="100%">
+          <description>Jupyter toolbar with the cell type dropdown changed from Code to Markdown.</description>
+        </image>
+      </figure>
+    </subsection>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="jupyter-saving">
+    <title>Saving your work</title>
+
+    <p>
+      As with any file you work on, it is critical to save your work often so you
+      don't lose your progress! Jupyter has an autosave feature, where open files are
+      saved periodically. The default for this is every two minutes. You can also
+      manually save a Jupyter notebook by selecting <em>Save Notebook</em> from the
+      <em>File</em> menu, by clicking the disk icon on the toolbar, or by using a
+      keyboard shortcut (<c>Control + S</c> for Windows, or <c>Command + S</c> for
+      Mac OS).
+    </p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="jupyter-best-practices">
+    <title>Best practices for running a notebook</title>
+    <idx>Jupyter notebook!best practices</idx>
+
+    <subsection xml:id="jupyter-best-practices-execution">
+      <title>Best practices for executing code cells</title>
+
+      <p>
+        As you might know (or at least imagine) by now, Jupyter notebooks are great for
+        interactively editing, writing and running R code; this is what they were
+        designed for! Consequently, Jupyter notebooks are flexible in regards to code
+        cell execution order. This flexibility means that code cells can be run in any
+        arbitrary order using the <em>Run</em> (&#x25B6;) button. But this flexibility
+        has a downside: it can lead to Jupyter notebooks whose code cannot be executed
+        in a linear order (from top to bottom of the notebook). A nonlinear notebook is
+        problematic because a linear order is the conventional way code documents are
+        run, and others will have this expectation when running your notebook. Finally,
+        if the code is used in some automated process, it will need to run in a linear
+        order, from top to bottom of the notebook.
+        <idx>Jupyter notebook!best practices</idx>
+      </p>
+      <p>
+        The most common way to inadvertently create a nonlinear notebook is to rely
+        solely on using the &#x25B6; button to execute cells. For example, suppose you
+        write some R code that creates an R object, say a variable named <c>y</c>.
+        When you execute that cell and create <c>y</c>, it will continue to exist until
+        it is deliberately deleted with R code, or when the Jupyter notebook R session
+        (<em>i.e.</em>, kernel) is stopped or restarted. It can also be referenced in
+        another distinct code cell (<xref ref="fig-out-of-order-1"/>). Together, this
+        means that you could then write a code cell further above in the notebook that
+        references <c>y</c> and execute it without error in the current session
+        (<xref ref="fig-out-of-order-2"/>). This could also be done successfully in
+        future sessions if, and only if, you run the cells in the same unconventional
+        order. However, it is difficult to remember this unconventional order, and it
+        is not the order that others would expect your code to be executed in. Thus, in
+        the future, this would lead to errors when the notebook is run in the
+        conventional linear order (<xref ref="fig-out-of-order-3"/>).
+      </p>
+
+      <figure xml:id="fig-out-of-order-1">
+        <caption>Code that was written out of order, but not yet executed.</caption>
+        <image source="images/jupyter/out-of-order-1.png" width="100%">
+          <description>Two Jupyter code cells written in an order where the second cell defines y and the first cell uses y, neither having been executed yet.</description>
+        </image>
+      </figure>
+
+      <figure xml:id="fig-out-of-order-2">
+        <caption>Code that was written out of order, and was executed using the run
+        button in a nonlinear order without error. The order of execution can be traced
+        by following the numbers to the left of the code cells; their order indicates
+        the order in which the cells were executed.</caption>
+        <image source="images/jupyter/out-of-order-2.png" width="100%">
+          <description>The same two cells now executed in nonlinear order, with cell numbers showing they ran out of sequence.</description>
+        </image>
+      </figure>
+
+      <figure xml:id="fig-out-of-order-3">
+        <caption>Code that was written out of order, and was executed in a linear
+        order using <q>Restart Kernel and Run All Cells...</q> This resulted in an
+        error at the execution of the second code cell and it failed to run all code
+        cells in the notebook.</caption>
+        <image source="images/jupyter/out-of-order-3.png" width="100%">
+          <description>The same cells run linearly using Restart Kernel and Run All Cells, showing an error in the second cell because y was not yet defined.</description>
+        </image>
+      </figure>
+
+      <p>
+        You can also accidentally create a nonfunctioning notebook by creating an
+        object in a cell that later gets deleted. In such a scenario, that object only
+        exists for that one particular R session and will not exist once the notebook
+        is restarted and run again. If that object was referenced in another cell in
+        that notebook, an error would occur when the notebook was run again in a new
+        session.
+      </p>
+      <p>
+        These events may not negatively affect the current R session when the code is
+        being written; but as you might now see, they will likely lead to errors when
+        that notebook is run in a future session. Regularly executing the entire
+        notebook in a fresh R session will help guard against this. If you restart your
+        session and new errors seem to pop up when you run all of your cells in linear
+        order, you can at least be aware that there is an issue. Knowing this sooner
+        rather than later will allow you to fix the issue and ensure your notebook can
+        be run linearly from start to finish.
+      </p>
+      <p>
+        We recommend as a best practice to run the entire notebook in a fresh R session
+        at least 2&#x2013;3 times within any period of work. Note that, critically, you
+        <em>must do this in a fresh R session</em> by restarting your kernel. We
+        recommend using either the <em>Kernel</em> &gt;&gt; <em>Restart Kernel and Run
+        All Cells...</em> command from the menu or the &#x23ED; button in the toolbar.
+        Note that the <em>Run</em> &gt;&gt; <em>Run All Cells</em> menu item will not
+        restart the kernel, and so it is not sufficient to guard against these errors.
+      </p>
+    </subsection>
+
+    <subsection xml:id="jupyter-best-practices-packages">
+      <title>Best practices for including R packages in notebooks</title>
+
+      <p>
+        Most data analyses these days depend on functions from external R packages that
+        are not built into R. One example is the <c>tidyverse</c> metapackage that we
+        heavily rely on in this book. This package provides us access to functions like
+        <c>read_csv</c> for reading data, <c>select</c> for subsetting columns, and
+        <c>ggplot</c> for creating high-quality graphics.
+      </p>
+      <p>
+        As mentioned earlier in the book, external R packages need to be loaded before
+        the functions they contain can be used. Our recommended way to do this is via
+        <c>library(package_name)</c>. But where should this line of code be written in
+        a Jupyter notebook? One idea could be to load the library right before the
+        function is used in the notebook. However, although this technically works, this
+        causes hidden, or at least non-obvious, R package dependencies when others view
+        or try to run the notebook. These hidden dependencies can lead to errors when
+        the notebook is executed on another computer if the needed R packages are not
+        installed. Additionally, if the data analysis code takes a long time to run,
+        uncovering the hidden dependencies that need to be installed so that the
+        analysis can run without error can take a great deal of time to uncover.
+      </p>
+      <p>
+        Therefore, we recommend you load all R packages in a code cell near the top of
+        the Jupyter notebook. Loading all your packages at the start ensures that all
+        packages are loaded before their functions are called, assuming the notebook is
+        run in a linear order from top to bottom as recommended above. It also makes it
+        easy for others viewing or running the notebook to see what external R packages
+        are used in the analysis, and hence, what packages they should install on their
+        computer to run the analysis successfully.
+      </p>
+    </subsection>
+
+    <subsection xml:id="jupyter-best-practices-summary">
+      <title>Summary of best practices for running a notebook</title>
+
+      <ol>
+        <li><p>Write code so that it can be executed in a linear order.</p></li>
+        <li><p>As you write code in a Jupyter notebook, run the notebook in a linear
+          order and in its entirety often (2&#x2013;3 times every work session) via the
+          <em>Kernel</em> &gt;&gt; <em>Restart Kernel and Run All Cells...</em> command
+          from the Jupyter menu or the &#x23ED; button in the toolbar.</p></li>
+        <li><p>Write the code that loads external R packages near the top of the
+          Jupyter notebook.</p></li>
+      </ol>
+    </subsection>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="jupyter-exploring-data-files">
+    <title>Exploring data files</title>
+    <idx>delimiter</idx>
+
+    <p>
+      It is essential to preview data files before you try to read them into R to see
+      whether or not there are column names, what the delimiters are, and if there are
+      lines you need to skip. In Jupyter, you preview data files stored as plain text
+      files (e.g., comma- and tab-separated files) in their plain text format
+      (<xref ref="fig-open-data-w-editor-2"/>) by right-clicking on the file's name in
+      the Jupyter file explorer, selecting <em>Open with</em>, and then selecting
+      <em>Editor</em> (<xref ref="fig-open-data-w-editor-1"/>).
+      Suppose you do not specify to open the data file with an editor. In that case,
+      Jupyter will render a nice table for you, and you will not be able to see the
+      column delimiters, <idx>delimiter</idx> and therefore you will not know which
+      function to use, nor which arguments to use and values to specify for them.
+    </p>
+
+    <figure xml:id="fig-open-data-w-editor-1">
+      <caption>Opening data files with an editor in Jupyter.</caption>
+      <image source="images/jupyter/open_data_w_editor_01.png" width="100%">
+        <description>The Jupyter file browser context menu showing the Open With > Editor option selected.</description>
+      </image>
+    </figure>
+
+    <figure xml:id="fig-open-data-w-editor-2">
+      <caption>A data file as viewed in an editor in Jupyter.</caption>
+      <image source="images/jupyter/open_data_w_editor_02.png" width="100%">
+        <description>A CSV data file viewed in Jupyter's plain text editor, showing raw comma-separated values.</description>
+      </image>
+    </figure>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="jupyter-exporting">
+    <title>Exporting to a different file format</title>
+    <idx>Jupyter notebook!export</idx>
+
+    <p>
+      In Jupyter, viewing, editing and running R code is done in the Jupyter notebook
+      file format with <idx>Jupyter notebook!export</idx> file extension <c>.ipynb</c>.
+      This file format is not easy to open and view outside of Jupyter. Thus, to share
+      your analysis with people who do not commonly use Jupyter, it is recommended that
+      you export your executed analysis as a more common file type, such as an
+      <c>.html</c> file, or a <c>.pdf</c>. We recommend exporting the Jupyter notebook
+      after executing the analysis so that you can also share the outputs of your code.
+      Note, however, that your audience will not be able to <em>run</em> your analysis
+      using a <c>.html</c> or <c>.pdf</c> file. If you want your audience to be able to
+      reproduce the analysis, you must provide them with the <c>.ipynb</c> Jupyter
+      notebook file.
+    </p>
+
+    <subsection xml:id="jupyter-export-html">
+      <title>Exporting to HTML</title>
+
+      <p>
+        Exporting to <c>.html</c> will result in a shareable file that anyone can open
+        using a web browser (e.g., Firefox, Safari, Chrome, or Edge). The <c>.html</c>
+        output will produce a document that is visually similar to what the Jupyter
+        notebook looked like inside Jupyter. One point of caution here is that if there
+        are images in your Jupyter notebook, you will need to share the image files and
+        the <c>.html</c> file to see them.
+      </p>
+    </subsection>
+
+    <subsection xml:id="jupyter-export-pdf">
+      <title>Exporting to PDF</title>
+
+      <p>
+        Exporting to <c>.pdf</c> will result in a shareable file that anyone can open
+        using many programs, including Adobe Acrobat, Preview, web browsers and many
+        more. The benefit of exporting to PDF is that it is a standalone document, even
+        if the Jupyter notebook included references to image files. Unfortunately, the
+        default settings will result in a document that visually looks quite different
+        from what the Jupyter notebook looked like. The font, page margins, and other
+        details will appear different in the <c>.pdf</c> output.
+      </p>
+    </subsection>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="jupyter-creating-notebook">
+    <title>Creating a new Jupyter notebook</title>
+
+    <p>
+      At some point, you will want to create a new, fresh Jupyter notebook for your own
+      project instead of viewing, running or editing a notebook that was started by
+      someone else. To do this, navigate to the <em>Launcher</em> tab, and click on the
+      R icon under the <em>Notebook</em> heading. If no <em>Launcher</em> tab is
+      visible, you can get a new one via clicking the <em>+</em> button at the top of
+      the Jupyter file explorer (<xref ref="fig-launcher"/>).
+    </p>
+
+    <figure xml:id="fig-launcher">
+      <caption>Clicking on the R icon under the Notebook heading will create a new
+      Jupyter notebook with an R kernel.</caption>
+      <image source="images/jupyter/launcher-annotated.png" width="100%">
+        <description>The JupyterLab launcher tab showing the Notebook section with an R icon highlighted.</description>
+      </image>
+    </figure>
+
+    <p>
+      Once you have created a new Jupyter notebook, be sure to give it a descriptive
+      name, as the default file name is <c>Untitled.ipynb</c>. You can rename files by
+      first right-clicking on the file name of the notebook you just created, and then
+      clicking <em>Rename</em>. This will make the file name editable. Use your
+      keyboard to change the name. Pressing <c>Enter</c> or clicking anywhere else in
+      the Jupyter interface will save the changed file name.
+    </p>
+    <p>
+      We recommend not using white space or non-standard characters in file names.
+      Doing so will not prevent you from using that file in Jupyter. However, these
+      sorts of things become troublesome as you start to do more advanced data science
+      projects that involve repetition and automation. We recommend naming files using
+      lower case characters and separating words by a dash (<c>-</c>) or an underscore
+      (<c>_</c>).
+    </p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="jupyter-additional-resources">
+    <title>Additional resources</title>
+
+    <ul>
+      <li>
+        <p>
+          The <url href="https://jupyterlab.readthedocs.io/en/latest/" visual="jupyterlab.readthedocs.io/en/latest/">JupyterLab Documentation</url>
+          is a good next place to look for more information about working in Jupyter
+          notebooks. This documentation goes into significantly more detail about all of
+          the topics we covered in this chapter, and covers more advanced topics as well.
+        </p>
+      </li>
+      <li>
+        <p>
+          If you are keen to learn about the Markdown language for rich text formatting,
+          two good places to start are CommonMark's
+          <url href="https://commonmark.org/help/" visual="commonmark.org/help/">Markdown cheatsheet</url>
+          and
+          <url href="https://commonmark.org/help/tutorial/" visual="commonmark.org/help/tutorial/">Markdown tutorial</url>.
+        </p>
+      </li>
+    </ul>
+  </section>
 
 </chapter>
