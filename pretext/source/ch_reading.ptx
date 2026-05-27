@@ -304,8 +304,6 @@ canlang_data
         Oftentimes, information about how data was collected, or other relevant information, is included
         at the top of the data file. This information is usually written in sentence and paragraph form,
         with no delimiter because it is not organized into columns. An example of this is shown below.
-      </p>
-      <p>
         This information gives the data scientist useful context and information about the data; however,
         it is not well formatted or intended to be read into a data frame cell along with the tabular data
         that follows later in the file.
@@ -316,7 +314,14 @@ Data originally published in: Statistics Canada Census of Population 2016.
 Reproduced and distributed on an as-is basis with their permission.
 category,language,mother_tongue,most_at_home,most_at_work,lang_known
 Aboriginal languages,"Aboriginal languages, n.o.s.",590,235,30,665
-Non-Official &amp; Non-Aboriginal languages,Afrikaans,10260,4785,85,23415</pre>
+Non-Official & Non-Aboriginal languages,Afrikaans,10260,4785,85,23415
+Non-Official & Non-Aboriginal languages,"Afro-Asiatic languages, n.i.e.",1150,44
+Non-Official & Non-Aboriginal languages,Akan (Twi),13460,5985,25,22150
+Non-Official & Non-Aboriginal languages,Albanian,26895,13135,345,31930
+Aboriginal languages,"Algonquian languages, n.i.e.",45,10,0,120
+Aboriginal languages,Algonquin,1260,370,40,2480
+Non-Official & Non-Aboriginal languages,American Sign Language,2685,3020,1145,21
+Non-Official & Non-Aboriginal languages,Amharic,22465,12785,200,33670</pre>
       <p>
         With this extra information being present at the top of the file, using <c>read_csv</c> as we
         did previously does not allow us to correctly load the data into R. In the case of this file we
@@ -332,22 +337,25 @@ canlang_data
         </input>
       </program>
       <pre>
-Warning message:
-One or more parsing issues, see `problems()` for details.
-# A tibble: 217 × 1
-   `Data source: https://ttimbers.github.io/canlang/`                          
-   &lt;chr&gt;                                                                        
- 1 Data originally published in: Statistics Canada Census of Population 2016.  
- 2 Reproduced and distributed on an as-is basis with their permission.         
- 3 category                                                                     
- 4 Aboriginal languages                                                         
- 5 Non-Official &amp; Non-Aboriginal languages                                  
- 6 Non-Official &amp; Non-Aboriginal languages                                  
- 7 Non-Official &amp; Non-Aboriginal languages                                  
- 8 Non-Official &amp; Non-Aboriginal languages                                  
- 9 Aboriginal languages                                                         
-10 Aboriginal languages                                                         
-# … with 207 more rows
+## Warning: One or more parsing issues, call `problems()` on your data frame for details,
+## e.g.:
+##   dat &lt;- vroom(...)
+##   problems(dat)
+
+## # A tibble: 217 × 1
+##    `Data source: https://ttimbers.github.io/canlang/`                           
+##    &lt;chr&gt;                                                                          
+##  1 "Data originally published in: Statistics Canada Census of Population 2016." 
+##  2 "Reproduced and distributed on an as-is basis with their permission."        
+##  3 "category,language,mother_tongue,most_at_home,most_at_work,lang_known"       
+##  4 "Aboriginal languages,\"Aboriginal languages, n.o.s.\",590,235,30,665"       
+##  5 "Non-Official & Non-Aboriginal languages,Afrikaans,10260,4785,85,23415"      
+##  6 "Non-Official & Non-Aboriginal languages,\"Afro-Asiatic languages, n.i.e.\",…
+##  7 "Non-Official & Non-Aboriginal languages,Akan (Twi),13460,5985,25,22150"     
+##  8 "Non-Official & Non-Aboriginal languages,Albanian,26895,13135,345,31930"     
+##  9 "Aboriginal languages,\"Algonquian languages, n.i.e.\",45,10,0,120"          
+## 10 "Aboriginal languages,Algonquin,1260,370,40,2480"                            
+## # ℹ 207 more rows
       </pre>
       <p>
         To successfully read data like this into R, the <c>skip</c> argument
