@@ -285,15 +285,15 @@ canlang_data
 ##    category          language mother_tongue most_at_home most_at_work lang_known
 ##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
 ##  1 Aboriginal langu… Aborigi…           590          235           30        665
-##  2 Non-Official & N… Afrikaa…         10260         4785           85      23415
-##  3 Non-Official & N… Afro-As…          1150          445           10       2775
-##  4 Non-Official & N… Akan (T…         13460         5985           25      22150
-##  5 Non-Official & N… Albanian         26895        13135          345      31930
+##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
+##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
+##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
+##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
 ##  6 Aboriginal langu… Algonqu…            45           10            0        120
 ##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
-##  8 Non-Official & N… America…          2685         3020         1145      21930
-##  9 Non-Official & N… Amharic          22465        12785          200      33670
-## 10 Non-Official & N… Arabic          419890       223535         5585     629055
+##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
+##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
+## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
 ## # ℹ 204 more rows
      </pre>
     </subsection>
@@ -314,14 +314,14 @@ Data originally published in: Statistics Canada Census of Population 2016.
 Reproduced and distributed on an as-is basis with their permission.
 category,language,mother_tongue,most_at_home,most_at_work,lang_known
 Aboriginal languages,"Aboriginal languages, n.o.s.",590,235,30,665
-Non-Official & Non-Aboriginal languages,Afrikaans,10260,4785,85,23415
-Non-Official & Non-Aboriginal languages,"Afro-Asiatic languages, n.i.e.",1150,44
-Non-Official & Non-Aboriginal languages,Akan (Twi),13460,5985,25,22150
-Non-Official & Non-Aboriginal languages,Albanian,26895,13135,345,31930
+Non-Official &amp; Non-Aboriginal languages,Afrikaans,10260,4785,85,23415
+Non-Official &amp; Non-Aboriginal languages,"Afro-Asiatic languages, n.i.e.",1150,44
+Non-Official &amp; Non-Aboriginal languages,Akan (Twi),13460,5985,25,22150
+Non-Official &amp; Non-Aboriginal languages,Albanian,26895,13135,345,31930
 Aboriginal languages,"Algonquian languages, n.i.e.",45,10,0,120
 Aboriginal languages,Algonquin,1260,370,40,2480
-Non-Official & Non-Aboriginal languages,American Sign Language,2685,3020,1145,21
-Non-Official & Non-Aboriginal languages,Amharic,22465,12785,200,33670</pre>
+Non-Official &amp; Non-Aboriginal languages,American Sign Language,2685,3020,1145,21
+Non-Official &amp; Non-Aboriginal languages,Amharic,22465,12785,200,33670</pre>
       <p>
         With this extra information being present at the top of the file, using <c>read_csv</c> as we
         did previously does not allow us to correctly load the data into R. In the case of this file we
@@ -349,10 +349,10 @@ canlang_data
 ##  2 "Reproduced and distributed on an as-is basis with their permission."        
 ##  3 "category,language,mother_tongue,most_at_home,most_at_work,lang_known"       
 ##  4 "Aboriginal languages,\"Aboriginal languages, n.o.s.\",590,235,30,665"       
-##  5 "Non-Official & Non-Aboriginal languages,Afrikaans,10260,4785,85,23415"      
-##  6 "Non-Official & Non-Aboriginal languages,\"Afro-Asiatic languages, n.i.e.\",…
-##  7 "Non-Official & Non-Aboriginal languages,Akan (Twi),13460,5985,25,22150"     
-##  8 "Non-Official & Non-Aboriginal languages,Albanian,26895,13135,345,31930"     
+##  5 "Non-Official &amp; Non-Aboriginal languages,Afrikaans,10260,4785,85,23415"      
+##  6 "Non-Official &amp; Non-Aboriginal languages,\"Afro-Asiatic languages, n.i.e.\",…
+##  7 "Non-Official &amp; Non-Aboriginal languages,Akan (Twi),13460,5985,25,22150"     
+##  8 "Non-Official &amp; Non-Aboriginal languages,Albanian,26895,13135,345,31930"     
 ##  9 "Aboriginal languages,\"Algonquian languages, n.i.e.\",45,10,0,120"          
 ## 10 "Aboriginal languages,Algonquin,1260,370,40,2480"                            
 ## # ℹ 207 more rows
