@@ -371,15 +371,20 @@ canlang_data
         </input>
       </program>
       <pre>
-# A tibble: 214 × 6
-   category                   language                mother_tongue most_at_home
-   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
- 1 Aboriginal languages       Aboriginal languages,…             590          235
- 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
- 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
- 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
- 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
-# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+## # A tibble: 214 × 6
+##    category          language mother_tongue most_at_home most_at_work lang_known
+##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+##  1 Aboriginal langu… Aborigi…           590          235           30        665
+##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
+##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
+##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
+##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
+##  6 Aboriginal langu… Algonqu…            45           10            0        120
+##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
+##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
+##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
+## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
+## # ℹ 204 more rows
       </pre>
       <p>
         How did we know to skip three lines? We looked at the data! The first three lines of the data
@@ -399,9 +404,17 @@ Reproduced and distributed on an as-is basis with their permission.</pre>
         <c>can_lang.tsv</c>, has tabs in between the columns instead of commas.
       </p>
       <pre>
-category    language    mother_tongue   most_at_home    most_at_work    lang_known
+category    language    mother_tongue   most_at_home    most_at_work    lang_kno
 Aboriginal languages    Aboriginal languages, n.o.s.    590 235 30  665
-Non-Official &amp; Non-Aboriginal languages Afrikaans   10260   4785    85  23415</pre>
+Non-Official &amp; Non-Aboriginal languages Afrikaans   10260   4785    85  23415
+Non-Official &amp; Non-Aboriginal languages Afro-Asiatic languages, n.i.e.  1150
+Non-Official &amp; Non-Aboriginal languages Akan (Twi)  13460   5985    25  22150
+Non-Official &amp; Non-Aboriginal languages Albanian    26895   13135   345 31930
+Aboriginal languages    Algonquian languages, n.i.e.    45  10  0   120
+Aboriginal languages    Algonquin   1260    370 40  2480
+Non-Official &amp; Non-Aboriginal languages American Sign Language  2685    3020
+Non-Official &amp; Non-Aboriginal languages Amharic 22465   12785   200 33670
+    </pre>
       <p>
         We can use the <c>read_tsv</c> function
         <idx><h>tab-separated values</h><see>tsv</see></idx>
@@ -416,15 +429,20 @@ canlang_data
         </input>
       </program>
       <pre>
-# A tibble: 214 × 6
-   category                   language                mother_tongue most_at_home
-   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
- 1 Aboriginal languages       Aboriginal languages,…             590          235
- 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
- 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
- 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
- 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
-# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+## # A tibble: 214 × 6
+##    category          language mother_tongue most_at_home most_at_work lang_known
+##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Aboriginal langu… Aborigi…           590          235           30        665
+##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
+##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
+##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
+##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
+##  6 Aboriginal langu… Algonqu…            45           10            0        120
+##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
+##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
+##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
+## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
+## # ℹ 204 more rows
       </pre>
       <p>
         If you compare the data frame here to the data frame we obtained in
@@ -449,7 +467,16 @@ canlang_data
       </p>
       <pre>
 Aboriginal languages    Aboriginal languages, n.o.s.    590 235 30  665
-Non-Official &amp; Non-Aboriginal languages Afrikaans   10260   4785    85  23415</pre>
+Non-Official &amp; Non-Aboriginal languages Afrikaans   10260   4785    85  23415
+Non-Official &amp; Non-Aboriginal languages Afro-Asiatic languages, n.i.e.  1150
+Non-Official &amp; Non-Aboriginal languages Akan (Twi)  13460   5985    25  22150
+Non-Official &amp; Non-Aboriginal languages Albanian    26895   13135   345 31930
+Aboriginal languages    Algonquian languages, n.i.e.    45  10  0   120
+Aboriginal languages    Algonquin   1260    370 40  2480
+Non-Official &amp; Non-Aboriginal languages American Sign Language  2685    3020
+Non-Official &amp; Non-Aboriginal languages Amharic 22465   12785   200 33670
+Non-Official &amp; Non-Aboriginal languages Arabic  419890  223535  5585    629055
+</pre>
       <p>
         To read this into R using the <c>read_delim</c> function, we specify the path to the file as the
         first argument, provide the tab character <c>"\t"</c> as the <c>delim</c> argument, and set the
@@ -477,15 +504,20 @@ canlang_data
         </input>
       </program>
       <pre>
-# A tibble: 214 × 6
-   X1                                     X2                              X3    X4    X5    X6
-   &lt;chr&gt;                                  &lt;chr&gt;                        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1 Aboriginal languages                   Aboriginal languages, n.o.s.   590   235    30   665
- 2 Non-Official &amp; Non-Aboriginal langua… Afrikaans                  10260  4785    85 23415
- 3 Non-Official &amp; Non-Aboriginal langua… Afro-Asiatic languages, n.…  1150   445    10  2775
- 4 Non-Official &amp; Non-Aboriginal langua… Akan (Twi)                 13460  5985    25 22150
- 5 Non-Official &amp; Non-Aboriginal langua… Albanian                   26895 13135   345 31930
-# … with 209 more rows
+## # A tibble: 214 × 6
+##    X1                                      X2             X3     X4    X5     X6
+##     &lt;chr&gt;                                    &lt;chr&gt;        &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Aboriginal languages                    Aborigina…    590    235    30    665
+##  2 Non-Official &amp; Non-Aboriginal languages Afrikaans   10260   4785    85  23415
+##  3 Non-Official &amp; Non-Aboriginal languages Afro-Asia…   1150    445    10   2775
+##  4 Non-Official &amp; Non-Aboriginal languages Akan (Twi)  13460   5985    25  22150
+##  5 Non-Official &amp; Non-Aboriginal languages Albanian    26895  13135   345  31930
+##  6 Aboriginal languages                    Algonquia…     45     10     0    120
+##  7 Aboriginal languages                    Algonquin    1260    370    40   2480
+##  8 Non-Official &amp; Non-Aboriginal languages American …   2685   3020  1145  21930
+##  9 Non-Official &amp; Non-Aboriginal languages Amharic     22465  12785   200  33670
+## 10 Non-Official &amp; Non-Aboriginal languages Arabic     419890 223535  5585 629055
+## # ℹ 204 more rows
       </pre>
       <p>
         Data frames in R need to have column names. Thus if you read in data without column names, R will
@@ -498,7 +530,8 @@ canlang_data
         <idx><h>dplyr</h></idx>
         (one of the packages loaded with <c>tidyverse</c>, so we don&#x2019;t need to load it separately).
         The first argument is the data set, and in the subsequent arguments you write
-        <c>new_name = old_name</c> for the selected variables to rename.
+        <c>new_name = old_name</c> for the selected variables to rename. We rename the 
+        <c>X1, X2, ..., X6</c> columns in the <c>canlang_data</c> data frame to more descriptive names below.
       </p>
       <program language="r">
         <input>
@@ -513,15 +546,20 @@ canlang_data
         </input>
       </program>
       <pre>
-# A tibble: 214 × 6
-   category                   language                mother_tongue most_at_home
-   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
- 1 Aboriginal languages       Aboriginal languages,…             590          235
- 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
- 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
- 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
- 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
-# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+## # A tibble: 214 × 6
+##    category          language mother_tongue most_at_home most_at_work lang_known
+##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Aboriginal langu… Aborigi…           590          235           30        665
+##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
+##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
+##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
+##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
+##  6 Aboriginal langu… Algonqu…            45           10            0        120
+##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
+##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
+##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
+## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
+## # ℹ 204 more rows
       </pre>
     </subsection>
 
@@ -547,15 +585,20 @@ canlang_data
         </input>
       </program>
       <pre>
-# A tibble: 214 × 6
-   category                   language                mother_tongue most_at_home
-   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
- 1 Aboriginal languages       Aboriginal languages,…             590          235
- 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
- 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
- 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
- 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
-# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+## # A tibble: 214 × 6
+##    category          language mother_tongue most_at_home most_at_work lang_known
+##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Aboriginal langu… Aborigi…           590          235           30        665
+##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
+##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
+##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
+##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
+##  6 Aboriginal langu… Algonqu…            45           10            0        120
+##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
+##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
+##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
+## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
+## # ℹ 204 more rows
       </pre>
     </subsection>
 
@@ -576,15 +619,20 @@ canlang_data
         </input>
       </program>
       <pre>
-# A tibble: 214 × 6
-   category                   language                mother_tongue most_at_home
-   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
- 1 Aboriginal languages       Aboriginal languages,…             590          235
- 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
- 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
- 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
- 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
-# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+## # A tibble: 214 × 6
+##    category          language mother_tongue most_at_home most_at_work lang_known
+##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Aboriginal langu… Aborigi…           590          235           30        665
+##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
+##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
+##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
+##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
+##  6 Aboriginal langu… Algonqu…            45           10            0        120
+##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
+##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
+##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
+## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
+## # ℹ 204 more rows
       </pre>
     </subsection>
 
@@ -613,20 +661,33 @@ canlang_data
       is that even though <c>.csv</c> and <c>.xlsx</c> files look almost identical when loaded into Excel,
       the data themselves are stored completely differently. While <c>.csv</c> files are plain text files,
       where the characters you see when you open the file in a text editor are exactly the data they
-      represent, this is not the case for <c>.xlsx</c> files.
+      represent, this is not the case for <c>.xlsx</c> files. Take a look at a snippet of what a <c>.xlsx</c>
+      file would look like in a text editor:
     </p>
+
+<pre>
+,?'O
+    _rels/.rels???J1??>E?{7?
+<?V????w8?'J???'QrJ???Tf?d??d?o?wZ'???@>?4'?|??hlIo??F
+t                                                       8f??3wn
+????t??u"/
+          %~Ed2??<?w??
+                       ?Pd(??J-?E???7?'t(?-GZ?????y???c~N?g[^_r?4
+                                                                  yG?O
+                                                                      ?K??G?
+
+
+     ]TUEe??O??c[???????6q??s??d?m???\???H?^????3} ?rZY? ?:L60?^?????XTP+?|?
+X?a??4VT?,D?Jq
+</pre>
+
     <p>
-      This type of file representation allows Excel files to store additional things that plain text
-      files cannot, such as images, equations, multiple sheets, and formatting of the data. However,
-      if we want to analyze the data, we don&#x2019;t need most of these things, and it can actually get in
-      our way. We need special functions to read <c>.xlsx</c> files into R.
+      This type of file representation allows Excel files to store additional things that 
+      you cannot store in a <c>.csv</c> file, such as fonts, text formatting, graphics, multiple
+      sheets and more. And despite looking odd in a plain text editor, we can read Excel
+      spreadsheets into R using the <c>readxl</c> package developed specifically for this purpose.
     </p>
-    <p>
-      Despite looking odd in a plain text editor, we can read Excel spreadsheets into R using the
-      <c>readxl</c> package developed specifically for this purpose.
-      <idx><h>readxl</h></idx>
-      <idx><h>read function</h><h>read_excel</h></idx>
-    </p>
+
     <program language="r">
       <input>
 library(readxl)
@@ -636,15 +697,20 @@ canlang_data
       </input>
     </program>
     <pre>
-# A tibble: 214 × 6
-   category                   language                mother_tongue most_at_home
-   &lt;chr&gt;                      &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
- 1 Aboriginal languages       Aboriginal languages,…             590          235
- 2 Non-Official &amp; Non-Aborigi… Afrikaans                       10260         4785
- 3 Non-Official &amp; Non-Aborigi… Afro-Asiatic languag…            1150          445
- 4 Non-Official &amp; Non-Aborigi… Akan (Twi)                     13460         5985
- 5 Non-Official &amp; Non-Aborigi… Albanian                       26895        13135
-# … with 209 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+## # A tibble: 214 × 6
+##    category          language mother_tongue most_at_home most_at_work lang_known
+##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Aboriginal langu… Aborigi…           590          235           30        665
+##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
+##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
+##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
+##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
+##  6 Aboriginal langu… Algonqu…            45           10            0        120
+##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
+##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
+##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
+## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
+## # ℹ 204 more rows
     </pre>
     <p>
       If the <c>.xlsx</c> file has multiple sheets, you have to use the <c>sheet</c> argument to specify
@@ -784,32 +850,33 @@ lang_db
         </input>
       </program>
       <pre>
-# Source:   table&lt;lang&gt; [?? x 6]
-# Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
-   category                                language                     mother_tongue most_at_home
-   &lt;chr&gt;                                   &lt;chr&gt;                                &lt;dbl&gt;        &lt;dbl&gt;
- 1 Aboriginal languages                    Aboriginal languages, n.o.s.           590          235
- 2 Non-Official &amp; Non-Aboriginal langua… Afrikaans                          10260         4785
- 3 Non-Official &amp; Non-Aboriginal langua… Afro-Asiatic languages, n.i…         1150          445
- 4 Non-Official &amp; Non-Aboriginal langua… Akan (Twi)                         13460         5985
- 5 Non-Official &amp; Non-Aboriginal langua… Albanian                           26895        13135
-# … with more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
+## # Source:   table&lt;lang&gt; [?? x 6]
+## # Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
+##    category          language mother_tongue most_at_home most_at_work lang_known
+##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Aboriginal langu… Aborigi…           590          235           30        665
+##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
+##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
+##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
+##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
+##  6 Aboriginal langu… Algonqu…            45           10            0        120
+##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
+##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
+##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
+## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
+## # ℹ more rows
       </pre>
       <p>
         Although it looks like we just got a data frame from the database, we didn&#x2019;t! It&#x2019;s a
         <em>reference</em>; the data is still stored only in the SQLite database. The <c>dbplyr</c> package
         works this way because databases are often more efficient at selecting, filtering and joining large
         data sets than R.
-      </p>
-      <p>
         And typically the database will not even be stored on your computer, but rather a more powerful
         machine somewhere on the web. So R is lazy and waits to bring this data into memory until you
         explicitly tell it to using the <c>collect</c>
         <idx><h>database</h><h>collect</h></idx>
         function.
-      </p>
-      <p>
-        Figure <xref ref="fig-reading-ref-vs-tibble"/> highlights the difference between a <c>tibble</c>
+        <xref ref="fig-reading-ref-vs-tibble"/> highlights the difference between a <c>tibble</c>
         object in R and the output we just created. Notice in the table on the right, the first two lines
         of the output indicate the source is SQL. The last line doesn&#x2019;t show how many rows there are
         (R is trying to avoid performing expensive query operations), whereas the output for the
@@ -857,23 +924,26 @@ aboriginal_lang_db
         </input>
       </program>
       <pre>
-# Source:   SQL [?? x 6]
-# Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
-   category             language                     mother_tongue most_at_home most_at_work lang_known
-   &lt;chr&gt;                &lt;chr&gt;                                &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
- 1 Aboriginal languages Aboriginal languages, n.o.s.           590          235           30        665
- 2 Aboriginal languages Algonquian languages, n.i.e.            45           10            0        120
- 3 Aboriginal languages Algonquin                             1260          370           40       2480
- 4 Aboriginal languages Atikamekw                             5765         4505           85       6455
- 5 Aboriginal languages Blackfoot                             2765         1560           25       3040
-# … with more rows
+## # Source:   SQL [?? x 6]
+## # Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
+##    category          language mother_tongue most_at_home most_at_work lang_known
+##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Aboriginal langu… Aborigi…           590          235           30        665
+##  2 Aboriginal langu… Algonqu…            45           10            0        120
+##  3 Aboriginal langu… Algonqu…          1260          370           40       2480
+##  4 Aboriginal langu… Athabas…            50           10            0         85
+##  5 Aboriginal langu… Atikame…          6150         5465         1100       6645
+##  6 Aboriginal langu… Babine …           110           20           10        210
+##  7 Aboriginal langu… Beaver             190           50            0        340
+##  8 Aboriginal langu… Blackfo…          2815         1110           85       5645
+##  9 Aboriginal langu… Carrier           1025          250           15       2100
+## 10 Aboriginal langu… Cayuga              45           10           10        125
+## # ℹ more rows
       </pre>
       <p>
         Above you can again see the hints that this data is not actually stored in R yet: the source is
         <c>SQL [?? x 6]</c> and the output says <c>... more rows</c> at the end (both indicating that R
         does not know how many rows there are in total!), and a database type <c>sqlite</c> is listed.
-      </p>
-      <p>
         We didn&#x2019;t use the <c>collect</c> function because we are not ready to bring the data into R yet.
         <idx><h>collect</h></idx>
         We can still use the database to do some work to obtain <em>only</em> the small amount of data we
@@ -887,16 +957,21 @@ aboriginal_lang_selected_db
         </input>
       </program>
       <pre>
-# Source:   SQL [?? x 2]
-# Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
-   language                         mother_tongue
-   &lt;chr&gt;                                    &lt;dbl&gt;
- 1 Aboriginal languages, n.o.s.               590
- 2 Algonquian languages, n.i.e.                45
- 3 Algonquin                                 1260
- 4 Atikamekw                                 5765
- 5 Blackfoot                                 2765
-# … with more rows
+## # Source:   SQL [?? x 2]
+## # Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
+##    language                     mother_tongue
+##     &lt;chr&gt;                                 &lt;dbl&gt;
+##  1 Aboriginal languages, n.o.s.           590
+##  2 Algonquian languages, n.i.e.            45
+##  3 Algonquin                             1260
+##  4 Athabaskan languages, n.i.e.            50
+##  5 Atikamekw                             6150
+##  6 Babine (Wetsuwet'en)                   110
+##  7 Beaver                                 190
+##  8 Blackfoot                             2815
+##  9 Carrier                               1025
+## 10 Cayuga                                  45
+## # ℹ more rows
       </pre>
       <p>
         Now you can see that the database will return only the two columns we asked for with the
@@ -913,15 +988,20 @@ aboriginal_lang_data
         </input>
       </program>
       <pre>
-# A tibble: 67 × 2
-   language                         mother_tongue
-   &lt;chr&gt;                                    &lt;dbl&gt;
- 1 Aboriginal languages, n.o.s.               590
- 2 Algonquian languages, n.i.e.                45
- 3 Algonquin                                 1260
- 4 Atikamekw                                 5765
- 5 Blackfoot                                 2765
-# … with 62 more rows
+## # A tibble: 67 × 2
+##    language                     mother_tongue
+##     &lt;chr&gt;                                 &lt;dbl&gt;
+##  1 Aboriginal languages, n.o.s.           590
+##  2 Algonquian languages, n.i.e.            45
+##  3 Algonquin                             1260
+##  4 Athabaskan languages, n.i.e.            50
+##  5 Atikamekw                             6150
+##  6 Babine (Wetsuwet'en)                   110
+##  7 Beaver                                 190
+##  8 Blackfoot                             2815
+##  9 Carrier                               1025
+## 10 Cayuga                                  45
+## # ℹ 57 more rows
       </pre>
       <p>
         Aside from knowing the number of rows, the data looks pretty similar in both outputs shown above.
@@ -929,8 +1009,6 @@ aboriginal_lang_data
         directly feed the database reference (<c>lang_db</c>) into downstream analysis functions
         (e.g., <c>ggplot2</c> for data visualization). But <c>dbplyr</c> does not provide <em>every</em>
         function that we need for analysis; we do eventually need to call <c>collect</c>.
-      </p>
-      <p>
         For example, look what happens when we try to use <c>nrow</c> to count rows in a data frame:
         <idx><h>nrow</h></idx>
       </p>
@@ -1047,11 +1125,16 @@ avg_rating_db
 # Database: postgres [user0001@fakeserver.stat.ubc.ca:5432/can_mov_db]
    average_rating
             &lt;dbl&gt;
- 1            5.8
- 2            7.1
- 3            6.5
- 4            8.2
- 5            6.8
+ 1            6.6
+ 2            6.3
+ 3            7.5
+ 4            6.1
+ 5            7.0
+ 6            5.5
+ 7            5.6
+ 8            5.3
+ 9            5.8
+10            6.9
 # … with more rows
       </pre>
       <p>
@@ -1152,29 +1235,7 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
       have to provide when accessing the API.
     </p>
     <p>
-      Another interesting thought: websites themselves <em>are</em> data! When you type a URL into your
-      browser window, your browser asks the <em>web server</em> (another computer on the internet whose
-      job it is to respond to requests for the website) to give it the website&#x2019;s data, and then your
-      browser translates that data into something you can see. This process of taking information directly
-      from what a website displays is called
-      <idx><h>web scraping</h></idx>
-      <em>web scraping</em> (or sometimes <em>screen scraping</em>).
-    </p>
-    <p>
-      If the website shows you some information that you&#x2019;re interested in, you could <em>create</em> a
-      data set for yourself by copying and pasting that information into a file. Now, of course, copying
-      and pasting information manually is a painstaking and error-prone process, especially when there is
-      a lot of information to gather. So instead of asking your browser to translate the information that
-      the web server provides into something you can see, you can collect that data programmatically&#x2014;in
-      the form of <em>hypertext markup language (HTML)</em>
-      <idx><h>hypertext markup language</h><see>HTML</see></idx>
-      <idx><h>cascading style sheet</h><see>CSS</see></idx>
-      <idx><h>CSS</h></idx>
-      <idx><h>HTML</h></idx>
-      and <em>cascading style sheet (CSS)</em> code&#x2014;and process it to extract useful information.
-      HTML provides the basic structure of a site and tells the webpage how to display the content
-      (e.g., titles, paragraphs, bullet lists etc.), whereas CSS helps style the content and tells the
-      webpage how the HTML elements should be presented (e.g., colors, layouts, fonts etc.).
+     Another interesting thought: websites themselves are data! When you type a URL into your browser window, your browser asks the web server (another computer on the internet whose job it is to respond to requests for the website) to give it the website’s data, and then your browser translates that data into something you can see. If the website shows you some information that you’re interested in, you could create a data set for yourself by copying and pasting that information into a file. This process of taking information directly from what a website displays is called web scraping (or sometimes screen scraping). Now, of course, copying and pasting information manually is a painstaking and error-prone process, especially when there is a lot of information to gather. So instead of asking your browser to translate the information that the web server provides into something you can see, you can collect that data programmatically—in the form of hypertext markup language (HTML) and cascading style sheet (CSS) code—and process it to extract useful information. HTML provides the basic structure of a site and tells the webpage how to display the content (e.g., titles, paragraphs, bullet lists etc.), whereas CSS helps style the content and tells the webpage how the HTML elements should be presented (e.g., colors, layouts, fonts etc.).
     </p>
     <p>
       This subsection will show you the basics of both web scraping with the
@@ -1218,21 +1279,36 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
         </p>
         <pre>
 &lt;span class="result-meta"&gt;
-    &lt;span class="result-price"&gt;$800&lt;/span&gt;
-    &lt;span class="housing"&gt;
-        1br -
-    &lt;/span&gt;
-    &lt;span class="result-hood"&gt; (13768 108th Avenue)&lt;/span&gt;
+        &lt;span class="result-price"&gt;$800&lt;/span&gt;
+        &lt;span class="housing"&gt;
+            1br -
+        &lt;/span&gt;
+        &lt;span class="result-hood"&gt; (13768 108th Avenue)&lt;/span&gt;
+        &lt;span class="result-tags"&gt;
+            &lt;span class="maptag" data-pid="6786042973"&gt;map&lt;/span&gt;
+        &lt;/span&gt;
+        &lt;span class="banish icon icon-trash" role="button"&gt;
+            &lt;span class="screen-reader-text"&gt;hide this posting&lt;/span&gt;
+        &lt;/span&gt;
+    &lt;span class="unbanish icon icon-trash red" role="button"&gt;&lt;/span&gt;
+    &lt;ahref="#" class="restore-link"&gt;
+        &lt;span class="restore-narrow-text"&gt;restore&lt;/span&gt;
+        &lt;span class="restore-wide-text"&gt;restore this posting&lt;/span&gt;
+    &lt/a&gt;
     &lt;span class="result-price"&gt;$2285&lt;/span&gt;
-&lt;/span&gt;</pre>
+&lt;/span&gt;
+</pre>
         <p>
           Oof...you can tell that the source code for a web page is not really designed for humans to
           understand easily. However, if you look through it closely, you will find that the information
-          we&#x2019;re interested in is hidden among the muck.
+          we&#x2019;re interested in is hidden among the muck. For example, near the top of the snippet
+         above you can see a line that looks like
         </p>
+ <pre>
+        &lt;span class="result-price"&gt;$800&lt;/span&gt;
+</pre>
         <p>
-          Near the top of the snippet above you can see a line that looks like
-          <c>&lt;span class="result-price"&gt;$800&lt;/span&gt;</c>. That snippet is definitely storing
+          That snippet is definitely storing
           the price of a particular apartment. With some more investigation, you should be able to find
           things like the date and time of the listing, the address of the listing, and more. So this
           source code most likely contains all the information we are interested in!
@@ -1249,15 +1325,19 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
           a very useful &#x201C;class&#x201D;: <c>class="result-price"</c>. Since we want R to
           programmatically sort through all of the source code for the website to find apartment prices,
           maybe we can look for all the tags with the <c>"result-price"</c> class, and grab the
-          information between the opening and closing tag.
+          information between the opening and closing tag. Indeed, take a look at another line of the source snippet above:
         </p>
+
+<pre>
+        &lt;span class="result-price"&gt;$2285&lt;/span&gt;
+</pre>
         <p>
           It&#x2019;s yet another price for an apartment listing, and the tags surrounding it have the
           <c>"result-price"</c> class. Wonderful! Now that we know what pattern we are looking for&#x2014;a
           dollar amount between opening and closing tags that have the <c>"result-price"</c>
           class&#x2014;we should be able to use code to pull out all of the matching patterns from the
           source code to obtain our data. This sort of &#x201C;pattern&#x201D; is known as a <em>CSS
-          selector</em>.
+          selector</em> (where CSS stands for cascading style sheet).
         </p>
         <p>
           The above was a simple example of &#x201C;finding the pattern to look for&#x201D;; many websites are
@@ -1306,6 +1386,7 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
           SelectorGadget returns them to us as a comma-separated list (here <c>.housing , .result-price</c>),
           which is exactly the format we need to provide to R if we are using more than one CSS selector.
         </p>
+<p><alert>Caution: are you allowed to scrape that website?</alert></p>
         <p>
           <em>Before</em> scraping
           <idx><h>web scraping</h><h>permission</h></idx>
@@ -1321,8 +1402,6 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
           However, we are not likely to get a response, and even if we did they would not likely give us
           permission. The more realistic answer is that we simply cannot scrape Craigslist. If we still want
           to find data about rental prices in Vancouver, we must go elsewhere.
-        </p>
-        <p>
           To continue learning how to scrape data from the web, let&#x2019;s instead scrape data on the
           population of Canadian cities from Wikipedia.
           <idx><h>Wikipedia</h></idx>
@@ -1399,13 +1478,13 @@ head(population_nodes)
           </input>
         </program>
         <pre>
-{xml_nodeset (6)}
-[1] &lt;td style="text-align:left;background:#f0f0f0;"&gt;\n&lt;a href="/wiki/Toronto" title="Toron…
-[2] &lt;td style="text-align:right;background:#f0f0f0;"&gt;5,928,040&lt;/td&gt;                       
-[3] &lt;td style="text-align:left;background:#f0f0f0;"&gt;\n&lt;a href="/wiki/Montr%C3%A9al" title=…
-[4] &lt;td style="text-align:right;background:#f0f0f0;"&gt;4,098,927&lt;/td&gt;                       
-[5] &lt;td style="text-align:left;background:#f0f0f0;"&gt;\n&lt;a href="/wiki/Calgary" title="Calga…
-[6] &lt;td style="text-align:right;background:#f0f0f0;"&gt;1,392,609&lt;/td&gt;
+## {xml_nodeset (6)}
+## [1] &lt;a href="/wiki/Greater_Toronto_Area" title="Greater Toronto Area">Toronto ...
+## [2] &lt;td style="text-align:right;">6,202,225&lt/td&gt;
+## [3] &lt;a href="/wiki/London,_Ontario" title="London, Ontario">London&lt/a&gt;
+## [4] &lt;td style="text-align:right;">543,551\n&lt/td&gt;
+## [5] &lt;a href="/wiki/Greater_Montreal" title="Greater Montreal">Montreal&lt/a&gt;
+## [6] &lt;td style="text-align:right;">4,291,732&lt/td&gt;
         </pre>
         <note>
           <p>
@@ -1421,8 +1500,15 @@ head(population_nodes)
           Each of the items in the <c>population_nodes</c> list is a <em>node</em> from the HTML document
           that matches the CSS selectors you specified. A <em>node</em> is an HTML tag pair (e.g.,
           <c>&lt;td&gt;</c> and <c>&lt;/td&gt;</c>, which defines the cell of a table) combined with the
-          content stored between the tags. For our CSS selector <c>td:nth-child(4)</c>, an example node
-          that would be selected would be the node containing <c>London</c>. Next we extract the meaningful
+          content stored between the tags. For our CSS selector <c>td:nth-child(4)</c>, an example node that
+          that would be selected would be:
+</p>
+<pre>
+&lt;td style="text-align:left;background:#f0f0f0;"&gt;
+&lt;a href="/wiki/London,_Ontario" title="London, Ontario"&gt;London&lt;/a&gt;
+&lt;/td&gt;
+
+<p>Next we extract the meaningful
           data&#x2014;in other words, we get rid of the HTML code syntax and tags&#x2014;from the nodes using the
           <c>html_text</c> function. In the case of the example node above, <c>html_text</c> returns
           <c>"London"</c>.
@@ -1434,13 +1520,15 @@ head(population_text)
           </input>
         </program>
         <pre>
-[1] "Toronto"     "5,928,040"   "Montréal"    "4,098,927"   "Calgary"     "1,392,609"
+## [1] "Toronto"   "6,202,225" "London"    "543,551\n" "Montreal"  "4,291,732"
         </pre>
         <p>
           Fantastic! We seem to have extracted the data of interest from the raw HTML source code. But we
           are not quite done; the data is not yet in an optimal format for data analysis. Both the city
           names and population are encoded as characters in a single vector, instead of being in a data
-          frame with one character column for city and one numeric column for population. In
+          frame with one character column for city and one numeric column for population. (like a spreadsheet).
+          Additionally, the populations contain commas (not useful for programmatically dealing with
+          numbers), and some even contain a line break character at the end (<c>\n</c>). In
           <xref ref="ch-wrangling"/>, we will learn more about how to <em>wrangle</em> data such as this
           into a more useful format for data analysis using R.
         </p>
@@ -1520,7 +1608,10 @@ head(population_text)
           particular URL as if it were a regular website. To make a query to the NASA API, we need to
           specify three things. First, we specify the URL <em>endpoint</em> of
           <idx><h>API</h><h>endpoint</h></idx>
-          the API: <c>https://api.nasa.gov/planetary/apod</c>. Second, we write <c>?</c>, which denotes
+          the API, , which is simply a URL that helps the remote server understand which API you are
+          trying to access. NASA offers a variety of APIs, each with its own endpoint; in the case of
+          the NASA “Astronomy Picture of the Day” API, the URL endpoint is:
+          <c>https://api.nasa.gov/planetary/apod</c>. Second, we write <c>?</c>, which denotes
           that a list of <em>query parameters</em>
           <idx><h>API</h><h>query parameters</h></idx>
           will follow. And finally, we specify a list of query parameters of the form
@@ -1543,15 +1634,33 @@ head(population_text)
 https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY&amp;date=2023-07-13</pre>
         <p>
           If you try putting this URL into your web browser, you&#x2019;ll actually find that the server
-          responds to your request with some text.
+          responds to your request with some text:
         </p>
-        <p>
+<pre>{"date":"2023-07-13","explanation":"A mere 390 light-years away, Sun-like stars
+and future planetary systems are forming in the Rho Ophiuchi molecular cloud
+complex, the closest star-forming region to our fair planet. The James Webb
+Space Telescope's NIRCam peered into the nearby natal chaos to capture this
+infrared image at an inspiring scale. The spectacular cosmic snapshot was
+released to celebrate the successful first year of Webb's exploration of the
+Universe. The frame spans less than a light-year across the Rho Ophiuchi region
+and contains about 50 young stars. Brighter stars clearly sport Webb's
+characteristic pattern of diffraction spikes. Huge jets of shocked molecular
+hydrogen blasting from newborn stars are red in the image, with the large,
+yellowish dusty cavity carved out by the energetic young star near its center.
+Near some stars in the stunning image are shadows cast by their protoplanetary
+disks.","hdurl":"https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph.png",
+"media_type":"image","service_version":"v1","title":"Webb's
+Rho Ophiuchi","url":"https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph1024.png"}
+</pre>
+<p>
           Neat! There is definitely some data there, but it&#x2019;s a bit hard to see what it all is. As it
           turns out, this is a common format for data called <em>JSON</em> (JavaScript Object Notation).
           <idx><h>JSON</h></idx>
           <idx><h>JavaScript Object Notation</h><see>JSON</see></idx>
           We won&#x2019;t encounter this kind of data much in this book, but for now you can interpret this data
-          as <c>key : value</c> pairs separated by commas.
+          as <c>key : value</c> pairs separated by commas. For example, if you look closely, you'll see that the
+          first entry is <c>"date":"2023-07-13"</c>, which indicates that we indeed successfully received data
+          corresponding to July 13, 2023.
         </p>
         <p>
           So now our job is to do all of this programmatically in R. We will load the <c>httr2</c> package,
@@ -1573,32 +1682,29 @@ nasa_data_single
           </input>
         </program>
         <pre>
-$copyright
-[1] "Rheinhold Wittich"
-
-$date
-[1] "2023-07-13"
-
-$explanation
-[1] "A mere 390 light years away, MC Snefru is a multistar system..."
-
-$hdurl
-[1] "https://apod.nasa.gov/apod/image/2307/RhoOph_Jwst_4066.jpg"
-
-$media_type
-[1] "image"
-
-$service_version
-[1] "v1"
-
-$title
-[1] "Rho Ophiuchi Wide Field"
-
-$url
-[1] "https://apod.nasa.gov/apod/image/2307/RhoOph_Jwst_960.jpg"
+## $date
+## [1] "2023-07-13"
+## 
+## $explanation
+## [1] "A mere 390 light-years away, Sun-like stars and future planetary systems are forming in the Rho Ophiuchi molecular cloud complex, the closest star-forming region to our fair planet. The James Webb Space Telescope's NIRCam peered into the nearby natal chaos to capture this infrared image at an inspiring scale. The spectacular cosmic snapshot was released to celebrate the successful first year of Webb's exploration of the Universe. The frame spans less than a light-year across the Rho Ophiuchi region and contains about 50 young stars. Brighter stars clearly sport Webb's characteristic pattern of diffraction spikes. Huge jets of shocked molecular hydrogen blasting from newborn stars are red in the image, with the large, yellowish dusty cavity carved out by the energetic young star near its center. Near some stars in the stunning image are shadows cast by their protoplanetary disks."
+## 
+## $hdurl
+## [1] "https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph.png"
+## 
+## $media_type
+## [1] "image"
+## 
+## $service_version
+## [1] "v1"
+## 
+## $title
+## [1] "Webb's Rho Ophiuchi"
+## 
+## $url
+## [1] "https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph1024.png"
         </pre>
         <p>
-          We can obtain more records at once by using the <c>start_date</c> and <c>end_date</c> parameters.
+          We can obtain more records at once by using the <c>start_date</c> and <c>end_date</c> parameters, as shown in the table of parameters in <xref ref = "fig-reading-nasa-parameters"/>.
           Let&#x2019;s obtain all the records between May 1, 2023, and July 13, 2023; now the response
           will take the form of an R <em>list</em> (you&#x2019;ll learn more about these in <xref ref="ch-wrangling"/>).
           Each item in the list will correspond to a single day&#x2019;s record (just like the <c>nasa_data_single</c> object),
@@ -1634,15 +1740,20 @@ nasa_df
           </input>
         </program>
         <pre>
-# A tibble: 74 × 4
-   date       title                                       copyright            url                    
-   &lt;chr&gt;      &lt;chr&gt;                                       &lt;chr&gt;                &lt;chr&gt;                  
- 1 2023-05-01 Streaks of Noctilucent Clouds               Ruslan Merzlyakov   https://apod.nasa.gov/…
- 2 2023-05-02 A Total Solar Eclipse Close-Up in Real Time NA                  https://apod.nasa.gov/…
- 3 2023-05-03 Milky Way above Tres Marias Reservoire      Leandro Ferreira…   https://apod.nasa.gov/…
- 4 2023-05-04 Thor&#x27;s Helmet                               Vikas Chander       https://apod.nasa.gov/…
- 5 2023-05-05 M14: Globular Cluster of the Milky Way      Greg Polanski       https://apod.nasa.gov/…
-# … with 69 more rows
+## # A tibble: 74 × 4
+##    date       title                                        copyright       url                    
+##    &lt;chr&gt;      &lt;chr&gt;                                        &lt;chr&gt;           &lt;chr&gt;                  
+##  1 2023-05-01 Carina Nebula North                          "\nCarlos Tayl… http…
+##  2 2023-05-02 Flat Rock Hills on Mars                      "\nNASA, \nJPL… http…
+##  3 2023-05-03 Centaurus A: A Peculiar Island of Stars      "\nMarco Loren… http…
+##  4 2023-05-04 The Galaxy, the Jet, and a Famous Black Hole  <NA>           http…
+##  5 2023-05-05 Shackleton from ShadowCam                     <NA>           http…
+##  6 2023-05-06 Twilight in a Flower                         "Dario Giannob… http…
+##  7 2023-05-07 The Helix Nebula from CFHT                    <NA>           http…
+##  8 2023-05-08 The Spanish Dancer Spiral Galaxy              <NA>           http…
+##  9 2023-05-09 Shadows of Earth                             "\nMarcella Gi… http…
+## 10 2023-05-10 Milky Way over Egyptian Desert               "\nAmr Abdulwa… http…
+## # ℹ 64 more rows
         </pre>
         <p>
           Success&#x2014;we have created a small data set using the NASA API! This data is also quite different
