@@ -1479,12 +1479,12 @@ head(population_nodes)
         </program>
         <pre>
 ## {xml_nodeset (6)}
-## [1] &lt;a href="/wiki/Greater_Toronto_Area" title="Greater Toronto Area">Toronto ...
-## [2] &lt;td style="text-align:right;">6,202,225&lt/td&gt;
-## [3] &lt;a href="/wiki/London,_Ontario" title="London, Ontario">London&lt/a&gt;
-## [4] &lt;td style="text-align:right;">543,551\n&lt/td&gt;
-## [5] &lt;a href="/wiki/Greater_Montreal" title="Greater Montreal">Montreal&lt/a&gt;
-## [6] &lt;td style="text-align:right;">4,291,732&lt/td&gt;
+## [1] &lt;a href="/wiki/Greater_Toronto_Area" title="Greater Toronto Area"&gt;Toronto ...
+## [2] &lt;td style="text-align:right;"&gt;6,202,225&lt;/td&gt;
+## [3] &lt;a href="/wiki/London,_Ontario" title="London, Ontario">London&lt;/a&gt;
+## [4] &lt;td style="text-align:right;"&gt;543,551\n&lt;/td&gt;
+## [5] &lt;a href="/wiki/Greater_Montreal" title="Greater Montreal">Montreal&lt;/a&gt;
+## [6] &lt;td style="text-align:right;"&gt;4,291,732&lt;/td&gt;
         </pre>
         <note>
           <p>
