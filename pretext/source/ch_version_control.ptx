@@ -10,6 +10,10 @@
       </p>
       <attribution>Mark T. Holder</attribution>
     </blockquote>
+</introduction>
+
+  <section xml:id="vc-overview">
+    <title>Overview</title>
     <p>
       This chapter will introduce the concept of using version control systems
       to track changes to a project over its lifespan, to share
@@ -23,7 +27,7 @@
       There are many user interfaces for Git; in this chapter
       we will cover the Jupyter Git interface.
     </p>
-  </introduction>
+  </section>
 
   <!-- ============================================================ -->
   <section xml:id="vc-learning-objectives">
