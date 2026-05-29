@@ -1294,7 +1294,7 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
     &lt;ahref="#" class="restore-link"&gt;
         &lt;span class="restore-narrow-text"&gt;restore&lt;/span&gt;
         &lt;span class="restore-wide-text"&gt;restore this posting&lt;/span&gt;
-    &lt/a&gt;
+    &lt;/a&gt;
     &lt;span class="result-price"&gt;$2285&lt;/span&gt;
 &lt;/span&gt;
 </pre>
