@@ -1507,6 +1507,7 @@ head(population_nodes)
 &lt;td style="text-align:left;background:#f0f0f0;"&gt;
 &lt;a href="/wiki/London,_Ontario" title="London, Ontario"&gt;London&lt;/a&gt;
 &lt;/td&gt;
+</pre>
 
 <p>Next we extract the meaningful
           data&#x2014;in other words, we get rid of the HTML code syntax and tags&#x2014;from the nodes using the
