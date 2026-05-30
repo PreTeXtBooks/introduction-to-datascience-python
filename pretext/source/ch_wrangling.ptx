@@ -809,7 +809,7 @@ tidy_lang
       <pre>
 ## # A tibble: 1,070 × 5
 ##    category                            language region most_at_home most_at_work
-##    &lt;chr&gt;                               &lt;chr&gt;    &lt;chr&gt;         <int>        <int>
+##    &lt;chr&gt;                               &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt;        &lt;int&gt;
 ##  1 Aboriginal languages                Aborigi… Toron…           50            0
 ##  2 Aboriginal languages                Aborigi… Montr…           15            0
 ##  3 Aboriginal languages                Aborigi… Vanco…           15            0
@@ -852,7 +852,7 @@ selected_columns
     <pre>
 ## # A tibble: 1,070 × 4
 ##    language                     region    most_at_home most_at_work
-##    &lt;chr&gt;                        &lt;chr&gt;            <int>        <int>
+##    &lt;chr&gt;                        &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;
 ##  1 Aboriginal languages, n.o.s. Toronto             50            0
 ##  2 Aboriginal languages, n.o.s. Montréal            15            0
 ##  3 Aboriginal languages, n.o.s. Vancouver           15            0
@@ -885,7 +885,7 @@ column_range
     <pre>
 ## # A tibble: 1,070 × 4
 ##    language                     region    most_at_home most_at_work
-##    &lt;chr&gt;                        &lt;chr&gt;            <int>        <int>
+##    &lt;chr&gt;                        &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;
 ##  1 Aboriginal languages, n.o.s. Toronto             50            0
 ##  2 Aboriginal languages, n.o.s. Montréal            15            0
 ##  3 Aboriginal languages, n.o.s. Vancouver           15            0
@@ -918,7 +918,7 @@ select(tidy_lang, starts_with("most"))
     <pre>
 ## # A tibble: 1,070 × 2
 ##    most_at_home most_at_work
-##           <int>        <int>
+##           &lt;int&gt;        &lt;int&gt;
 ##  1           50            0
 ##  2           15            0
 ##  3           15            0
@@ -945,7 +945,7 @@ select(tidy_lang, contains("_"))
     <pre>
 ## # A tibble: 1,070 × 2
 ##    most_at_home most_at_work
-##           <int>        <int>
+##           &lt;int&gt;        &lt;int&gt;
 ##  1           50            0
 ##  2           15            0
 ##  3           15            0
@@ -1033,7 +1033,7 @@ filter(tidy_lang, category != "Official languages")
       <pre>
 ## # A tibble: 1,060 × 5
 ##    category                            language region most_at_home most_at_work
-##    &lt;chr&gt;                               &lt;chr&gt;    &lt;chr&gt;         <int>        <int>
+##    &lt;chr&gt;                               &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt;        &lt;int&gt;
 ##  1 Aboriginal languages                Aborigi… Toron…           50            0
 ##  2 Aboriginal languages                Aborigi… Montr…           15            0
 ##  3 Aboriginal languages                Aborigi… Vanco…           15            0
@@ -1521,7 +1521,7 @@ tidy_lang
 <pre>
 ## # A tibble: 1,070 × 5
 ##    category                            language region most_at_home most_at_work
-##    &lt;chr&gt;                               &lt;chr&gt;    &lt;chr&gt;         <int>        <int>
+##    &lt;chr&gt;                               &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt;        &lt;int&gt;
 ##  1 Aboriginal languages                Aborigi… Toron…           50            0
 ##  2 Aboriginal languages                Aborigi… Montr…           15            0
 ##  3 Aboriginal languages                Aborigi… Vanco…           15            0
@@ -1550,7 +1550,7 @@ van_data
       <pre>
 ## # A tibble: 214 × 5
 ##    category                            language region most_at_home most_at_work
-##    &lt;chr&gt;                               &lt;chr&gt;    &lt;chr&gt;         <int>        <int>
+##    &lt;chr&gt;                               &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt;        &lt;int&gt;
 ##  1 Aboriginal languages                Aborigi… Vanco…           15            0
 ##  2 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Vanco…          520           10
 ##  3 Non-Official &amp; Non-Aboriginal lang… Afro-As… Vanco…           10            0
@@ -1575,7 +1575,7 @@ van_data_selected
       <pre>
 ## # A tibble: 214 × 2
 ##    language                       most_at_home
-##    &lt;chr&gt;                                 <int>
+##    &lt;chr&gt;                                 &lt;int&gt;
 ##  1 Aboriginal languages, n.o.s.             15
 ##  2 Afrikaans                               520
 ##  3 Afro-Asiatic languages, n.i.e.           10
@@ -1605,7 +1605,7 @@ van_data_selected
       <pre>
 ## # A tibble: 214 × 2
 ##    language                       most_at_home
-##    &lt;chr&gt;                                 <int>
+##    &lt;chr&gt;                                 &lt;int&gt;
 ##  1 Aboriginal languages, n.o.s.             15
 ##  2 Afrikaans                               520
 ##  3 Afro-Asiatic languages, n.i.e.           10
@@ -1663,7 +1663,7 @@ large_region_lang
       <pre>
 ## # A tibble: 67 × 3
 ##    region    language most_at_home
-##    &lt;chr&gt;     &lt;chr&gt;           <int>
+##    &lt;chr&gt;     &lt;chr&gt;           &lt;int&gt;
 ##  1 Edmonton  Arabic          10590
 ##  2 Montréal  Tamil           10670
 ##  3 Vancouver Russian         10795
@@ -1695,7 +1695,7 @@ large_region_lang
       <pre>
 ## # A tibble: 67 × 3
 ##    region    language most_at_home
-##    &lt;chr&gt;     &lt;chr&gt;           <int>
+##    &lt;chr&gt;     &lt;chr&gt;           &lt;int&gt;
 ##  1 Edmonton  Arabic          10590
 ##  2 Montréal  Tamil           10670
 ##  3 Vancouver Russian         10795
