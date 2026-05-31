@@ -148,13 +148,22 @@ cancer
         </input>
       </program>
       <pre>
-# A tibble: 569 × 12
-       ID Class Radius Texture Perimeter   Area Smoothness Compactness Concavity
-    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
- 1 8.42e5 M       1.10   -2.07      1.27  0.984      1.57        3.28       2.65
- 2 8.43e5 M       1.83   -0.354     1.69  1.91      -0.827      -0.487     -0.0239
- 3 8.43e5 M       1.58    0.456     1.57  1.56       0.941       1.05       1.36
- # … with 566 more rows
+## # A tibble: 569 × 12
+##        ID Class Radius Texture Perimeter   Area Smoothness Compactness Concavity
+##     &lt;dbl&gt; <chr>  &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+##  1 8.42e5 M      1.10   -2.07     1.27    0.984      1.57       3.28      2.65  
+##  2 8.43e5 M      1.83   -0.353    1.68    1.91      -0.826     -0.487    -0.0238
+##  3 8.43e7 M      1.58    0.456    1.57    1.56       0.941      1.05      1.36  
+##  4 8.43e7 M     -0.768   0.254   -0.592  -0.764      3.28       3.40      1.91  
+##  5 8.44e7 M      1.75   -1.15     1.78    1.82       0.280      0.539     1.37  
+##  6 8.44e5 M     -0.476  -0.835   -0.387  -0.505      2.24       1.24      0.866 
+##  7 8.44e5 M      1.17    0.161    1.14    1.09      -0.123      0.0882    0.300 
+##  8 8.45e7 M     -0.118   0.358   -0.0728 -0.219      1.60       1.14      0.0610
+##  9 8.45e5 M     -0.320   0.588   -0.184  -0.384      2.20       1.68      1.22  
+## 10 8.45e7 M     -0.473   1.10    -0.329  -0.509      1.58       2.56      1.74  
+## # ℹ 559 more rows
+## # ℹ 3 more variables: Concave_Points &lt;dbl&gt;, Symmetry &lt;dbl&gt;,
+## #   Fractal_Dimension &lt;dbl&gt;
       </pre>
     </subsection>
 
@@ -205,14 +214,20 @@ glimpse(cancer)
         </input>
       </program>
       <pre>
-Rows: 569
-Columns: 12
-$ ID               &lt;dbl&gt; 842302, 842517, 84300903, 84348301, …
-$ Class            &lt;chr&gt; "M", "M", "M", "M", …
-$ Radius           &lt;dbl&gt; 1.097, 1.829, 1.580, -0.769, …
-$ Texture          &lt;dbl&gt; -2.073, -0.354, 0.456, 0.254, …
-$ Perimeter        &lt;dbl&gt; 1.269, 1.686, 1.567, -0.592, …
-      </pre>
+## Rows: 569
+## Columns: 12
+## $ ID                &lt;dbl&gt; 842302, 842517, 84300903, 84348301, 84358402, 843786…
+## $ Class             <chr> "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M…
+## $ Radius            &lt;dbl&gt; 1.0960995, 1.8282120, 1.5784992, -0.7682333, 1.74875…
+## $ Texture           &lt;dbl&gt; -2.0715123, -0.3533215, 0.4557859, 0.2535091, -1.150…
+## $ Perimeter         &lt;dbl&gt; 1.26881726, 1.68447255, 1.56512598, -0.59216612, 1.7…
+## $ Area              &lt;dbl&gt; 0.98350952, 1.90703027, 1.55751319, -0.76379174, 1.8…
+## $ Smoothness        &lt;dbl&gt; 1.56708746, -0.82623545, 0.94138212, 3.28066684, 0.2…
+## $ Compactness       &lt;dbl&gt; 3.28062806, -0.48664348, 1.05199990, 3.39991742, 0.5…
+## $ Concavity         &lt;dbl&gt; 2.65054179, -0.02382489, 1.36227979, 1.91421287, 1.3…
+## $ Concave_Points    &lt;dbl&gt; 2.53024886, 0.54766227, 2.03543978, 1.45043113, 1.42…
+## $ Symmetry          &lt;dbl&gt; 2.215565542, 0.001391139, 0.938858720, 2.864862154, …
+## $ Fractal_Dimension &lt;dbl&gt; 2.25376381, -0.86788881, -0.39765801, 4.90660199, -0…      </pre>
       <p>
         From the summary of the data above, we can see that <c>Class</c> is of type
         character (denoted by <c>&lt;chr&gt;</c>). We can use the
@@ -256,6 +271,22 @@ cancer &lt;- cancer |>
 glimpse(cancer)
         </input>
       </program>
+<pre>
+## Rows: 569
+## Columns: 12
+## $ ID                &lt;dbl&gt; 842302, 842517, 84300903, 84348301, 84358402, 843786…
+## $ Class             &lt;fct&gt; Malignant, Malignant, Malignant, Malignant, Malignan…
+## $ Radius            &lt;dbl&gt; 1.0960995, 1.8282120, 1.5784992, -0.7682333, 1.74875…
+## $ Texture           &lt;dbl&gt; -2.0715123, -0.3533215, 0.4557859, 0.2535091, -1.150…
+## $ Perimeter         &lt;dbl&gt; 1.26881726, 1.68447255, 1.56512598, -0.59216612, 1.7…
+## $ Area              &lt;dbl&gt; 0.98350952, 1.90703027, 1.55751319, -0.76379174, 1.8…
+## $ Smoothness        &lt;dbl&gt; 1.56708746, -0.82623545, 0.94138212, 3.28066684, 0.2…
+## $ Compactness       &lt;dbl&gt; 3.28062806, -0.48664348, 1.05199990, 3.39991742, 0.5…
+## $ Concavity         &lt;dbl&gt; 2.65054179, -0.02382489, 1.36227979, 1.91421287, 1.3…
+## $ Concave_Points    &lt;dbl&gt; 2.53024886, 0.54766227, 2.03543978, 1.45043113, 1.42…
+## $ Symmetry          &lt;dbl&gt; 2.215565542, 0.001391139, 0.938858720, 2.864862154, …
+## $ Fractal_Dimension &lt;dbl&gt; 2.25376381, -0.86788881, -0.39765801, 4.90660199, -0…
+</pre>
       <p>
         Let's verify that we have successfully converted the <c>Class</c> column to a
         factor variable and renamed its values to &#x201C;Benign&#x201D; and
@@ -386,7 +417,7 @@ perim_concav
     </figure>
     <p>
       <xref ref="fig-classif1-knn-1nn"/> shows that the nearest point to this new
-      observation is <term>malignant</term>. The idea here is that if a point is
+      observation is <term>malignant</term> and located at the coordinates (2.1, 3.6). The idea here is that if a point is
       close to another in the scatter plot, then the perimeter and concavity values
       are similar, and so we may expect that they would have the same diagnosis.
     </p>
@@ -401,7 +432,7 @@ perim_concav
       concavity of 3.3. Looking at the scatter plot in
       <xref ref="fig-classif1-knn-1nn-benign"/>, how would you classify this red,
       diamond observation? The nearest neighbor to this new point is a
-      <term>benign</term> observation. Does this seem like the right prediction to
+      <term>benign</term> observation at (0.2, 2.7). Does this seem like the right prediction to
       make for this observation? Probably not, if you consider the other nearby
       points.
     </p>
@@ -485,20 +516,67 @@ cancer |>
         </input>
       </program>
       <pre>
-# A tibble: 5 × 5
-        ID Perimeter Concavity Class     dist_from_new
-     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;fct&gt;             &lt;dbl&gt;
-1   869691    0.0556      3.38  Malignant         0.124
-2   921385    0.164       3.43  Malignant         0.200
-3   919812    0.198       3.30  Malignant         0.226
-4   916799   -0.104       3.37  Malignant         0.244
-5   862261    0.245       3.32  Malignant         0.281
+## # A tibble: 5 × 5
+##        ID Perimeter Concavity Class     dist_from_new
+##     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;fct&gt;             &lt;dbl&gt;
+## 1   86409     0.241      2.65 Benign            0.881
+## 2  887181     0.750      2.87 Malignant         0.980
+## 3  899667     0.623      2.54 Malignant         1.14 
+## 4  907914     0.417      2.31 Malignant         1.26 
+## 5 8710441    -1.16       4.04 Benign            1.28
       </pre>
-      <p>
-        The computations above show in mathematical detail how the <c>mutate</c> step
-        was used to compute the <c>dist_from_new</c> variable (the distance to the new
-        observation) for each of the 5 nearest neighbors in the training data.
-      </p>
+<p>
+  In <xref ref="table-knn-distances"/> we show in mathematical detail how the 
+  <c>mutate</c> step was used to compute the <c>dist_from_new</c> variable (the 
+  distance to the new observation) for each of the 5 nearest neighbors in the training 
+  data.
+</p>
+
+<table xml:id="table-knn-distances">
+  <title>Evaluating the distances from the new observation to each of its 5 nearest neighbors</title>
+  <tabular halign="center">
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <row header="yes">
+      <cell>Perimeter</cell>
+      <cell>Concavity</cell>
+      <cell>Distance</cell>
+      <cell>Class</cell>
+    </row>
+    <row>
+      <cell>0.24</cell>
+      <cell>2.65</cell>
+      <cell><m>\sqrt{(0-0.24)^2+(3.5-2.65)^2}=0.88</m></cell>
+      <cell>Benign</cell>
+    </row>
+    <row>
+      <cell>0.75</cell>
+      <cell>2.87</cell>
+      <cell><m>\sqrt{(0-0.75)^2+(3.5-2.87)^2}=0.98</m></cell>
+      <cell>Malignant</cell>
+    </row>
+    <row>
+      <cell>0.62</cell>
+      <cell>2.54</cell>
+      <cell><m>\sqrt{(0-0.62)^2+(3.5-2.54)^2}=1.14</m></cell>
+      <cell>Malignant</cell>
+    </row>
+    <row>
+      <cell>0.42</cell>
+      <cell>2.31</cell>
+      <cell><m>\sqrt{(0-0.42)^2+(3.5-2.31)^2}=1.26</m></cell>
+      <cell>Malignant</cell>
+    </row>
+    <row>
+      <cell>-1.16</cell>
+      <cell>4.04</cell>
+      <cell><m>\sqrt{(0-(-1.16))^2+(3.5-4.04)^2}=1.28</m></cell>
+      <cell>Benign</cell>
+    </row>
+  </tabular>
+</table>
       <p>
         The result of this computation shows that 3 of the 5 nearest neighbors to our
         new observation are malignant; since this is the majority, we classify our new
@@ -560,14 +638,14 @@ cancer |>
         </input>
       </program>
       <pre>
-# A tibble: 5 × 6
-        ID Perimeter Concavity Symmetry Class     dist_from_new
-     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt;             &lt;dbl&gt;
-1   862261     0.245      3.32    1.08   Malignant         0.290
-2   869691     0.0556     3.38    1.12   Malignant         0.304
-3   921385     0.164      3.43    1.21   Malignant         0.339
-4   916799    -0.104      3.37    0.825  Malignant         0.440
-5   913102     0.416      3.47    1.48   Malignant         0.521
+## # A tibble: 5 × 6
+##         ID Perimeter Concavity Symmetry Class     dist_from_new
+##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt;             &lt;dbl&gt;
+## 1   907914     0.417      2.31    0.837 Malignant          1.27
+## 2 90439701     1.33       2.89    1.10  Malignant          1.47
+## 3   925622     0.470      2.08    1.15  Malignant          1.50
+## 4   859471    -1.37       2.81    1.09  Benign             1.53
+## 5   899667     0.623      2.54    2.06  Malignant          1.56
       </pre>
       <p>
         Based on <m>K=5</m> nearest neighbors with these three predictors, we would
@@ -647,13 +725,20 @@ cancer_train
       </input>
     </program>
     <pre>
-# A tibble: 569 × 3
-   Class     Perimeter Concavity
-   &lt;fct&gt;         &lt;dbl&gt;     &lt;dbl&gt;
- 1 Malignant     1.27      2.65
- 2 Malignant     1.69     -0.0239
- 3 Malignant     1.57      1.36
- # … with 566 more rows
+## # A tibble: 569 × 3
+##    Class     Perimeter Concavity
+##    &lt;fct&gt;         &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Malignant    1.27      2.65  
+##  2 Malignant    1.68     -0.0238
+##  3 Malignant    1.57      1.36  
+##  4 Malignant   -0.592     1.91  
+##  5 Malignant    1.78      1.37  
+##  6 Malignant   -0.387     0.866 
+##  7 Malignant    1.14      0.300 
+##  8 Malignant   -0.0728    0.0610
+##  9 Malignant   -0.184     1.22  
+## 10 Malignant   -0.329     1.74  
+## # ℹ 559 more rows
     </pre>
     <p>
       Next, we create a <em>model specification</em>
@@ -685,13 +770,13 @@ knn_spec
       </input>
     </program>
     <pre>
-K-Nearest Neighbor Model Specification (classification)
-
-Main Arguments:
-  neighbors = 5
-  weight_func = rectangular
-
-Computational engine: kknn
+## K-Nearest Neighbor Model Specification (classification)
+## 
+## Main Arguments:
+##   neighbors = 5
+##   weight_func = rectangular
+## 
+## Computational engine: kknn
     </pre>
     <p>
       In order to fit the model on the breast cancer data, we need to pass the model
@@ -726,21 +811,17 @@ knn_fit
       </input>
     </program>
     <pre>
-== Workflow [trained] ====================================
-Preprocessor: Formula
-Model: nearest_neighbor()
-
--- Preprocessor ------------------------------------------
-Class ~ .
-
--- Model -------------------------------------------------
-Call:
-kknn::train.kknn(formula = Class ~ ., data = data, ks = min_rows(5, data, 5), …)
-
-Type of response variable: nominal
-Minimal misclassification: 0.09139
-Best kernel: rectangular
-Best k: 5
+## parsnip model object
+## 
+## 
+## Call:
+## kknn::train.kknn(formula = Class ~ ., data = data, ks = min_rows(5,     data, 5)
+## , kernel = ~"rectangular")
+## 
+## Type of response variable: nominal
+## Minimal misclassification: 0.07557118
+## Best kernel: rectangular
+## Best k: 5
     </pre>
     <p>
       Here you can see the final trained model summary. It confirms that the
@@ -845,13 +926,20 @@ unscaled_cancer
         </input>
       </program>
       <pre>
-# A tibble: 569 × 3
-   Class     Area Smoothness
-   &lt;fct&gt;    &lt;dbl&gt;      &lt;dbl&gt;
- 1 Malignant 1001.      0.118
- 2 Malignant 1326.      0.0847
- 3 Malignant  700.      0.110
- # … with 566 more rows
+## # A tibble: 569 × 3
+##    Class      Area Smoothness
+##    &lt;fct&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+##  1 Malignant 1001      0.118 
+##  2 Malignant 1326      0.0847
+##  3 Malignant 1203      0.110 
+##  4 Malignant  386.     0.142 
+##  5 Malignant 1297      0.100 
+##  6 Malignant  477.     0.128 
+##  7 Malignant 1040      0.0946
+##  8 Malignant  578.     0.119 
+##  9 Malignant  520.     0.127 
+## 10 Malignant  476.     0.119 
+## # ℹ 559 more rows
       </pre>
       <p>
         Looking at the unscaled and uncentered data above, you can see that the
@@ -880,10 +968,13 @@ uc_recipe
         </input>
       </program>
       <pre>
-── Recipe ──────────────────────────────────────────────────────────────────────
-── Inputs
- outcomes:  Class
- predictors:  Area, Smoothness
+## 
+## ── Recipe ──────────
+## 
+## ── Inputs 
+## Number of variables by role
+## outcome:   1
+## predictor: 2
       </pre>
       <p>
         So far, there is not much in the recipe; just a statement about the number of
@@ -913,17 +1004,20 @@ uc_recipe
         </input>
       </program>
       <pre>
-── Recipe ──────────────────────────────────────────────────────────────────────
-── Inputs
- outcomes:  Class
- predictors:  Area, Smoothness
-
-── Training information
-Training data contained 569 data points and no incomplete rows.
-
-── Operations
-• Scaling for: Area, Smoothness | Trained
-• Centering for: Area, Smoothness | Trained
+## 
+## ── Recipe ──────────
+## 
+## ── Inputs 
+## Number of variables by role
+## outcome:   1
+## predictor: 2
+## 
+## ── Training information 
+## Training data contained 569 data points and no incomplete rows.
+## 
+## ── Operations 
+## • Scaling for: Area, Smoothness | Trained
+## • Centering for: Area, Smoothness | Trained
       </pre>
       <p>
         You can now see that the recipe includes a scaling and centering step for all
@@ -968,13 +1062,20 @@ scaled_cancer
         </input>
       </program>
       <pre>
-# A tibble: 569 × 3
-   Class     Area Smoothness
-   &lt;fct&gt;    &lt;dbl&gt;      &lt;dbl&gt;
- 1 Malignant 1.00      0.673
- 2 Malignant 2.49     -1.03
- 3 Malignant 0.0890    0.190
- # … with 566 more rows
+## # A tibble: 569 × 3
+##      Area Smoothness Class    
+##     &lt;dbl&gt;      &lt;dbl&gt; &lt;fct&gt;    
+##  1  0.984      1.57  Malignant
+##  2  1.91      -0.826 Malignant
+##  3  1.56       0.941 Malignant
+##  4 -0.764      3.28  Malignant
+##  5  1.82       0.280 Malignant
+##  6 -0.505      2.24  Malignant
+##  7  1.09      -0.123 Malignant
+##  8 -0.219      1.60  Malignant
+##  9 -0.384      2.20  Malignant
+## 10 -0.509      1.58  Malignant
+## # ℹ 559 more rows
       </pre>
       <p>
         It may seem redundant that we had to both <c>bake</c> <em>and</em> <c>prep</c>
@@ -1140,16 +1241,19 @@ ups_recipe
         </input>
       </program>
       <pre>
-── Recipe ──────────────────────────────────────────────────────────────────────
-── Inputs
- outcomes:  Class
- predictors:  Perimeter, Concavity
-
-── Training information
-Training data contained 360 data points and no incomplete rows.
-
-── Operations
-• Up-sampling based on: Class | Trained
+## 
+## ── Recipe ──────────
+## 
+## ── Inputs 
+## Number of variables by role
+## outcome:   1
+## predictor: 2
+## 
+## ── Training information 
+## Training data contained 360 data points and no incomplete rows.
+## 
+## ── Operations 
+## • Up-sampling based on: Class | Trained
       </pre>
       <program language="r">
         <input>
@@ -1221,13 +1325,16 @@ missing_cancer
         </input>
       </program>
       <pre>
-# A tibble: 569 × 4
-   Class     Radius Texture Perimeter
-   &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
- 1 Malignant  1.10   -2.07      1.27
- 2 Malignant  1.83   NA         1.69
- 3 Malignant  1.58    0.456     1.57
- # … with 566 more rows
+## # A tibble: 7 × 4
+##   Class     Radius Texture Perimeter
+##   &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Malignant NA      NA         1.27 
+## 2 Malignant  1.83   -0.353     1.68 
+## 3 Malignant  1.58   NA         1.57 
+## 4 Malignant -0.768   0.254    -0.592
+## 5 Malignant  1.75   -1.15      1.78 
+## 6 Malignant -0.476  -0.835    -0.387
+## 7 Malignant  1.17    0.161     1.14
       </pre>
       <p>
         Recall that K-nearest neighbors classification makes predictions by computing
@@ -1248,13 +1355,14 @@ no_missing_cancer
         </input>
       </program>
       <pre>
-# A tibble: 546 × 4
-   Class     Radius Texture Perimeter
-   &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
- 1 Malignant  1.10   -2.07      1.27
- 2 Malignant  1.58    0.456     1.57
- 3 Malignant -0.769   0.254    -0.592
- # … with 543 more rows
+## # A tibble: 5 × 4
+##   Class     Radius Texture Perimeter
+##   &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Malignant  1.83   -0.353     1.68 
+## 2 Malignant -0.768   0.254    -0.592
+## 3 Malignant  1.75   -1.15      1.78 
+## 4 Malignant -0.476  -0.835    -0.387
+## 5 Malignant  1.17    0.161     1.14
       </pre>
       <p>
         However, this strategy will not work when many of the rows have missing
@@ -1277,16 +1385,19 @@ impute_missing_recipe
         </input>
       </program>
       <pre>
-── Recipe ──────────────────────────────────────────────────────────────────────
-── Inputs
- outcomes:  Class
- predictors:  Radius, Texture, Perimeter
-
-── Training information
-Training data contained 569 data points and 23 incomplete rows.
-
-── Operations
-• Mean imputation for: Radius, Texture, Perimeter | Trained
+## 
+## ── Recipe ──────────
+## 
+## ── Inputs 
+## Number of variables by role
+## outcome:   1
+## predictor: 3
+## 
+## ── Training information 
+## Training data contained 7 data points and 2 incomplete rows.
+## 
+## ── Operations 
+## • Mean imputation for: Radius, Texture, Perimeter | Trained
       </pre>
       <p>
         To visualize what mean imputation does, let's just apply the recipe directly
@@ -1301,13 +1412,16 @@ imputed_cancer
         </input>
       </program>
       <pre>
-# A tibble: 569 × 4
-   Class     Radius Texture Perimeter
-   &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
- 1 Malignant  1.10  -2.07       1.27
- 2 Malignant  1.83   0.000105   1.69
- 3 Malignant  1.58   0.456      1.57
- # … with 566 more rows
+## # A tibble: 7 × 4
+##   Radius Texture Perimeter Class    
+##    &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;fct&gt;    
+## 1  0.847  -0.385     1.27  Malignant
+## 2  1.83   -0.353     1.68  Malignant
+## 3  1.58   -0.385     1.57  Malignant
+## 4 -0.768   0.254    -0.592 Malignant
+## 5  1.75   -1.15      1.78  Malignant
+## 6 -0.476  -0.835    -0.387 Malignant
+## 7  1.17    0.161     1.14  Malignant
       </pre>
       <p>
         Many other options for missing data imputation can be found in
@@ -1383,24 +1497,26 @@ knn_fit
       </input>
     </program>
     <pre>
-== Workflow [trained] ====================================
-Preprocessor: Recipe
-Model: nearest_neighbor()
-
--- Preprocessor ------------------------------------------
-2 Recipe Steps
-
-* step_scale()
-* step_center()
-
--- Model -------------------------------------------------
-Call:
-kknn::train.kknn(formula = ..y ~ ., data = data, ks = min_rows(7, data, 5), …)
-
-Type of response variable: nominal
-Minimal misclassification: 0.0861
-Best kernel: rectangular
-Best k: 7
+## ══ Workflow [trained] ══════════
+## Preprocessor: Recipe
+## Model: nearest_neighbor()
+## 
+## ── Preprocessor ──────────
+## 2 Recipe Steps
+## 
+## • step_scale()
+## • step_center()
+## 
+## ── Model ──────────
+## 
+## Call:
+## kknn::train.kknn(formula = ..y ~ ., data = data, ks = min_rows(7,     data, 5), 
+## kernel = ~"rectangular")
+## 
+## Type of response variable: nominal
+## Minimal misclassification: 0.112478
+## Best kernel: rectangular
+## Best k: 7
     </pre>
     <p>
       As before, the fit object lists the function that trains the model as well as
