@@ -17,30 +17,102 @@
   <section xml:id="sec-viz-objectives">
     <title>Chapter learning objectives</title>
     <p>By the end of the chapter, readers will be able to do the following:</p>
+<ul>
+  <li>
+    <p>
+      Describe when to use the following kinds of visualizations to answer specific 
+      questions using a data set:
+    </p>
     <ul>
-      <li><p>Describe when to use the following kinds of visualizations to answer specific
-        questions using a data set: scatter plots, line plots, bar plots, and histogram
-        plots.</p></li>
-      <li><p>Given a data set and a question, select from the above plot types and use R
-        to create a visualization that best answers the question.</p></li>
-      <li><p>Evaluate the effectiveness of a visualization and suggest improvements to
-        better answer a given question.</p></li>
-      <li><p>Referring to the visualization, communicate the conclusions in non-technical
-        terms.</p></li>
-      <li><p>Identify rules of thumb for creating effective visualizations.</p></li>
-      <li><p>Use the <c>ggplot2</c> package in R to create and refine the above
-        visualizations using: geometric objects (<c>geom_point</c>, <c>geom_line</c>,
-        <c>geom_histogram</c>, <c>geom_bar</c>, <c>geom_vline</c>, <c>geom_hline</c>),
-        scales (<c>xlim</c>, <c>ylim</c>), aesthetic mappings (<c>x</c>, <c>y</c>,
-        <c>fill</c>, <c>color</c>, <c>shape</c>), labeling (<c>xlab</c>, <c>ylab</c>,
-        <c>labs</c>), font control and legend positioning (<c>theme</c>), and subplots
-        (<c>facet_grid</c>).</p></li>
-      <li><p>Define the three key aspects of <c>ggplot2</c> objects: aesthetic mappings,
-        geometric objects, and scales.</p></li>
-      <li><p>Describe the difference in raster and vector output formats.</p></li>
-      <li><p>Use <c>ggsave</c> to save visualizations in <c>.png</c> and <c>.svg</c>
-        format.</p></li>
+      <li><p>scatter plots</p></li>
+      <li><p>line plots</p></li>
+      <li><p>bar plots</p></li>
+      <li><p>histogram plots</p></li>
     </ul>
+  </li>
+  <li>
+    <p>
+      Given a data set and a question, select from the above plot types and use R to 
+      create a visualization that best answers the question.
+    </p>
+  </li>
+  <li>
+    <p>
+      Evaluate the effectiveness of a visualization and suggest improvements to better 
+      answer a given question.
+    </p>
+  </li>
+  <li>
+    <p>
+      Referring to the visualization, communicate the conclusions in non-technical terms.
+    </p>
+  </li>
+  <li>
+    <p>
+      Identify rules of thumb for creating effective visualizations.
+    </p>
+  </li>
+  <li>
+    <p>
+      Use the <c>ggplot2</c> package in R to create and refine the above visualizations 
+      using:
+    </p>
+    <ul>
+      <li>
+        <p>
+          geometric objects: <c>geom_point</c>, <c>geom_line</c>, 
+          <c>geom_histogram</c>, <c>geom_bar</c>, <c>geom_vline</c>, <c>geom_hline</c>
+        </p>
+      </li>
+      <li>
+        <p>
+          scales: <c>xlim</c>, <c>ylim</c>
+        </p>
+      </li>
+      <li>
+        <p>
+          aesthetic mappings: <c>x</c>, <c>y</c>, <c>fill</c>, <c>color</c>, 
+          <c>shape</c>
+        </p>
+      </li>
+      <li>
+        <p>
+          labeling: <c>xlab</c>, <c>ylab</c>, <c>labs</c>
+        </p>
+      </li>
+      <li>
+        <p>
+          font control and legend positioning: <c>theme</c>
+        </p>
+      </li>
+      <li>
+        <p>
+          subplots: <c>facet_grid</c>
+        </p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>
+      Define the three key aspects of <c>ggplot2</c> objects:
+    </p>
+    <ul>
+      <li><p>aesthetic mappings</p></li>
+      <li><p>geometric objects</p></li>
+      <li><p>scales</p></li>
+    </ul>
+  </li>
+  <li>
+    <p>
+      Describe the difference in raster and vector output formats.
+    </p>
+  </li>
+  <li>
+    <p>
+      Use <c>ggsave</c> to save visualizations in <c>.png</c> and <c>.svg</c> format.
+    </p>
+  </li>
+</ul>
   </section>
 
   <section xml:id="sec-viz-choosing">
