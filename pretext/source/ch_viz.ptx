@@ -118,15 +118,17 @@
   <section xml:id="sec-viz-choosing">
     <title>Choosing the visualization</title>
     <p><em>Ask a question, and answer it</em></p>
-    <p>
-      The purpose of a visualization is to answer a question
+<p>
+  The purpose of a visualization is to answer a question about a data set of interest. 
       <idx><h>question</h><h>visualization</h></idx>
-      about a data set of interest. So naturally, the first thing to do
-      <em>before</em> creating a visualization is to formulate the question about the
-      data you are trying to answer. A good visualization will clearly answer your
-      question without distraction; a <em>great</em> visualization will suggest even
-      what the question was itself without additional explanation.
-    </p>
+  So naturally, the first thing to do <em>before</em> creating a visualization is to formulate 
+  the question about the data you are trying to answer. A good visualization will 
+  clearly answer your question without distraction; a <em>great</em> visualization will suggest 
+  even what the question was itself without additional explanation. Imagine your 
+  visualization as part of a poster presentation for a project; even if you aren't 
+  standing at the poster explaining things, an effective visualization will convey your 
+  message to the audience.
+</p>
     <p>
       Recall the different data analysis questions from <xref ref="ch-intro"/>. With
       the visualizations we will cover in this chapter, we will be able to answer
@@ -171,7 +173,7 @@
       should also not use <term>3-D visualizations</term>, as they are typically hard
       to understand when converted to a static 2-D image format. Finally, do not use
       tables to make numerical comparisons; humans are much better at quickly
-      processing visual information than text and math.
+      processing visual information than text and math. Bar plots are again typically a better alternative.
     </p>
   </section>
 
@@ -179,7 +181,7 @@
     <title>Refining the visualization</title>
     <p><em>Convey the message, minimize noise</em></p>
     <p>
-      Just being able to make a visualization in R does not mean that it effectively
+      Just being able to make a visualization in R (or any other language, for that matter) does not mean that it effectively
       communicates your message to others. Once you have selected a broad type of
       visualization to use, you will have to refine it to suit your particular need.
       Some rules of thumb for doing this are listed below. They generally fall into
@@ -271,32 +273,107 @@ co2_df
         </input>
       </program>
       <pre>
-# A tibble: 489 x 2
-   date_measured   ppm
-   &lt;date&gt;        &lt;dbl&gt;
- 1 1980-02-01     338.
- 2 1980-03-01     340.
-...
+## # A tibble: 484 × 2
+##    date_measured   ppm
+##    <date>        <dbl>
+##  1 1980-02-01     338.
+##  2 1980-03-01     340.
+##  3 1980-04-01     341.
+##  4 1980-05-01     341.
+##  5 1980-06-01     341.
+##  6 1980-07-01     339.
+##  7 1980-08-01     338.
+##  8 1980-09-01     336.
+##  9 1980-10-01     336.
+## 10 1980-11-01     337.
+## # ℹ 474 more rows
       </pre>
+<p>
+  We see that there are two columns in the <c>co2_df</c> data frame: 
+  <c>date_measured</c> and <c>ppm</c>. The <c>date_measured</c> column holds the date 
+  the measurement was taken, and is of type <c>date</c>. The <c>ppm</c> column holds 
+  the value of CO2 in parts per million that was measured on each date, and is type 
+  <c>double</c>.
+</p>
       <note>
-        <p><c>read_csv</c> was able to parse the <c>date_measured</c> column into the
-        <c>date</c> vector type because it was entered in ISO 8601 format
-        (<c>year-month-day</c>). <c>date</c> type vectors allow functions like
-        <c>ggplot</c> to treat them as numeric dates and not as character vectors. An
-        in-depth study of dates and times is beyond the scope of the book, but
-        interested readers may consult the Dates and Times chapter of <em>R for Data
+  <c>read_csv</c> was able to parse the <c>date_measured</c> column into the 
+  <c>date</c> vector type because it was entered in the international standard date 
+  format, called ISO 8601, which lists dates as <c>year-month-day</c>. <c>date</c> 
+  vectors are <c>double</c> vectors with special properties that allow them to handle 
+  dates correctly. For example, <c>date</c> type vectors allow functions like 
+  <c>ggplot</c> to treat them as numeric dates and not as character vectors, even though 
+  they contain non-numeric characters (e.g., in the <c>date_measured</c> column in the 
+  <c>co2_df</c> data frame). This means R will not accidentally plot the dates in the 
+  wrong order (i.e., not alphanumerically as would happen if it was a character vector). 
+  An in-depth study of dates and times is beyond the scope of the book, but interested 
+  readers may consult the Dates and Times chapter of <em>R for Data
         Science</em> <xref ref="wickham2016r"/>; see the additional resources at the
         end of this chapter.</p>
       </note>
-      <p>
-        Since we are investigating a relationship between two variables (CO<m>_2</m>
-        concentration and date), a scatter plot is a good place to start.
+<p>
+  Since we are investigating a relationship between two variables (CO2 concentration 
+  and date), a scatter plot is a good place to start. Scatter plots show the data as 
+  individual points with <c>x</c> (horizontal axis) and <c>y</c> (vertical axis) 
         <idx><h>ggplot</h><h>aesthetic mapping</h></idx>
         <idx><h>ggplot</h><h>geometric object</h></idx>
-        We create a plot object with the <c>ggplot</c> function, mapping
-        <c>date_measured</c> to the <c>x</c> axis, <c>ppm</c> to the <c>y</c> axis,
-        and using <c>geom_point</c>:
-      </p>
+  coordinates. Here, we will use the measurement date as the <c>x</c> coordinate and 
+  the CO2 concentration as the <c>y</c> coordinate. When using the <c>ggplot2</c> 
+  package, we create a plot object with the <c>ggplot</c> function. There are a few 
+  basic aspects of a plot that we need to specify:
+</p>
+
+<ul>
+  <li>
+    <p>
+      The name of the data frame object to visualize.
+    </p>
+    <ul>
+      <li><p>Here, we specify the <c>co2_df</c> data frame.</p></li>
+    </ul>
+  </li>
+  <li>
+    <p>
+      The aesthetic mapping, which tells <c>ggplot</c> how the columns in the data 
+      frame map to properties of the visualization.
+    </p>
+    <ul>
+      <li><p>To create an aesthetic mapping, we use the <c>aes</c> function.</p></li>
+      <li>
+        <p>
+          Here, we set the plot <c>x</c> axis to the <c>date_measured</c> variable, 
+          and the plot <c>y</c> axis to the <c>ppm</c> variable.
+        </p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>
+      The <c>+</c> operator, which tells <c>ggplot</c> that we would like to add 
+      another layer to the plot.
+    </p>
+  </li>
+  <li>
+    <p>
+      The geometric object, which specifies how the mapped data should be displayed.
+    </p>
+    <ul>
+      <li>
+        <p>
+          To create a geometric object, we use a <c>geom_*</c> function (see the 
+          <url href="https://ggplot2.tidyverse.org/reference/">ggplot reference</url> 
+          for a list of geometric objects).
+        </p>
+      </li>
+      <li>
+        <p>
+          Here, we use the <c>geom_point</c> function to visualize our data as a 
+          scatter plot.
+        </p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
       <program language="r">
         <input>
 co2_scatter &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
@@ -310,18 +387,31 @@ co2_scatter
         time.</caption>
         <image source="images/viz/co2-scatter.png" width="75%"/>
       </figure>
-      <p>
-        <xref ref="fig-viz-co2-scatter"/> shows a clear upward trend in the
-        atmospheric concentration of CO<m>_2</m> over time. But that appears to be
-        the only conclusion one can make from the scatter visualization.
-      </p>
-      <p>
-        Because time is an ordered quantitative variable, a line plot is often a
-        better choice. Line plots connect the sequence of <c>x</c> and <c>y</c>
-        coordinates of the observations with line segments, thereby emphasizing their
-        order. We can create a line plot using the <c>geom_line</c> function:
-        <idx><h>ggplot</h><h>geom_line</h></idx>
-      </p>
+
+<p>
+  The visualization in <xref ref="fig-viz-co2-scatter"/> shows a clear upward trend 
+  in the atmospheric concentration of <m>CO_2</m> over time. This plot answers the first part 
+  of our question in the affirmative, but that appears to be the only conclusion one 
+  can make from the scatter visualization.
+</p>
+
+<p>
+  One important thing to note about this data is that one of the variables we are 
+  exploring is time. Time is a special kind of quantitative variable because it forces 
+  additional structure on the data <mdash/> the data points have a natural order. 
+  Specifically, each observation in the data set has a predecessor and a successor, and 
+  the order of the observations matters; changing their order alters their meaning. In 
+  situations like this, we typically use a line plot to visualize the data. Line plots 
+  connect the sequence of <c>x</c> and <c>y</c> coordinates of the observations with 
+  line segments, thereby emphasizing their order.
+</p>
+
+<p>
+  We can create a line plot in <c>ggplot</c> using the <c>geom_line</c> function. 
+  Let's now try to visualize the <c>co2_df</c> as a line plot with just the default 
+  arguments:
+</p>
+
       <program language="r">
         <input>
 co2_line &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
@@ -338,10 +428,9 @@ co2_line
       <p>
         Aha! <xref ref="fig-viz-co2-line"/> shows us there <em>is</em> another
         interesting phenomenon in the data: in addition to increasing over time, the
-        concentration seems to oscillate as well. The comparison between these two
-        visualizations also illustrates a common issue with scatter plots: often, the
-        points are shown too close together or even on top of one another, muddling
-        information that would otherwise be clear (<term>overplotting</term>).
+        concentration seems to oscillate as well. 
+Given the visualization as it is now, it is still hard to tell how fast the oscillation is, but nevertheless, the line seems to be a better choice for answering the question than the scatter plot was. The comparison between these two visualizations also illustrates a common issue with scatter plots: often, the points are shown too close together or even on top of one another, muddling information that would
+otherwise be clear (<term>overplotting</term>).
         <idx><h>overplotting</h></idx>
       </p>
       <p>
