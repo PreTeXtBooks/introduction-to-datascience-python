@@ -431,7 +431,7 @@ canlang_data
       <pre>
 ## # A tibble: 214 × 6
 ##    category          language mother_tongue most_at_home most_at_work lang_known
-##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
 ##  1 Aboriginal langu… Aborigi…           590          235           30        665
 ##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
 ##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
@@ -506,7 +506,7 @@ canlang_data
       <pre>
 ## # A tibble: 214 × 6
 ##    X1                                      X2             X3     X4    X5     X6
-##     &lt;chr&gt;                                    &lt;chr&gt;        &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+##    &lt;chr&gt;                                   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
 ##  1 Aboriginal languages                    Aborigina…    590    235    30    665
 ##  2 Non-Official &amp; Non-Aboriginal languages Afrikaans   10260   4785    85  23415
 ##  3 Non-Official &amp; Non-Aboriginal languages Afro-Asia…   1150    445    10   2775
@@ -548,7 +548,7 @@ canlang_data
       <pre>
 ## # A tibble: 214 × 6
 ##    category          language mother_tongue most_at_home most_at_work lang_known
-##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
 ##  1 Aboriginal langu… Aborigi…           590          235           30        665
 ##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
 ##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
@@ -587,7 +587,7 @@ canlang_data
       <pre>
 ## # A tibble: 214 × 6
 ##    category          language mother_tongue most_at_home most_at_work lang_known
-##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
 ##  1 Aboriginal langu… Aborigi…           590          235           30        665
 ##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
 ##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
@@ -621,7 +621,7 @@ canlang_data
       <pre>
 ## # A tibble: 214 × 6
 ##    category          language mother_tongue most_at_home most_at_work lang_known
-##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
 ##  1 Aboriginal langu… Aborigi…           590          235           30        665
 ##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
 ##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
@@ -699,7 +699,7 @@ canlang_data
     <pre>
 ## # A tibble: 214 × 6
 ##    category          language mother_tongue most_at_home most_at_work lang_known
-##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
 ##  1 Aboriginal langu… Aborigi…           590          235           30        665
 ##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
 ##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
@@ -851,9 +851,9 @@ lang_db
       </program>
       <pre>
 ## # Source:   table&lt;lang&gt; [?? x 6]
-## # Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
+## # Database: sqlite 3.41.2 [/home/rstudio/introduction-to-datascience/data/can_lang.db]
 ##    category          language mother_tongue most_at_home most_at_work lang_known
-##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
 ##  1 Aboriginal langu… Aborigi…           590          235           30        665
 ##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
 ##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
@@ -925,9 +925,9 @@ aboriginal_lang_db
       </program>
       <pre>
 ## # Source:   SQL [?? x 6]
-## # Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
+## # Database: sqlite 3.41.2 [/home/rstudio/introduction-to-datascience/data/can_lang.db]
 ##    category          language mother_tongue most_at_home most_at_work lang_known
-##     &lt;chr&gt;              &lt;chr&gt;             &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
+##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
 ##  1 Aboriginal langu… Aborigi…           590          235           30        665
 ##  2 Aboriginal langu… Algonqu…            45           10            0        120
 ##  3 Aboriginal langu… Algonqu…          1260          370           40       2480
@@ -958,9 +958,9 @@ aboriginal_lang_selected_db
       </program>
       <pre>
 ## # Source:   SQL [?? x 2]
-## # Database: sqlite 3.41.0 [/path/to/data/can_lang.db]
+## # Database: sqlite 3.41.2 [/home/rstudio/introduction-to-datascience/data/can_lang.db]
 ##    language                     mother_tongue
-##     &lt;chr&gt;                                 &lt;dbl&gt;
+##    &lt;chr&gt;                                &lt;dbl&gt;
 ##  1 Aboriginal languages, n.o.s.           590
 ##  2 Algonquian languages, n.i.e.            45
 ##  3 Algonquin                             1260
@@ -990,7 +990,7 @@ aboriginal_lang_data
       <pre>
 ## # A tibble: 67 × 2
 ##    language                     mother_tongue
-##     &lt;chr&gt;                                 &lt;dbl&gt;
+##    &lt;chr&gt;                                &lt;dbl&gt;
 ##  1 Aboriginal languages, n.o.s.           590
 ##  2 Algonquian languages, n.i.e.            45
 ##  3 Algonquin                             1260
@@ -1104,11 +1104,19 @@ ratings_db
 # Source:   table&lt;ratings&gt; [?? x 3]
 # Database: postgres [user0001@fakeserver.stat.ubc.ca:5432/can_mov_db]
    title              average_rating num_votes
-   &lt;chr&gt;                       &lt;dbl&gt;     &lt;int&gt;
- 1 The Grand Seduction           6.6       150
- 2 Rhymes for Young Ghouls       6.3      1685
- 3 Mommy                         7.5      1060
-# … with more rows</pre>
+   &lt;chr&gt;                    &lt;dbl&gt;     &lt;int&gt;
+ 1 The Grand Seduction       6.6       150
+ 2 Rhymes for Young Ghouls   6.3      1685
+ 3 Mommy                     7.5      1060
+ 4 Incendies                 6.1      1101
+ 5 Bon Cop, Bad Cop          7.0       894
+ 6 Goon                      5.5      1111
+ 7 Monsieur Lazhar           5.6       610
+ 8 What if                   5.3      1401
+ 9 The Barbarian Invations   5.8        99
+10 Away from Her             6.9      2311
+# … with more rows
+</pre>
       <p>
         To find the lowest rating that exists in the data base, we first need to extract the
         <c>average_rating</c> column using <c>select</c>:
