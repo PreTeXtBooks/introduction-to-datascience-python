@@ -538,6 +538,7 @@ glimpse(cancer_train)
 ## $ Fractal_Dimension &lt;dbl&gt; 0.05766, 0.06811, 0.06905, 0.05863, 0.06503, 0.06043…
       </pre>
 
+<program language="r">
         <input>
 glimpse(cancer_test)
         </input>
