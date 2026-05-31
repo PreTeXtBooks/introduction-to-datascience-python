@@ -1097,13 +1097,13 @@ cancer_vfold
         <input>
 # recreate the standardization recipe from before
 # (since it must be based on the training data)
-cancer_recipe <- recipe(Class ~ Smoothness + Concavity,
+cancer_recipe &lt;- recipe(Class ~ Smoothness + Concavity,
                         data = cancer_train) |&gt;
   step_scale(all_predictors()) |&gt;
   step_center(all_predictors())
 
 # fit the knn model (we can reuse the old knn_spec model from before)
-knn_fit <- workflow() |&gt;
+knn_fit &lt;- workflow() |&gt;
   add_recipe(cancer_recipe) |&gt;
   add_model(knn_spec) |&gt;
   fit_resamples(resamples = cancer_vfold)
