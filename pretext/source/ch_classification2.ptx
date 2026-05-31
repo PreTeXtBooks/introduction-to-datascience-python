@@ -326,8 +326,8 @@ random_numbers1
       </input>
     </program>
     <pre>
- [1] 3 4 6 9 2 6 6 2 6 1
-    </pre>
+ [1] 8 3 6 0 1 6 1 2 0 4
+     </pre>
     <p>
       You can see that <c>random_numbers1</c> is a list of 10 numbers from 0
       to 9 that, from all appearances, looks random. If we run the
@@ -341,7 +341,7 @@ random_numbers2
       </input>
     </program>
     <pre>
- [1] 5 9 4 5 8 1 4 3 9 7
+ [1] 4 9 5 9 6 8 4 4 8 8
     </pre>
     <p>
       If we want to force R to produce the same sequences of random numbers,
@@ -359,8 +359,8 @@ random_numbers2_again
       </input>
     </program>
     <pre>
- [1] 3 4 6 9 2 6 6 2 6 1
- [1] 5 9 4 5 8 1 4 3 9 7
+ [1] 8 3 6 0 1 6 1 2 0 4
+ [1] 4 9 5 9 6 8 4 4 8 8
     </pre>
     <p>
       Notice that after setting the seed, we get the same two sequences of
@@ -382,8 +382,8 @@ random_numbers2_different
       </input>
     </program>
     <pre>
- [1] 9 8 2 4 6 6 5 0 1 3
- [1] 7 0 5 4 5 3 8 9 7 2
+ [1] 8 3 1 4 6 8 8 4 1 7
+ [1] 3 7 8 2 8 8 6 3 3 8
     </pre>
     <p>
       In other words, even though the sequences of numbers that R is
@@ -492,7 +492,10 @@ perim_concav
         <idx><h>stratification</h></idx>
         <em>stratifies</em> the data by the class label, to ensure that
         roughly the same proportion of each class ends up in both the training
-        and testing sets.
+        and testing sets. For example, in our data set, roughly 63% of the observations
+        are from the benign class, and 37% are from the malignant class, so <c>initial_split</c>
+        ensures that roughly 63% of the training data are benign, 37% of the training
+        data are malignant, and the same proportions exist in the testing data.
       </p>
       <p>
         Let's use the <c>initial_split</c> function to create the training and
@@ -502,7 +505,9 @@ perim_concav
         <c>Class</c>) to ensure that the training and testing subsets contain
         the right proportions of each category of observation. The
         <c>training</c> and <c>testing</c> functions then extract the training
-        and testing data sets into two separate data frames.
+        and testing data sets into two separate data frames. Note that the
+        <c>initial_split</c> function uses randomness, but since we set the seed
+        earlier in the chapter, the split will be reproducible.
       </p>
       <program language="r">
         <input>
@@ -514,35 +519,63 @@ cancer_test &lt;- testing(cancer_split)
       <program language="r">
         <input>
 glimpse(cancer_train)
+        </input>
+      </program>
+      <pre>
+## Rows: 426
+## Columns: 12
+## $ ID                <dbl> 8510426, 8510653, 8510824, 854941, 85713702, 857155,…
+## $ Class             &lt;fct&gt; Benign, Benign, Benign, Benign, Benign, Benign, Beni…
+## $ Radius            <dbl> 13.540, 13.080, 9.504, 13.030, 8.196, 12.050, 13.490…
+## $ Texture           <dbl> 14.36, 15.71, 12.44, 18.42, 16.84, 14.63, 22.30, 21.…
+## $ Perimeter         <dbl> 87.46, 85.63, 60.34, 82.61, 51.71, 78.04, 86.91, 74.…
+## $ Area              <dbl> 566.3, 520.0, 273.9, 523.8, 201.9, 449.3, 561.0, 427…
+## $ Smoothness        <dbl> 0.09779, 0.10750, 0.10240, 0.08983, 0.08600, 0.10310…
+## $ Compactness       <dbl> 0.08129, 0.12700, 0.06492, 0.03766, 0.05943, 0.09092…
+## $ Concavity         <dbl> 0.066640, 0.045680, 0.029560, 0.025620, 0.015880, 0.…
+## $ Concave_Points    <dbl> 0.047810, 0.031100, 0.020760, 0.029230, 0.005917, 0.…
+## $ Symmetry          <dbl> 0.1885, 0.1967, 0.1815, 0.1467, 0.1769, 0.1675, 0.18…
+## $ Fractal_Dimension <dbl> 0.05766, 0.06811, 0.06905, 0.05863, 0.06503, 0.06043…
+      </pre>
+
+        <input>
 glimpse(cancer_test)
         </input>
       </program>
       <pre>
-Rows: 426
-Columns: 32
-$ ID        &lt;dbl&gt; 842302, 84300903, 84358402, 844359, 84458202, ...
-$ Class     &lt;fct&gt; Malignant, Malignant, Malignant, Malignant, Malignant, ...
-$ Radius    &lt;dbl&gt; 17.99, 20.57, 19.69, 11.42, 20.29, 12.45, ...
-...
-
-Rows: 143
-Columns: 32
-$ ID        &lt;dbl&gt; 8510426, 857637, 858477, ...
-$ Class     &lt;fct&gt; Benign, Malignant, Benign, ...
+## Rows: 143
+## Columns: 12
+## $ ID                <dbl> 842517, 84300903, 84501001, 84610002, 848406, 848620…
+## $ Class             &lt;fct&gt; Malignant, Malignant, Malignant, Malignant, Malignan…
+## $ Radius            <dbl> 20.570, 19.690, 12.460, 15.780, 14.680, 16.130, 19.8…
+## $ Texture           <dbl> 17.77, 21.25, 24.04, 17.89, 20.13, 20.68, 22.15, 14.…
+## $ Perimeter         <dbl> 132.90, 130.00, 83.97, 103.60, 94.74, 108.10, 130.00…
+## $ Area              <dbl> 1326.0, 1203.0, 475.9, 781.0, 684.5, 798.8, 1260.0, …
+## $ Smoothness        <dbl> 0.08474, 0.10960, 0.11860, 0.09710, 0.09867, 0.11700…
+## $ Compactness       <dbl> 0.07864, 0.15990, 0.23960, 0.12920, 0.07200, 0.20220…
+## $ Concavity         <dbl> 0.08690, 0.19740, 0.22730, 0.09954, 0.07395, 0.17220…
+## $ Concave_Points    <dbl> 0.070170, 0.127900, 0.085430, 0.066060, 0.052590, 0.…
+## $ Symmetry          <dbl> 0.1812, 0.2069, 0.2030, 0.1842, 0.1586, 0.2164, 0.15…
+## $ Fractal_Dimension <dbl> 0.05667, 0.05999, 0.08243, 0.06082, 0.05922, 0.07356…
       </pre>
       <p>
         We can see from <c>glimpse</c>
         <idx><h>glimpse</h></idx>
         in the code above that the training set contains 426 observations,
         while the test set contains 143 observations. This corresponds to a
-        train / test split of 75% / 25%, as desired.
+        train / test split of 75% / 25%, as desired. Recall from <xref ref = "ch-classification2"/>
+        that we use the glimpse function to view data with a large number of
+        columns, as it prints the data such that the columns go down the page
+        (instead of across).
       </p>
       <p>
         We can use <c>group_by</c> and <c>summarize</c>
         <idx><h>group_by</h></idx>
         <idx><h>summarize</h></idx>
         to find the percentage of malignant and benign classes in
-        <c>cancer_train</c>.
+        <c>cancer_train</c> and we see about 63% of the training data
+        are benign and 37% are malignant, indicating that our class
+        proportions were roughly preserved when we split the data.
       </p>
       <program language="r">
         <input>
@@ -558,14 +591,9 @@ cancer_proportions
 # A tibble: 2 × 3
   Class         n percent
   &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;
-1 Malignant   160    37.6
-2 Benign      266    62.4
+1 Malignant   159    37.3
+2 Benign      267    62.7
       </pre>
-      <p>
-        We see about 62% of the training data are benign and 38% are
-        malignant, indicating that our class proportions were roughly
-        preserved when we split the data.
-      </p>
     </subsection>
 
     <subsection xml:id="subsec-classif2-preprocess">
@@ -626,25 +654,26 @@ knn_fit
         </input>
       </program>
       <pre>
-== Workflow [trained] ============================
-Preprocessor: Recipe
-Model: nearest_neighbor()
-
--- Preprocessor -----------------------------
-2 Recipe Steps:
-* step_scale()
-* step_center()
-
--- Model ------------------------------------
-Call:
-kknn::train.kknn(formula = ..y ~ ., data = data, ks = min_rows(3, data, 5),
-    kernel = ~"rectangular")
-
-Type: classification
-Distances: 2
-Kernel: rectangular
-Best k: 3
-Accuracy: 0.8919
+## ══ Workflow [trained] ══════════
+## Preprocessor: Recipe
+## Model: nearest_neighbor()
+## 
+## ── Preprocessor ──────────
+## 2 Recipe Steps
+## 
+## • step_scale()
+## • step_center()
+## 
+## ── Model ──────────
+## 
+## Call:
+## kknn::train.kknn(formula = ..y ~ ., data = data, ks = min_rows(3,     data, 5), 
+## kernel = ~"rectangular")
+## 
+## Type of response variable: nominal
+## Minimal misclassification: 0.1126761
+## Best kernel: rectangular
+## Best k: 3
       </pre>
     </subsection>
 
@@ -669,13 +698,22 @@ cancer_test_predictions
         </input>
       </program>
       <pre>
-# A tibble: 143 × 33
-   .pred_class ID        Class     Radius Texture Perimeter  Area Smoothness
-   &lt;fct&gt;       &lt;dbl&gt;     &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
- 1 Benign      8510426   Benign      13.5    14.4      87.5  566.     0.0978
- 2 Malignant   857637    Malignant   13.1    15.7      85.3  520.     0.108
- 3 Benign      858477    Benign       9.50   12.4      60.3  274.     0.102
-...
+## # A tibble: 143 × 13
+##    .pred_class       ID Class     Radius Texture Perimeter  Area Smoothness
+##    &lt;fct&gt;          <dbl> &lt;fct&gt;      <dbl>   <dbl>     <dbl> <dbl>      <dbl>
+##  1 Benign        842517 Malignant   20.6    17.8     133.  1326      0.0847
+##  2 Malignant   84300903 Malignant   19.7    21.2     130   1203      0.110 
+##  3 Malignant   84501001 Malignant   12.5    24.0      84.0  476.     0.119 
+##  4 Malignant   84610002 Malignant   15.8    17.9     104.   781      0.0971
+##  5 Benign        848406 Malignant   14.7    20.1      94.7  684.     0.0987
+##  6 Malignant   84862001 Malignant   16.1    20.7     108.   799.     0.117 
+##  7 Malignant     849014 Malignant   19.8    22.2     130   1260      0.0983
+##  8 Malignant    8511133 Malignant   15.3    14.3     102.   704.     0.107 
+##  9 Malignant     852552 Malignant   16.6    21.4     110    905.     0.112 
+## 10 Malignant     853612 Malignant   11.8    18.7      77.9  441.     0.111 
+## # ℹ 133 more rows
+## # ℹ 5 more variables: Compactness <dbl>, Concavity <dbl>, Concave_Points <dbl>,
+## #   Symmetry <dbl>, Fractal_Dimension <dbl>
       </pre>
     </subsection>
 
@@ -699,14 +737,14 @@ cancer_test_predictions |&gt;
 # A tibble: 1 × 3
   .metric  .estimator .estimate
   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
-1 accuracy binary         0.860
+1 accuracy binary         0.853
       </pre>
       <p>
         In the metrics data frame, we filtered the <c>.metric</c> column
         since we are interested in the <c>accuracy</c> row. Other entries
         involve other metrics that are beyond the scope of this book. Looking
         at the value of the <c>.estimate</c> variable shows that the estimated
-        accuracy of the classifier on the test data was approximately 86%.
+        accuracy of the classifier on the test data was 85%.
         To compute the precision and recall, we can use the <c>precision</c>
         and <c>recall</c> functions from <c>tidymodels</c>. We first check
         the order of the labels in the <c>Class</c> variable using the
@@ -726,7 +764,7 @@ cancer_test_predictions |&gt; pull(Class) |&gt; levels()
         <c>Class</c> and <c>.pred_class</c> as before, but also specify that
         the <q>positive</q> class corresponds to the first factor level via
         <c>event_level="first"</c>. If the labels were in the other order,
-        we would have had to use <c>event_level="second"</c> instead.
+        we would instead use <c>event_level="second"</c>.
       </p>
       <program language="r">
         <input>
@@ -738,7 +776,7 @@ cancer_test_predictions |&gt;
 # A tibble: 1 × 3
   .metric   .estimator .estimate
   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
-1 precision binary         0.826
+1 precision binary         0.767
       </pre>
       <program language="r">
         <input>
@@ -750,11 +788,11 @@ cancer_test_predictions |&gt;
 # A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 recall  binary         0.725
+1 recall  binary         0.868
       </pre>
       <p>
         The output shows that the estimated precision and recall of the
-        classifier on the test data was approximately 83% and 73%,
+        classifier on the test data was 77% and 87%,
         respectively. Finally, we can look at the <em>confusion matrix</em>
         for the classifier using the <c>conf_mat</c> function.
       </p>
@@ -766,27 +804,43 @@ confusion
         </input>
       </program>
       <pre>
-          Truth
-Prediction Malignant Benign
- Malignant        40      8
- Benign           15     80
+##            Truth
+## Prediction  Malignant Benign
+##   Malignant        46     14
+##   Benign            7     76
       </pre>
-      <p>
-        The confusion matrix shows 40 observations were correctly predicted as
-        malignant, and 80 were correctly predicted as benign. It also shows
-        that the classifier made some mistakes; in particular, it classified 15
-        observations as benign when they were actually malignant, and 8
-        observations as malignant when they were actually benign.
-      </p>
+<p>
+  The confusion matrix shows 46 observations were correctly predicted as malignant, and 
+  76 were correctly predicted as benign. It also shows that the classifier made some 
+  mistakes; in particular, it classified 7 observations as benign when they were 
+  actually malignant, and 14 observations as malignant when they were actually benign. 
+  Using our formulas from earlier, we see that the accuracy, precision, and recall agree 
+  with what R reported.
+</p>
+
+<md>
+  <mrow>
+    \text{accuracy} = \frac{\text{number of correct predictions}}{\text{total number of predictions}} 
+    = \frac{46+76}{46+76+14+7} = 0.853
+  </mrow>
+  <mrow>
+    \text{precision} = \frac{\text{number of correct positive predictions}}{\text{total number of positive predictions}} 
+    = \frac{46}{46+14} = 0.767
+  </mrow>
+  <mrow>
+    \text{recall} = \frac{\text{number of correct positive predictions}}{\text{total number of positive test set observations}} 
+    = \frac{46}{46+7} = 0.868
+  </mrow>
+</md>
     </subsection>
 
     <subsection xml:id="subsec-classif2-critical-analysis">
       <title>Critically analyze performance</title>
-      <p>
-        We now know that the classifier was approximately 86% accurate on the
-        test data set. That sounds pretty good! Wait, <em>is</em> it good? Or
-        do we need something higher?
-      </p>
+<p>
+  We now know that the classifier was 85% accurate on the test data set, and had a 
+  precision of 77% and a recall of 87%. That sounds pretty good! Wait, is it good? Or 
+  do we need something higher?
+</p>
       <p>
         In general, a <em>good</em> value for accuracy (as well as precision
         and recall, if applicable)
@@ -838,31 +892,28 @@ cancer_proportions
         </input>
       </program>
       <pre>
-# A tibble: 2 × 3
-  Class         n percent
-  &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;
-1 Malignant   160    37.6
-2 Benign      266    62.4
+## # A tibble: 2 × 3
+##   Class         n percent
+##   &lt;fct&gt;     &lt;int&gt;   <dbl>
+## 1 Malignant   159    37.3
+## 2 Benign      267    62.7
       </pre>
-      <p>
-        Since the benign class represents the majority of the training data,
-        the majority classifier would <em>always</em> predict that a new
-        observation is benign. The estimated accuracy of the majority
-        classifier is usually fairly close to the majority class proportion in
-        the training data&#x2014;in this case, around 62%. The K-nearest
-        neighbors classifier we built does quite a bit better than this, with
-        an accuracy of approximately 86%. This means that from the perspective
-        of accuracy, the K-nearest neighbors classifier improved quite a bit
-        on the basic majority classifier. Hooray! But we still need to be
-        cautious; in this application, it is likely very important not to
-        misdiagnose any malignant tumors to avoid missing patients who actually
-        need medical care. The confusion matrix above shows that the classifier
-        does, indeed, misdiagnose a significant number of malignant tumors as
-        benign (15 out of 55 malignant tumors, or about 27%). Therefore, even
-        though the accuracy improved upon the majority classifier, our critical
-        analysis suggests that this classifier may not have appropriate
-        performance for the application.
-      </p>
+<p>
+  Since the benign class represents the majority of the training data, the majority 
+  classifier would always predict that a new observation is benign. The estimated 
+  accuracy of the majority classifier is usually fairly close to the majority class 
+  proportion in the training data. In this case, we would suspect that the majority 
+  classifier will have an accuracy of around 63%. The K-nearest neighbors classifier 
+  we built does quite a bit better than this, with an accuracy of 85%. This means that 
+  from the perspective of accuracy, the K-nearest neighbors classifier improved quite a 
+  bit on the basic majority classifier. Hooray! But we still need to be cautious; in 
+  this application, it is likely very important not to misdiagnose any malignant tumors 
+  to avoid missing patients who actually need medical care. The confusion matrix above 
+  shows that the classifier does, indeed, misdiagnose a significant number of malignant 
+  tumors as benign (7 out of 53 malignant tumors, or 13%!). Therefore, even though the 
+  accuracy improved upon the majority classifier, our critical analysis suggests that 
+  this classifier may not have appropriate performance for the application.
+</p>
     </subsection>
   </section>
 
@@ -970,20 +1021,19 @@ acc
         </input>
       </program>
       <pre>
-[1] 0.8679245
+## [1] 0.8598131
       </pre>
-      <p>
-        The accuracy estimate using this split is approximately 86.8%. Now we
-        repeat the above code 4 more times, which generates 4 more splits.
-        Therefore we get five different shuffles of the data, and therefore
-        five different values for accuracy. None of these values are
-        necessarily <q>more correct</q> than any other; they're just five
-        estimates of the true, underlying accuracy of our classifier built
-        using our overall training data. We can combine the estimates by
-        taking their average to try to get a single assessment of our
-        classifier's accuracy; this has the effect of reducing the influence
-        of any one (un)lucky validation set on the estimate.
-      </p>
+<p>
+  The accuracy estimate using this split is 86%. Now we repeat the above code 4 more 
+  times, which generates 4 more splits. Therefore we get five different shuffles of the 
+  data, and therefore five different values for accuracy: 86.0%, 89.7%, 88.8%, 86.0%, 
+  86.9%. None of these values are necessarily <q>more correct</q> than any other; 
+  they're just five estimates of the true, underlying accuracy of our classifier built 
+  using our overall training data. We can combine the estimates by taking their average 
+  (here 87%) to try to get a single assessment of our classifier's accuracy; this has 
+  the effect of reducing the influence of any one (un)lucky validation set on the 
+  estimate.
+</p>
       <p>
         In practice, we don't use random splits, but rather use a more
         structured splitting procedure so that each observation in the data
@@ -1025,15 +1075,15 @@ cancer_vfold
         </input>
       </program>
       <pre>
-#  5-fold cross-validation using stratification
-# A tibble: 5 × 2
-  splits           id
-  &lt;list&gt;           &lt;chr&gt;
-1 &lt;split [340/86]&gt; Fold1
-2 &lt;split [341/85]&gt; Fold2
-3 &lt;split [341/85]&gt; Fold3
-4 &lt;split [341/85]&gt; Fold4
-5 &lt;split [341/85]&gt; Fold5
+## #  5-fold cross-validation using stratification 
+## # A tibble: 5 × 2
+##   splits           id   
+##   &lt;list&gt;           &lt;chr&gt;
+## 1 &lt;split [340/86]&gt; Fold1
+## 2 &lt;split [340/86]&gt; Fold2
+## 3 &lt;split [341/85]&gt; Fold3
+## 4 &lt;split [341/85]&gt; Fold4
+## 5 &lt;split [342/84]&gt; Fold5
       </pre>
       <p>
         Then, when we create our data analysis workflow, we use the
@@ -1045,18 +1095,33 @@ cancer_vfold
       <program language="r">
         <input>
 # recreate the standardization recipe from before
-cancer_recipe &lt;- recipe(Class ~ Smoothness + Concavity,
+# (since it must be based on the training data)
+cancer_recipe <- recipe(Class ~ Smoothness + Concavity,
                         data = cancer_train) |&gt;
   step_scale(all_predictors()) |&gt;
   step_center(all_predictors())
 
-# fit the knn model
-knn_fit &lt;- workflow() |&gt;
+# fit the knn model (we can reuse the old knn_spec model from before)
+knn_fit <- workflow() |&gt;
   add_recipe(cancer_recipe) |&gt;
   add_model(knn_spec) |&gt;
   fit_resamples(resamples = cancer_vfold)
+
+knn_fit
         </input>
       </program>
+<pre>
+## # Resampling results
+## # 5-fold cross-validation using stratification 
+## # A tibble: 5 × 4
+##   splits          id    .metrics         .notes          
+##   &lt;list&gt;          &lt;chr&gt; &lt;list&gt;          &lt;list&gt;          
+## 1 &lt;split [340/86]&gt; Fold1 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+## 2 &lt;split [340/86]&gt; Fold2 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+## 3 &lt;split [341/85]&gt; Fold3 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+## 4 &lt;split [341/85]&gt; Fold4 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+## 5 &lt;split [342/84]&gt; Fold5 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt;
+</pre>
       <p>
         The
         <idx><h>tidymodels!collect_metrics</h></idx>
@@ -1070,31 +1135,39 @@ knn_fit &lt;- workflow() |&gt;
         consider the mean (<c>mean</c>) to be the estimated accuracy, while
         the standard error (<c>std_err</c>) is a measure of how uncertain we
         are in the mean value.
-      </p>
-      <program language="r">
+  A detailed treatment of this is beyond the scope of this chapter; but roughly, if 
+  your estimated mean is 0.89 and standard error is 0.02, you can expect the true 
+  average accuracy of the classifier to be somewhere roughly between 87% and 91% 
+  (although it may fall outside this range). You may ignore the other columns in the 
+  metrics data frame, as they do not provide any additional insight. You can also ignore 
+  the entire second row with <c>roc_auc</c> in the <c>.metric</c> column, as it is 
+  beyond the scope of this book.
+</p>
+<program language="r">
         <input>
 knn_fit |&gt;
   collect_metrics()
         </input>
       </program>
       <pre>
-# A tibble: 2 × 6
-  .metric  .estimator  mean     n std_err .config
-  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
-1 accuracy binary     0.860     5  0.0116 Preprocessor1_Model1
-2 roc_auc  binary     0.921     5  0.0108 Preprocessor1_Model1
+## # A tibble: 2 × 6
+##   .metric  .estimator  mean     n std_err .config             
+##   &lt;chr&gt;    &lt;chr&gt;      <dbl> &lt;int&gt;   <dbl> &lt;chr&gt;               
+## 1 accuracy binary     0.890     5  0.0180 Preprocessor1_Model1
+## 2 roc_auc  binary     0.925     5  0.0151 Preprocessor1_Model1
       </pre>
-      <p>
-        We can choose any number of folds,
+<p>
+  We can choose any number of folds, 
         <idx><h>cross-validation!folds</h></idx>
-        and typically the more we use the better our accuracy estimate will be
-        (lower standard error). However, we are limited by computational
-        power: the more folds we choose, the more computation it takes, and
-        hence the more time it takes to run the analysis. In practice, this is
-        a trial-and-error process, but typically <m>C</m> is chosen to be
-        either 5 or 10. Here we will try 10-fold cross-validation to see if
-        we get a lower standard error:
-      </p>
+  and typically the more we use the better our 
+  accuracy estimate will be (lower standard error). However, we are limited by 
+  computational power: the more folds we choose, the more computation it takes, and 
+  hence the more time it takes to run the analysis. So when you do cross-validation, 
+  you need to consider the size of the data, the speed of the algorithm (e.g., 
+  K-nearest neighbors), and the speed of your computer. In practice, this is a 
+  trial-and-error process, but typically <m>C</m> is chosen to be either 5 or 10. 
+  Here we will try 10-fold cross-validation to see if we get a lower standard error:
+</p>
       <program language="r">
         <input>
 cancer_vfold &lt;- vfold_cv(cancer_train, v = 10, strata = Class)
@@ -1109,11 +1182,11 @@ vfold_metrics
         </input>
       </program>
       <pre>
-# A tibble: 2 × 6
-  .metric  .estimator  mean     n std_err .config
-  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
-1 accuracy binary     0.862    10  0.00820 Preprocessor1_Model1
-2 roc_auc  binary     0.925    10  0.00760 Preprocessor1_Model1
+## # A tibble: 2 × 6
+##   .metric  .estimator  mean     n std_err .config             
+##   &lt;chr&gt;    &lt;chr&gt;      <dbl> &lt;int&gt;   <dbl> &lt;chr&gt;               
+## 1 accuracy binary     0.890    10  0.0127 Preprocessor1_Model1
+## 2 roc_auc  binary     0.913    10  0.0150 Preprocessor1_Model1
       </pre>
       <p>
         In this case, using 10-fold instead of 5-fold cross validation did
@@ -1139,37 +1212,34 @@ vfold_metrics_50
         </input>
       </program>
       <pre>
-# A tibble: 2 × 6
-  .metric  .estimator  mean     n std_err .config
-  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
-1 accuracy binary     0.860    50  0.00367 Preprocessor1_Model1
-2 roc_auc  binary     0.922    50  0.00340 Preprocessor1_Model1
+## # A tibble: 2 × 6
+##   .metric  .estimator  mean     n std_err .config             
+##   &lt;chr&gt;    &lt;chr&gt;      <dbl> &lt;int&gt;   <dbl> &lt;chr&gt;               
+## 1 accuracy binary     0.884    50 0.00568 Preprocessor1_Model1
+## 2 roc_auc  binary     0.926    50 0.0148  Preprocessor1_Model1
       </pre>
     </subsection>
 
     <subsection xml:id="subsec-classif2-param-selection">
       <title>Parameter value selection</title>
-      <p>
-        Using 5- and 10-fold cross-validation, we have estimated that the
-        prediction accuracy of our classifier is somewhere around 86%.
-        Whether that is good or not depends entirely on the downstream
-        application of the data analysis. In the present situation, we are
-        trying to predict a tumor diagnosis, with expensive, damaging
-        chemo/radiation therapy or patient death as potential consequences of
-        misprediction. Hence, we might like to do better than 86% for this
-        application.
-      </p>
-      <p>
-        In order to improve our classifier, we have one choice of parameter:
-        the number of neighbors, <m>K</m>. Since cross-validation helps us
-        evaluate the accuracy of our classifier, we can use cross-validation
-        to calculate an accuracy for each value of <m>K</m> in a reasonable
-        range, and then pick the value of <m>K</m> that gives us the best
-        accuracy. The <c>tidymodels</c> package collection provides a very
-        simple syntax for tuning models: each parameter in the model to be
-        tuned should be specified as <c>tune()</c> in the model specification
-        rather than given a particular value.
-      </p>
+<p>
+  Using 5- and 10-fold cross-validation, we have estimated that the prediction accuracy 
+  of our classifier is somewhere around 89%. Whether that is good or not depends 
+  entirely on the downstream application of the data analysis. In the present situation, 
+  we are trying to predict a tumor diagnosis, with expensive, damaging 
+  chemo/radiation therapy or patient death as potential consequences of misprediction. 
+  Hence, we might like to do better than 89% for this application.
+</p>
+
+<p>
+  In order to improve our classifier, we have one choice of parameter: the number of 
+  neighbors, <m>K</m>. Since cross-validation helps us evaluate the accuracy of our 
+  classifier, we can use cross-validation to calculate an accuracy for each value of 
+  <m>K</m> in a reasonable range, and then pick the value of <m>K</m> that gives us 
+  the best accuracy. The <c>tidymodels</c> package collection provides a very simple 
+  syntax for tuning models: each parameter in the model to be tuned should be specified 
+  as <c>tune()</c> in the model specification rather than given a particular value.
+</p>
       <program language="r">
         <input>
 knn_spec &lt;- nearest_neighbor(weight_func = "rectangular",
@@ -1178,18 +1248,17 @@ knn_spec &lt;- nearest_neighbor(weight_func = "rectangular",
   set_mode("classification")
         </input>
       </program>
-      <p>
-        Then instead of using <c>fit</c> or <c>fit_resamples</c>, we will use
-        the
+<p>
+  Then instead of using <c>fit</c> or <c>fit_resamples</c>, we will use the 
         <idx><h>cross-validation!tune_grid</h></idx>
         <idx><h>tidymodels!tune_grid</h></idx>
-        <c>tune_grid</c> function to fit the model for each value in a range
-        of parameter values. In particular, we first create a data frame with
-        a <c>neighbors</c> variable that contains the sequence of values of
-        <m>K</m> to try; below we create the <c>k_vals</c> data frame with
-        the <c>neighbors</c> variable containing values from 1 to 100
-        (stepping by 5) using the <c>seq</c> function.
-      </p>
+  <c>tune_grid</c> function to fit the model for each value in a range of parameter 
+  values. In particular, we first create a data frame with a <c>neighbors</c> variable 
+  that contains the sequence of values of <m>K</m> to try; below we create the 
+  <c>k_vals</c> data frame with the <c>neighbors</c> variable containing values from 
+  1 to 100 (stepping by 5) using the <c>seq</c> function. Then we pass that data frame 
+  to the <c>grid</c> argument of <c>tune_grid</c>.
+</p>
       <program language="r">
         <input>
 k_vals &lt;- tibble(neighbors = seq(from = 1, to = 100, by = 5))
@@ -1207,13 +1276,29 @@ accuracies
         </input>
       </program>
       <pre>
-# A tibble: 20 × 7
-   neighbors .metric  .estimator  mean     n std_err .config
-       &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
- 1         1 accuracy binary     0.821     5  0.0175 Preprocessor1_Model01
- 2         6 accuracy binary     0.854     5  0.0138 Preprocessor1_Model02
- 3        11 accuracy binary     0.861     5  0.0136 Preprocessor1_Model03
-...
+## # A tibble: 20 × 7
+##    neighbors .metric  .estimator  mean     n std_err .config              
+##        <dbl> &lt;chr&gt;    &lt;chr&gt;      <dbl> &lt;int&gt;   <dbl> &lt;chr&gt;                
+##  1         1 accuracy binary     0.866    10  0.0165 Preprocessor1_Model01
+##  2         6 accuracy binary     0.890    10  0.0153 Preprocessor1_Model02
+##  3        11 accuracy binary     0.887    10  0.0173 Preprocessor1_Model03
+##  4        16 accuracy binary     0.887    10  0.0142 Preprocessor1_Model04
+##  5        21 accuracy binary     0.887    10  0.0143 Preprocessor1_Model05
+##  6        26 accuracy binary     0.887    10  0.0170 Preprocessor1_Model06
+##  7        31 accuracy binary     0.897    10  0.0145 Preprocessor1_Model07
+##  8        36 accuracy binary     0.899    10  0.0144 Preprocessor1_Model08
+##  9        41 accuracy binary     0.892    10  0.0135 Preprocessor1_Model09
+## 10        46 accuracy binary     0.892    10  0.0156 Preprocessor1_Model10
+## 11        51 accuracy binary     0.890    10  0.0155 Preprocessor1_Model11
+## 12        56 accuracy binary     0.873    10  0.0156 Preprocessor1_Model12
+## 13        61 accuracy binary     0.876    10  0.0104 Preprocessor1_Model13
+## 14        66 accuracy binary     0.871    10  0.0139 Preprocessor1_Model14
+## 15        71 accuracy binary     0.876    10  0.0104 Preprocessor1_Model15
+## 16        76 accuracy binary     0.873    10  0.0127 Preprocessor1_Model16
+## 17        81 accuracy binary     0.876    10  0.0135 Preprocessor1_Model17
+## 18        86 accuracy binary     0.873    10  0.0131 Preprocessor1_Model18
+## 19        91 accuracy binary     0.873    10  0.0140 Preprocessor1_Model19
+## 20        96 accuracy binary     0.866    10  0.0126 Preprocessor1_Model20
       </pre>
       <p>
         We can decide which number of neighbors is best by plotting the
@@ -1259,7 +1344,7 @@ best_k
       </pre>
       <p>
         Setting the number of neighbors to <m>K = 36</m> provides the highest
-        cross-validation accuracy estimate. But there is no exact or perfect
+        cross-validation accuracy estimate (89.89%). But there is no exact or perfect
         answer here; any selection from <m>K = 30</m> to <m>K = 60</m> would
         be reasonably justified, as all of these differ in classifier accuracy
         by a small amount. Remember: the values you see on this plot are
@@ -1406,6 +1491,27 @@ knn_fit &lt;- workflow() |&gt;
 knn_fit
         </input>
       </program>
+<pre>
+## ══ Workflow [trained] ══════════════════════════════════════════════════════════
+## Preprocessor: Recipe
+## Model: nearest_neighbor()
+## 
+## ── Preprocessor ────────────────────────────────────────────────────────────────
+## 2 Recipe Steps
+## 
+## • step_scale()
+## • step_center()
+## 
+## ── Model ───────────────────────────────────────────────────────────────────────
+## 
+## Call:
+## kknn::train.kknn(formula = ..y ~ ., data = data, ks = min_rows(36,     data, 5), kernel = ~"rectangular")
+## 
+## Type of response variable: nominal
+## Minimal misclassification: 0.1150235
+## Best kernel: rectangular
+## Best k: 36
+</pre>
       <p>
         Then to make predictions and assess the estimated accuracy of the best
         model on the test data, we use the
@@ -1429,10 +1535,10 @@ cancer_test_predictions |&gt;
         </input>
       </program>
       <pre>
-# A tibble: 1 × 3
-  .metric  .estimator .estimate
-  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
-1 accuracy binary         0.874
+## # A tibble: 1 × 3
+##   .metric  .estimator .estimate
+##   &lt;chr&gt;    &lt;chr&gt;          <dbl>
+## 1 accuracy binary         0.860
       </pre>
       <program language="r">
         <input>
@@ -1441,10 +1547,10 @@ cancer_test_predictions |&gt;
         </input>
       </program>
       <pre>
-# A tibble: 1 × 3
-  .metric   .estimator .estimate
-  &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
-1 precision binary         0.841
+## # A tibble: 1 × 3
+##   .metric   .estimator .estimate
+##   &lt;chr&gt;     &lt;chr&gt;          <dbl>
+## 1 precision binary           0.8
       </pre>
       <program language="r">
         <input>
@@ -1453,10 +1559,10 @@ cancer_test_predictions |&gt;
         </input>
       </program>
       <pre>
-# A tibble: 1 × 3
-  .metric .estimator .estimate
-  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 recall  binary         0.690
+## # A tibble: 1 × 3
+##   .metric .estimator .estimate
+##   &lt;chr&gt;   &lt;chr&gt;          <dbl>
+## 1 recall  binary         0.830
       </pre>
       <program language="r">
         <input>
@@ -1466,28 +1572,31 @@ confusion
         </input>
       </program>
       <pre>
-          Truth
-Prediction Malignant Benign
- Malignant        40     11
- Benign           17     75
+##            Truth
+## Prediction  Malignant Benign
+##   Malignant        44     11
+##   Benign            9     79
       </pre>
       <p>
         At first glance, this is a bit surprising: the accuracy of the
         classifier has only changed a small amount despite tuning the number
         of neighbors! Our first model with <m>K = 3</m> (before we knew how
-        to tune) had an estimated accuracy of approximately 86%, while the
+        to tune) had an estimated accuracy of 85%, while the
         tuned model with <m>K = 36</m> had an estimated accuracy of
-        approximately 87%. Upon examining
+        86%. Upon examining
         <xref ref="fig-classif2-accuracy-vs-k"/> again to see the cross
         validation accuracy estimates for a range of neighbors, this result
-        becomes much less surprising. From 1 to around 100 neighbors, the
-        cross validation accuracy estimate varies only by around 4%, with
-        each estimate having a standard error around 1%. Since the
-        cross-validation accuracy estimates the test set accuracy, the fact
-        that the test set accuracy also doesn't change much is expected.
-        It is important to think critically about the result of tuning; models
-        tuned to maximize accuracy are not necessarily better for a given
-        application.
+        becomes much less surprising. 
+  From 1 to around 96 neighbors, the cross validation accuracy estimate varies only by 
+  around 3%, with each estimate having a standard error around 1%. Since the 
+  cross-validation accuracy estimates the test set accuracy, the fact that the test set 
+  accuracy also doesn't change much is expected. Also note that the <m>K = 3</m> model 
+  had a precision of 77% and recall of 87%, while the tuned model had a precision of 
+  80% and recall of 83%. Given that the recall decreased <mdash/> remember, in this 
+  application, recall is critical to making sure we find all the patients with malignant 
+  tumors <mdash/> the tuned model may actually be less preferred in this setting. In 
+  any case, it is important to think critically about the result of tuning. Models tuned 
+  to maximize accuracy are not necessarily better for a given application.
       </p>
     </subsection>
   </section>
@@ -1599,18 +1708,16 @@ Prediction Malignant Benign
 
     <subsection xml:id="subsec-classif2-irrelevant-predictors">
       <title>The effect of irrelevant predictors</title>
-      <p>
-        Let's take a look at an example where K-nearest neighbors performs
-        worse when given more predictors to work with. In this example, we
-        modified the breast cancer data to have only the <c>Smoothness</c>,
-        <c>Concavity</c>, and <c>Perimeter</c> variables from the original
-        data. Then, we added irrelevant variables that we created ourselves
-        using a random number generator. The irrelevant variables each take a
-        value of 0 or 1 with equal probability for each observation,
-        regardless of what the value of the <c>Class</c> variable takes. In
-        other words, the irrelevant variables have no meaningful relationship
-        with the <c>Class</c> variable.
-      </p>
+<p>
+  Let's take a look at an example where K-nearest neighbors performs worse when given 
+  more predictors to work with. In this example, we modified the breast cancer data to 
+  have only the <c>Smoothness</c>, <c>Concavity</c>, and <c>Perimeter</c> variables 
+  from the original data. Then, we added irrelevant variables that we created ourselves 
+  using a random number generator. The irrelevant variables each take a value of 0 or 
+  1 with equal probability for each observation, regardless of what the value 
+  <c>Class</c> variable takes. In other words, the irrelevant variables have no 
+  meaningful relationship with the <c>Class</c> variable.
+</p>
       <program language="r">
         <input>
 cancer_irrelevant |&gt;
@@ -1618,13 +1725,20 @@ cancer_irrelevant |&gt;
         </input>
       </program>
       <pre>
-# A tibble: 569 × 6
-   Class     Smoothness Concavity Perimeter Irrelevant1 Irrelevant2
-   &lt;fct&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
- 1 Malignant     0.118      0.300       122.           0           0
- 2 Malignant     0.0847     0.0869      133.           1           1
- 3 Malignant     0.110      0.197       130.           0           1
-...
+## # A tibble: 569 × 6
+##    Class     Smoothness Concavity Perimeter Irrelevant1 Irrelevant2
+##    &lt;fct&gt;          <dbl>     <dbl>     <dbl>       <dbl>       <dbl>
+##  1 Malignant     0.118     0.300      123.            1           0
+##  2 Malignant     0.0847    0.0869     133.            0           0
+##  3 Malignant     0.110     0.197      130             0           0
+##  4 Malignant     0.142     0.241       77.6           0           1
+##  5 Malignant     0.100     0.198      135.            0           0
+##  6 Malignant     0.128     0.158       82.6           1           0
+##  7 Malignant     0.0946    0.113      120.            0           1
+##  8 Malignant     0.119     0.0937      90.2           1           0
+##  9 Malignant     0.127     0.186       87.5           0           0
+## 10 Malignant     0.119     0.227       84.0           1           1
+## # ℹ 559 more rows
       </pre>
       <p>
         Next, we build a sequence of K-NN classifiers that include
@@ -1773,7 +1887,7 @@ cancer_irrelevant |&gt;
         predictors to choose, you will end up training
         <m>\frac{1}{2}m(m+1)</m> separate models. This is a <em>big</em>
         improvement from the <m>2^m - 1</m> models that best subset selection
-        requires you to train!
+        requires you to train!  For example, while best subset selection requires training over 1000 candidate models with 10 predictors, forward selection requires training only 55 candidate models. Therefore we will continue the rest of this section using forward selection.
       </p>
 
       <note>
@@ -1823,12 +1937,20 @@ cancer_subset
         </input>
       </program>
       <pre>
-# A tibble: 569 × 7
-   Class     Smoothness Concavity Perimeter Irrelevant1 Irrelevant2 Irrelevant3
-   &lt;fct&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
- 1 Malignant     0.118      0.300       122.           0           0           0
- 2 Malignant     0.0847     0.0869      133.           1           1           0
-...
+## # A tibble: 569 × 7
+##    Class     Smoothness Concavity Perimeter Irrelevant1 Irrelevant2 Irrelevant3
+##    &lt;fct&gt;          <dbl>     <dbl>     <dbl>       <dbl>       <dbl>       <dbl>
+##  1 Malignant     0.118     0.300      123.            1           0           1
+##  2 Malignant     0.0847    0.0869     133.            0           0           0
+##  3 Malignant     0.110     0.197      130             0           0           0
+##  4 Malignant     0.142     0.241       77.6           0           1           0
+##  5 Malignant     0.100     0.198      135.            0           0           0
+##  6 Malignant     0.128     0.158       82.6           1           0           1
+##  7 Malignant     0.0946    0.113      120.            0           1           1
+##  8 Malignant     0.119     0.0937      90.2           1           0           0
+##  9 Malignant     0.127     0.186       87.5           0           0           1
+## 10 Malignant     0.119     0.227       84.0           1           1           0
+## # ℹ 559 more rows
       </pre>
       <p>
         The key idea of the forward selection code is to use the <c>paste</c>
@@ -1837,7 +1959,8 @@ cancer_subset
         a model. The <c>collapse</c> argument tells <c>paste</c> what to put
         between the items in the list; to make a formula, we need to put a
         <c>+</c> symbol between each variable. As an example, let's make a
-        model formula for all the predictors:
+        model formula for all the predictors, which should output something
+        like <c>Class ~ Smoothness + Concavity + Perimeter + Irrelevant1 + Irrelevant2 + Irrelevant3</c>:
       </p>
       <program language="r">
         <input>
@@ -1856,13 +1979,13 @@ example_formula
         earlier, and in these cases one typically resorts to a <em>for loop</em>;
         see
         <url href="https://r4ds.had.co.nz/iteration.html" visual="r4ds.had.co.nz/iteration.html">the chapter on iteration</url>
-        in <em>R for Data Science</em> (<xref ref="wickham2016r"/>). Here we
-        will use two for loops: one over increasing predictor set sizes, and
-        another to check which predictor to add in each round. For each set of
-        predictors to try, we construct a model formula, pass it into a
-        <c>recipe</c>, build a <c>workflow</c> that tunes a K-NN classifier
-        using 5-fold cross-validation, and finally records the estimated
-        accuracy.
+        in <em>R for Data Science</em> (<xref ref="wickham2016r"/>).
+  Here we will use two <c>for</c> loops: one over increasing predictor set sizes 
+  (where you see <c>for (i in 1:length(names))</c> below), and another to check which 
+  predictor to add in each round (where you see <c>for (j in 1:length(names))</c> 
+  below). For each set of predictors to try, we construct a model formula, pass it into 
+  a <c>recipe</c>, build a <c>workflow</c> that tunes a K-NN classifier using 5-fold 
+  cross-validation, and finally records the estimated accuracy.
       </p>
       <program language="r">
         <input>
@@ -1927,41 +2050,37 @@ accuracies
         </input>
       </program>
       <pre>
-# A tibble: 6 × 3
-   size model_string                                        accuracy
-  &lt;int&gt; &lt;chr&gt;                                                &lt;dbl&gt;
-1     1 Class ~ Perimeter                                    0.842
-2     2 Class ~ Perimeter+Concavity                          0.860
-3     3 Class ~ Perimeter+Concavity+Smoothness               0.871
-4     4 Class ~ Perimeter+Concavity+Smoothness+Irrelevant2   0.869
-5     5 Class ~ Perimeter+Concavity+Smoothness+...           0.867
-6     6 Class ~ Perimeter+Concavity+Smoothness+...           0.864
+## # A tibble: 6 × 3
+##    size model_string                                                    accuracy
+##   &lt;int&gt; &lt;chr&gt;                                                              <dbl>
+## 1     1 Class ~ Perimeter                                                  0.896
+## 2     2 Class ~ Perimeter+Concavity                                        0.916
+## 3     3 Class ~ Perimeter+Concavity+Smoothness                             0.931
+## 4     4 Class ~ Perimeter+Concavity+Smoothness+Irrelevant1                 0.928
+## 5     5 Class ~ Perimeter+Concavity+Smoothness+Irrelevant1+Irrelevant3     0.924
+## 6     6 Class ~ Perimeter+Concavity+Smoothness+Irrelevant1+Irrelevant3…    0.902
       </pre>
-      <p>
-        Interesting! The forward selection procedure first added the three
-        meaningful variables <c>Perimeter</c>, <c>Concavity</c>, and
-        <c>Smoothness</c>, followed by the irrelevant variables.
-        <xref ref="fig-classif2-fwdsel"/> visualizes the accuracy versus the
-        number of predictors in the model. You can see that as meaningful
-        predictors are added, the estimated accuracy increases substantially;
-        and as you add irrelevant variables, the accuracy either exhibits
-        small fluctuations or decreases as the model attempts to tune the
-        number of neighbors to account for the extra noise. In order to pick
-        the right model from the sequence, you have to balance high accuracy
-        and model simplicity (i.e., having fewer predictors and a lower chance
-        of overfitting). The way to find that balance is to look for the
-        <em>elbow</em>
-        <idx><h>variable selection!elbow method</h></idx>
-        in <xref ref="fig-classif2-fwdsel"/>, i.e., the place on the plot
-        where the accuracy stops increasing dramatically and levels off or
-        begins to decrease. The elbow in
-        <xref ref="fig-classif2-fwdsel"/> appears to occur at the model with
-        3 predictors; after that point the accuracy levels off. So here the
-        right trade-off of accuracy and number of predictors occurs with 3
-        variables: <c>Class ~ Perimeter + Concavity + Smoothness</c>. In
-        other words, we have successfully removed irrelevant predictors from
-        the model!
-      </p>
+<p>
+  Interesting! The forward selection procedure first added the three meaningful 
+  variables <c>Perimeter</c>, <c>Concavity</c>, and <c>Smoothness</c>, followed by 
+  the irrelevant variables. <xref ref="fig-classif2-fwdsel"/> visualizes the accuracy versus 
+  the number of predictors in the model. You can see that as meaningful predictors are 
+  added, the estimated accuracy increases substantially; and as you add irrelevant 
+  variables, the accuracy either exhibits small fluctuations or decreases as the model 
+  attempts to tune the number of neighbors to account for the extra noise. In order to 
+  pick the right model from the sequence, you have to balance high accuracy and model 
+  simplicity (i.e., having fewer predictors and a lower chance of overfitting). The way 
+  to find that balance is to look for the elbow in <xref ref="fig-classif2-fwdsel"/>, i.e., 
+  the place on the plot where the accuracy stops increasing dramatically and levels off 
+  or begins to decrease. The elbow in <xref ref="fig-classif2-fwdsel"/> appears to occur at 
+  the model with 3 predictors; after that point the accuracy levels off. So here the 
+  right trade-off of accuracy and number of predictors occurs with 3 variables: 
+  <c>Class ~ Perimeter + Concavity + Smoothness</c>. In other words, we have 
+  successfully removed irrelevant predictors from the model! It is always worth 
+  remembering, however, that what cross-validation gives you is an estimate of the true 
+  accuracy; you have to use your judgement when looking at this plot to decide where the 
+  elbow occurs, and whether adding a variable provides a meaningful increase in accuracy.
+</p>
       <program language="r">
         <input>
 fwd_sel_accuracies_plot &lt;- accuracies |&gt;
@@ -2020,7 +2139,9 @@ fwd_sel_accuracies_plot
         beyond the scope of this book. It's worth noting that the
         <c>tidymodels</c> package does a lot more than just classification,
         and so the examples on the website similarly go beyond classification
-        as well.</p>
+        as well. In the next two chapters, you’ll learn about another kind of
+        predictive modeling setting, so it might be worth visiting the website
+        only after reading through those chapters.</p>
       </li>
       <li>
         <p><em>An Introduction to Statistical Learning</em>
