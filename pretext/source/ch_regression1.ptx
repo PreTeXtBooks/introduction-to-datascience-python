@@ -144,20 +144,20 @@ sacramento
       </input>
     </program>
     <pre>
-# A tibble: 932 x 9
-   city           zip      beds baths  sqft type           price latitude longitude
-   &lt;chr&gt;          &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
- 1 CITRUS HEIGHTS 95610       3     1   836 Residential    59222     38.6     -121.
- 2 CITRUS HEIGHTS 95610       3     1   799 Residential    68212     38.6     -121.
- 3 CITRUS HEIGHTS 95610       3     1  1193 Residential    68880     38.6     -121.
- 4 CITRUS HEIGHTS 95610       3     2  1635 Residential   167500     38.6     -121.
- 5 CITRUS HEIGHTS 95610       4     2  2688 Residential   239000     38.6     -121.
- 6 ANTELOPE       95843       3     1  1077 Residential    68500     38.7     -121.
- 7 ANTELOPE       95843       3     2  1200 Residential   171000     38.7     -121.
- 8 ANTELOPE       95843       4     2  1560 Residential   220000     38.7     -121.
- 9 ANTELOPE       95843       4     2  1957 Residential   250000     38.7     -121.
-10 ANTELOPE       95843       3     2  1575 Residential   192000     38.7     -121.
-# i 922 more rows
+## # A tibble: 932 × 9
+##    city           zip     beds baths  sqft type        price latitude longitude
+##    &lt;chr&gt;          &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+##  1 SACRAMENTO     z95838     2     1   836 Residential 59222     38.6     -121.
+##  2 SACRAMENTO     z95823     3     1  1167 Residential 68212     38.5     -121.
+##  3 SACRAMENTO     z95815     2     1   796 Residential 68880     38.6     -121.
+##  4 SACRAMENTO     z95815     2     1   852 Residential 69307     38.6     -121.
+##  5 SACRAMENTO     z95824     2     1   797 Residential 81900     38.5     -121.
+##  6 SACRAMENTO     z95841     3     1  1122 Condo       89921     38.7     -121.
+##  7 SACRAMENTO     z95842     3     2  1104 Residential 90895     38.7     -121.
+##  8 SACRAMENTO     z95820     3     1  1177 Residential 91002     38.5     -121.
+##  9 RANCHO_CORDOVA z95670     2     2   941 Condo       94905     38.6     -121.
+## 10 RIO_LINDA      z95673     3     2  1146 Residential 98937     38.7     -121.
+## # ℹ 922 more rows
     </pre>
     <p>
       The scientific question guides our initial exploration: the columns in the
@@ -277,14 +277,14 @@ nearest_neighbors
       </input>
     </program>
     <pre>
-# A tibble: 5 x 10
-  city        zip    beds baths  sqft type          price latitude longitude  diff
-  &lt;chr&gt;       &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
-1 SACRAMENTO  95820     3     2  1963 Residential  155000     38.5     -121.    37
-2 SACRAMENTO  95820     4     2  2017 Residential  197000     38.5     -121.    17
-3 ELK GROVE   95624     3     2  1990 Residential  224900     38.4     -121.    10
-4 ELK GROVE   95624     4     2  2100 Residential  259000     38.4     -121.   100
-5 SACRAMENTO  95833     3     2  1905 Residential  189000     38.6     -121.    95
+## # A tibble: 5 × 10
+##   city       zip     beds baths  sqft type        price latitude longitude  diff
+##   &lt;chr&gt;      &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
+## 1 ROSEVILLE  z95661     3   2    2049 Residenti… 395500     38.7     -121.    49
+## 2 ANTELOPE   z95843     4   3    2085 Residenti… 408431     38.7     -121.    85
+## 3 SACRAMENTO z95823     4   2    1876 Residenti… 299940     38.5     -121.   124
+## 4 ROSEVILLE  z95747     3   2.5  1829 Residenti… 306500     38.8     -121.   171
+## 5 SACRAMENTO z95825     4   2    1776 Multi_Fam… 221250     38.6     -121.   224
     </pre>
     <figure xml:id="fig-sacr-knn-example">
       <caption>Scatter plot of price (USD) versus house size (square feet) with lines to 5 nearest neighbors (highlighted in orange).</caption>
@@ -311,14 +311,14 @@ prediction
 # A tibble: 1 x 1
   predicted
       &lt;dbl&gt;
-1   204980
+1   326324
     </pre>
     <figure xml:id="fig-sacr-predicted-viz">
       <caption>Scatter plot of price (USD) versus house size (square feet) with predicted price for a 2,000 square-foot house based on 5 nearest neighbors represented as a red dot.</caption>
       <image source="images/regression1/sacr-predicted-viz.png" width="60%"/>
     </figure>
     <p>
-      Our predicted price is $204,980 (shown as a red point in
+      Our predicted price is $326,324 (shown as a red point in
       <xref ref="fig-sacr-predicted-viz"/>), which is much less than $350,000;
       perhaps we might want to offer less than the list price at which the house
       is advertised. But this is only the very beginning of the story. We still
@@ -399,24 +399,20 @@ sacramento_test  &lt;- testing(sacramento_split)
       <image source="images/regression1/sacr-verticalerrors.png" width="60%"/>
     </figure>
     <note>
-      <p>
-        When using many code packages (<c>tidymodels</c> included), the
-        evaluation output we will get to assess the prediction quality of our
-        K-NN regression models is labeled <q>RMSE</q>, or <q>root mean squared
-        error</q>. Why is this so, and why not RMSPE?
-        <idx><h>RMSPE</h><h>comparison with RMSE</h></idx>
-        In statistics, we try to be very precise with our language to indicate
-        whether we are calculating the prediction error on the training data
-        (<em>in-sample</em> prediction) versus on the testing data
-        (<em>out-of-sample</em> prediction). When predicting and evaluating
-        prediction quality on the training data, we say RMSE. By contrast, when
-        predicting and evaluating prediction quality on the testing or validation
-        data, we say RMSPE. The equation for calculating RMSE and RMSPE is
-        exactly the same; all that changes is whether the <m>y</m>s are training
-        or testing data. But many people just use RMSE for both, and rely on
-        context to denote which data the root mean squared error is being
-        calculated on.
-      </p>
+<p>
+  When using many code packages (<c>tidymodels</c> included), the evaluation output we 
+  will get to assess the prediction quality of our K-NN regression models is labeled 
+  <q>RMSE</q>, or <q>root mean squared error</q>. Why is this so, and why not RMSPE? 
+  In statistics, we try to be very precise with our language to indicate whether we are 
+  calculating the prediction error on the training data (in-sample prediction) versus 
+  on the testing data (out-of-sample prediction). When predicting and evaluating 
+  prediction quality on the training data, we say RMSE. By contrast, when predicting 
+  and evaluating prediction quality on the testing or validation data, we say RMSPE. 
+  The equation for calculating RMSE and RMSPE is exactly the same; all that changes is 
+  whether the <m>y</m>s are training or testing data. But many people just use RMSE for 
+  both, and rely on context to denote which data the root mean squared error is being 
+  calculated on.
+</p>
     </note>
     <p>
       Now that we know how we can assess how well our model predicts a numerical
@@ -456,24 +452,24 @@ sacr_wkflw
       </input>
     </program>
     <pre>
-== Workflow =================================================
-Preprocessor: Recipe
-Model: nearest_neighbor()
-
--- Preprocessor ---------------------------------------------
-2 Recipe Steps
-
-* step_scale()
-* step_center()
-
--- Model ----------------------------------------------------
-K-Nearest Neighbor Model Specification (regression)
-
-Main Arguments:
-  neighbors = tune()
-  weight_func = rectangular
-
-Computational engine: kknn
+## ══ Workflow ══════════
+## Preprocessor: Recipe
+## Model: nearest_neighbor()
+## 
+## ── Preprocessor ──────────
+## 2 Recipe Steps
+## 
+## • step_scale()
+## • step_center()
+## 
+## ── Model ──────────
+## K-Nearest Neighbor Model Specification (regression)
+## 
+## Main Arguments:
+##   neighbors = tune()
+##   weight_func = rectangular
+## 
+## Computational engine: kknn
     </pre>
     <p>
       Next we run cross-validation for a grid of numbers of neighbors ranging
@@ -505,20 +501,20 @@ sacr_results
       </input>
     </program>
     <pre>
-# A tibble: 67 x 7
-   neighbors .metric .estimator    mean     n std_err .config
-       &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
- 1         1 rmse    standard   104489.     5   5811. Preprocessor1_Model01
- 2         4 rmse    standard    94527.     5   4694. Preprocessor1_Model02
- 3         7 rmse    standard    91238.     5   4263. Preprocessor1_Model03
- 4        10 rmse    standard    89503.     5   4125. Preprocessor1_Model04
- 5        13 rmse    standard    88519.     5   4067. Preprocessor1_Model05
- 6        16 rmse    standard    88042.     5   4053. Preprocessor1_Model06
- 7        19 rmse    standard    87717.     5   4040. Preprocessor1_Model07
- 8        22 rmse    standard    87571.     5   4035. Preprocessor1_Model08
- 9        25 rmse    standard    87422.     5   4028. Preprocessor1_Model09
-10        28 rmse    standard    87397.     5   4025. Preprocessor1_Model10
-# i 57 more rows
+## # A tibble: 67 × 7
+##    neighbors .metric .estimator    mean     n std_err .config              
+##        &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
+##  1         1 rmse    standard   107206.     5   4102. Preprocessor1_Model01
+##  2         4 rmse    standard    90469.     5   3312. Preprocessor1_Model02
+##  3         7 rmse    standard    86580.     5   3062. Preprocessor1_Model03
+##  4        10 rmse    standard    85321.     5   3395. Preprocessor1_Model04
+##  5        13 rmse    standard    85045.     5   3641. Preprocessor1_Model05
+##  6        16 rmse    standard    84675.     5   3679. Preprocessor1_Model06
+##  7        19 rmse    standard    84776.     5   3984. Preprocessor1_Model07
+##  8        22 rmse    standard    84617.     5   3952. Preprocessor1_Model08
+##  9        25 rmse    standard    84953.     5   3929. Preprocessor1_Model09
+## 10        28 rmse    standard    84612.     5   3917. Preprocessor1_Model10
+## # ℹ 57 more rows
     </pre>
     <figure xml:id="fig-sacr-tunek-plot">
       <caption>Effect of the number of neighbors on the RMSPE.</caption>
@@ -539,13 +535,13 @@ sacr_min
       </input>
     </program>
     <pre>
-# A tibble: 1 x 7
-  neighbors .metric .estimator   mean     n std_err .config
-      &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
-1        46 rmse    standard   87164.     5   3976. Preprocessor1_Model16
+## # A tibble: 1 × 7
+##   neighbors .metric .estimator   mean     n std_err .config              
+##       &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
+## 1        52 rmse    standard   84561.     5   4470. Preprocessor1_Model18
     </pre>
     <p>
-      The smallest RMSPE occurs when <m>K = 46</m>.
+      The smallest RMSPE occurs when <m>K = 52</m>.
     </p>
   </section>
 
@@ -561,7 +557,7 @@ sacr_min
       <xref ref="fig-sacr-howK"/> visualizes the effect of different settings
       of <m>K</m> on the regression model. Each plot shows the predicted values
       for house sale price from our K-NN regression model on the training data
-      for 6 different values for <m>K</m>: 1, 3, 25, 46, 250, and 680 (almost
+      for 6 different values for <m>K</m>: 1, 3, 25, 52, 250, and 680 (almost
       the entire training set). For each model, we predict prices for the range
       of possible home sizes we observed in the data set (here 500 to 5,000
       square feet) and we plot the predicted prices as a blue line.
@@ -610,7 +606,7 @@ sacr_min
       data to learn something useful, and (2) does not follow the noisy
       fluctuations, so that we can be confident that our model will
       transfer/generalize well to other new data. If we explore the other values
-      for <m>K</m>, in particular <m>K = 46</m> (as suggested by
+      for <m>K</m>, in particular <m>K = 52</m> (as suggested by
       cross-validation), we can see it achieves this goal: it follows the
       increasing trend of house price versus house size, but is not influenced
       too much by the idiosyncratic variations in price. All of this is similar
@@ -626,7 +622,7 @@ sacr_min
       To assess how well our model might do at predicting on unseen data, we
       will assess its RMSPE on the test data. To do this, we will first
       re-train our K-NN regression model on the entire training data set, using
-      <m>K = 46</m> neighbors. Then we will use <c>predict</c> to make
+      <m>K = 52</m> neighbors. Then we will use <c>predict</c> to make
       predictions on the test data, and use the <c>metrics</c> function again
       to compute the summary of regression quality. Because we specify that we
       are performing regression in <c>set_mode</c>, the <c>metrics</c> function
@@ -656,26 +652,25 @@ sacr_summary
       </input>
     </program>
     <pre>
-# A tibble: 1 x 3
-  .metric .estimator .estimate
-  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard      89479.
+## # A tibble: 1 × 3
+##   .metric .estimator .estimate
+##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+## 1 rmse    standard      90529.
     </pre>
-    <p>
-      Our final model's test error as assessed by RMSPE is $89,479. Note that
-      RMSPE is measured in the same units as the response variable. In other
-      words, on new observations, we expect the error in our prediction to be
-      <em>roughly</em> $89,479. From one perspective, this is good news: this
-      is about the same as the cross-validation RMSPE estimate of our tuned
-      model, so we can say that the model appears to generalize well to new data
-      that it has never seen before. However, much like in the case of K-NN
-      classification, whether this value for RMSPE is <em>good</em>&#x2014;i.e.,
-      whether an error of around $89,479 is acceptable&#x2014;depends entirely
-      on the application. In this application, this error is not prohibitively
-      large, but it is not negligible either; $89,479 might represent a
-      substantial fraction of a home buyer's budget, and could make or break
-      whether or not they could afford to put an offer on a house.
-    </p>
+<p>
+  Our final model's test error as assessed by RMSPE is $90,529. Note that RMSPE is 
+  measured in the same units as the response variable. In other words, on new 
+  observations, we expect the error in our prediction to be roughly $90,529. From one 
+  perspective, this is good news: this is about the same as the cross-validation RMSPE 
+  estimate of our tuned model (which was $84,561), so we can say that the model appears 
+  to generalize well to new data that it has never seen before. However, much like in 
+  the case of K-NN classification, whether this value for RMSPE is good <mdash/> i.e., 
+  whether an error of around $90,529 is acceptable <mdash/> depends entirely on the 
+  application. In this application, this error is not prohibitively large, but it is 
+  not negligible either; $90,529 might represent a substantial fraction of a home 
+  buyer's budget, and could make or break whether or not they could afford to put an 
+  offer on a house.
+</p>
     <p>
       Finally, <xref ref="fig-sacr-predict-all"/> shows the predictions that
       our final model makes across the range of house sizes we might encounter
@@ -818,31 +813,29 @@ sacr_multi
       </input>
     </program>
     <pre>
-# A tibble: 1 x 7
-  neighbors .metric .estimator   mean     n std_err .config
-      &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
-1        58 rmse    standard   87052.     5   3946. Preprocessor1_Model058
+## # A tibble: 1 × 7
+##   neighbors .metric .estimator   mean     n std_err .config               
+##       &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                 
+## 1        11 rmse    standard   81839.     5   3108. Preprocessor1_Model011
     </pre>
-    <p>
-      Here we see that the smallest estimated RMSPE from cross-validation
-      occurs when <m>K = 58</m>. If we want to compare this multivariable K-NN
-      regression model to the model with only a single predictor <em>as part
-      of the model tuning process</em> (e.g., if we are running forward
-      selection as described in the chapter on evaluating and tuning
-      classification models), then we must compare the RMSPE estimated using
-      only the training data via cross-validation. Looking back, the estimated
-      cross-validation RMSPE for the single-predictor model was $87,164. The
-      estimated cross-validation RMSPE for the multivariable model is $87,052.
-      Thus in this case, we did not improve the model by a large amount by
-      adding this additional predictor.
-    </p>
-    <p>
-      Regardless, let's continue the analysis to see how we can make
-      predictions with a multivariable K-NN regression model and evaluate its
-      performance on test data. We first need to re-train the model on the
-      entire training data set with <m>K = 58</m>, and then use that model to
-      make predictions on the test data.
-    </p>
+<p>
+  Here we see that the smallest estimated RMSPE from cross-validation occurs when 
+  <m>K = 11</m>. If we want to compare this multivariable K-NN regression model to the 
+  model with only a single predictor as part of the model tuning process (e.g., if we 
+  are running forward selection as described in the chapter on evaluating and tuning 
+  classification models), then we must compare the RMSPE estimated using only the 
+  training data via cross-validation. Looking back, the estimated cross-validation RMSPE 
+  for the single-predictor model was $84,561. The estimated cross-validation RMSPE for 
+  the multivariable model is $81,839. Thus in this case, we did not improve the model 
+  by a large amount by adding this additional predictor.
+</p>
+
+<p>
+  Regardless, let's continue the analysis to see how we can make predictions with a 
+  multivariable K-NN regression model and evaluate its performance on test data. We 
+  first need to re-train the model on the entire training data set with <m>K = 11</m>, 
+  and then use that model to make predictions on the test data.
+</p>
     <program language="r">
       <input>
 sacr_spec &lt;- nearest_neighbor(weight_func = "rectangular",
@@ -869,12 +862,12 @@ knn_mult_mets
 # A tibble: 1 x 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard      90343.
+1 rmse    standard      90862.
     </pre>
     <p>
       This time, when we performed K-NN regression on the same data set, but
       also included number of bedrooms as a predictor, we obtained a RMSPE test
-      error of $90,343. <xref ref="fig-sacr-3d-mult-viz"/> visualizes the
+      error of $90,862. <xref ref="fig-sacr-3d-mult-viz"/> visualizes the
       model's predictions overlaid on top of the data. This time the
       predictions are a surface in 3D space, instead of a line in 2D space, as
       we have 2 predictors instead of 1.
