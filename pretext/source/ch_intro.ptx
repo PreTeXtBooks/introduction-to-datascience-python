@@ -127,9 +127,7 @@
     </p>
 
     <table xml:id="tab-questions-table">
-      <title>Types of data analysis question
-        <xref ref="leek2015question"/>
-        <xref ref="peng2015art"/>.</title>
+      <title>Types of data analysis question.</title>
       <tabular halign="left" top="minor" bottom="minor" left="minor" right="minor">
         <col width="20%"/>
         <col width="45%"/>
@@ -183,6 +181,7 @@
         </row>
       </tabular>
     </table>
+    <p>Source: <xref ref="leek2015question"/> <xref ref="peng2015art"/>.</p>
 
     <p>
       In this book, you will learn techniques to answer the first four types of question:
