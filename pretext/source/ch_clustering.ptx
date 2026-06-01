@@ -113,7 +113,7 @@
       <xref ref="palmerpenguins"/>. This data set was collected by Dr. Kristen
       Gorman and the Palmer Station, Antarctica Long Term Ecological Research
       Site, and includes measurements for adult penguins
-      (Figure <xref ref="fig-clustering-gentoo"/>) found near there
+      (<xref ref="fig-clustering-gentoo"/>) found near there
       <xref ref="penguinpaper"/>. Our goal will be to use two
       variables&#x2014;penguin bill and flipper length, both in
       millimeters&#x2014;to determine whether there are distinct types of
@@ -124,10 +124,10 @@
       works for learning purposes.
     </p>
 
-    <figure xml:id="fig-clustering-gentoo">
+    < xml:id="fig-clustering-gentoo">
       <caption>A Gentoo penguin.</caption>
       <image source="images/clustering/gentoo.jpg" width="60%"/>
-    </figure>
+    </>
 
     <p>
       Before we get started, we will load the <c>tidyverse</c> metapackage as
@@ -157,15 +157,27 @@ penguins
       </input>
     </program>
     <pre>
-# A tibble: 18 × 2
-   bill_length_mm flipper_length_mm
-            &lt;dbl&gt;             &lt;dbl&gt;
- 1           39.1               181
- 2           39.5               186
- 3           40.3               195
- 4           36.7               193
- 5           39.3               190
- ...
+## # A tibble: 18 × 2
+##    bill_length_mm flipper_length_mm
+##             &lt;dbl&gt;             &lt;dbl&gt;
+##  1           39.2               196
+##  2           36.5               182
+##  3           34.5               187
+##  4           36.7               187
+##  5           38.1               181
+##  6           39.2               190
+##  7           36                 195
+##  8           37.8               193
+##  9           46.5               213
+## 10           46.1               215
+## 11           47.8               215
+## 12           45                 220
+## 13           49.1               212
+## 14           43.3               208
+## 15           46                 195
+## 16           46.7               195
+## 17           52.2               197
+## 18           46.8               189
     </pre>
 
     <p>
@@ -187,14 +199,27 @@ penguins_standardized
       </input>
     </program>
     <pre>
-# A tibble: 18 × 2
-   bill_length_standardized flipper_length_standardized
-                      &lt;dbl&gt;                       &lt;dbl&gt;
- 1               -1.19                        -1.10
- 2               -1.08                        -1.22
- 3               -0.854                       -0.790
- 4               -1.39                        -1.10
- ...
+## # A tibble: 18 × 2
+##    bill_length_standardized flipper_length_standardized
+##                       &lt;dbl&gt;                       &lt;dbl&gt;
+##  1                   -0.641                      -0.190
+##  2                   -1.14                       -1.33 
+##  3                   -1.52                       -0.922
+##  4                   -1.11                       -0.922
+##  5                   -0.847                      -1.41 
+##  6                   -0.641                      -0.678
+##  7                   -1.24                       -0.271
+##  8                   -0.902                      -0.434
+##  9                    0.720                       1.19 
+## 10                    0.646                       1.36 
+## 11                    0.963                       1.36 
+## 12                    0.440                       1.76 
+## 13                    1.21                        1.11 
+## 14                    0.123                       0.786
+## 15                    0.627                      -0.271
+## 16                    0.757                      -0.271
+## 17                    1.78                       -0.108
+## 18                    0.776                      -0.759
     </pre>
 
     <p>
@@ -214,16 +239,16 @@ ggplot(penguins_standardized,
       </input>
     </program>
 
-    <figure xml:id="fig-clustering-scatter">
+    < xml:id="fig-clustering-scatter">
       <caption>Scatter plot of standardized bill length versus standardized flipper length.</caption>
       <image source="images/clustering/penguins-scatter.png" width="60%"/>
-    </figure>
+    </>
 
     <p>
       Based
       <idx><h>ggplot</h></idx>
       <idx><h>ggplot</h><h>geom_point</h></idx>
-      on the visualization in Figure <xref ref="fig-clustering-scatter"/>,
+      on the visualization in <xref ref="fig-clustering-scatter"/>,
       we might suspect there are a few subtypes of penguins within our data set.
       We can see roughly 3 groups of observations, including:
     </p>
@@ -247,14 +272,14 @@ ggplot(penguins_standardized,
       the <em>elbow method</em>
       <idx><h>elbow method</h></idx>
       for selecting the number of clusters. This procedure will separate the
-      data into groups; Figure <xref ref="fig-clustering-clustered"/> shows
+      data into groups; <xref ref="fig-clustering-clustered"/> shows
       these groups denoted by colored scatter points.
     </p>
 
-    <figure xml:id="fig-clustering-clustered">
+    < xml:id="fig-clustering-clustered">
       <caption>Scatter plot of standardized bill length versus standardized flipper length with colored groups.</caption>
       <image source="images/clustering/penguins-clustered.png" width="70%"/>
-    </figure>
+    </>
 
     <p>
       What are the labels for these groups? Unfortunately, we don&#x2019;t
@@ -308,13 +333,13 @@ ggplot(penguins_standardized,
       <p>
         In the first cluster from the example, there are 5 data points. These
         are shown with their cluster center highlighted in
-        Figure <xref ref="fig-clustering-clus1-center"/>.
+        <xref ref="fig-clustering-clus1-center"/>.
       </p>
 
-      <figure xml:id="fig-clustering-clus1-center">
+      < xml:id="fig-clustering-clus1-center">
         <caption>Cluster 1 from the <c>penguins_standardized</c> data set example. Observations are small blue points, with the cluster center highlighted as a large blue point with a black outline.</caption>
         <image source="images/clustering/clus1-center.png" width="60%"/>
-      </figure>
+      </>
 
       <p>
         The second step in computing the WSSD is to add up the squared distance
@@ -337,14 +362,14 @@ ggplot(penguins_standardized,
       </md>
       <p>
         These distances are denoted by lines in
-        Figure <xref ref="fig-clustering-clus1-dists"/> for the first cluster of
+        <xref ref="fig-clustering-clus1-dists"/> for the first cluster of
         the penguin data example.
       </p>
 
-      <figure xml:id="fig-clustering-clus1-dists">
+      < xml:id="fig-clustering-clus1-dists">
         <caption>Cluster 1 from the <c>penguins_standardized</c> data set example. Observations are small blue points, with the cluster center highlighted as a large blue point with a black outline. The distances from the observations to the cluster center are represented as black lines.</caption>
         <image source="images/clustering/clus1-dists.png" width="60%"/>
-      </figure>
+      </>
 
       <p>
         The larger the value of <m>S^2</m>, the more spread out the cluster
@@ -360,13 +385,13 @@ ggplot(penguins_standardized,
         together to get the <em>total WSSD</em>. For our example, this means
         adding up all the squared distances for the 18 observations. These
         distances are denoted by black lines in
-        Figure <xref ref="fig-clustering-all-clus-dists"/>.
+        <xref ref="fig-clustering-all-clus-dists"/>.
       </p>
 
-      <figure xml:id="fig-clustering-all-clus-dists">
+      < xml:id="fig-clustering-all-clus-dists">
         <caption>All clusters from the <c>penguins_standardized</c> data set example. Observations are small orange, blue, and yellow points with cluster centers denoted by larger points with a black outline. The distances from the observations to each of the respective cluster centers are represented as black lines.</caption>
         <image source="images/clustering/all-clus-dists.png" width="70%"/>
-      </figure>
+      </>
 
       <p>
         Since K-means uses the straight-line distance to measure the quality of
@@ -385,13 +410,13 @@ ggplot(penguins_standardized,
         <idx><h>K-means</h><h>algorithm</h></idx>
         algorithm by picking K, and randomly assigning a roughly equal number
         of observations to each of the K clusters. An example random
-        initialization is shown in Figure <xref ref="fig-clustering-kmeans-init"/>.
+        initialization is shown in <xref ref="fig-clustering-kmeans-init"/>.
       </p>
 
-      <figure xml:id="fig-clustering-kmeans-init">
+      < xml:id="fig-clustering-kmeans-init">
         <caption>Random initialization of labels.</caption>
         <image source="images/clustering/kmeans-init.png" width="65%"/>
-      </figure>
+      </>
 
       <p>
         Then K-means consists of two major steps that attempt to minimize the
@@ -406,8 +431,8 @@ ggplot(penguins_standardized,
       <p>
         These two steps are repeated until the cluster assignments no longer
         change. We show what the first four iterations of K-means would look
-        like in Figure <xref ref="fig-clustering-kmeans-iter"/>. There each pair
-        of plots in each row corresponds to an iteration, where the left figure
+        like in <xref ref="fig-clustering-kmeans-iter"/>. There each pair
+        of plots in each row corresponds to an iteration, where the left 
         in the pair depicts the center update, and the right figure in the pair
         depicts the label update (i.e., the reassignment of data to clusters).
       </p>
@@ -447,7 +472,7 @@ ggplot(penguins_standardized,
         chapters, K-means
         <idx><h>K-means</h><h>restart</h></idx>
         can get &#x201C;stuck&#x201D; in a bad solution. For example,
-        Figure <xref ref="fig-clustering-bad-init"/> illustrates an unlucky
+        <xref ref="fig-clustering-bad-init"/> illustrates an unlucky
         random initialization by K-means.
       </p>
 
@@ -457,9 +482,9 @@ ggplot(penguins_standardized,
       </figure>
 
       <p>
-        Figure <xref ref="fig-clustering-bad-iter"/> shows what the iterations
+        <xref ref="fig-clustering-bad-iter"/> shows what the iterations
         of K-means would look like with the unlucky random initialization shown
-        in Figure <xref ref="fig-clustering-bad-init"/>.
+        in <xref ref="fig-clustering-bad-init"/>.
       </p>
 
       <figure xml:id="fig-clustering-bad-iter">
@@ -485,7 +510,7 @@ ggplot(penguins_standardized,
         prediction error. Further, if K is chosen too small, then multiple
         clusters get grouped together; if K is too large, then clusters get
         subdivided. In both cases, we will potentially miss interesting
-        structure in the data. Figure <xref ref="fig-clustering-vary-k"/>
+        structure in the data. <xref ref="fig-clustering-vary-k"/>
         illustrates the impact of K on K-means clustering of our penguin flipper
         and bill length data by showing the different clusterings for K&#x2019;s
         ranging from 1 to 9.
@@ -507,7 +532,7 @@ ggplot(penguins_standardized,
         &#x201C;elbow shape&#x201D;)
         <idx><h>elbow method</h></idx>
         when we reach roughly the right number of clusters
-        (Figure <xref ref="fig-clustering-elbow"/>).
+        (<xref ref="fig-clustering-elbow"/>).
       </p>
 
       <figure xml:id="fig-clustering-elbow">
@@ -578,13 +603,16 @@ kmeans_recipe
       </input>
     </program>
     <pre>
-── Recipe ──────────────────────────────────────────────────────────────────────
-── Inputs
- Number of variables by role
- predictor: 2
-── Operations
- • Scaling for: all_predictors()
- • Centering for: all_predictors()
+## 
+## ── Recipe ──────────
+## 
+## ── Inputs 
+## Number of variables by role
+## predictor: 2
+## 
+## ── Operations 
+## • Scaling for: all_predictors()
+## • Centering for: all_predictors()
     </pre>
 
     <p>
@@ -605,12 +633,12 @@ kmeans_spec
       </input>
     </program>
     <pre>
-K Means Cluster Specification (partition)
-
-Main Arguments:
-  num_clusters = 3
-
-Computational engine: stats
+## K Means Cluster Specification (partition)
+## 
+## Main Arguments:
+##   num_clusters = 3
+## 
+## Computational engine: stats
     </pre>
 
     <p>
@@ -631,24 +659,36 @@ kmeans_fit
       </input>
     </program>
     <pre>
-══ Workflow [trained] ══════════════════════════════════════════════════════════
-Preprocessor: Recipe
-Model: k_means()
-
-── Preprocessor ────────────────────────────────────────────────────────────────
-2 Recipe Steps
-
-• step_scale()
-• step_center()
-
-── Model ────────────────────────────────────────────────────────────────────────
-K-means clustering with 3 clusters of sizes 6, 5, 7
-
-Cluster means:
-  bill_length_mm flipper_length_mm
-1      0.6484         0.8932
-2     -1.1060        -0.9978
-3      0.4853        -0.5841
+## ══ Workflow [trained] ══════════
+## Preprocessor: Recipe
+## Model: k_means()
+## 
+## ── Preprocessor ──────────
+## 2 Recipe Steps
+## 
+## • step_scale()
+## • step_center()
+## 
+## ── Model ──────────
+## K-means clustering with 3 clusters of sizes 4, 6, 8
+## 
+## Cluster means:
+##   bill_length_mm flipper_length_mm
+## 1      0.9858721        -0.3524358
+## 2      0.6828058         1.2606357
+## 3     -1.0050404        -0.7692589
+## 
+## Clustering vector:
+##  [1] 3 3 3 3 3 3 3 3 2 2 2 2 2 2 1 1 1 1
+## 
+## Within cluster sum of squares by cluster:
+## [1] 1.098928 1.247042 2.121932
+##  (between_SS / total_SS =  86.9 %)
+## 
+## Available components:
+## 
+## [1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
+## [6] "betweenss"    "size"         "iter"         "ifault"
     </pre>
 
     <p>
@@ -670,19 +710,33 @@ clustered_data
       </input>
     </program>
     <pre>
-# A tibble: 18 × 3
-   bill_length_mm flipper_length_mm .pred_cluster
-            &lt;dbl&gt;             &lt;dbl&gt; &lt;fct&gt;
- 1           39.1               181 Cluster_2
- 2           39.5               186 Cluster_2
- 3           40.3               195 Cluster_3
- ...
+## # A tibble: 18 × 3
+##    bill_length_mm flipper_length_mm .pred_cluster
+##             &lt;dbl&gt;             &lt;dbl&gt; &lt;fct&gt;        
+##  1           39.2               196 Cluster_1    
+##  2           36.5               182 Cluster_1    
+##  3           34.5               187 Cluster_1    
+##  4           36.7               187 Cluster_1    
+##  5           38.1               181 Cluster_1    
+##  6           39.2               190 Cluster_1    
+##  7           36                 195 Cluster_1    
+##  8           37.8               193 Cluster_1    
+##  9           46.5               213 Cluster_2    
+## 10           46.1               215 Cluster_2    
+## 11           47.8               215 Cluster_2    
+## 12           45                 220 Cluster_2    
+## 13           49.1               212 Cluster_2    
+## 14           43.3               208 Cluster_2    
+## 15           46                 195 Cluster_3    
+## 16           46.7               195 Cluster_3    
+## 17           52.2               197 Cluster_3    
+## 18           46.8               189 Cluster_3
     </pre>
 
     <p>
       Now that we have the cluster assignments included in the
       <c>clustered_data</c> tidy data frame, we can visualize them as shown in
-      Figure <xref ref="fig-clustering-plot-clusters"/>. Note that we are
+      <xref ref="fig-clustering-plot-clusters"/>. Note that we are
       plotting the <em>un-standardized</em> data here; if we for some reason
       wanted to visualize the <em>standardized</em> data from the recipe, we
       would need to use the <c>bake</c> function to obtain that first.
@@ -727,10 +781,10 @@ glance(kmeans_fit)
       </input>
     </program>
     <pre>
-# A tibble: 1 × 3
-  tot.withinss totss betweenss
-         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
-1         4.05  34.0      30.0
+## # A tibble: 1 × 4
+##   totss tot.withinss betweenss  iter
+##   &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
+## 1    34         4.47      29.5     2
     </pre>
 
     <p>
@@ -746,18 +800,18 @@ penguin_clust_ks
       </input>
     </program>
     <pre>
-# A tibble: 9 × 1
-  num_clusters
-         &lt;int&gt;
-1            1
-2            2
-3            3
-4            4
-5            5
-6            6
-7            7
-8            8
-9            9
+## # A tibble: 9 × 1
+##   num_clusters
+##          &lt;int&gt;
+## 1            1
+## 2            2
+## 3            3
+## 4            4
+## 5            5
+## 6            6
+## 7            7
+## 8            8
+## 9            9
     </pre>
 
     <p>
@@ -773,12 +827,12 @@ kmeans_spec
       </input>
     </program>
     <pre>
-K Means Cluster Specification (partition)
-
-Main Arguments:
-  num_clusters = tune()
-
-Computational engine: stats
+## K Means Cluster Specification (partition)
+## 
+## Main Arguments:
+##   num_clusters = tune()
+## 
+## Computational engine: stats
     </pre>
 
     <p>
@@ -808,14 +862,27 @@ kmeans_results
       </input>
     </program>
     <pre>
-# A tibble: 18 × 8
-   num_clusters .metric         .estimator    mean     n std_err .config
-          &lt;int&gt; &lt;chr&gt;           &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
- 1            1 sse_total       standard    34.0       1      NA  Preprocessor1…
- 2            1 sse_within_total standard   34.0       1      NA  Preprocessor1…
- 3            2 sse_total       standard    34.0       1      NA  Preprocessor1…
- 4            2 sse_within_total standard    9.23      1      NA  Preprocessor1…
-...
+## # A tibble: 18 × 7
+##    num_clusters .metric          .estimator   mean     n std_err .config        
+##           &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;          
+##  1            1 sse_total        standard   34         1      NA Preprocessor1_…
+##  2            1 sse_within_total standard   34         1      NA Preprocessor1_…
+##  3            2 sse_total        standard   34         1      NA Preprocessor1_…
+##  4            2 sse_within_total standard   10.9       1      NA Preprocessor1_…
+##  5            3 sse_total        standard   34         1      NA Preprocessor1_…
+##  6            3 sse_within_total standard    4.47      1      NA Preprocessor1_…
+##  7            4 sse_total        standard   34         1      NA Preprocessor1_…
+##  8            4 sse_within_total standard    3.54      1      NA Preprocessor1_…
+##  9            5 sse_total        standard   34         1      NA Preprocessor1_…
+## 10            5 sse_within_total standard    2.23      1      NA Preprocessor1_…
+## 11            6 sse_total        standard   34         1      NA Preprocessor1_…
+## 12            6 sse_within_total standard    1.75      1      NA Preprocessor1_…
+## 13            7 sse_total        standard   34         1      NA Preprocessor1_…
+## 14            7 sse_within_total standard    2.06      1      NA Preprocessor1_…
+## 15            8 sse_total        standard   34         1      NA Preprocessor1_…
+## 16            8 sse_within_total standard    2.46      1      NA Preprocessor1_…
+## 17            9 sse_total        standard   34         1      NA Preprocessor1_…
+## 18            9 sse_within_total standard    0.906     1      NA Preprocessor1_…
     </pre>
 
     <p>
@@ -837,24 +904,24 @@ kmeans_results
       </input>
     </program>
     <pre>
-# A tibble: 9 × 2
-  num_clusters total_WSSD
-         &lt;int&gt;      &lt;dbl&gt;
-1            1     34.0
-2            2      9.23
-3            3      4.05
-4            4      2.69
-5            5      2.10
-6            6      1.68
-7            7      1.28
-8            8      2.45
-9            9      0.836
+## # A tibble: 9 × 2
+##   num_clusters total_WSSD
+##          &lt;int&gt;      &lt;dbl&gt;
+## 1            1     34    
+## 2            2     10.9  
+## 3            3      4.47 
+## 4            4      3.54 
+## 5            5      2.23 
+## 6            6      1.75 
+## 7            7      2.06 
+## 8            8      2.46 
+## 9            9      0.906
     </pre>
 
     <p>
       Now that we have <c>total_WSSD</c> and <c>num_clusters</c> as columns in
       a data frame, we can make a line plot
-      (Figure <xref ref="fig-clustering-plot-choose-k"/>) and search for the
+      (<xref ref="fig-clustering-plot-choose-k"/>) and search for the
       &#x201C;elbow&#x201D; to find which value of K to use.
       <idx><h>elbow method</h></idx>
     </p>
@@ -899,15 +966,15 @@ kmeans_spec
       </input>
     </program>
     <pre>
-K Means Cluster Specification (partition)
-
-Main Arguments:
-  num_clusters = tune()
-
-Computational engine: stats
-
-Engine-Specific Arguments:
-  nstart = 10
+## K Means Cluster Specification (partition)
+## 
+## Main Arguments:
+##   num_clusters = tune()
+## 
+## Engine-Specific Arguments:
+##   nstart = 10
+## 
+## Computational engine: stats
     </pre>
 
     <p>
@@ -915,7 +982,7 @@ Engine-Specific Arguments:
       K-means clustering will be performed <c>nstart = 10</c> times for each
       value of K. The <c>collect_metrics</c> function will then pick the best
       clustering of the 10 runs for each value of K, and report the results for
-      that best clustering. Figure <xref ref="fig-clustering-choose-k-nstart"/>
+      that best clustering. <xref ref="fig-clustering-choose-k-nstart"/>
       shows the resulting total WSSD plot from using 10 restarts; the bump is
       gone and the total WSSD decreases as expected. The more times we perform
       K-means clustering, the more likely we are to find a good clustering (if
