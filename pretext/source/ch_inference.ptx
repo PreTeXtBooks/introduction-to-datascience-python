@@ -78,7 +78,7 @@
       proportion of those students who own an iPhone (the sample estimate). In that
       case, we might suspect that proportion is a reasonable estimate of the
       proportion of students who own an iPhone in the entire population.
-      Figure <xref ref="fig-inference-population-vs-sample"/> illustrates this process.
+      xref ref="fig-inference-population-vs-sample"/> illustrates this process.
       In general, the process of using a sample to make a conclusion about the
       broader population from which it is taken is referred to as
       <term>statistical inference</term>.
@@ -369,7 +369,7 @@ tail(sample_estimates)
       </pre>
       <p>
         We can now visualize the sampling distribution of sample proportions
-        for samples of size 40 using a histogram in Figure <xref ref="fig-inference-proportions-sampling-dist"/>.
+        for samples of size 40 using a histogram in <xref ref="fig-inference-proportions-sampling-dist"/>.
         Keep in mind: in the real world,
         we don&#x2019;t have access to the full population. So we
         can&#x2019;t take many samples and can&#x2019;t actually construct or visualize the sampling distribution.
@@ -394,7 +394,7 @@ sampling_distribution
       </figure>
 
       <p>
-        The sampling distribution in Figure <xref ref="fig-inference-proportions-sampling-dist"/> appears
+        The sampling distribution in <xref ref="fig-inference-proportions-sampling-dist"/> appears
         to be bell-shaped, is roughly symmetric, and has one peak. It is centered
         around 0.7 and the sample proportions
         range from about 0.5 to about 0.9. In fact, we can
@@ -457,7 +457,7 @@ population_distribution
       </figure>
 
       <p>
-        In Figure <xref ref="fig-inference-population-price"/>, we see that the population distribution
+        In <xref ref="fig-inference-population-price"/>, we see that the population distribution
         <idx><h>population</h><h>distribution</h></idx>
         has one peak. It is also skewed (i.e., is not symmetric): most of the listings are
         less than $250 per night, but a small number of listings cost much more,
@@ -503,7 +503,7 @@ one_sample &lt;- airbnb |&gt;
       </program>
       <p>
         We can create a histogram to visualize the distribution of observations in the
-        sample (Figure <xref ref="fig-inference-sample-price"/>), and calculate the mean
+        sample (<xref ref="fig-inference-sample-price"/>), and calculate the mean
         of our sample.
         <idx><h>ggplot</h><h>geom_histogram</h></idx>
       </p>
@@ -607,7 +607,7 @@ sampling_distribution_40
       </figure>
 
       <p>
-        In Figure <xref ref="fig-inference-means-sampling-dist"/>, the sampling distribution of the mean
+        In <xref ref="fig-inference-means-sampling-dist"/>, the sampling distribution of the mean
         has one peak and is
         <idx><h>sampling distribution</h><h>shape</h></idx>
         bell-shaped. Most of the estimates are between
@@ -652,7 +652,7 @@ sampling_distribution_40
       </figure>
 
       <p>
-        Based on the visualization in Figure <xref ref="fig-inference-means-four-n"/>, three points
+        Based on the visualization in <xref ref="fig-inference-means-four-n"/>, three points
         about the sample mean become clear. First, the mean of the sample mean (across
         samples) is equal to the population mean. In other words, the sampling
         distribution is centered at the population mean. Second, increasing the size of
@@ -664,7 +664,7 @@ sampling_distribution_40
       </p>
       <note>
         <p>
-          You might notice that in the <m>n = 20</m> case in Figure <xref ref="fig-inference-means-four-n"/>,
+          You might notice that in the <m>n = 20</m> case in <xref ref="fig-inference-means-four-n"/>,
           the distribution is not <em>quite</em> bell-shaped. There is a bit of skew towards the right!
           You might also notice that in the <m>n = 50</m> case and larger, that skew seems to disappear.
           In general, the sampling distribution&#x2014;for both means and proportions&#x2014;only
@@ -728,7 +728,7 @@ sampling_distribution_40
       <p>
         Here is the key idea. First, if you take a big enough sample, it <em>looks like</em>
         the population. Notice the histograms&#x2019; shapes for samples of different sizes
-        taken from the population in Figure <xref ref="fig-inference-sample-sizes-compare"/>. We
+        taken from the population in <xref ref="fig-inference-sample-sizes-compare"/>. We
         see that the sample&#x2019;s distribution looks like that of the population for a
         large enough sample.
       </p>
@@ -758,7 +758,7 @@ sampling_distribution_40
       </note>
       <p>
         This section will explore how to create a bootstrap distribution from a single
-        sample using R. The process is visualized in Figure <xref ref="fig-inference-intro-bootstrap"/>.
+        sample using R. The process is visualized in <xref ref="fig-inference-intro-bootstrap"/>.
         For a sample of size <m>n</m>, you would do the following:
       </p>
       <ol>
@@ -786,7 +786,7 @@ sampling_distribution_40
         interested in estimating the population mean price per night of all Airbnb
         listings in Vancouver, Canada, using a single sample size of 40.
         Recall our point estimate was $155.33. The
-        histogram of prices in the sample is displayed in Figure <xref ref="fig-inference-one-sample-hist"/>.
+        histogram of prices in the sample is displayed in <xref ref="fig-inference-one-sample-hist"/>.
       </p>
       <program language="r">
         <input>
@@ -859,7 +859,7 @@ summarize(boot1, mean_price = mean(price))
       </figure>
 
       <p>
-        Notice in Figure <xref ref="fig-inference-one-bootstrap-sample"/> that the histogram of our bootstrap sample
+        Notice in <xref ref="fig-inference-one-bootstrap-sample"/> that the histogram of our bootstrap sample
         has a similar shape to the original sample histogram. Though the shapes of
         the distributions are similar, they are not identical. You&#x2019;ll also notice that
         the original sample mean and the bootstrap sample mean differ. How might that
@@ -916,7 +916,7 @@ ggplot(six_bootstrap_samples, aes(price)) +
       </figure>
 
       <p>
-        We see in Figure <xref ref="fig-inference-six-bootstrap-samples"/> how the
+        We see in <xref ref="fig-inference-six-bootstrap-samples"/> how the
         bootstrap samples differ. We can also calculate the sample mean for each of
         these six replicates.
       </p>
@@ -943,7 +943,7 @@ six_bootstrap_samples |&gt;
         different. They are different because we are sampling <em>with replacement</em>. We
         will now calculate point estimates for our 20,000 bootstrap samples and
         generate a bootstrap distribution of our point estimates. The bootstrap
-        distribution (Figure <xref ref="fig-inference-bootstrap-dist"/>) suggests how we might expect
+        distribution (<xref ref="fig-inference-bootstrap-dist"/>) suggests how we might expect
         our point estimate to behave if we took another sample.
       </p>
       <program language="r">
@@ -989,7 +989,7 @@ boot_est_dist
       </figure>
 
       <p>
-        There are two essential points that we can take away from Figure
+        There are two essential points that we can take away from 
         <xref ref="fig-inference-compare-sampling-bootstrap"/>.
         <idx><h>sampling distribution</h><h>compared to bootstrap distribution</h></idx>
         First, the shape and spread of the true sampling
@@ -1005,7 +1005,7 @@ boot_est_dist
         sample mean, which is centered at the population parameter value).
       </p>
       <p>
-        Figure <xref ref="fig-inference-bootstrap-summary"/> summarizes the bootstrapping process.
+        <xref ref="fig-inference-bootstrap-summary"/> summarizes the bootstrapping process.
         The idea here is that we can use this distribution of bootstrap sample means to
         approximate the sampling distribution of the sample means when we only have one
         sample. Since the bootstrap distribution pretty well approximates the sampling
