@@ -34,6 +34,40 @@
     <titlepage-items/>
   </titlepage>
 
+  <preface xml:id="pretext-edition-note">
+    <title>Note on This PreTeXt Edition</title>
+    <p>
+      This is a <url href="https://pretextbook.org/" visual="pretextbook.org">PreTeXt</url>
+      conversion of <em>Data Science: A First Introduction</em>, originally written by
+      <url href="https://www.tiffanytimbers.com/" visual="tiffanytimbers.com">Tiffany Timbers</url>,
+      <url href="https://trevorcampbell.me/" visual="trevorcampbell.me">Trevor Campbell</url>,
+      and
+      <url href="https://www.stat.ubc.ca/users/melissa-lee" visual="stat.ubc.ca/users/melissa-lee">Melissa Lee</url>.
+      The original work is available online at
+      <url href="https://datasciencebook.ca" visual="datasciencebook.ca">datasciencebook.ca</url>
+      and was published by CRC Press. The original GitHub repository for the book source is at
+      <url href="https://github.com/UBC-DSCI/introduction-to-datascience"
+           visual="github.com/UBC-DSCI/introduction-to-datascience">github.com/UBC-DSCI/introduction-to-datascience</url>.
+    </p>
+    <p>
+      This PreTeXt edition was prepared by
+      <url href="https://github.com/PreTeXtBooks/introduction-to-datascience"
+           visual="github.com/PreTeXtBooks/introduction-to-datascience">the PreTeXtBooks project</url>
+      to make the content available in the PreTeXt format, enabling accessible and structured output
+      in HTML, PDF, and other formats. All prose, code examples, figures, and mathematical content
+      are intended to be faithful reproductions of the original work, though occasional typographical
+      errors may have been introduced in the conversion process. Report any issues to our
+      <url href="https://github.com/PreTeXtBooks/introduction-to-datascience/issues"
+           visual="github.com/PreTeXtBooks/introduction-to-datascience/issues">GitHub Issues Page</url>.
+    </p>
+    <p>
+      The original work by Tiffany Timbers, Trevor Campbell, and Melissa Lee is licensed under a
+      <url href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+           visual="creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons
+      Attribution-NonCommercial-ShareAlike 4.0 International License</url>.
+    </p>
+  </preface>
+
   <preface xml:id="welcome">
     <title>Welcome!</title>
     <p>
