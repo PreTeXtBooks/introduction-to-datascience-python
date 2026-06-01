@@ -124,10 +124,10 @@
       works for learning purposes.
     </p>
 
-    < xml:id="fig-clustering-gentoo">
+    <figure xml:id="fig-clustering-gentoo">
       <caption>A Gentoo penguin.</caption>
       <image source="images/clustering/gentoo.jpg" width="60%"/>
-    </>
+    </figure>
 
     <p>
       Before we get started, we will load the <c>tidyverse</c> metapackage as
@@ -239,10 +239,10 @@ ggplot(penguins_standardized,
       </input>
     </program>
 
-    < xml:id="fig-clustering-scatter">
+    <figure xml:id="fig-clustering-scatter">
       <caption>Scatter plot of standardized bill length versus standardized flipper length.</caption>
       <image source="images/clustering/penguins-scatter.png" width="60%"/>
-    </>
+    </figure>
 
     <p>
       Based
@@ -276,10 +276,10 @@ ggplot(penguins_standardized,
       these groups denoted by colored scatter points.
     </p>
 
-    < xml:id="fig-clustering-clustered">
+    <figure xml:id="fig-clustering-clustered">
       <caption>Scatter plot of standardized bill length versus standardized flipper length with colored groups.</caption>
       <image source="images/clustering/penguins-clustered.png" width="70%"/>
-    </>
+    </figure>
 
     <p>
       What are the labels for these groups? Unfortunately, we don&#x2019;t
@@ -336,10 +336,10 @@ ggplot(penguins_standardized,
         <xref ref="fig-clustering-clus1-center"/>.
       </p>
 
-      < xml:id="fig-clustering-clus1-center">
+      <figure xml:id="fig-clustering-clus1-center">
         <caption>Cluster 1 from the <c>penguins_standardized</c> data set example. Observations are small blue points, with the cluster center highlighted as a large blue point with a black outline.</caption>
         <image source="images/clustering/clus1-center.png" width="60%"/>
-      </>
+      </figure>
 
       <p>
         The second step in computing the WSSD is to add up the squared distance
@@ -366,10 +366,10 @@ ggplot(penguins_standardized,
         the penguin data example.
       </p>
 
-      < xml:id="fig-clustering-clus1-dists">
+      <figure xml:id="fig-clustering-clus1-dists">
         <caption>Cluster 1 from the <c>penguins_standardized</c> data set example. Observations are small blue points, with the cluster center highlighted as a large blue point with a black outline. The distances from the observations to the cluster center are represented as black lines.</caption>
         <image source="images/clustering/clus1-dists.png" width="60%"/>
-      </>
+      </figure>
 
       <p>
         The larger the value of <m>S^2</m>, the more spread out the cluster
@@ -388,10 +388,10 @@ ggplot(penguins_standardized,
         <xref ref="fig-clustering-all-clus-dists"/>.
       </p>
 
-      < xml:id="fig-clustering-all-clus-dists">
+      <figure xml:id="fig-clustering-all-clus-dists">
         <caption>All clusters from the <c>penguins_standardized</c> data set example. Observations are small orange, blue, and yellow points with cluster centers denoted by larger points with a black outline. The distances from the observations to each of the respective cluster centers are represented as black lines.</caption>
         <image source="images/clustering/all-clus-dists.png" width="70%"/>
-      </>
+      </figure>
 
       <p>
         Since K-means uses the straight-line distance to measure the quality of
@@ -413,10 +413,10 @@ ggplot(penguins_standardized,
         initialization is shown in <xref ref="fig-clustering-kmeans-init"/>.
       </p>
 
-      < xml:id="fig-clustering-kmeans-init">
+      <figure xml:id="fig-clustering-kmeans-init">
         <caption>Random initialization of labels.</caption>
         <image source="images/clustering/kmeans-init.png" width="65%"/>
-      </>
+      </figure>
 
       <p>
         Then K-means consists of two major steps that attempt to minimize the
