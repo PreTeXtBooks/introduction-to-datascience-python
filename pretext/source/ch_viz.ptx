@@ -240,7 +240,7 @@
       package. Given that the <c>ggplot2</c> package is loaded by the
       <c>tidyverse</c> metapackage, we still need to load only <c>tidyverse</c>:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 library(tidyverse)
       </input>
@@ -265,7 +265,7 @@ library(tidyverse)
         Does the concentration of atmospheric CO<m>_2</m> change over time, and are
         there any interesting patterns to note?
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 # mauna loa carbon dioxide data
 co2_df &lt;- read_csv("data/mauna_loa_data.csv")
@@ -374,7 +374,7 @@ co2_df
   </li>
 </ul>
 
-      <program language="r">
+      <program language="python">
         <input>
 co2_scatter &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
   geom_point()
@@ -412,7 +412,7 @@ co2_scatter
   arguments:
 </p>
 
-      <program language="r">
+      <program language="python">
         <input>
 co2_line &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
   geom_line()
@@ -445,7 +445,7 @@ otherwise be clear (<term>overplotting</term>).
         <idx><h>ggplot</h><h>ylab</h></idx>
         <idx><h>ggplot</h><h>theme</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 co2_line &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
   geom_line() +
@@ -492,7 +492,7 @@ co2_line
         metapackage, but is not loaded by it. Hence we need to load it separately in
         the code below.</p>
       </note>
-      <program language="r">
+      <program language="python">
         <input>
 library(lubridate)
 
@@ -555,7 +555,7 @@ co2_line
         Is there a relationship between the waiting time before an eruption and the
         duration of the eruption?
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 faithful &lt;- as_tibble(faithful)
 faithful
@@ -588,7 +588,7 @@ faithful
         <c>geom_point</c> geometric object. The result is shown in
         <xref ref="fig-viz-faithful-scatter"/>.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 faithful_scatter &lt;- ggplot(faithful, aes(x = waiting, y = eruptions)) +
   geom_point()
@@ -608,7 +608,7 @@ faithful_scatter
         pattern they form is clear. In order to refine the visualization, we need only
         to add axis labels and make the font more readable:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 faithful_scatter &lt;- ggplot(faithful, aes(x = waiting, y = eruptions)) +
   geom_point() +
@@ -645,7 +645,7 @@ faithful_scatter
         the higher-level language categories (Official languages, Aboriginal languages,
         or non-official and non-Aboriginal languages)?
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 can_lang &lt;- read_csv("data/can_lang.csv")
 can_lang
@@ -672,7 +672,7 @@ can_lang
         <c>most_at_home</c> columns:
         <idx><h>ggplot</h><h>geom_point</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
   geom_point()
@@ -692,7 +692,7 @@ ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
         <idx><h>escape character</h></idx>
         We should also increase the font size to further improve readability.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
   geom_point() +
@@ -719,7 +719,7 @@ ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
         correspond to Canada's two official languages by filtering the data:
         <idx><h>filter</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 can_lang |&gt;
   filter(language == "English" | language == "French")
@@ -760,7 +760,7 @@ can_lang |&gt;
         <c>labels</c> argument of the <c>scale_x_log10</c> and <c>scale_x_log10</c>
         functions.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 library(scales)
 
@@ -797,7 +797,7 @@ ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
         <idx><h>mutate</h></idx>
         <idx><h>select</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 can_lang &lt;- can_lang |&gt;
   mutate(
@@ -830,7 +830,7 @@ can_lang |&gt;
         computed (and change our axis labels to reflect this change in units).
         <xref ref="fig-viz-canlang-scatter-log-pct"/> displays the final result.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 ggplot(can_lang, aes(x = most_at_home_percent, y = mother_tongue_percent)) +
   geom_point() +
@@ -910,7 +910,7 @@ ggplot(can_lang, aes(x = most_at_home_percent, y = mother_tongue_percent)) +
         this argument will color the points according to their group and add a legend
         at the side of the plot.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 ggplot(can_lang, aes(x = most_at_home_percent,
                      y = mother_tongue_percent,
@@ -941,7 +941,7 @@ ggplot(can_lang, aes(x = most_at_home_percent,
         that will not work well for this particular visualization because the legend
         labels are quite long and would run off the page if displayed this way.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 ggplot(can_lang, aes(x = most_at_home_percent,
                      y = mother_tongue_percent,
@@ -975,7 +975,7 @@ ggplot(can_lang, aes(x = most_at_home_percent,
         You can also print a list of color-blind friendly palettes by adding
         <c>colorblindFriendly = TRUE</c> to the function.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 library(RColorBrewer)
 display.brewer.all(colorblindFriendly = TRUE)
@@ -1001,7 +1001,7 @@ display.brewer.all(colorblindFriendly = TRUE)
         color and shape&#x2014;can further improve the clarity and accessibility of your
         visualization.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 ggplot(can_lang, aes(x = most_at_home_percent,
                      y = mother_tongue_percent,
@@ -1067,7 +1067,7 @@ ggplot(can_lang, aes(x = most_at_home_percent,
         Antarctica) Earth&#x2019;s seven largest landmasses? If so, what are the next few
         largest landmasses after those?
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 islands_df &lt;- read_csv("data/islands.csv")
 islands_df
@@ -1111,7 +1111,7 @@ islands_df
         <xref ref="fig-viz-islands-bar"/>.
         <idx><h>ggplot</h><h>geom_bar</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 islands_bar &lt;- ggplot(islands_df, aes(x = landmass, y = size)) +
   geom_bar(stat = "identity")
@@ -1148,7 +1148,7 @@ islands_bar
         because they are specialized for this purpose. In general, it is good to use
         more specialized functions when they are available!</p>
       </note>
-      <program language="r">
+      <program language="python">
         <input>
 islands_top12 &lt;- slice_max(islands_df, order_by = size, n = 12)
 islands_bar &lt;- ggplot(islands_top12, aes(x = size, y = landmass)) +
@@ -1204,7 +1204,7 @@ islands_bar
         use the <c>theme</c> function to change the font size.
         <idx><h>ggplot</h><h>labs</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 islands_bar &lt;- ggplot(islands_top12,
                       aes(x = size,
@@ -1259,7 +1259,7 @@ islands_bar
         Given what we know now about the speed of light (299,792.458 kilometres per
         second), how accurate were each of the experiments?
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 morley &lt;- as_tibble(morley)
 morley
@@ -1300,7 +1300,7 @@ morley
         <c>Speed</c> measurement variable. As usual, let&#x2019;s use the default arguments
         just to see how things look.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 morley_hist &lt;- ggplot(morley, aes(x = Speed)) +
   geom_histogram()
@@ -1330,7 +1330,7 @@ morley_hist
         axis</em>, while <em>horizontal lines</em> are used to denote quantities on
         the <em>vertical axis</em>.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 morley_hist &lt;- ggplot(morley, aes(x = Speed)) +
   geom_histogram() +
@@ -1360,7 +1360,7 @@ morley_hist
         overlaid side-by-side, instead of stacked bars (which is the default for bar
         plots or histograms when they are colored by another categorical variable).
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 morley_hist &lt;- ggplot(morley, aes(x = Speed, fill = Expt)) +
   geom_histogram(alpha = 0.5, position = "identity") +
@@ -1397,7 +1397,7 @@ morley_hist
         treat this variable as a factor, and the color will be mapped discretely.
         <idx><h>factor</h><h>usage in ggplot</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 morley_hist &lt;- ggplot(morley, aes(x = Speed, fill = as_factor(Expt))) +
   geom_histogram(alpha = 0.5, position = "identity") +
@@ -1441,7 +1441,7 @@ morley_hist
         to be correctly evaluated in the context of the data frame.
         <idx><h>ggplot</h><h>facet_grid</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 morley_hist &lt;- ggplot(morley, aes(x = Speed, fill = as_factor(Expt))) +
   geom_histogram() +
@@ -1479,7 +1479,7 @@ morley_hist
         <idx><h>ggplot</h><h>labs</h></idx>
         <idx><h>ggplot</h><h>theme</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 morley_rel &lt;- mutate(morley,
                      relative_accuracy = 100 *
@@ -1571,7 +1571,7 @@ morley_hist
           layer with the <c>ggtitle</c> function. The result is shown in
           <xref ref="fig-viz-morley-hist-title"/>.
         </p>
-        <program language="r">
+        <program language="python">
           <input>
 morley_hist_title &lt;- morley_hist +
   ggtitle("Speed of light experiments \n were accurate to about 0.05%")
@@ -1770,7 +1770,7 @@ morley_hist_title
       Faithful data set</url> <xref ref="faithfuldata"/>, shown in
       <xref ref="fig-viz-faithful-save"/>.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 library(svglite) # we need this to save SVG files
 faithful_plot &lt;- ggplot(data = faithful, aes(x = waiting, y = eruptions)) +
@@ -1798,7 +1798,7 @@ faithful_plot
       that the file extension is <c>.png</c>. Below we demonstrate how to save PNG,
       JPG, BMP, TIFF and SVG file types for the <c>faithful_plot</c>:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 ggsave("img/viz/faithful_plot.png", faithful_plot)
 ggsave("img/viz/faithful_plot.jpg", faithful_plot)

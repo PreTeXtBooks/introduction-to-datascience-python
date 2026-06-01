@@ -124,7 +124,7 @@
       <c>/home/dsci-100/project3/data/happiness_report.csv</c>. We can load the file using its absolute path
       as a string passed to the <c>read_csv</c> function.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 happy_data &lt;- read_csv("/home/dsci-100/project3/data/happiness_report.csv")
       </input>
@@ -136,7 +136,7 @@ happy_data &lt;- read_csv("/home/dsci-100/project3/data/happiness_report.csv")
       to reach our desired file. Hence the relative path is <c>data/happiness_report.csv</c>, and we can
       load the file using its relative path as a string passed to <c>read_csv</c>.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 happy_data &lt;- read_csv("data/happiness_report.csv")
       </input>
@@ -245,7 +245,7 @@ Non-Official &amp; Non-Aboriginal languages,Albanian,26895,13135,345,31930</pre>
         <idx><h>tidyverse</h></idx>
         package to gain access to useful functions for reading the data.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 library(tidyverse)
         </input>
@@ -258,7 +258,7 @@ library(tidyverse)
         functions to load data in this book, we will silence these messages to help with the readability of
         the book.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 canlang_data &lt;- read_csv("data/can_lang.csv")
         </input>
@@ -274,7 +274,7 @@ dbl (4): mother_tongue, most_at_home, most_at_work, lang_known
       <p>
         Finally, to view the first 10 rows of the data frame, we must call it:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 canlang_data
         </input>
@@ -330,7 +330,7 @@ Non-Official &amp; Non-Aboriginal languages,Amharic,22465,12785,200,33670</pre>
         our data is being read in.
         <idx><h>warning</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 canlang_data &lt;- read_csv("data/can_lang_meta-data.csv")
 canlang_data
@@ -363,7 +363,7 @@ canlang_data
         can be useful to tell R how many lines to skip before it should start reading in the data.
         In the example above, we would set this value to 3.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 canlang_data &lt;- read_csv("data/can_lang_meta-data.csv",
                          skip = 3)
@@ -422,7 +422,7 @@ Non-Official &amp; Non-Aboriginal languages Amharic 22465   12785   200 33670
         <idx><h>read function</h><h>read_tsv</h></idx>
         to read in <c>.tsv</c> (<em>t</em>ab <em>s</em>eparated <em>v</em>alues) files.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 canlang_data &lt;- read_tsv("data/can_lang.tsv")
 canlang_data
@@ -495,7 +495,7 @@ Non-Official &amp; Non-Aboriginal languages Arabic  419890  223535  5585    6290
           special meanings (such as quotation marks).
         </p>
       </note>
-      <program language="r">
+      <program language="python">
         <input>
 canlang_data &lt;- read_delim("data/can_lang_no_names.tsv",
                            delim = "\t",
@@ -533,7 +533,7 @@ canlang_data
         <c>new_name = old_name</c> for the selected variables to rename. We rename the 
         <c>X1, X2, ..., X6</c> columns in the <c>canlang_data</c> data frame to more descriptive names below.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 canlang_data &lt;- rename(canlang_data,
        category = X1,
@@ -577,7 +577,7 @@ canlang_data
         All other arguments that we use are the same as when using these functions with a local file on
         our computer.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 url &lt;- "https://raw.githubusercontent.com/UBC-DSCI/data/main/can_lang.csv"
 canlang_data &lt;- read_csv(url)
@@ -611,7 +611,7 @@ canlang_data
         it in R, we can use the <c>download.file</c> function. The first argument is the URL, and the
         second is a path where we would like to store the downloaded file.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 download.file(url, "data/can_lang.csv")
 canlang_data &lt;- read_csv("data/can_lang.csv")
@@ -688,7 +688,7 @@ X?a??4VT?,D?Jq
       spreadsheets into R using the <c>readxl</c> package developed specifically for this purpose.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 library(readxl)
 
@@ -807,7 +807,7 @@ canlang_data
         This does not read in the data, but simply tells R where the database is and opens up a
         communication channel that R can use to send SQL commands to the database.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 library(DBI)
 
@@ -821,7 +821,7 @@ canlang_conn &lt;- dbConnect(RSQLite::SQLite(), "data/can_lang.db")
         <idx><h>database</h><h>tables</h></idx>
         function:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 tables &lt;- dbListTables(canlang_conn)
 tables
@@ -841,7 +841,7 @@ tables
         if they were just regular data frames; but secretly, behind the scenes, <c>dbplyr</c> is turning
         your function calls (e.g., <c>select</c> and <c>filter</c>) into SQL queries!
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 library(dbplyr)
 
@@ -894,7 +894,7 @@ lang_db
         package.
         <idx><h>database</h><h>show_query</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 show_query(tbl(canlang_conn, "lang"))
         </input>
@@ -917,7 +917,7 @@ FROM `lang`</pre>
         and keep only the <c>language</c> and <c>mother_tongue</c> columns. We can use the <c>filter</c>
         function to obtain only certain rows. Below we filter the data to include only Aboriginal languages.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 aboriginal_lang_db &lt;- filter(lang_db, category == "Aboriginal languages")
 aboriginal_lang_db
@@ -950,7 +950,7 @@ aboriginal_lang_db
         want to work with locally in R. Let&#x2019;s add the second part of our database query: selecting only
         the <c>language</c> and <c>mother_tongue</c> columns using the <c>select</c> function.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 aboriginal_lang_selected_db &lt;- select(aboriginal_lang_db, language, mother_tongue)
 aboriginal_lang_selected_db
@@ -981,7 +981,7 @@ aboriginal_lang_selected_db
         Below you will see that after running <c>collect</c>, R knows that the retrieved data has 67
         rows, and there is no database listed any more.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 aboriginal_lang_data &lt;- collect(aboriginal_lang_selected_db)
 aboriginal_lang_data
@@ -1012,7 +1012,7 @@ aboriginal_lang_data
         For example, look what happens when we try to use <c>nrow</c> to count rows in a data frame:
         <idx><h>nrow</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 nrow(aboriginal_lang_selected_db)
         </input>
@@ -1023,7 +1023,7 @@ nrow(aboriginal_lang_selected_db)
         <idx><h>tail</h></idx>
         to preview the last six rows of a data frame:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 tail(aboriginal_lang_selected_db)
         </input>
@@ -1068,7 +1068,7 @@ Error: tail() is not supported by sql sources</pre>
         <c>host</c>, <c>user</c>, and <c>password</c> below are <em>not real</em>; you will not actually
         be able to connect to a database using this information.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 library(RPostgres)
 canmov_conn &lt;- dbConnect(RPostgres::Postgres(), dbname = "can_mov_db",
@@ -1081,7 +1081,7 @@ canmov_conn &lt;- dbConnect(RPostgres::Postgres(), dbname = "can_mov_db",
         using an SQLite database in R. For example, we can again use <c>dbListTables</c> to find out what
         tables are in the <c>can_mov_db</c> database:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 dbListTables(canmov_conn)
         </input>
@@ -1094,7 +1094,7 @@ dbListTables(canmov_conn)
         We see that there are 10 tables in this database. Let&#x2019;s first look at the <c>"ratings"</c> table
         to find the lowest rating that exists in the <c>can_mov_db</c> database:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 ratings_db &lt;- tbl(canmov_conn, "ratings")
 ratings_db
@@ -1122,7 +1122,7 @@ ratings_db
         <c>average_rating</c> column using <c>select</c>:
         <idx><h>select</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 avg_rating_db &lt;- select(ratings_db, average_rating)
 avg_rating_db
@@ -1149,7 +1149,7 @@ avg_rating_db
         Next we use <c>min</c> to find the minimum rating in that column:
         <idx><h>min</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 min(avg_rating_db)
         </input>
@@ -1160,7 +1160,7 @@ Error in min(avg_rating_db) : invalid 'type' (list) of argument</pre>
         Instead of the minimum, we get an error! This is another example of when we need to use the
         <c>collect</c> function to bring the data into R for further computation:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 avg_rating_data &lt;- collect(avg_rating_db)
 min(avg_rating_data)
@@ -1210,7 +1210,7 @@ min(avg_rating_data)
       of the Canadian languages data set without the official languages category according to the
       Canadian 2016 Census, and then writing this to a <c>.csv</c> file:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 no_official_lang_data &lt;- filter(can_lang, category != "Official languages")
 write_csv(no_official_lang_data, "data/no_official_languages.csv")
@@ -1446,7 +1446,7 @@ td:nth-child(4) ,
           <idx><h>rvest</h></idx>
           to scrape data from the Wikipedia page. We start by loading the <c>rvest</c> package:
         </p>
-        <program language="r">
+        <program language="python">
           <input>
 library(rvest)
           </input>
@@ -1455,7 +1455,7 @@ library(rvest)
           Next, we tell R what page we want to scrape by providing the webpage&#x2019;s URL in quotations to
           the function <c>read_html</c>:
         </p>
-        <program language="r">
+        <program language="python">
           <input>
 page &lt;- read_html("https://en.wikipedia.org/wiki/Canada")
           </input>
@@ -1475,7 +1475,7 @@ page &lt;- read_html("https://en.wikipedia.org/wiki/Canada")
           into a list. We use this function to build the list of selectors to maintain code readability;
           this avoids having a very long line of code.
         </p>
-        <program language="r">
+        <program language="python">
           <input>
 selectors &lt;- paste("td:nth-child(8)",
              "td:nth-child(4)",
@@ -1522,7 +1522,7 @@ head(population_nodes)
           <c>html_text</c> function. In the case of the example node above, <c>html_text</c> returns
           <c>"London"</c>.
         </p>
-        <program language="r">
+        <program language="python">
           <input>
 population_text &lt;- html_text(population_nodes)
 head(population_text)
@@ -1680,7 +1680,7 @@ Rho Ophiuchi","url":"https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph1024.p
           <idx><h>httr2</h><h>req_perform</h></idx>
           <idx><h>httr2</h><h>resp_body_json</h></idx>
         </p>
-        <program language="r">
+        <program language="python">
           <input>
 library(httr2)
 
@@ -1719,7 +1719,7 @@ nasa_data_single
           Each item in the list will correspond to a single day&#x2019;s record (just like the <c>nasa_data_single</c> object),
           and there will be 74 items total, one for each day between the start and end dates:
         </p>
-        <program language="r">
+        <program language="python">
           <input>
 req &lt;- request("https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY&amp;start_date=2023-05-01&amp;end_date=2023-07-13")
 resp &lt;- req_perform(req)
@@ -1741,7 +1741,7 @@ length(nasa_data)
             those readers who would like to parse JSON data into a data frame in their own data analyses.
           </p>
         </note>
-        <program language="r">
+        <program language="python">
           <input>
 nasa_df_all &lt;- tibble(bind_rows(lapply(nasa_data, as.data.frame.list)))
 nasa_df &lt;- select(nasa_df_all, date, title, copyright, url)

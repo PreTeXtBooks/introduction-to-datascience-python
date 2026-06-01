@@ -318,7 +318,7 @@
       the sample function, we call <c>set.seed</c>, and pass it any integer as
       an argument. Here, we pass in the number <c>1</c>.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 set.seed(1)
 random_numbers1 &lt;- sample(0:9, 10, replace = TRUE)
@@ -334,7 +334,7 @@ random_numbers1
       <c>sample</c> function again, we will get a fresh batch of 10 numbers
       that also look random.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 random_numbers2 &lt;- sample(0:9, 10, replace = TRUE)
 random_numbers2
@@ -348,7 +348,7 @@ random_numbers2
       we can simply call the <c>set.seed</c> function again with the same
       argument value.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 set.seed(1)
 random_numbers1_again &lt;- sample(0:9, 10, replace = TRUE)
@@ -371,7 +371,7 @@ random_numbers2_again
       seed&#x2014;say, 4235&#x2014;we obtain a different sequence of random
       numbers.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 set.seed(4235)
 random_numbers1_different &lt;- sample(0:9, 10, replace = TRUE)
@@ -434,7 +434,7 @@ random_numbers2_different
       analysis using the <c>set.seed</c> function, as described in
       <xref ref="sec-classif2-randomseeds"/>.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 # load packages
 library(tidyverse)
@@ -509,14 +509,14 @@ perim_concav
         <c>initial_split</c> function uses randomness, but since we set the seed
         earlier in the chapter, the split will be reproducible.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_split &lt;- initial_split(cancer, prop = 0.75, strata = Class)
 cancer_train &lt;- training(cancer_split)
 cancer_test &lt;- testing(cancer_split)
         </input>
       </program>
-      <program language="r">
+      <program language="python">
         <input>
 glimpse(cancer_train)
         </input>
@@ -538,7 +538,7 @@ glimpse(cancer_train)
 ## $ Fractal_Dimension &lt;dbl&gt; 0.05766, 0.06811, 0.06905, 0.05863, 0.06503, 0.06043…
       </pre>
 
-<program language="r">
+<program language="python">
         <input>
 glimpse(cancer_test)
         </input>
@@ -578,7 +578,7 @@ glimpse(cancer_test)
         are benign and 37% are malignant, indicating that our class
         proportions were roughly preserved when we split the data.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_proportions &lt;- cancer_train |&gt;
   group_by(Class) |&gt;
@@ -619,7 +619,7 @@ cancer_proportions
         properly. Below we construct and prepare the recipe using only the
         training data (due to <c>data = cancer_train</c> in the first line).
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_recipe &lt;- recipe(Class ~ Smoothness + Concavity, data = cancer_train) |&gt;
   step_scale(all_predictors()) |&gt;
@@ -640,7 +640,7 @@ cancer_recipe &lt;- recipe(Class ~ Smoothness + Concavity, data = cancer_train) 
         and recipe into a workflow, and then finally use <c>fit</c> with the
         training data <c>cancer_train</c> to build the classifier.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 knn_spec &lt;- nearest_neighbor(weight_func = "rectangular", neighbors = 3) |&gt;
   set_engine("kknn") |&gt;
@@ -690,7 +690,7 @@ knn_fit
         the <c>.pred_class</c> contains the predicted diagnoses from the
         classifier.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_test_predictions &lt;- predict(knn_fit, cancer_test) |&gt;
   bind_cols(cancer_test)
@@ -727,7 +727,7 @@ cancer_test_predictions
         <c>metrics</c> function from <c>tidymodels</c>, specifying the
         <c>truth</c> and <c>estimate</c> arguments:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_test_predictions |&gt;
   metrics(truth = Class, estimate = .pred_class) |&gt;
@@ -751,7 +751,7 @@ cancer_test_predictions |&gt;
         the order of the labels in the <c>Class</c> variable using the
         <c>levels</c> function:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_test_predictions |&gt; pull(Class) |&gt; levels()
         </input>
@@ -767,7 +767,7 @@ cancer_test_predictions |&gt; pull(Class) |&gt; levels()
         <c>event_level="first"</c>. If the labels were in the other order,
         we would instead use <c>event_level="second"</c>.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_test_predictions |&gt;
   precision(truth = Class, estimate = .pred_class, event_level = "first")
@@ -779,7 +779,7 @@ cancer_test_predictions |&gt;
   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
 1 precision binary         0.767
       </pre>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_test_predictions |&gt;
   recall(truth = Class, estimate = .pred_class, event_level = "first")
@@ -797,7 +797,7 @@ cancer_test_predictions |&gt;
         respectively. Finally, we can look at the <em>confusion matrix</em>
         for the classifier using the <c>conf_mat</c> function.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 confusion &lt;- cancer_test_predictions |&gt;
   conf_mat(truth = Class, estimate = .pred_class)
@@ -887,7 +887,7 @@ confusion
         As an example, in the breast cancer data, recall the proportions of
         benign and malignant observations in the training data are as follows:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_proportions
         </input>
@@ -988,7 +988,7 @@ cancer_proportions
         five different K-nearest neighbors models, and evaluate their
         accuracy. We will start with just a single split.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 # create the 25/75 split of the training data into training and validation
 cancer_split &lt;- initial_split(cancer_train, prop = 0.75, strata = Class)
@@ -1069,7 +1069,7 @@ acc
         the training and validation subsets contain the right proportions of
         each category of observation.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_vfold &lt;- vfold_cv(cancer_train, v = 5, strata = Class)
 cancer_vfold
@@ -1093,7 +1093,7 @@ cancer_vfold
         <c>fit_resamples</c> function instead of the <c>fit</c> function for
         training. This runs cross-validation on each train/validation split.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 # recreate the standardization recipe from before
 # (since it must be based on the training data)
@@ -1144,7 +1144,7 @@ knn_fit
   the entire second row with <c>roc_auc</c> in the <c>.metric</c> column, as it is 
   beyond the scope of this book.
 </p>
-<program language="r">
+<program language="python">
         <input>
 knn_fit |&gt;
   collect_metrics()
@@ -1169,7 +1169,7 @@ knn_fit |&gt;
   trial-and-error process, but typically <m>C</m> is chosen to be either 5 or 10. 
   Here we will try 10-fold cross-validation to see if we get a lower standard error:
 </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_vfold &lt;- vfold_cv(cancer_train, v = 10, strata = Class)
 
@@ -1199,7 +1199,7 @@ vfold_metrics
         <m>C = 50</m>; picking such a large number of folds often takes a long
         time to run in practice, so we usually stick to 5 or 10.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_vfold_50 &lt;- vfold_cv(cancer_train, v = 50, strata = Class)
 
@@ -1241,7 +1241,7 @@ vfold_metrics_50
   syntax for tuning models: each parameter in the model to be tuned should be specified 
   as <c>tune()</c> in the model specification rather than given a particular value.
 </p>
-      <program language="r">
+      <program language="python">
         <input>
 knn_spec &lt;- nearest_neighbor(weight_func = "rectangular",
                              neighbors = tune()) |&gt;
@@ -1260,7 +1260,7 @@ knn_spec &lt;- nearest_neighbor(weight_func = "rectangular",
   1 to 100 (stepping by 5) using the <c>seq</c> function. Then we pass that data frame 
   to the <c>grid</c> argument of <c>tune_grid</c>.
 </p>
-      <program language="r">
+      <program language="python">
         <input>
 k_vals &lt;- tibble(neighbors = seq(from = 1, to = 100, by = 5))
 
@@ -1306,7 +1306,7 @@ accuracies
         accuracy versus <m>K</m>, as shown in
         <xref ref="fig-classif2-accuracy-vs-k"/>.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 accuracy_vs_k &lt;- ggplot(accuracies, aes(x = neighbors, y = mean)) +
   geom_point() +
@@ -1331,7 +1331,7 @@ accuracy_vs_k
         did above since this provides additional information on how the model
         performance varies.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 best_k &lt;- accuracies |&gt;
   arrange(desc(mean)) |&gt;
@@ -1388,7 +1388,7 @@ best_k
         estimated accuracy as we vary <m>K</m> from 1 to almost the number of
         observations in the training set.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 k_lots &lt;- tibble(neighbors = seq(from = 1, to = 385, by = 10))
 
@@ -1474,7 +1474,7 @@ accuracy_vs_k_lots
         retrain the K-NN classifier on the entire training data set using the
         selected number of neighbors.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_recipe &lt;- recipe(Class ~ Smoothness + Concavity, data = cancer_train) |&gt;
   step_scale(all_predictors()) |&gt;
@@ -1525,7 +1525,7 @@ knn_fit
         <c>recall</c>, and <c>conf_mat</c> functions to assess the estimated
         precision and recall, and print a confusion matrix.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_test_predictions &lt;- predict(knn_fit, cancer_test) |&gt;
   bind_cols(cancer_test)
@@ -1541,7 +1541,7 @@ cancer_test_predictions |&gt;
 ##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
 ## 1 accuracy binary         0.860
       </pre>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_test_predictions |&gt;
   precision(truth = Class, estimate = .pred_class, event_level = "first")
@@ -1553,7 +1553,7 @@ cancer_test_predictions |&gt;
 ##   &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
 ## 1 precision binary           0.8
       </pre>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_test_predictions |&gt;
   recall(truth = Class, estimate = .pred_class, event_level = "first")
@@ -1565,7 +1565,7 @@ cancer_test_predictions |&gt;
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
 ## 1 recall  binary         0.830
       </pre>
-      <program language="r">
+      <program language="python">
         <input>
 confusion &lt;- cancer_test_predictions |&gt;
   conf_mat(truth = Class, estimate = .pred_class)
@@ -1719,7 +1719,7 @@ confusion
   <c>Class</c> variable takes. In other words, the irrelevant variables have no 
   meaningful relationship with the <c>Class</c> variable.
 </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_irrelevant |&gt;
   select(Class, Smoothness, Concavity, Perimeter, Irrelevant1, Irrelevant2)
@@ -1921,7 +1921,7 @@ cancer_irrelevant |&gt;
         label. We will also extract the column names for the full set of
         predictors.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer_subset &lt;- cancer_irrelevant |&gt;
   select(Class,
@@ -1963,7 +1963,7 @@ cancer_subset
         model formula for all the predictors, which should output something
         like <c>Class ~ Smoothness + Concavity + Perimeter + Irrelevant1 + Irrelevant2 + Irrelevant3</c>:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 example_formula &lt;- paste("Class", "~", paste(names, collapse = "+"))
 example_formula
@@ -1988,7 +1988,7 @@ example_formula
   a <c>recipe</c>, build a <c>workflow</c> that tunes a K-NN classifier using 5-fold 
   cross-validation, and finally records the estimated accuracy.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 # create an empty tibble to store the results
 accuracies &lt;- tibble(size = integer(),
@@ -2082,7 +2082,7 @@ accuracies
   accuracy; you have to use your judgement when looking at this plot to decide where the 
   elbow occurs, and whether adding a variable provides a meaningful increase in accuracy.
 </p>
-      <program language="r">
+      <program language="python">
         <input>
 fwd_sel_accuracies_plot &lt;- accuracies |&gt;
   ggplot(aes(x = size, y = accuracy)) +

@@ -131,7 +131,7 @@
       seed value.
     </p>
     <idx><h>seed</h><h>set.seed</h></idx>
-    <program language="r">
+    <program language="python">
       <input>
 library(tidyverse)
 library(tidymodels)
@@ -178,7 +178,7 @@ sacramento
         <c>labels</c> argument of the <c>scale_y_continuous</c> function.
       </p>
     </note>
-    <program language="r">
+    <program language="python">
       <input>
 eda &lt;- ggplot(sacramento, aes(x = sqft, y = price)) +
   geom_point(alpha = 0.4) +
@@ -226,7 +226,7 @@ eda
       number of rows to randomly select.
       <idx>slice_sample</idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 small_sacramento &lt;- slice_sample(sacramento, n = 30)
       </input>
@@ -242,7 +242,7 @@ small_sacramento &lt;- slice_sample(sacramento, n = 30)
       observations of a house of size <em>exactly</em> 2,000 square feet.
       How can we predict the sale price?
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 small_plot &lt;- ggplot(small_sacramento, aes(x = sqft, y = price)) +
   geom_point() +
@@ -267,7 +267,7 @@ small_plot
       neighbors to our observation of a house that is 2,000 square feet.
       <idx>mutate</idx> <idx>slice_min</idx> <idx>abs</idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 nearest_neighbors &lt;- small_sacramento |&gt;
   mutate(diff = abs(2000 - sqft)) |&gt;
@@ -299,7 +299,7 @@ nearest_neighbors
       values as our predicted value, as illustrated by the red point in
       <xref ref="fig-sacr-predicted-viz"/>.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 prediction &lt;- nearest_neighbors |&gt;
   summarise(predicted = mean(price))
@@ -349,7 +349,7 @@ prediction
       (<xref ref="fig-sacr-small-eda"/>).
       <idx>training set</idx> <idx>test set</idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 sacramento_split &lt;- initial_split(sacramento, prop = 0.75, strata = price)
 sacramento_train &lt;- training(sacramento_split)
@@ -431,7 +431,7 @@ sacramento_test  &lt;- testing(sacramento_split)
       recipe and model specification together in a workflow.
       <idx>tidymodels</idx> <idx>recipe</idx> <idx>workflow</idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 sacr_recipe &lt;- recipe(price ~ sqft, data = sacramento_train) |&gt;
   step_scale(all_predictors()) |&gt;
@@ -487,7 +487,7 @@ sacr_wkflw
       metrics data frame, as they do not provide any additional insight.
       <idx><h>cross-validation</h><h>collect_metrics</h></idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 gridvals &lt;- tibble(neighbors = seq(from = 1, to = 200, by = 3))
 
@@ -525,7 +525,7 @@ sacr_results
       the number of neighbors <m>K</m>. We take the <em>minimum</em> RMSPE to
       find the best setting for the number of neighbors:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 # show only the row of minimum RMSPE
 sacr_min &lt;- sacr_results |&gt;
@@ -629,7 +629,7 @@ sacr_min
       knows to output a quality summary related to regression, and not, say,
       classification.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 kmin &lt;- sacr_min |&gt; pull(neighbors)
 
@@ -683,7 +683,7 @@ sacr_summary
       already seen a few plots like this in this chapter, but here we also
       provide the code that generated it as a learning opportunity.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 sqft_prediction_grid &lt;- tibble(
     sqft = seq(
@@ -751,7 +751,7 @@ plot_final
       <xref ref="fig-sacr-bedscatter"/> shows that the number of bedrooms
       might provide useful information to help predict the sale price of a house.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 plot_beds &lt;- sacramento |&gt;
   ggplot(aes(x = beds, y = price)) +
@@ -780,7 +780,7 @@ plot_beds
       we have two predictors, and set <c>neighbors = tune()</c> to tell
       <c>tidymodels</c> to tune the number of neighbors for us.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 sacr_recipe &lt;- recipe(price ~ sqft + beds, data = sacramento_train) |&gt;
   step_scale(all_predictors()) |&gt;
@@ -795,7 +795,7 @@ sacr_spec &lt;- nearest_neighbor(weight_func = "rectangular",
       Next, we'll use 5-fold cross-validation to choose the number of neighbors
       via the minimum RMSPE:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 gridvals &lt;- tibble(neighbors = seq(1, 200))
 
@@ -836,7 +836,7 @@ sacr_multi
   first need to re-train the model on the entire training data set with <m>K = 11</m>, 
   and then use that model to make predictions on the test data.
 </p>
-    <program language="r">
+    <program language="python">
       <input>
 sacr_spec &lt;- nearest_neighbor(weight_func = "rectangular",
                               neighbors = sacr_k) |&gt;

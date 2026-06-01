@@ -120,7 +120,7 @@
         (<c>c</c> stands for &#x201C;concatenate&#x201D;). For example, to create the vector <c>region</c>
         as shown in <xref ref="fig-wrangling-vector"/>, you would write:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 region &lt;- c("Toronto", "Montreal", "Vancouver", "Calgary", "Ottawa")
 region
@@ -278,7 +278,7 @@ shows a data frame where the columns are vectors of
           is a tibble it will return <c>"tbl_df"  "tbl"  "data.frame"</c>. You can easily convert
           built-in R data frames to tibbles using the <c>tidyverse</c> <c>as_tibble</c> function.
         </p>
-        <program language="r">
+        <program language="python">
           <input>
 class(can_lang)
           </input>
@@ -415,7 +415,7 @@ class(can_lang)
         To get started, we will load the <c>tidyverse</c> package and use <c>read_csv</c> to load the
         (untidy) data.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 library(tidyverse)
 
@@ -479,7 +479,7 @@ lang_wide
         to tell R to select all the columns between Toronto and Edmonton:
         <idx><h>column range</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 lang_mother_tidy &lt;- pivot_longer(lang_wide,
   cols = Toronto:Edmonton,
@@ -567,7 +567,7 @@ lang_mother_tidy
         reporting the primary language at home and work for five major cities (Toronto, Montr&#xe9;al,
         Vancouver, Calgary, and Edmonton).
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 lang_long &lt;- read_csv("data/region_lang_top5_cities_long.csv")
 lang_long
@@ -620,7 +620,7 @@ lang_long
       </figure>
 
       <p>We will apply the function as detailed in <xref ref="fig-wrangling-pivot-wider"/>:</p>
-      <program language="r">
+      <program language="python">
         <input>
 lang_home_tidy &lt;- pivot_wider(lang_long,
   names_from = type,
@@ -673,7 +673,7 @@ lang_home_tidy
         <idx><h>separate</h></idx>
         <idx><h>delimiter</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 lang_messy &lt;- read_csv("data/region_lang_top5_cities_messy.csv")
 lang_messy
@@ -702,7 +702,7 @@ lang_messy
         further separate; that is, the number of Canadians reporting their primary language at home and
         work.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 lang_messy_longer &lt;- pivot_longer(lang_messy,
   cols = Toronto:Edmonton,
@@ -741,7 +741,7 @@ lang_messy_longer
         <image source="images/wrangling/separate_function.png" width="100%"/>
       </figure>
 
-      <program language="r">
+      <program language="python">
         <input>
 tidy_lang &lt;- separate(lang_messy_longer,
   col = value,
@@ -794,7 +794,7 @@ tidy_lang
         fix problems like this: we can set <c>convert = TRUE</c> to convert the <c>most_at_home</c> and
         <c>most_at_work</c> columns to the correct data type.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 tidy_lang &lt;- separate(lang_messy_longer,
   col = value,
@@ -839,7 +839,7 @@ tidy_lang
       <c>most_at_home</c> and <c>most_at_work</c> from the <c>tidy_lang</c> data set. Using what we learned in <xref ref="ch-intro"/>, we would pass the tidy_lang data frame as well as all of these column names into the select function:
       <idx><h>select</h><h>helpers</h></idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 selected_columns &lt;- select(tidy_lang,
                            language,
@@ -876,7 +876,7 @@ selected_columns
       <c>most_at_work</c> we pass <c>language:most_at_work</c> as the second argument to the
       <c>select</c> function.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 column_range &lt;- select(tidy_lang, language:most_at_work)
 column_range
@@ -910,7 +910,7 @@ column_range
       <idx><h>select</h><h>starts_with</h></idx>
       <c>starts_with</c> to choose only the columns that start with the word &#x201C;most&#x201D;:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 select(tidy_lang, starts_with("most"))
       </input>
@@ -937,7 +937,7 @@ select(tidy_lang, starts_with("most"))
       columns we want contain underscores and the others don&#x2019;t.
       <idx><h>select</h><h>contains</h></idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 select(tidy_lang, contains("_"))
       </input>
@@ -993,7 +993,7 @@ select(tidy_lang, contains("_"))
         <c>category</c> column holds the value <c>"Official languages"</c>. We name this data frame
         <c>official_langs</c>.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 official_langs &lt;- filter(tidy_lang, category == "Official languages")
 official_langs
@@ -1025,7 +1025,7 @@ official_langs
         operator, which means &#x201C;not equal to&#x201D;. So if we want to find all the rows where the
         <c>category</c> does <em>not</em> equal <c>"Official languages"</c> we write the code below.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 filter(tidy_lang, category != "Official languages")
         </input>
@@ -1059,7 +1059,7 @@ filter(tidy_lang, category != "Official languages")
         <c>language == "French"</c>.
         <idx><h>logical operator</h><h>and</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 filter(official_langs, region == "Montréal", language == "French")
         </input>
@@ -1075,7 +1075,7 @@ filter(official_langs, region == "Montréal", language == "French")
         <em>both</em> one condition <em>and</em> another condition are satisfied. You can use either
         comma (<c>,</c>) or ampersand (<c>&amp;</c>) in the <c>filter</c> function interchangeably.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 filter(official_langs, region == "Montréal" &amp; language == "French")
         </input>
@@ -1100,7 +1100,7 @@ filter(official_langs, region == "Montréal" &amp; language == "French")
         <c>"Edmonton"</c>.
         <idx><h>logical operator</h><h>or</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 filter(official_langs, region == "Calgary" | region == "Edmonton")
         </input>
@@ -1123,7 +1123,7 @@ filter(official_langs, region == "Calgary" | region == "Edmonton")
         <c>region_data.csv</c> file that comes from the 2016 Canadian census, as it contains statistics
         for number of households, land area, population and number of dwellings for different regions.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 region_data &lt;- read_csv("data/region_data.csv")
 region_data
@@ -1152,7 +1152,7 @@ region_data
         Here we are filtering for rows where the value in the <c>region</c> column matches any of the
         five cities we are interested in: Toronto, Montr&#xe9;al, Vancouver, Calgary, and Edmonton.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 city_names &lt;- c("Toronto", "Montréal", "Vancouver", "Calgary", "Edmonton")
 five_cities &lt;- filter(region_data,
@@ -1181,7 +1181,7 @@ five_cities
           <c>vectorA</c> is compared to all the elements in <c>vectorB</c>, and so on. Notice the
           difference between <c>==</c> and <c>%in%</c> in the example below.
         </p>
-        <program language="r">
+        <program language="python">
           <input>
 c("Vancouver", "Toronto") == c("Toronto", "Vancouver")
 c("Vancouver", "Toronto") %in% c("Toronto", "Vancouver")
@@ -1207,7 +1207,7 @@ c("Vancouver", "Toronto") %in% c("Toronto", "Vancouver")
         <idx><h>logical operator</h><h>greater than</h></idx>
         <idx><h>logical operator</h><h>less than</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 filter(official_langs, most_at_home > 2669195)
         </input>
@@ -1242,7 +1242,7 @@ filter(official_langs, most_at_home > 2669195)
         argument, and needed to modify the column type some other way. Below we create such a situation so that we can demonstrate how to use <c>mutate</c> to change the column types of a data frame. <c>mutate</c> is a useful function
         to modify or create new data frame columns.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 lang_messy &lt;- read_csv("data/region_lang_top5_cities_messy.csv")
 lang_messy_longer &lt;- pivot_longer(lang_messy,
@@ -1292,7 +1292,7 @@ official_langs_chr
 
       <p>Below we use <c>mutate</c> to convert the columns <c>most_at_home</c> and <c>most_at_work</c> to numeric data types
 in the official_langs data set as described in <xref ref = "fig-wrangling-mutate"/></p>
-      <program language="r">
+      <program language="python">
         <input>
 official_langs_numeric &lt;- mutate(official_langs_chr,
   most_at_home = as.numeric(most_at_home),
@@ -1348,7 +1348,7 @@ official_langs_numeric
         Vancouver, Calgary, Edmonton), we will use the <c>c</c> function (recall that <c>c</c> stands for
         &#x201C;concatenate&#x201D;):
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 city_pops &lt;- c(5928040, 4098927, 2463431, 1392609, 1321426)
 city_pops
@@ -1361,7 +1361,7 @@ city_pops
         where the language is English. We will name the new data frame we get from this
         <c>english_langs</c>:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 english_langs &lt;- filter(official_langs, language == "English")
 english_langs
@@ -1383,7 +1383,7 @@ english_langs
         people reporting English as their primary language at home. We will compute this by dividing the
         column by our vector of city populations.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 english_langs &lt;- mutate(english_langs,
                          most_at_home_proportion = most_at_home / city_pops)
@@ -1435,7 +1435,7 @@ english_langs
       One way of performing these three steps is to write multiple lines of code, storing temporary
       objects as you go:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 output_1 &lt;- mutate(data, new_col = old_col * 2)
 output_2 &lt;- filter(output_1, other_col > 5)
@@ -1451,7 +1451,7 @@ output &lt;- select(output_2, new_col)
     <p>
       Another option for doing this would be to <em>compose</em> the functions:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 output &lt;- select(filter(mutate(data, new_col = old_col * 2),
                         other_col > 5),
@@ -1471,7 +1471,7 @@ output &lt;- select(filter(mutate(data, new_col = old_col * 2),
       left-hand side of the pipe, and passes it as the first argument to the function on the right-hand
       side of the pipe. The code below accomplishes the same thing as the previous two code blocks:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 output &lt;- data |&gt;
   mutate(new_col = old_col * 2) |&gt;
@@ -1513,7 +1513,7 @@ output &lt;- data |&gt;
         which contains the number of Canadians reporting their primary language at home and work for five
         major cities (Toronto, Montr&#xe9;al, Vancouver, Calgary, and Edmonton):
 </p>
-      <program language="r">
+      <program language="python">
         <input>
 tidy_lang
         </input>
@@ -1541,7 +1541,7 @@ tidy_lang
         First, we use <c>filter</c> to create a data frame called <c>van_data</c> that contains only
         values for Vancouver:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 van_data &lt;- filter(tidy_lang, region == "Vancouver")
 van_data
@@ -1566,7 +1566,7 @@ van_data
       <p>
         We then use <c>select</c> on this data frame to keep only the variables we want:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 van_data_selected &lt;- select(van_data, language, most_at_home)
 van_data_selected
@@ -1594,7 +1594,7 @@ van_data_selected
         from <c>filter</c>. Instead, we can directly send the output of <c>filter</c> to the input of
         <c>select</c>:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 van_data_selected &lt;- filter(tidy_lang, region == "Vancouver") |&gt;
         select(language, most_at_home)
@@ -1651,7 +1651,7 @@ van_data_selected
 
 Here we pass the column name <c>most_at_home</c> to arrange the data frame rows by the values in that column, in ascending order.
 </p>
-      <program language="r">
+      <program language="python">
         <input>
 large_region_lang &lt;- filter(tidy_lang, most_at_home > 10000) |&gt;
   select(region, language, most_at_home) |&gt;
@@ -1682,7 +1682,7 @@ large_region_lang
         it as the first argument of the first function. These two choices are equivalent, and we get the
         same result.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 large_region_lang &lt;- tidy_lang |&gt;
   filter(most_at_home > 10000) |&gt;
@@ -1747,7 +1747,7 @@ large_region_lang
         of Canadians reporting a particular language as their primary language at home. First a reminder
         of what <c>region_lang</c> looks like:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 region_lang
         </input>
@@ -1772,7 +1772,7 @@ region_lang
         We apply <c>summarize</c> to calculate the minimum and maximum number of Canadians reporting a
         particular language as their primary language at home, for any region:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 summarize(region_lang,
           min_most_at_home = min(most_at_home),
@@ -1812,7 +1812,7 @@ summarize(region_lang,
         <c>region_lang_na</c>, that has a seemingly innocuous <c>NA</c> in the first row of the
         <c>most_at_home</c> column:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 region_lang_na
         </input>
@@ -1837,7 +1837,7 @@ region_lang_na
         Now if we apply the <c>summarize</c> function as above, we see that we no longer get the minimum
         and maximum returned, but just an <c>NA</c> instead:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 summarize(region_lang_na,
           min_most_at_home = min(most_at_home),
@@ -1853,7 +1853,7 @@ summarize(region_lang_na,
       <p>
         We can fix this by adding the <c>na.rm = TRUE</c> as explained above:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 summarize(region_lang_na,
           min_most_at_home = min(most_at_home, na.rm = TRUE),
@@ -1887,7 +1887,7 @@ summarize(region_lang_na,
         be grouped, and the second and onwards are columns to use in the grouping. Here we use only one
         column for grouping (<c>region</c>), but more than one can also be used. To do this, list additional columns separated by commas.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 group_by(region_lang, region) |&gt;
   summarize(
@@ -1918,7 +1918,7 @@ group_by(region_lang, region) |&gt;
         <c>region</c>. Instead, <c>group_by</c> simply changes how other functions work with the data,
         as we saw with <c>summarize</c> above.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 group_by(region_lang, region)
         </input>
@@ -1968,7 +1968,7 @@ group_by(region_lang, region)
         and use a colon <c>:</c> to specify a range of columns:
         <idx><h>column range</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 region_lang |&gt;
   summarize(across(mother_tongue:lang_known, max))
@@ -1996,7 +1996,7 @@ region_lang |&gt;
   <c>na.rm = TRUE</c>. For example, for the previous example with the <c>max</c> 
   function, we would write
 </p>
-        <program language="r">
+        <program language="python">
           <input>
 region_lang_na |&gt;
   summarize(across(mother_tongue:lang_known, ~ max(.x, na.rm = TRUE)))
@@ -2025,7 +2025,7 @@ region_lang_na |&gt;
         specify <em>which</em> columns to apply the function to. Therefore, we will use the <c>select</c>
         function before calling <c>map</c> to choose the columns for which we want the maximum.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 region_lang |&gt;
   select(mother_tongue:lang_known) |&gt;
@@ -2056,7 +2056,7 @@ $lang_known
         The output looks a bit unusual&#x2014;we passed in a data frame, but the output doesn&#x2019;t look like a
         data frame. As it so happens, it is <em>not</em> a data frame, but rather a plain list:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 region_lang |&gt;
   select(mother_tongue:lang_known) |&gt;
@@ -2096,7 +2096,7 @@ region_lang |&gt;
         Let&#x2019;s get the columns&#x2019; maximums again, but this time use the <c>map_dfr</c> function to return
         the output as a data frame:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 region_lang |&gt;
   select(mother_tongue:lang_known) |&gt;
@@ -2122,7 +2122,7 @@ region_lang |&gt;
   this with <c>map</c>, we do this by adding a <c>,</c> and then <c>na.rm = TRUE</c> 
   after specifying the function, as illustrated below:
 </p>
-        <program language="r">
+        <program language="python">
           <input>
 region_lang_na |&gt;
   select(mother_tongue:lang_known) |&gt;
@@ -2164,7 +2164,7 @@ region_lang_na |&gt;
   can see that this would be the columns from <c>mother_tongue</c> to <c>lang_known</c>.
 </p>
 
-<program language="r">
+<program language="python">
   <input>
     region_lang
   </input>
@@ -2198,7 +2198,7 @@ region_lang_na |&gt;
   specified columns (here <c>mother_tongue</c> to <c>lang_known</c>).
 </p>
 
-<program language="r">
+<program language="python">
   <input>
     region_lang |>
       mutate(across(mother_tongue:lang_known, as.integer))
@@ -2249,7 +2249,7 @@ region_lang_na |&gt;
   demonstration, the data set we are operating on looks like this:
 </p>
 
-<program language="r">
+<program language="python">
   <input>
     region_lang |>
       select(mother_tongue:lang_known)
@@ -2278,7 +2278,7 @@ region_lang_na |&gt;
   applied on a column (which is the default behavior of <c>mutate</c>):
 </p>
 
-<program language="r">
+<program language="python">
   <input>
     region_lang |>
       select(mother_tongue:lang_known) |>
@@ -2324,7 +2324,7 @@ region_lang_na |&gt;
   reported in every single row; this code does not provide the desired result.
 </p>
 
-<program language="r">
+<program language="python">
   <input>
     region_lang |>
       select(mother_tongue:lang_known) |>

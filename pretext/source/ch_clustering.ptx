@@ -139,7 +139,7 @@
     </p>
     <idx><h>seed</h><h>set.seed</h></idx>
 
-    <program language="r">
+    <program language="python">
       <input>
 library(tidyverse)
 set.seed(1)
@@ -150,7 +150,7 @@ set.seed(1)
       Now we can load and preview the <c>penguins</c> data.
       <idx><h>read function</h><h>read_csv</h></idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 penguins &lt;- read_csv("data/penguins.csv")
 penguins
@@ -189,7 +189,7 @@ penguins
       standardization automatically in the clustering pipeline.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 penguins_standardized &lt;- penguins |&gt;
   mutate(bill_length_standardized = (bill_length_mm - mean(bill_length_mm))/sd(bill_length_mm)) |&gt;
@@ -227,7 +227,7 @@ penguins_standardized
       detect subtypes or groups in our data set.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 ggplot(penguins_standardized,
        aes(x = flipper_length_standardized,
@@ -554,7 +554,7 @@ ggplot(penguins_standardized,
       library, which contains the necessary functionality.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 library(tidyclust)
       </input>
@@ -594,7 +594,7 @@ library(tidyclust)
       </p>
     </note>
 
-    <program language="r">
+    <program language="python">
       <input>
 kmeans_recipe &lt;- recipe(~ ., data = penguins) |&gt;
     step_scale(all_predictors()) |&gt;
@@ -625,7 +625,7 @@ kmeans_recipe
       <idx><h>K-means</h><h>stats engine</h></idx>
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 kmeans_spec &lt;- k_means(num_clusters = 3) |&gt;
     set_engine("stats")
@@ -648,7 +648,7 @@ kmeans_spec
       since we set the random seed earlier, the clustering will be reproducible.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 kmeans_fit &lt;- workflow() |&gt;
     add_recipe(kmeans_recipe) |&gt;
@@ -702,7 +702,7 @@ kmeans_fit
       <idx><h>augment</h></idx>
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 clustered_data &lt;- kmeans_fit |&gt;
                     augment(penguins)
@@ -742,7 +742,7 @@ clustered_data
       would need to use the <c>bake</c> function to obtain that first.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 cluster_plot &lt;- ggplot(clustered_data,
   aes(x = flipper_length_mm,
@@ -775,7 +775,7 @@ cluster_plot
       from our clustering with 3 clusters using the <c>glance</c> function.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 glance(kmeans_fit)
       </input>
@@ -793,7 +793,7 @@ glance(kmeans_fit)
       value of K we want to run K-means with (here, 1 to 9).
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 penguin_clust_ks &lt;- tibble(num_clusters = 1:9)
 penguin_clust_ks
@@ -819,7 +819,7 @@ penguin_clust_ks
       that we want to tune the <c>num_clusters</c> parameter.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 kmeans_spec &lt;- k_means(num_clusters = tune()) |&gt;
     set_engine("stats")
@@ -851,7 +851,7 @@ kmeans_spec
       <idx><h>tidymodels</h><h>collect_metrics</h></idx>
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 kmeans_results &lt;- workflow() |&gt;
     add_recipe(kmeans_recipe) |&gt;
@@ -894,7 +894,7 @@ kmeans_results
       <idx><h>mutate</h></idx>
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 kmeans_results &lt;- kmeans_results |&gt;
     filter(.metric == "sse_within_total") |&gt;
@@ -926,7 +926,7 @@ kmeans_results
       <idx><h>elbow method</h></idx>
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 elbow_plot &lt;- ggplot(kmeans_results, aes(x = num_clusters, y = total_WSSD)) +
   geom_point() +
@@ -958,7 +958,7 @@ elbow_plot
       specification. Here we will try using 10 restarts.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 kmeans_spec &lt;- k_means(num_clusters = tune()) |&gt;
     set_engine("stats", nstart = 10)
@@ -994,7 +994,7 @@ kmeans_spec
       something that needs to be balanced.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 kmeans_results &lt;- workflow() |&gt;
     add_recipe(kmeans_recipe) |&gt;

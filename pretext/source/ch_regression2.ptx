@@ -200,7 +200,7 @@ By using simple linear regression on this small data set to predict the sale pri
       after we choose our final model. Let's take care of that now.
       <idx><h>seed</h><h>set.seed</h></idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 library(tidyverse)
 library(tidymodels)
@@ -218,7 +218,7 @@ sacramento_test  &lt;- testing(sacramento_split)
       Now that we have our training data, we will create the model specification
       and recipe, and fit our simple linear regression model:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 lm_spec &lt;- linear_reg() |&gt;
   set_engine("lm") |&gt;
@@ -276,7 +276,7 @@ lm_fit
       house by approximately $135. Finally, we predict on the test data set to
       assess how well our model does:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 lm_test_results &lt;- lm_fit |&gt;
   predict(sacramento_test) |&gt;
@@ -311,7 +311,7 @@ lm_test_results
       that we can qualitatively assess if the model seems to fit the data well.
       <xref ref="fig-regression2-lm-predict-all"/> displays the result.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 sqft_prediction_grid &lt;- tibble(
     sqft = c(
@@ -351,7 +351,7 @@ lm_plot_final
       <c>extract_fit_parsnip</c> function, and then apply the <c>tidy</c>
       function to convert the result into a data frame:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 coeffs &lt;- lm_fit |&gt;
              extract_fit_parsnip() |&gt;
@@ -472,13 +472,13 @@ coeffs
       response variable. We will start by changing the formula in the recipe
       to include both the <c>sqft</c> and <c>beds</c> variables as predictors:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 mlm_recipe &lt;- recipe(price ~ sqft + beds, data = sacramento_train)
       </input>
     </program>
     <p>Now we can build our workflow and fit the model:</p>
-    <program language="r">
+    <program language="python">
       <input>
 mlm_fit &lt;- workflow() |&gt;
   add_recipe(mlm_recipe) |&gt;
@@ -506,7 +506,7 @@ mlm_fit
 ##     72547.8        160.6     -29644.3
     </pre>
     <p>And finally, we make predictions on the test data set to assess the quality of our model:</p>
-    <program language="r">
+    <program language="python">
       <input>
 lm_mult_test_results &lt;- mlm_fit |&gt;
   predict(sacramento_test) |&gt;
@@ -545,7 +545,7 @@ lm_mult_test_results
       regression, and thus describe the plane mathematically. We can extract the
       slope values from our model object as shown below:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 mcoeffs &lt;- mlm_fit |&gt;
              extract_fit_parsnip() |&gt;
@@ -592,7 +592,7 @@ mcoeffs
       models and we want to make a final comparison, we can do so by comparing
       the prediction error of the methods on the test data.
 </p>
-    <program language="r">
+    <program language="python">
       <input>
 lm_mult_test_results
       </input>
@@ -761,7 +761,7 @@ lm_mult_test_results
       simple linear regression, as shown in
       <xref ref="fig-regression2-curve"/>.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 set.seed(1)
 df &lt;- tibble(x = sample(10000, 100, replace = TRUE) / 10000)
@@ -801,7 +801,7 @@ df
       predictor variable</em> <c>z</c> using the <c>mutate</c> function:
       <idx>predictor design</idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 df &lt;- df |&gt;
         mutate(z = x^3)

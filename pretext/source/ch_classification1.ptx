@@ -130,7 +130,7 @@
         in order to better understand the data we are working with. We start by
         loading the <c>tidyverse</c> package needed for our analysis.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 library(tidyverse)
         </input>
@@ -141,7 +141,7 @@ library(tidyverse)
         <idx><h>read function</h><h>read_csv</h></idx>
         with no additional arguments, and then inspect its contents:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer &lt;- read_csv("data/wdbc.csv")
 cancer
@@ -208,7 +208,7 @@ cancer
         data when we have a lot of columns, as it prints the data such that the
         columns go down the page (instead of across).
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 glimpse(cancer)
         </input>
@@ -237,7 +237,7 @@ glimpse(cancer)
         there are two diagnoses: benign, represented by &#x201C;B&#x201D;, and
         malignant, represented by &#x201C;M&#x201D;.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer |>
   distinct(Class)
@@ -263,7 +263,7 @@ cancer |>
         want to modify, followed by any number of arguments of the form
         <c>"new name" = "old name"</c> to specify the renaming scheme.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer &lt;- cancer |>
   mutate(Class = as_factor(Class)) |>
@@ -292,7 +292,7 @@ glimpse(cancer)
         factor variable and renamed its values to &#x201C;Benign&#x201D; and
         &#x201C;Malignant&#x201D; using the <c>distinct</c> function once more.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 cancer |>
   distinct(Class)
@@ -321,7 +321,7 @@ cancer |>
         by the total number of observations and multiplying by 100. We have 357 (63%)
         benign and 212 (37%) malignant tumor observations.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 num_obs &lt;- nrow(cancer)
 cancer |>
@@ -348,7 +348,7 @@ cancer |>
         <c>"steelblue"</c> for blue&#x2014;and pass them as the <c>values</c>
         argument to the <c>scale_color_manual</c> function.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 perim_concav &lt;- cancer |>
   ggplot(aes(x = Perimeter, y = Concavity, color = Class)) +
@@ -504,7 +504,7 @@ perim_concav
           represented as a red diamond.</caption>
         <image source="images/classification1/cancer-knn-new-obs2.png" width="70%"/>
       </figure>
-      <program language="r">
+      <program language="python">
         <input>
 new_obs_Perimeter &lt;- 0
 new_obs_Concavity &lt;- 3.5
@@ -624,7 +624,7 @@ cancer |>
         observations in the training set to find the <m>K=5</m> neighbors when we
         have these three predictors.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 new_obs_Perimeter &lt;- 0
 new_obs_Concavity &lt;- 3.5
@@ -703,7 +703,7 @@ cancer |>
       simple, readable and accurate; the less we have to code ourselves, the fewer
       mistakes we will likely make. We start by loading <c>tidymodels</c>.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 library(tidymodels)
       </input>
@@ -717,7 +717,7 @@ library(tidymodels)
       Let's pick out our two desired predictor variables and class label and store them
       as a new data set named <c>cancer_train</c>:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 cancer_train &lt;- cancer |>
   select(Class, Perimeter, Concavity)
@@ -761,7 +761,7 @@ cancer_train
       classification. Finally, we specify that this is a classification problem with
       the <c>set_mode</c> function.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 knn_spec &lt;- nearest_neighbor(weight_func = "rectangular", neighbors = 5) |>
   set_engine("kknn") |>
@@ -786,7 +786,7 @@ knn_spec
       that <c>Class</c> is the response variable (the one we want to predict), and
       both <c>Perimeter</c> and <c>Concavity</c> are to be used as the predictors.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 knn_fit &lt;- knn_spec |>
   fit(Class ~ Perimeter + Concavity, data = cancer_train)
@@ -803,7 +803,7 @@ knn_fit &lt;- knn_spec |>
       In general, you can choose individual predictors using the <c>+</c> symbol, or
       you can specify to use <em>all</em> predictors using the <c>.</c> symbol.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 knn_fit &lt;- knn_spec |>
   fit(Class ~ ., data = cancer_train)
@@ -844,7 +844,7 @@ knn_fit
       Note that the <c>predict</c> function outputs a data frame with a single variable
       named <c>.pred_class</c>.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 new_obs &lt;- tibble(Perimeter = 0, Concavity = 3.5)
 predict(knn_fit, new_obs)
@@ -916,7 +916,7 @@ predict(knn_fit, new_obs)
         and &#x201C;Benign&#x201D;. To keep things simple, we will just use the
         <c>Area</c>, <c>Smoothness</c>, and <c>Class</c> variables:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 unscaled_cancer &lt;- read_csv("data/wdbc_unscaled.csv") |>
   mutate(Class = as_factor(Class)) |>
@@ -961,7 +961,7 @@ unscaled_cancer
         for the <c>unscaled_cancer</c> data above, specifying that the <c>Class</c>
         variable is the response, and all other variables are predictors:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 uc_recipe &lt;- recipe(Class ~ ., data = unscaled_cancer)
 uc_recipe
@@ -994,7 +994,7 @@ uc_recipe
         <idx><h>tidymodels</h><h>prep</h></idx>
         <idx><h>prep</h><see>tidymodels</see></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 uc_recipe &lt;- uc_recipe |>
   step_scale(all_predictors()) |>
@@ -1055,7 +1055,7 @@ uc_recipe
         <idx><h>bake</h><see>tidymodels</see></idx>
         function to the unscaled data.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 scaled_cancer &lt;- bake(uc_recipe, unscaled_cancer)
 scaled_cancer
@@ -1160,7 +1160,7 @@ scaled_cancer
         back together, and name the result <c>rare_cancer</c>. The new imbalanced data
         is shown in <xref ref="fig-classif1-imbalanced"/>.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 rare_cancer &lt;- bind_rows(
       filter(cancer, Class == "Benign"),
@@ -1229,7 +1229,7 @@ rare_plot
         We show below how to do this, and also use the <c>group_by</c> and
         <c>summarize</c> functions to see that our classes are now balanced:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 library(themis)
 
@@ -1255,7 +1255,7 @@ ups_recipe
 ## ── Operations 
 ## • Up-sampling based on: Class | Trained
       </pre>
-      <program language="r">
+      <program language="python">
         <input>
 upsampled_cancer &lt;- bake(ups_recipe, rare_cancer)
 
@@ -1315,7 +1315,7 @@ upsampled_cancer |>
         Let's load and examine a modified subset of the tumor image data that has a
         few missing entries:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 missing_cancer &lt;- read_csv("data/wdbc_missing.csv") |>
   select(Class, Radius, Texture, Perimeter) |>
@@ -1348,7 +1348,7 @@ missing_cancer
         prior to working with the data.
         <idx><h>missing data</h><h>drop_na</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 no_missing_cancer &lt;- missing_cancer |> drop_na()
 no_missing_cancer
@@ -1376,7 +1376,7 @@ no_missing_cancer
         <idx><h>missing data</h><h>mean imputation</h></idx>
         step to the <c>tidymodels</c> preprocessing recipe.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 impute_missing_recipe &lt;- recipe(Class ~ ., data = missing_cancer) |>
   step_impute_mean(all_predictors()) |>
@@ -1405,7 +1405,7 @@ impute_missing_recipe
         imputation step fills in the missing entries with the mean values of their
         corresponding variables.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 imputed_cancer &lt;- bake(impute_missing_recipe, missing_cancer)
 imputed_cancer
@@ -1446,7 +1446,7 @@ imputed_cancer
       scratch with the <c>wdbc_unscaled.csv</c> data. First we will load the data,
       create a model, and specify a recipe for how the data should be preprocessed:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 # load the unscaled cancer data
 # and make sure the response variable, Class, is a factor
@@ -1486,7 +1486,7 @@ uc_recipe &lt;- recipe(Class ~ Area + Smoothness, data = unscaled_cancer) |>
       This is again because we included the formula in the recipe, so there is no
       need to respecify it:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 knn_fit &lt;- workflow() |>
   add_recipe(uc_recipe) |>
@@ -1531,7 +1531,7 @@ knn_fit
       <c>Smoothness = 0.075</c>, and one with <c>Area = 1500</c> and
       <c>Smoothness = 0.1</c>.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
 new_observation &lt;- tibble(Area = c(500, 1500), Smoothness = c(0.075, 0.1))
 prediction &lt;- predict(knn_fit, new_observation)
@@ -1564,7 +1564,7 @@ prediction
       is included for those readers who would like to use similar visualizations in
       their own data analyses.</p>
     </note>
-    <program language="r">
+    <program language="python">
       <input>
 # create the grid of area/smoothness vals, and arrange in a data frame
 are_grid &lt;- seq(min(unscaled_cancer$Area),
