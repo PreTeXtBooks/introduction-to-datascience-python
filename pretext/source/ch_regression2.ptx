@@ -359,11 +359,11 @@ coeffs
       </input>
     </program>
     <pre>
-# A tibble: 2 x 5
-  term        estimate std.error statistic   p.value
-  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-1 (Intercept)  -14648.    6379.      -2.30  2.19e- 2
-2 sqft            147.       2.26    64.9   0
+## # A tibble: 2 × 5
+##   term        estimate std.error statistic   p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)   18450.   7916.        2.33 2.01e-  2
+## 2 sqft            135.      4.31     31.2  1.37e-134
     </pre>
   </section>
 
@@ -486,21 +486,21 @@ mlm_fit
       </input>
     </program>
     <pre>
-== Workflow [trained] ==========================================================
-Preprocessor: Recipe
-Model: linear_reg()
-
--- Preprocessor ----------------------------------------------------------------
-0 Recipe Steps
-
--- Model -----------------------------------------------------------------------
-
-Call:
-stats::lm(formula = ..y ~ ., data = data)
-
-Coefficients:
-(Intercept)         sqft         beds
-   10011.59       156.96     -4410.27
+## ══ Workflow [trained] ══════════
+## Preprocessor: Recipe
+## Model: linear_reg()
+## 
+## ── Preprocessor ──────────
+## 0 Recipe Steps
+## 
+## ── Model ──────────
+## 
+## Call:
+## stats::lm(formula = ..y ~ ., data = data)
+## 
+## Coefficients:
+## (Intercept)         sqft         beds  
+##     72547.8        160.6     -29644.3
     </pre>
     <p>And finally, we make predictions on the test data set to assess the quality of our model:</p>
     <program language="r">
@@ -514,12 +514,12 @@ lm_mult_test_results
       </input>
     </program>
     <pre>
-# A tibble: 3 x 3
-  .metric .estimator .estimate
-  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard   83297.
-2 rsq     standard       0.518
-3 mae     standard   59532.
+## # A tibble: 3 × 3
+##   .metric .estimator .estimate
+##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+## 1 rmse    standard   88739.   
+## 2 rsq     standard       0.603
+## 3 mae     standard   61732.
     </pre>
     <p>
       Our model&#x2019;s test error as assessed by RMSPE is approximately
@@ -552,12 +552,12 @@ mcoeffs
       </input>
     </program>
     <pre>
-# A tibble: 3 x 5
-  term        estimate std.error statistic  p.value
-  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 (Intercept)  10012.     8937.       1.12  0.263
-2 sqft           157.        2.73    57.5   0
-3 beds         -4410.     3451.      -1.28  0.202
+## # A tibble: 3 × 5
+##   term        estimate std.error statistic   p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)   72548.  11670.        6.22 8.76e- 10
+## 2 sqft            161.      5.93     27.1  8.34e-111
+## 3 beds         -29644.   4799.       -6.18 1.11e-  9
     </pre>
     <p>
       And then use those slopes to write a mathematical equation to describe
@@ -608,12 +608,12 @@ lm_mult_test_results
       </input>
     </program>
     <pre>
-# A tibble: 3 × 3
-  .metric .estimator .estimate
-  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard   83297.
-2 rsq     standard       0.518
-3 mae     standard   59532.
+## # A tibble: 3 × 3
+##   .metric .estimator .estimate
+##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+## 1 rmse    standard   88739.   
+## 2 rsq     standard       0.603
+## 3 mae     standard   61732.
     </pre>
   </section>
 
@@ -766,20 +766,20 @@ df
       </input>
     </program>
     <pre>
-# A tibble: 100 x 2
-        x       y
-    &lt;dbl&gt;   &lt;dbl&gt;
- 1 0.266  0.0241
- 2 0.372  0.0744
- 3 0.573  0.196
- 4 0.908  0.768
- 5 0.202  0.00957
- 6 0.898  0.736
- 7 0.945  0.856
- 8 0.661  0.298
- 9 0.629  0.262
-10 0.0618 0.0102
-# ... with 90 more rows
+## # A tibble: 100 × 2
+##        x      y
+##    &lt;dbl&gt;  &lt;dbl&gt;
+##  1 0.102 0.0720
+##  2 0.800 0.532 
+##  3 0.478 0.148 
+##  4 0.972 1.01  
+##  5 0.846 0.677 
+##  6 0.405 0.157 
+##  7 0.879 0.768 
+##  8 0.130 0.0402
+##  9 0.852 0.576 
+## 10 0.180 0.0847
+## # ℹ 90 more rows
     </pre>
 
     <figure xml:id="fig-regression2-curve">
