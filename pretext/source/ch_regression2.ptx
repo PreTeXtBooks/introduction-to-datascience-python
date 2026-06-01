@@ -147,6 +147,7 @@
     </figure>
 
     <p>
+By using simple linear regression on this small data set to predict the sale price for a 2,000 square-foot house, we get a predicted value of $295,564.
       But wait a minute&#x2026; how exactly does simple linear regression
       choose the line of best fit? Many different lines could be drawn through
       the data points. Some plausible examples are shown in
@@ -196,7 +197,7 @@
     <p>
       As usual, we start by loading packages, setting the seed, loading data,
       and putting some test data away in a lock box that we can come back to
-      after we choose our final model.
+      after we choose our final model. Let's take care of that now.
       <idx><h>seed</h><h>set.seed</h></idx>
     </p>
     <program language="r">
@@ -234,21 +235,21 @@ lm_fit
       </input>
     </program>
     <pre>
-== Workflow [trained] ==========================================================
-Preprocessor: Recipe
-Model: linear_reg()
-
--- Preprocessor ----------------------------------------------------------------
-0 Recipe Steps
-
--- Model -----------------------------------------------------------------------
-
-Call:
-stats::lm(formula = ..y ~ ., data = data)
-
-Coefficients:
-(Intercept)         sqft
-  -14648.14       146.74
+## ══ Workflow [trained] ══════════
+## Preprocessor: Recipe
+## Model: linear_reg()
+## 
+## ── Preprocessor ──────────
+## 0 Recipe Steps
+## 
+## ── Model ──────────
+## 
+## Call:
+## stats::lm(formula = ..y ~ ., data = data)
+## 
+## Coefficients:
+## (Intercept)         sqft  
+##     18450.3        134.8
     </pre>
     <note>
       <p>
@@ -264,15 +265,15 @@ Coefficients:
       </p>
     </note>
     <p>
-      Our coefficients are (intercept) <m>\beta_0 \approx -14{,}648</m> and
-      (slope) <m>\beta_1 \approx 147</m>. This means that the equation of the
+      Our coefficients are (intercept) <m>\beta_0 \approx 18450</m> and
+      (slope) <m>\beta_1 \approx 135</m>. This means that the equation of the
       line of best fit is
     </p>
-    <me>\text{house sale price} = -14{,}648 + 147 \cdot (\text{house size}).</me>
+    <me>\text{house sale price} = 18450 + 135 \cdot (\text{house size}).</me>
     <p>
-      In other words, the model predicts that houses start at $-14,648 for 0
+      In other words, the model predicts that houses start at $18,450 for 0
       square feet, and that every extra square foot increases the cost of the
-      house by approximately $147. Finally, we predict on the test data set to
+      house by approximately $135. Finally, we predict on the test data set to
       assess how well our model does:
     </p>
     <program language="r">
@@ -286,21 +287,22 @@ lm_test_results
       </input>
     </program>
     <pre>
-# A tibble: 3 x 3
-  .metric .estimator .estimate
-  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard   83437.
-2 rsq     standard       0.516
-3 mae     standard   59696.
+## # A tibble: 3 × 3
+##   .metric .estimator .estimate
+##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+## 1 rmse    standard   88528.   
+## 2 rsq     standard       0.608
+## 3 mae     standard   61892.
     </pre>
     <p>
       Our final model&#x2019;s test error as assessed by RMSPE
       <idx>RMSPE</idx>
-      is approximately $83,437. Remember that this is in units of the response
+      is approximately $88,528. Remember that this is in units of the response
       variable, and here that is US Dollars (USD). Does this mean our model is
       &#x201C;good&#x201D; at predicting house sale price based off of the
       predictor of home size? Again, answering this is tricky and requires
-      knowledge of how you intend to use the prediction. To visualize the simple
+      knowledge of how you intend to use the prediction. 
+</p><p> To visualize the simple
       linear regression model, we can plot the predicted house sale price across
       all possible house sizes we might encounter. Since our model is linear, we
       only need to compute the predicted price of the minimum and maximum house
@@ -417,8 +419,9 @@ coeffs
     </p>
     <p>
       How do these two models compare on the Sacramento house prices data set?
-      In <xref ref="fig-regression2-compare-regression"/>, we also show the
-      RMSPE as calculated from predicting on the test data set. The RMSPE for
+      In <xref ref="fig-regression2-compare-regression"/>, we also printed the
+      RMSPE as calculated from predicting on the test data set that was not used
+      to train/fit the models. The RMSPE for
       the simple linear regression model is slightly lower than the RMSPE for
       the K-NN regression model. Considering that the simple linear regression
       model is also more interpretable, if we were comparing these in practice
@@ -523,7 +526,7 @@ lm_mult_test_results
     </pre>
     <p>
       Our model&#x2019;s test error as assessed by RMSPE is approximately
-      $83,297. In the case of two predictors, the predictions from linear
+      $88,739. In the case of two predictors, the predictions from linear
       regression create a <em>plane</em> of best fit, as shown in
       <xref ref="fig-regression2-3d-lin-reg"/>.
     </p>
@@ -574,7 +577,7 @@ mcoeffs
     <p>
       Filling in the values, the equation of the plane of best fit is:
     </p>
-    <me>\text{house sale price} = 10{,}012 + 157\cdot (\text{house size}) - 4{,}410 \cdot (\text{number of bedrooms}).</me>
+    <me>\text{house sale price} = 72548 + 161\cdot (\text{house size}) - 29,649 \cdot (\text{number of bedrooms}).</me>
     <p>
       This model is more interpretable than the multivariable K-NN regression
       model; we can write a mathematical equation that explains how each
@@ -587,21 +590,8 @@ mcoeffs
       comparison using cross-validation on only our training data. But if we
       have already decided on a small number (e.g., 2 or 3) of tuned candidate
       models and we want to make a final comparison, we can do so by comparing
-      the prediction error of the methods on the test data. The RMSPE for the
-      multivariable linear regression model is approximately $83,297, which is
-      less than the prediction error for the multivariable K-NN regression
-      model, indicating that we should likely choose linear regression for
-      predictions of house sale price on this data set. Revisiting the simple
-      linear regression model with only a single predictor from earlier in this
-      chapter, we see that the RMSPE for that model was $83,437, which is
-      almost the same as that of our more complex model. As mentioned earlier,
-      this is not always the case: often including more predictors will either
-      positively or negatively impact the prediction performance on unseen test
-      data.
-    </p>
-    <p>
-      We obtain the RMSPE for the multivariable model via:
-    </p>
+      the prediction error of the methods on the test data.
+</p>
     <program language="r">
       <input>
 lm_mult_test_results
@@ -615,6 +605,22 @@ lm_mult_test_results
 ## 2 rsq     standard       0.603
 ## 3 mae     standard   61732.
     </pre>
+<p>The RMSPE for the
+      multivariable linear regression model is approximately $88,739, which is
+      less than the prediction error for the multivariable K-NN regression
+      model, indicating that we should likely choose linear regression for
+      predictions of house sale price on this data set. Revisiting the simple
+      linear regression model with only a single predictor from earlier in this
+      chapter, we see that the RMSPE for that model was $88,527.75, which is
+      almost the same as that of our more complex model. As mentioned earlier,
+      this is not always the case: often including more predictors will either
+      positively or negatively impact the prediction performance on unseen test
+      data.
+    </p>
+    <p>
+      We obtain the RMSPE for the multivariable model via:
+    </p>
+
   </section>
 
   <!-- ============================================================ -->
@@ -709,13 +715,13 @@ lm_mult_test_results
         chunks&#x2014;the coefficients vary by large amounts:
       </p>
       <p>
-        Best Fit 1: <m>\text{house sale price} = -14{,}648 + (300)\cdot (\text{house size 1 (ft}^2)) + (-154) \cdot (\text{house size 2 (ft}^2)).</m>
+        Best Fit 1: <m>\text{house sale price} = 18450 + (220)\cdot (\text{house size 1 (ft}^2)) + (-86) \cdot (\text{house size 2 (ft}^2)).</m>
       </p>
       <p>
-        Best Fit 2: <m>\text{house sale price} = -14{,}648 + (22)\cdot (\text{house size 1 (ft}^2)) + (125) \cdot (\text{house size 2 (ft}^2)).</m>
+        Best Fit 2: <m>\text{house sale price} = 18450 + (86)\cdot (\text{house size 1 (ft}^2)) + (49) \cdot (\text{house size 2 (ft}^2)).</m>
       </p>
       <p>
-        Best Fit 3: <m>\text{house sale price} = -14{,}648 + (-77)\cdot (\text{house size 1 (ft}^2)) + (224) \cdot (\text{house size 2 (ft}^2)).</m>
+        Best Fit 3: <m>\text{house sale price} = 18450 + (107)\cdot (\text{house size 1 (ft}^2)) + (27) \cdot (\text{house size 2 (ft}^2)).</m>
       </p>
       <p>
         Therefore, when performing multivariable linear regression, it is
@@ -913,13 +919,8 @@ df &lt;- df |&gt;
           (<xref ref="james2013introduction"/>) provides a great next stop in
           the process of learning about regression. Chapter 3 covers linear
           regression at a slightly more mathematical level than we do here, but
-          it is not too large a leap. Chapter 6 discusses how to pick a subset
-          of &#x201C;informative&#x201D; predictors when you have a data set
-          with many predictors. Chapter 7 covers regression models that are
-          more flexible than linear regression models but still enjoy the
-          computational efficiency of linear regression. In contrast, the K-NN
-          methods we covered earlier are indeed more flexible but become very
-          slow when given lots of data.
+          it is not too large a leap and so should provide a good stepping stone.
+           Chapter 6 discusses how to pick a subset of “informative” predictors when you have a data set with many predictors, and you expect only a few of them to be relevant. Chapter 7 covers regression models that are more flexible than linear regression models but still enjoy the computational efficiency of linear regression. In contrast, the K-NN methods we covered earlier are indeed more flexible but become very slow when given lots of data.
         </p>
       </li>
     </ul>
