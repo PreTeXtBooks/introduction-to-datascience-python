@@ -3,27 +3,12 @@
   <bibinfo>
     <author>
       <personname>Tiffany Timbers</personname>
-      <department>Department of Statistics</department>
-      <institution>University of British Columbia</institution>
-      <website>
-        <url href="https://tiffanytimbers.com/" visual="tiffanytimbers.com"/>
-      </website>
     </author>
     <author>
       <personname>Trevor Campbell</personname>
-      <department>Department of Statistics</department>
-      <institution>University of British Columbia</institution>
-      <website>
-        <url href="https://trevorcampbell.me/" visual="trevorcampbell.me"/>
-      </website>
     </author>
     <author>
       <personname>Melissa Lee</personname>
-      <department>Department of Statistics</department>
-      <institution>University of British Columbia</institution>
-      <website>
-        <url href="https://www.stat.ubc.ca/users/melissa-lee" visual="stat.ubc.ca/users/melissa-lee"/>
-      </website>
     </author>
     <date>
       <today/>
@@ -49,21 +34,11 @@
     <titlepage-items/>
   </titlepage>
 
-  <abstract>
-    <p>
-      This is a textbook for teaching a first introduction to data science.
-      We define <term>data science</term> as the process of generating insight from data
-      through <term>reproducible</term> and <term>auditable</term> processes.
-      In this book, you will learn how to identify common problems in data science
-      and solve those problems with reproducible and auditable workflows using the
-      R programming language.
-    </p>
-  </abstract>
-
   <preface xml:id="welcome">
     <title>Welcome!</title>
     <p>
-      This is the <url href="https://datasciencebook.ca/" visual="datasciencebook.ca/">website</url>
+      This is the PreTeXt version of <em>Data Science: A First Introduction</em>.
+      Here is the original <url href="https://datasciencebook.ca/" visual="datasciencebook.ca/">website</url>
       for <em>Data Science: A First Introduction</em>.
       You can read the web version of the book on this site. Click a section in the table of
       contents on the left side of the page to navigate to it. If you are on a mobile device,
@@ -77,7 +52,7 @@
     </p>
     <p>
       For the Python version of this textbook, visit
-      <url href="https://python.datasciencebook.ca" visual="python.datasciencebook.ca"/>.
+      <url href="https://python.datasciencebook.ca" visual="python.datasciencebook.ca">https://python.datasciencebook.ca</url>.
     </p>
     <p>
       This book is listed in a number of open educational resource (OER) collections:
