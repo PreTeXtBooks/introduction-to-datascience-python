@@ -196,11 +196,11 @@ airbnb |&gt;
 # A tibble: 1 × 2
       n proportion
   &lt;int&gt;      &lt;dbl&gt;
-1  3443      0.749
+1  3434      0.747
       </pre>
       <p>
         We can see that the proportion of <c>Entire home/apt</c> listings in
-        the data set is 0.749. This value, 0.749, is the population parameter. Remember, this
+        the data set is 0.747. This value, 0.747, is the population parameter. Remember, this
         parameter value is usually unknown in real data analysis problems, as it is
         typically not possible to make measurements for an entire population.
       </p>
@@ -233,11 +233,11 @@ airbnb_sample_1
 # A tibble: 1 × 2
       n  prop
   &lt;int&gt; &lt;dbl&gt;
-1    29  0.725
+1    28  0.7
       </pre>
       <p>
         Here we see that the proportion of entire home/apartment listings in this
-        random sample is 0.72. Wow&#x2014;that&#x2019;s close to our
+        random sample is 0.7. Wow&#x2014;that&#x2019;s close to our
         true population value! But remember, we computed the proportion using a random sample of size 40.
         This has two consequences. First, this value is only an <em>estimate</em>, i.e., our best guess
         of our population parameter using this sample.
@@ -262,7 +262,7 @@ airbnb_sample_2
 # A tibble: 1 × 2
       n  prop
   &lt;int&gt; &lt;dbl&gt;
-1    31  0.775
+1    35  0.875
       </pre>
       <p>
         Confirmed! We get a different value for our estimate this time.
@@ -297,13 +297,22 @@ samples
         </input>
       </program>
       <pre>
-# A tibble: 800,000 × 9
-# Groups:   replicate [20000]
-   replicate    id neighborhood room_type       accommodates bathrooms bedrooms  beds price
-       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1         1   342 Downtown     Entire home/apt            2 1 bath            1     1   100
- 2         1  1021 Kitsilano    Private room               1 shared           0     1    55
-...
+## # A tibble: 800,000 × 9
+## # Groups:   replicate [20,000]
+##    replicate    id neighbourhood room_type accommodates bathrooms bedrooms  beds
+##        &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;
+##  1         1  4403 Downtown      Entire h…            2 1 bath           1     1
+##  2         1   902 Kensington-C… Private …            2 1 shared…        1     1
+##  3         1  3808 Hastings-Sun… Entire h…            6 1.5 baths        1     3
+##  4         1   561 Kensington-C… Entire h…            6 1 bath           2     2
+##  5         1  3385 Mount Pleasa… Entire h…            4 1 bath           1     1
+##  6         1  4232 Shaughnessy   Entire h…            6 1.5 baths        2     2
+##  7         1  1169 Downtown      Entire h…            3 1 bath           1     1
+##  8         1   959 Kitsilano     Private …            1 1.5 shar…        1     1
+##  9         1  2171 Downtown      Entire h…            2 1 bath           1     1
+## 10         1  1258 Dunbar South… Entire h…            4 1 bath           2     2
+## # ℹ 799,990 more rows
+## # ℹ 1 more variable: price &lt;dbl&gt;
       </pre>
       <p>
         Notice that the column <c>replicate</c> indicates the replicate, or sample, to which
@@ -318,12 +327,17 @@ tail(samples)
         </input>
       </program>
       <pre>
-# A tibble: 6 × 9
-# Groups:   replicate [1]
-   replicate    id neighborhood    room_type       accommodates bathrooms bedrooms  beds price
-       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     20000  3412 Downtown        Entire home/apt            2 1 bath            1     1    89
-...
+## # A tibble: 6 × 9
+## # Groups:   replicate [1]
+##   replicate    id neighbourhood  room_type accommodates bathrooms bedrooms  beds
+##       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;
+## 1     20000  3414 Marpole        Entire h…            4 1 bath           2     2
+## 2     20000  1974 Hastings-Sunr… Private …            2 1 shared…        1     1
+## 3     20000  1846 Riley Park     Entire h…            4 1 bath           2     3
+## 4     20000   862 Downtown       Entire h…            5 2 baths          2     2
+## 5     20000  3295 Victoria-Fras… Private …            2 1 shared…        1     1
+## 6     20000   997 Dunbar Southl… Private …            1 1.5 shar…        1     1
+## # ℹ 1 more variable: price &lt;dbl&gt;
       </pre>
       <p>
         Now that we have obtained the samples, we need to compute the
@@ -348,24 +362,30 @@ tail(sample_estimates)
         </input>
       </program>
       <pre>
-# A tibble: 20,000 × 2
-   replicate sample_proportion
-       &lt;int&gt;             &lt;dbl&gt;
- 1         1             0.725
- 2         2             0.775
- 3         3             0.750
- 4         4             0.700
- 5         5             0.725
-...
-# A tibble: 6 × 2
-   replicate sample_proportion
-       &lt;int&gt;             &lt;dbl&gt;
-1     19995             0.750
-2     19996             0.725
-3     19997             0.800
-4     19998             0.775
-5     19999             0.700
-6     20000             0.750
+## # A tibble: 20,000 × 2
+##    replicate sample_proportion
+##        &lt;int&gt;             &lt;dbl&gt;
+##  1         1             0.85 
+##  2         2             0.85 
+##  3         3             0.65 
+##  4         4             0.7  
+##  5         5             0.75 
+##  6         6             0.725
+##  7         7             0.775
+##  8         8             0.775
+##  9         9             0.7  
+## 10        10             0.675
+## # ℹ 19,990 more rows
+
+## # A tibble: 6 × 2
+##   replicate sample_proportion
+##       &lt;int&gt;             &lt;dbl&gt;
+## 1     19995             0.75 
+## 2     19996             0.675
+## 3     19997             0.625
+## 4     19998             0.75 
+## 5     19999             0.875
+## 6     20000             0.65
       </pre>
       <p>
         We can now visualize the sampling distribution of sample proportions
@@ -395,10 +415,7 @@ sampling_distribution
 
       <p>
         The sampling distribution in <xref ref="fig-inference-proportions-sampling-dist"/> appears
-        to be bell-shaped, is roughly symmetric, and has one peak. It is centered
-        around 0.7 and the sample proportions
-        range from about 0.5 to about 0.9. In fact, we can
-        calculate the mean of the sample proportions.
+        to be bell-shaped, is roughly symmetric, and has one peak. It is centered around 0.7 and the sample proportions range from about 0.4 to about 1. In fact, we can calculate the mean of the sample proportions.
         <idx><h>sampling distribution</h><h>shape</h></idx>
       </p>
       <program language="r">
@@ -411,11 +428,11 @@ sample_estimates |&gt;
 # A tibble: 1 × 1
   mean_proportion
             &lt;dbl&gt;
-1           0.749
+1           0.747
       </pre>
       <p>
         We notice that the sample proportions are centered around the population
-        proportion value, 0.749! In general, the mean of
+        proportion value, 0.747! In general, the mean of
         the sampling distribution should be equal to the population proportion.
         This is great news because it means that the sample proportion is neither an overestimate nor an
         underestimate of the population proportion.
@@ -477,11 +494,11 @@ population_parameters
 # A tibble: 1 × 1
   mean_price
        &lt;dbl&gt;
-1       153.
+1     154.51
       </pre>
       <p>
         The price per night of all Airbnb rentals in Vancouver, BC
-        is $153, on average. This value is our
+        is $154.51, on average. This value is our
         population parameter since we are calculating it using the population data.
         <idx><h>population</h><h>parameter</h></idx>
       </p>
@@ -532,14 +549,14 @@ estimates
 # A tibble: 1 × 1
   mean_price
        &lt;dbl&gt;
-1       155.
+1     155.80
       </pre>
       <p>
         The average value of the sample of size 40
-        is $155.33. This
+        is $155.80. This
         number is a point estimate for the mean of the full population.
         Recall that the population mean was
-        $153. So our estimate was fairly close to
+        $154.51. So our estimate was fairly close to
         the population parameter: the mean was about
         1.5% off. Note that we usually cannot compute the estimate&#x2019;s accuracy in practice
         since we do not have access to the population parameter; if we did, we wouldn&#x2019;t
@@ -564,12 +581,22 @@ samples
         </input>
       </program>
       <pre>
-# A tibble: 800,000 × 9
-# Groups:   replicate [20000]
-   replicate    id neighborhood room_type       accommodates bathrooms bedrooms  beds price
-       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1         1   342 Downtown     Entire home/apt            2 1 bath            1     1   100
-...
+## # A tibble: 800,000 × 9
+## # Groups:   replicate [20,000]
+##    replicate    id neighbourhood room_type accommodates bathrooms bedrooms  beds
+##        &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;
+##  1         1  1177 Downtown      Entire h…            4 2 baths          2     2
+##  2         1  4063 Downtown      Entire h…            2 1 bath           1     1
+##  3         1  2641 Kitsilano     Private …            1 1 shared…        1     1
+##  4         1  1941 West End      Entire h…            2 1 bath           1     1
+##  5         1  2431 Mount Pleasa… Entire h…            2 1 bath           1     1
+##  6         1  1871 Arbutus Ridge Entire h…            4 1 bath           2     2
+##  7         1  2557 Marpole       Private …            3 1 privat…        1     2
+##  8         1  3534 Downtown      Entire h…            2 1 bath           1     1
+##  9         1  4379 Downtown      Entire h…            4 1 bath           1     0
+## 10         1  2161 Downtown      Entire h…            4 2 baths          2     2
+## # ℹ 799,990 more rows
+## # ℹ 1 more variable: price &lt;dbl&gt;
       </pre>
       <p>
         Now we can calculate the sample mean for each replicate and plot the sampling
@@ -592,13 +619,20 @@ sampling_distribution_40
         </input>
       </program>
       <pre>
-# A tibble: 20,000 × 2
-   replicate mean_price
-       &lt;int&gt;      &lt;dbl&gt;
- 1         1       142.
- 2         2       168.
- 3         3       155.
-...
+## # A tibble: 20,000 × 2
+##    replicate mean_price
+##        &lt;int&gt;      &lt;dbl&gt;
+##  1         1     160.06
+##  2         2     173.18
+##  3         3     131.20
+##  4         4     176.96
+##  5         5     125.65
+##  6         6     148.84
+##  7         7     134.82
+##  8         8     137.26
+##  9         9     166.11
+## 10        10     157.81
+## # ℹ 19,990 more rows
       </pre>
 
       <figure xml:id="fig-inference-means-sampling-dist">
@@ -611,10 +645,10 @@ sampling_distribution_40
         has one peak and is
         <idx><h>sampling distribution</h><h>shape</h></idx>
         bell-shaped. Most of the estimates are between
-        about $100 and $200; but there is
+        about $140 and $170; but there is
         a good fraction of cases outside this range (i.e., where the point estimate was
         not close to the population parameter). So it does indeed look like we were
-        quite lucky when we estimated the population mean with only about 1.5% error.
+        quite lucky when we estimated the population mean with only about 0.8% error.
       </p>
       <p>
         Let&#x2019;s visualize the population distribution, distribution of the sample, and
@@ -785,7 +819,7 @@ sampling_distribution_40
         Once again, suppose we are
         interested in estimating the population mean price per night of all Airbnb
         listings in Vancouver, Canada, using a single sample size of 40.
-        Recall our point estimate was $155.33. The
+        Recall our point estimate was $155.80. The
         histogram of prices in the sample is displayed in <xref ref="fig-inference-one-sample-hist"/>.
       </p>
       <program language="r">
@@ -801,13 +835,20 @@ one_sample_dist
         </input>
       </program>
       <pre>
-# A tibble: 40 × 8
-      id neighborhood        room_type       accommodates bathrooms bedrooms  beds price
-   &lt;dbl&gt; &lt;chr&gt;               &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1   342 Downtown            Entire home/apt            2 1 bath            1     1   100
- 2  1021 Kitsilano           Private room               1 shared            0     1    55
- 3  2453 Mount Pleasant      Entire home/apt            4 1 bath            2     2   125
-...
+## # A tibble: 40 × 8
+##       id neighbourhood     room_type accommodates bathrooms bedrooms  beds price
+##    &lt;dbl&gt; &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1  3928 Marpole           Private …            2 1 shared…        1     1    58
+##  2  3013 Kensington-Cedar… Entire h…            4 1 bath           2     2   112
+##  3  3156 Downtown          Entire h…            6 2 baths          2     2   151
+##  4  3873 Dunbar Southlands Private …            5 1 bath           2     3   700
+##  5  3632 Downtown Eastside Entire h…            6 2 baths          3     3   157
+##  6   296 Kitsilano         Private …            1 1 shared…        1     1   100
+##  7  3514 West End          Entire h…            2 1 bath           1     1   110
+##  8   594 Sunset            Entire h…            5 1 bath           3     3   105
+##  9  3305 Dunbar Southlands Entire h…            4 1 bath           1     2   196
+## 10   938 Downtown          Entire h…            7 2 baths          2     3   269
+## # ℹ 30 more rows
       </pre>
 
       <figure xml:id="fig-inference-one-sample-hist">
@@ -817,7 +858,7 @@ one_sample_dist
 
       <p>
         The histogram for the sample is skewed, with a few observations out to the right. The
-        mean of the sample is $155.33.
+        mean of the sample is $155.80.
         Remember, in practice, we usually only have this one sample from the population. So
         this sample and estimate are the only data we can work with.
       </p>
@@ -847,14 +888,14 @@ summarize(boot1, mean_price = mean(price))
         </input>
       </program>
       <pre>
-# A tibble: 1 × 1
-  mean_price
-       &lt;dbl&gt;
-1       148.
+## # A tibble: 1 × 2
+##   replicate mean_price
+##       &lt;int&gt;      &lt;dbl&gt;
+## 1         1     164.20
       </pre>
 
       <figure xml:id="fig-inference-one-bootstrap-sample">
-        <caption>Bootstrap distribution for one bootstrap sample.</caption>
+        <caption>Bootstrap distribution.</caption>
         <image source="images/inference/inference-one-bootstrap-sample.png" width="65%"/>
       </figure>
 
@@ -887,12 +928,34 @@ tail(boot20000)
         </input>
       </program>
       <pre>
-# A tibble: 800,000 × 9
-# Groups:   replicate [20000]
-   replicate    id neighborhood        room_type       accommodates bathrooms bedrooms  beds price
-       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;               &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1         1   342 Downtown            Entire home/apt            2 1 bath            1     1   100
-...
+## # A tibble: 800,000 × 9
+## # Groups:   replicate [20,000]
+##    replicate    id neighbourhood room_type accommodates bathrooms bedrooms  beds
+##        &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;
+##  1         1  1276 Hastings-Sun… Entire h…            2 1 bath           1     1
+##  2         1  3235 Hastings-Sun… Entire h…            2 1 bath           1     1
+##  3         1  1301 Oakridge      Entire h…           12 2 baths          2    12
+##  4         1   118 Grandview-Wo… Entire h…            4 1 bath           2     2
+##  5         1  2550 Downtown Eas… Private …            2 1.5 shar…        1     1
+##  6         1  1006 Grandview-Wo… Entire h…            5 1 bath           3     4
+##  7         1  3632 Downtown Eas… Entire h…            6 2 baths          3     3
+##  8         1  1923 West End      Entire h…            4 2 baths          2     2
+##  9         1  3873 Dunbar South… Private …            5 1 bath           2     3
+## 10         1  2349 Kerrisdale    Private …            2 1 shared…        1     1
+## # ℹ 799,990 more rows
+## # ℹ 1 more variable: price &lt;dbl&gt;
+
+## # A tibble: 6 × 9
+## # Groups:   replicate [1]
+##   replicate    id neighbourhood  room_type accommodates bathrooms bedrooms  beds
+##       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;
+## 1     20000  1949 Kitsilano      Entire h…            3 1 bath           1     1
+## 2     20000  1025 Kensington-Ce… Entire h…            3 1 bath           1     1
+## 3     20000  3013 Kensington-Ce… Entire h…            4 1 bath           2     2
+## 4     20000  2868 Downtown       Entire h…            2 1 bath           1     1
+## 5     20000  3156 Downtown       Entire h…            6 2 baths          2     2
+## 6     20000  1923 West End       Entire h…            4 2 baths          2     2
+## # ℹ 1 more variable: price &lt;dbl&gt;
       </pre>
       <p>
         Let&#x2019;s take a look at the histograms of the first six replicates of our bootstrap samples.
@@ -928,15 +991,15 @@ six_bootstrap_samples |&gt;
         </input>
       </program>
       <pre>
-# A tibble: 6 × 2
-  replicate mean_price
-      &lt;int&gt;      &lt;dbl&gt;
-1         1       148.
-2         2       162.
-3         3       159.
-4         4       143.
-5         5       170.
-6         6       152.
+## # A tibble: 6 × 2
+##   replicate mean_price
+##       &lt;int&gt;      &lt;dbl&gt;
+## 1         1     177.2 
+## 2         2     131.45
+## 3         3     179.10
+## 4         4     171.35
+## 5         5     191.32
+## 6         6     170.05
       </pre>
       <p>
         We can see that the bootstrap sample distributions and the sample means are
@@ -964,13 +1027,30 @@ boot_est_dist
         </input>
       </program>
       <pre>
-# A tibble: 20,000 × 2
-   replicate mean_price
-       &lt;int&gt;      &lt;dbl&gt;
- 1         1       148.
- 2         2       162.
- 3         3       159.
-...
+## # A tibble: 20,000 × 2
+##    replicate mean_price
+##        &lt;int&gt;      &lt;dbl&gt;
+##  1         1     177.2 
+##  2         2     131.45
+##  3         3     179.10
+##  4         4     171.35
+##  5         5     191.32
+##  6         6     170.05
+##  7         7     178.83
+##  8         8     154.78
+##  9         9     163.85
+## 10        10     209.28
+## # ℹ 19,990 more rows
+
+## # A tibble: 6 × 2
+##   replicate mean_price
+##       &lt;int&gt;      &lt;dbl&gt;
+## 1     19995     130.40
+## 2     19996     189.18
+## 3     19997     168.98
+## 4     19998     168.23
+## 5     19999     155.73
+## 6     20000     136.95
       </pre>
 
       <figure xml:id="fig-inference-bootstrap-dist">
@@ -997,9 +1077,9 @@ boot_est_dist
         distribution lets us get a sense of the point estimate&#x2019;s variability. The
         second important point is that the means of these two distributions are
         different. The sampling distribution is centered at
-        $153, the population mean value. However, the bootstrap
+        $154.51, the population mean value. However, the bootstrap
         distribution is centered at the original sample&#x2019;s mean price per night,
-        $155.33. Because we are resampling from the
+        $155.80. Because we are resampling from the
         original sample repeatedly, we see that the bootstrap distribution is centered
         at the original sample&#x2019;s mean value (unlike the sampling distribution of the
         sample mean, which is centered at the population parameter value).
@@ -1070,11 +1150,11 @@ bounds
         </input>
       </program>
       <pre>
-  2.5%  97.5%
-119.82 201.57
+##  2.5% 97.5% 
+##   119   204
       </pre>
       <p>
-        Our interval, $119.82 to $201.57, captures
+        Our interval, $119.28 to $203.63, captures
         the middle 95% of the sample mean prices in the bootstrap distribution. We can
         visualize the interval on our distribution in Figure
         <xref ref="fig-inference-bootstrap-ci"/>.
@@ -1089,11 +1169,11 @@ bounds
         To finish our estimation of the population parameter, we would report the point
         estimate and our confidence interval&#x2019;s lower and upper bounds. Here the sample
         mean price per night of 40 Airbnb listings was
-        $155.33, and we are 95% &#x201C;confident&#x201D; that the true
+        $155.80, and we are 95% &#x201C;confident&#x201D; that the true
         population mean price per night for all Airbnb listings in Vancouver is between
-        $119.82 and $201.57.
+        $119.28 and $203.63.
         Notice that our interval does indeed contain the true
-        population mean value, $153! However, in
+        population mean value, $154.51! However, in
         practice, we would not know whether our interval captured the population
         parameter or not because we usually only have a single sample, not the entire
         population. This is the best we can do when we only have one sample!
