@@ -26,11 +26,11 @@
       <li><p>Define common population parameters (e.g., mean, proportion, standard deviation) that are often estimated using sampled data, and estimate these from a sample.</p></li>
       <li><p>Define the following statistical sampling terms: population, sample, population parameter, point estimate, and sampling distribution.</p></li>
       <li><p>Explain the difference between a population parameter and a sample point estimate.</p></li>
-      <li><p>Use R to draw random samples from a finite population.</p></li>
-      <li><p>Use R to create a sampling distribution from a finite population.</p></li>
+      <li><p>Use Python to draw random samples from a finite population.</p></li>
+      <li><p>Use Python to create a sampling distribution from a finite population.</p></li>
       <li><p>Describe how sample size influences the sampling distribution.</p></li>
       <li><p>Define bootstrapping.</p></li>
-      <li><p>Use R to create a bootstrap distribution to approximate a sampling distribution.</p></li>
+      <li><p>Use Python to create a bootstrap distribution to approximate a sampling distribution.</p></li>
       <li><p>Contrast the bootstrap and sampling distributions.</p></li>
     </ul>
   </section>
@@ -148,13 +148,11 @@
         night.
       </p>
       <idx><h>seed</h><h>set.seed</h></idx>
-      <program language="r">
+      <program language="python">
         <input>
-library(tidyverse)
+import pandas as pd
 
-set.seed(123)
-
-airbnb &lt;- read_csv("data/listings.csv")
+airbnb = pd.read_csv(&quot;data/listings.csv&quot;)
 airbnb
         </input>
       </program>
@@ -183,13 +181,9 @@ airbnb
         <idx><h>sum</h></idx>
         <idx><h>nrow</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-airbnb |&gt;
-  summarize(
-    n =  sum(room_type == "Entire home/apt"),
-    proportion = sum(room_type == "Entire home/apt") / nrow(airbnb)
-  )
+airbnb[&quot;room_type&quot;].value_counts(normalize=True)
         </input>
       </program>
       <pre>
@@ -215,18 +209,14 @@ airbnb |&gt;
         package to take the sample. The arguments of <c>rep_sample_n</c> are (1) the data frame to
         sample from, and (2) the size of the sample to take.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-library(infer)
+import numpy as np
 
-sample_1 &lt;- rep_sample_n(tbl = airbnb, size = 40)
 
-airbnb_sample_1 &lt;- summarize(sample_1,
-  n = sum(room_type == "Entire home/apt"),
-  prop = sum(room_type == "Entire home/apt") / 40
-)
+np.random.seed(155)
 
-airbnb_sample_1
+airbnb.sample(n=40)[&quot;room_type&quot;].value_counts(normalize=True)
         </input>
       </program>
       <pre>
@@ -246,16 +236,9 @@ airbnb_sample_1
         if we were to take <em>another</em> random sample of size 40 and compute the proportion for that sample,
         we would not get the same answer:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-sample_2 &lt;- rep_sample_n(airbnb, size = 40)
-
-airbnb_sample_2 &lt;- summarize(sample_2,
-  n = sum(room_type == "Entire home/apt"),
-  prop = sum(room_type == "Entire home/apt") / 40
-)
-
-airbnb_sample_2
+airbnb.sample(n=40)[&quot;room_type&quot;].value_counts(normalize=True)
         </input>
       </program>
       <pre>
@@ -290,9 +273,12 @@ airbnb_sample_2
         <idx><h>rep_sample_n</h><h>reps argument</h></idx>
         <idx><h>rep_sample_n</h><h>size argument</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-samples &lt;- rep_sample_n(airbnb, size = 40, reps = 20000)
+samples = pd.concat([
+    airbnb.sample(40).assign(replicate=n)
+    for n in range(20_000)
+])
 samples
         </input>
       </program>
@@ -316,14 +302,19 @@ samples
       </pre>
       <p>
         Notice that the column <c>replicate</c> indicates the replicate, or sample, to which
-        each listing belongs. Above, since by default R only prints the first few rows,
+        each listing belongs. Above, since by default Python only prints the first few rows,
         it looks like all of the listings have <c>replicate</c> set to 1. But you can
         check the last few entries using the <c>tail()</c> function to verify that
         we indeed created 20,000 samples (or replicates).
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-tail(samples)
+(
+    samples
+    .groupby(&quot;replicate&quot;)
+    [&quot;room_type&quot;]
+    .value_counts(normalize=True)
+)
         </input>
       </program>
       <pre>
@@ -350,15 +341,15 @@ tail(samples)
         <idx><h>group_by</h></idx>
         <idx><h>summarize</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-sample_estimates &lt;- samples |&gt;
-  group_by(replicate) |&gt;
-  summarize(sample_proportion = sum(room_type == "Entire home/apt") / 40)
-
-sample_estimates
-
-tail(sample_estimates)
+(
+    samples
+    .groupby(&quot;replicate&quot;)
+    [&quot;room_type&quot;]
+    .value_counts(normalize=True)
+    .reset_index(name=&quot;sample_proportion&quot;)
+)
         </input>
       </program>
       <pre>
@@ -397,14 +388,18 @@ tail(sample_estimates)
         such that we <em>do</em> have access to the full population, which lets us visualize the
         sampling distribution directly for learning purposes.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-sampling_distribution &lt;- ggplot(sample_estimates, aes(x = sample_proportion)) +
-  geom_histogram(color = "lightgrey", bins = 12) +
-  labs(x = "Sample proportions", y = "Count") +
-  theme(text = element_text(size = 12))
+sample_estimates = (
+    samples
+    .groupby(&quot;replicate&quot;)
+    [&quot;room_type&quot;]
+    .value_counts(normalize=True)
+    .reset_index(name=&quot;sample_proportion&quot;)
+)
 
-sampling_distribution
+sample_estimates = sample_estimates[sample_estimates[&quot;room_type&quot;] == &quot;Entire home/apt&quot;]
+sample_estimates
         </input>
       </program>
 
@@ -418,10 +413,16 @@ sampling_distribution
         to be bell-shaped, is roughly symmetric, and has one peak. It is centered around 0.7 and the sample proportions range from about 0.4 to about 1. In fact, we can calculate the mean of the sample proportions.
         <idx><h>sampling distribution</h><h>shape</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-sample_estimates |&gt;
-  summarize(mean_proportion = mean(sample_proportion))
+sampling_distribution = alt.Chart(sample_estimates).mark_bar().encode(
+    x=alt.X(&quot;sample_proportion&quot;)
+        .bin(maxbins=20)
+        .title(&quot;Sample proportions&quot;),
+    y=alt.Y(&quot;count()&quot;).title(&quot;Count&quot;),
+)
+
+sampling_distribution
         </input>
       </program>
       <pre>
@@ -457,14 +458,9 @@ sample_estimates |&gt;
         the average could help them tell whether a particular listing is overpriced.
         We can visualize the population distribution of the price per night with a histogram.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-population_distribution &lt;- ggplot(airbnb, aes(x = price)) +
-  geom_histogram(color = "lightgrey") +
-  labs(x = "Price per night (dollars)", y = "Count") +
-  theme(text = element_text(size = 12))
-
-population_distribution
+sample_estimates[&quot;sample_proportion&quot;].mean()
         </input>
       </program>
 
@@ -482,12 +478,16 @@ population_distribution
         Along with visualizing the population, we can calculate the population mean,
         the average price per night for all the Airbnb listings.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-population_parameters &lt;- airbnb |&gt;
-  summarize(mean_price = mean(price))
+population_distribution = alt.Chart(airbnb).mark_bar().encode(
+    x=alt.X(&quot;price&quot;)
+        .bin(maxbins=30)
+        .title(&quot;Price per night (dollars)&quot;),
+    y=alt.Y(&quot;count()&quot;, title=&quot;Count&quot;),
+)
 
-population_parameters
+population_distribution
         </input>
       </program>
       <pre>
@@ -509,13 +509,12 @@ population_parameters
         and resources allow. Let&#x2019;s say we could do this for 40 listings. What would
         such a sample look like? Let&#x2019;s take advantage of the fact that we do have
         access to the population data and simulate taking one random sample of 40
-        listings in R, again using <c>rep_sample_n</c>.
+        listings in Python, again using <c>rep_sample_n</c>.
         <idx><h>rep_sample_n</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-one_sample &lt;- airbnb |&gt;
-  rep_sample_n(40)
+airbnb[&quot;price&quot;].mean()
         </input>
       </program>
       <p>
@@ -524,19 +523,9 @@ one_sample &lt;- airbnb |&gt;
         of our sample.
         <idx><h>ggplot</h><h>geom_histogram</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-sample_distribution &lt;- ggplot(one_sample, aes(price)) +
-  geom_histogram(color = "lightgrey") +
-  labs(x = "Price per night (dollars)", y = "Count") +
-  theme(text = element_text(size = 12))
-
-sample_distribution
-
-estimates &lt;- one_sample |&gt;
-  summarize(mean_price = mean(price))
-
-estimates
+one_sample = airbnb.sample(n=40)
         </input>
       </program>
 
@@ -574,10 +563,16 @@ estimates
         get a sense for this variation. In this case, we&#x2019;ll use 20,000 samples of size
         40.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-samples &lt;- rep_sample_n(airbnb, size = 40, reps = 20000)
-samples
+sample_distribution = alt.Chart(one_sample).mark_bar().encode(
+    x=alt.X(&quot;price&quot;)
+        .bin(maxbins=30)
+        .title(&quot;Price per night (dollars)&quot;),
+    y=alt.Y(&quot;count()&quot;).title(&quot;Count&quot;),
+)
+
+sample_distribution
         </input>
       </program>
       <pre>
@@ -602,20 +597,9 @@ samples
         Now we can calculate the sample mean for each replicate and plot the sampling
         distribution of sample means for samples of size 40.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-sample_estimates &lt;- samples |&gt;
-  group_by(replicate) |&gt;
-  summarize(mean_price = mean(price))
-
-sample_estimates
-
-sampling_distribution_40 &lt;- ggplot(sample_estimates, aes(x = mean_price)) +
-  geom_histogram(color = "lightgrey") +
-  labs(x = "Sample mean price per night (dollars)", y = "Count") +
-  theme(text = element_text(size = 12))
-
-sampling_distribution_40
+one_sample[&quot;price&quot;].mean()
         </input>
       </program>
       <pre>
@@ -792,7 +776,7 @@ sampling_distribution_40
       </note>
       <p>
         This section will explore how to create a bootstrap distribution from a single
-        sample using R. The process is visualized in <xref ref="fig-inference-intro-bootstrap"/>.
+        sample using Python. The process is visualized in <xref ref="fig-inference-intro-bootstrap"/>.
         For a sample of size <m>n</m>, you would do the following:
       </p>
       <ol>
@@ -812,7 +796,7 @@ sampling_distribution_40
     </subsection>
 
     <subsection xml:id="sec-inference-bootstrap-r">
-      <title>Bootstrapping in R</title>
+      <title>Bootstrapping in Python</title>
       <p>
         Let&#x2019;s continue working with our Airbnb example to illustrate how we might create
         and use a bootstrap distribution using just a single sample from the population.
@@ -822,16 +806,17 @@ sampling_distribution_40
         Recall our point estimate was $155.80. The
         histogram of prices in the sample is displayed in <xref ref="fig-inference-one-sample-hist"/>.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-one_sample
-
-one_sample_dist &lt;- ggplot(one_sample, aes(price)) +
-  geom_histogram(color = "lightgrey") +
-  labs(x = "Price per night (dollars)", y = "Count") +
-  theme(text = element_text(size = 12))
-
-one_sample_dist
+sample_estimates = (
+    samples
+    .groupby(&quot;replicate&quot;)
+    [&quot;price&quot;]
+    .mean()
+    .reset_index()
+    .rename(columns={&quot;price&quot;: &quot;mean_price&quot;})
+)
+sample_estimates
         </input>
       </program>
       <pre>
@@ -864,27 +849,25 @@ one_sample_dist
       </p>
       <p>
         We now perform steps 1&#x2013;5 listed above to generate a single bootstrap
-        sample in R and calculate a point estimate from that bootstrap sample. We will
+        sample in Python and calculate a point estimate from that bootstrap sample. We will
         use the <c>rep_sample_n</c> function as we did when we were
         creating our sampling distribution. But critically, note that we now
         pass <c>one_sample</c>&#x2014;our single sample of size 40&#x2014;as the first argument.
         And since we need to sample with replacement,
         we change the argument for <c>replace</c> from its default value of <c>FALSE</c> to <c>TRUE</c>.
-        <idx><h>bootstrap</h><h>in R</h></idx>
+        <idx><h>bootstrap</h><h>in Python</h></idx>
         <idx><h>rep_sample_n</h><h>bootstrap</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-boot1 &lt;- one_sample |&gt;
-  rep_sample_n(size = 40, replace = TRUE, reps = 1)
-boot1_dist &lt;- ggplot(boot1, aes(price)) +
-  geom_histogram(color = "lightgrey") +
-  labs(x = "Price per night (dollars)", y =  "Count") +
-  theme(text = element_text(size = 12))
+sampling_distribution = alt.Chart(sample_estimates).mark_bar().encode(
+    x=alt.X(&quot;mean_price&quot;)
+        .bin(maxbins=30)
+        .title(&quot;Sample mean price per night (dollars)&quot;),
+    y=alt.Y(&quot;count()&quot;).title(&quot;Count&quot;)
+)
 
-boot1_dist
-
-summarize(boot1, mean_price = mean(price))
+sampling_distribution
         </input>
       </program>
       <pre>
@@ -917,14 +900,9 @@ summarize(boot1, mean_price = mean(price))
         our original population; but since we do not have access to the population itself,
         this is often the best we can do.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-boot20000 &lt;- one_sample |&gt;
-  rep_sample_n(size = 40, replace = TRUE, reps = 20000)
-
-boot20000
-
-tail(boot20000)
+one_sample
         </input>
       </program>
       <pre>
@@ -960,16 +938,16 @@ tail(boot20000)
       <p>
         Let&#x2019;s take a look at the histograms of the first six replicates of our bootstrap samples.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-six_bootstrap_samples &lt;- boot20000 |&gt;
-  filter(replicate &lt;= 6)
+one_sample_dist = alt.Chart(one_sample).mark_bar().encode(
+    x=alt.X(&quot;price&quot;)
+        .bin(maxbins=30)
+        .title(&quot;Price per night (dollars)&quot;),
+    y=alt.Y(&quot;count()&quot;).title(&quot;Count&quot;),
+)
 
-ggplot(six_bootstrap_samples, aes(price)) +
-  geom_histogram(color = "lightgrey") +
-  labs(x = "Price per night (dollars)", y = "Count") +
-  facet_wrap(~replicate) +
-  theme(text = element_text(size = 12))
+one_sample_dist
         </input>
       </program>
 
@@ -983,11 +961,17 @@ ggplot(six_bootstrap_samples, aes(price)) +
         bootstrap samples differ. We can also calculate the sample mean for each of
         these six replicates.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-six_bootstrap_samples |&gt;
-  group_by(replicate) |&gt;
-  summarize(mean_price = mean(price))
+boot1 = one_sample.sample(frac=1, replace=True)
+boot1_dist = alt.Chart(boot1).mark_bar().encode(
+    x=alt.X(&quot;price&quot;)
+        .bin(maxbins=30)
+        .title(&quot;Price per night (dollars)&quot;),
+    y=alt.Y(&quot;count()&quot;, title=&quot;Count&quot;),
+)
+
+boot1_dist
         </input>
       </program>
       <pre>
@@ -1009,21 +993,9 @@ six_bootstrap_samples |&gt;
         distribution (<xref ref="fig-inference-bootstrap-dist"/>) suggests how we might expect
         our point estimate to behave if we took another sample.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-boot20000_means &lt;- boot20000 |&gt;
-  group_by(replicate) |&gt;
-  summarize(mean_price = mean(price))
-
-boot20000_means
-tail(boot20000_means)
-
-boot_est_dist &lt;- ggplot(boot20000_means, aes(x = mean_price)) +
-  geom_histogram(color = "lightgrey") +
-  labs(x = "Sample mean price per night (dollars)", y = "Count") +
-  theme(text = element_text(size = 12))
-
-boot_est_dist
+boot1[&quot;price&quot;].mean()
         </input>
       </program>
       <pre>
@@ -1132,21 +1104,20 @@ boot_est_dist
         <li><p>Find the value such that 97.5% of observations fall below it (the 97.5% percentile). Use that value as the upper bound of the interval.</p></li>
       </ol>
       <p>
-        To do this in R, we can use the <c>quantile()</c> function. Quantiles are expressed in proportions rather than
+        To do this in Python, we can use the <c>quantile()</c> function. Quantiles are expressed in proportions rather than
         percentages, so the 2.5th and 97.5th percentiles would be the 0.025 and 0.975 quantiles, respectively.
         <idx><h>percentile</h></idx>
         <idx><h>quantile</h></idx>
         <idx><h>pull</h></idx>
         <idx><h>select</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-bounds &lt;- boot20000_means |&gt;
-  select(mean_price) |&gt;
-  pull() |&gt;
-  quantile(c(0.025, 0.975))
-
-bounds
+boot20000 = pd.concat([
+    one_sample.sample(frac=1, replace=True).assign(replicate=n)
+    for n in range(20_000)
+])
+boot20000
         </input>
       </program>
       <pre>

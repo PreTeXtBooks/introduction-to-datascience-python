@@ -14,7 +14,7 @@
       <idx><h>regression</h><h>linear</h></idx>
       This chapter provides an introduction to the basic concept of linear
       regression, shows how to use <c>tidymodels</c> to perform linear
-      regression in R, and characterizes its strengths and weaknesses compared
+      regression in Python, and characterizes its strengths and weaknesses compared
       to K-NN regression. The focus is, as usual, on the case where there is a
       single predictor and single response variable of interest; but the chapter
       concludes with an example using <em>multivariable linear regression</em>
@@ -27,7 +27,7 @@
     <title>Chapter learning objectives</title>
     <p>By the end of the chapter, readers will be able to do the following:</p>
     <ul>
-      <li><p>Use R to fit simple and multivariable linear regression models on training data.</p></li>
+      <li><p>Use Python to fit simple and multivariable linear regression models on training data.</p></li>
       <li><p>Evaluate the linear regression model on test data.</p></li>
       <li><p>Compare and contrast predictions obtained from K-nearest neighbors regression to those obtained using linear regression from the same data set.</p></li>
       <li><p>Describe how linear regression is affected by outliers and multicollinearity.</p></li>
@@ -179,9 +179,9 @@ By using simple linear regression on this small data set to predict the sale pri
 
   <!-- ============================================================ -->
   <section xml:id="sec-regression2-in-r">
-    <title>Linear regression in R</title>
+    <title>Linear regression in Python</title>
     <p>
-      We can perform simple linear regression in R using <c>tidymodels</c>
+      We can perform simple linear regression in Python using <c>tidymodels</c>
       <idx>tidymodels</idx>
       in a very similar manner to how we performed K-NN regression.
       To do this, instead of creating a <c>nearest_neighbor</c> model
@@ -200,38 +200,43 @@ By using simple linear regression on this small data set to predict the sale pri
       after we choose our final model. Let's take care of that now.
       <idx><h>seed</h><h>set.seed</h></idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-library(tidyverse)
-library(tidymodels)
+import numpy as np
+import altair as alt
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+from sklearn import set_config
 
-set.seed(7)
+# Output dataframes instead of arrays
+set_config(transform_output=&quot;pandas&quot;)
 
-sacramento &lt;- read_csv("data/sacramento.csv")
+np.random.seed(1)
 
-sacramento_split &lt;- initial_split(sacramento, prop = 0.75, strata = price)
-sacramento_train &lt;- training(sacramento_split)
-sacramento_test  &lt;- testing(sacramento_split)
+sacramento = pd.read_csv(&quot;data/sacramento.csv&quot;)
+
+sacramento_train, sacramento_test = train_test_split(
+    sacramento, train_size=0.75
+)
       </input>
     </program>
     <p>
       Now that we have our training data, we will create the model specification
       and recipe, and fit our simple linear regression model:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-lm_spec &lt;- linear_reg() |&gt;
-  set_engine("lm") |&gt;
-  set_mode("regression")
+# fit the linear regression model
+lm = LinearRegression()
+lm.fit(
+   sacramento_train[[&quot;sqft&quot;]],  # A single-column data frame
+   sacramento_train[&quot;price&quot;]  # A series
+)
 
-lm_recipe &lt;- recipe(price ~ sqft, data = sacramento_train)
-
-lm_fit &lt;- workflow() |&gt;
-  add_recipe(lm_recipe) |&gt;
-  add_model(lm_spec) |&gt;
-  fit(data = sacramento_train)
-
-lm_fit
+# make a dataframe containing slope and intercept coefficients
+pd.DataFrame({&quot;slope&quot;: [lm.coef_[0]], &quot;intercept&quot;: [lm.intercept_]})
       </input>
     </program>
     <pre>
@@ -276,14 +281,18 @@ lm_fit
       house by approximately $135. Finally, we predict on the test data set to
       assess how well our model does:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-lm_test_results &lt;- lm_fit |&gt;
-  predict(sacramento_test) |&gt;
-  bind_cols(sacramento_test) |&gt;
-  metrics(truth = price, estimate = .pred)
+# make predictions
+sacramento_test[&quot;predicted&quot;] = lm.predict(sacramento_test[[&quot;sqft&quot;]])
 
-lm_test_results
+# calculate RMSPE
+RMSPE = mean_squared_error(
+    y_true=sacramento_test[&quot;price&quot;],
+    y_pred=sacramento_test[&quot;predicted&quot;]
+)**(1/2)
+
+RMSPE
       </input>
     </program>
     <pre>
@@ -311,30 +320,29 @@ lm_test_results
       that we can qualitatively assess if the model seems to fit the data well.
       <xref ref="fig-regression2-lm-predict-all"/> displays the result.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-sqft_prediction_grid &lt;- tibble(
-    sqft = c(
-        sacramento |&gt; select(sqft) |&gt; min(),
-        sacramento |&gt; select(sqft) |&gt; max()
-    )
+sqft_prediction_grid = sacramento[[&quot;sqft&quot;]].agg([&quot;min&quot;, &quot;max&quot;])
+sqft_prediction_grid[&quot;predicted&quot;] = lm.predict(sqft_prediction_grid)
+
+all_points = alt.Chart(sacramento).mark_circle().encode(
+    x=alt.X(&quot;sqft&quot;)
+        .scale(zero=False)
+        .title(&quot;House size (square feet)&quot;),
+    y=alt.Y(&quot;price&quot;)
+        .axis(format=&quot;$,.0f&quot;)
+        .scale(zero=False)
+        .title(&quot;Price (USD)&quot;)
 )
 
-sacr_preds &lt;- lm_fit |&gt;
-  predict(sqft_prediction_grid) |&gt;
-  bind_cols(sqft_prediction_grid)
+sacr_preds_plot = all_points + alt.Chart(sqft_prediction_grid).mark_line(
+    color=&quot;#ff7f0e&quot;
+).encode(
+    x=&quot;sqft&quot;,
+    y=&quot;predicted&quot;
+)
 
-lm_plot_final &lt;- ggplot(sacramento, aes(x = sqft, y = price)) +
-  geom_point(alpha = 0.4) +
-  geom_line(data = sacr_preds,
-            mapping = aes(x = sqft, y = .pred),
-            color = "steelblue",
-            linewidth = 1) +
-  xlab("House size (square feet)") +
-  ylab("Price (USD)") +
-  scale_y_continuous(labels = dollar_format())
-
-lm_plot_final
+sacr_preds_plot
       </input>
     </program>
 
@@ -351,13 +359,13 @@ lm_plot_final
       <c>extract_fit_parsnip</c> function, and then apply the <c>tidy</c>
       function to convert the result into a data frame:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-coeffs &lt;- lm_fit |&gt;
-             extract_fit_parsnip() |&gt;
-             tidy()
-
-coeffs
+mlm = LinearRegression()
+mlm.fit(
+    sacramento_train[[&quot;sqft&quot;, &quot;beds&quot;]],
+    sacramento_train[&quot;price&quot;]
+)
       </input>
     </program>
     <pre>
@@ -472,20 +480,65 @@ coeffs
       response variable. We will start by changing the formula in the recipe
       to include both the <c>sqft</c> and <c>beds</c> variables as predictors:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-mlm_recipe &lt;- recipe(price ~ sqft + beds, data = sacramento_train)
+sacramento_test[&quot;predicted&quot;] = mlm.predict(sacramento_test[[&quot;sqft&quot;,&quot;beds&quot;]])
+
+lm_mult_test_RMSPE = mean_squared_error(
+    y_true=sacramento_test[&quot;price&quot;],
+    y_pred=sacramento_test[&quot;predicted&quot;]
+)**(1/2)
+lm_mult_test_RMSPE
       </input>
     </program>
     <p>Now we can build our workflow and fit the model:</p>
-    <program language="r">
+    <program language="python">
       <input>
-mlm_fit &lt;- workflow() |&gt;
-  add_recipe(mlm_recipe) |&gt;
-  add_model(lm_spec) |&gt;
-  fit(data = sacramento_train)
+# create a prediction pt grid
+xvals = np.linspace(
+    sacramento_train[&quot;sqft&quot;].min(), sacramento_train[&quot;sqft&quot;].max(), 50
+)
+yvals = np.linspace(
+    sacramento_train[&quot;beds&quot;].min(), sacramento_train[&quot;beds&quot;].max(), 50
+)
+xygrid = np.array(np.meshgrid(xvals, yvals)).reshape(2, -1).T
+xygrid = pd.DataFrame(xygrid, columns=[&quot;sqft&quot;, &quot;beds&quot;])
 
-mlm_fit
+# add prediction
+mlmPredGrid = mlm.predict(xygrid)
+
+fig = px.scatter_3d(
+    sacramento_train,
+    x=&quot;sqft&quot;,
+    y=&quot;beds&quot;,
+    z=&quot;price&quot;,
+    opacity=0.4,
+    labels={&quot;sqft&quot;: &quot;Size (sq ft)&quot;, &quot;beds&quot;: &quot;Bedrooms&quot;, &quot;price&quot;: &quot;Price (USD)&quot;},
+)
+
+fig.update_traces(marker={&quot;size&quot;: 2, &quot;color&quot;: &quot;red&quot;})
+
+fig.add_trace(
+    go.Surface(
+        x=xvals,
+        y=yvals,
+        z=mlmPredGrid.reshape(50, -1),
+        name=&quot;Predictions&quot;,
+        colorscale=&quot;viridis&quot;,
+        colorbar={&quot;title&quot;: &quot;Price (USD)&quot;}
+    )
+)
+
+fig.update_layout(
+    margin=dict(l=0, r=0, b=0, t=1),
+    template=&quot;plotly_white&quot;,
+)
+
+# if HTML, use the plotly 3d image; if PDF, use static image
+if &quot;BOOK_BUILD_TYPE&quot; in os.environ and os.environ[&quot;BOOK_BUILD_TYPE&quot;] == &quot;PDF&quot;:
+    glue(&quot;fig:08-3DlinReg&quot;, Image(&quot;img/regression2/plot3d_linear_regression.png&quot;))
+else:
+    glue(&quot;fig:08-3DlinReg&quot;, fig)
       </input>
     </program>
     <pre>
@@ -506,14 +559,9 @@ mlm_fit
 ##     72547.8        160.6     -29644.3
     </pre>
     <p>And finally, we make predictions on the test data set to assess the quality of our model:</p>
-    <program language="r">
+    <program language="python">
       <input>
-lm_mult_test_results &lt;- mlm_fit |&gt;
-  predict(sacramento_test) |&gt;
-  bind_cols(sacramento_test) |&gt;
-  metrics(truth = price, estimate = .pred)
-
-lm_mult_test_results
+mlm.coef_
       </input>
     </program>
     <pre>
@@ -545,13 +593,9 @@ lm_mult_test_results
       regression, and thus describe the plane mathematically. We can extract the
       slope values from our model object as shown below:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-mcoeffs &lt;- mlm_fit |&gt;
-             extract_fit_parsnip() |&gt;
-             tidy()
-
-mcoeffs
+mlm.intercept_
       </input>
     </program>
     <pre>
@@ -592,9 +636,9 @@ mcoeffs
       models and we want to make a final comparison, we can do so by comparing
       the prediction error of the methods on the test data.
 </p>
-    <program language="r">
+    <program language="python">
       <input>
-lm_mult_test_results
+lm_mult_test_RMSPE
       </input>
     </program>
     <pre>
@@ -761,13 +805,8 @@ lm_mult_test_results
       simple linear regression, as shown in
       <xref ref="fig-regression2-curve"/>.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-set.seed(1)
-df &lt;- tibble(x = sample(10000, 100, replace = TRUE) / 10000)
-df &lt;- df |&gt;
-  mutate(y = x^3 + 0.2 * sample(10000, 100, replace = TRUE) / 10000 - 0.1)
-
 df
       </input>
     </program>
@@ -801,10 +840,9 @@ df
       predictor variable</em> <c>z</c> using the <c>mutate</c> function:
       <idx>predictor design</idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-df &lt;- df |&gt;
-        mutate(z = x^3)
+df[&quot;z&quot;] = df[&quot;x&quot;] ** 3
       </input>
     </program>
     <p>

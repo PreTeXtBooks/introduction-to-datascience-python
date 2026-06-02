@@ -18,9 +18,9 @@
     <ul>
       <li><p>Define the term &#x201C;tidy data&#x201D;.</p></li>
       <li><p>Discuss the advantages of storing data in a tidy data format.</p></li>
-      <li><p>Define what vectors, lists, and data frames are in R, and describe how they relate to
+      <li><p>Define what vectors, lists, and data frames are in Python, and describe how they relate to
         each other.</p></li>
-      <li><p>Describe the common types of data in R and their uses.</p></li>
+      <li><p>Describe the common types of data in Python and their uses.</p></li>
       <li><p>Use the following functions for their intended data wrangling tasks:
         <ul>
           <li><p><c>c</c></p></li>
@@ -52,10 +52,10 @@
     <title>Data frames, vectors, and lists</title>
     <p>
       In <xref ref="ch-intro"/> and <xref ref="ch-reading"/>, <em>data frames</em> were the focus:
-      we learned how to import data into R as a data frame, and perform basic operations on data frames
-      in R. In the remainder of this book, this pattern continues. The vast majority of tools we use
-      will require that data are represented as a data frame in R. Therefore, in this section, we will
-      dig more deeply into what data frames are and how they are represented in R. This knowledge will
+      we learned how to import data into Python as a data frame, and perform basic operations on data frames
+      in Python. In the remainder of this book, this pattern continues. The vast majority of tools we use
+      will require that data are represented as a data frame in Python. Therefore, in this section, we will
+      dig more deeply into what data frames are and how they are represented in Python. This knowledge will
       be helpful in effectively utilizing these objects in our data analyses.
     </p>
 
@@ -64,7 +64,7 @@
       <p>
         A data frame
         <idx><h>data frame</h><h>definition</h></idx>
-        is a table-like structure for storing data in R. Data frames are important to learn about because
+        is a table-like structure for storing data in Python. Data frames are important to learn about because
         most data that you will encounter in practice can be naturally stored as a table. In order to
         define data frames precisely, we need to introduce a few technical terms:
       </p>
@@ -77,7 +77,7 @@
           given entity.</p></li>
       </ul>
       <p>
-        Given these definitions, a <em>data frame</em> is a tabular data structure in R that is designed
+        Given these definitions, a <em>data frame</em> is a tabular data structure in Python that is designed
         to store observations, variables, and their values. Most commonly, each column in a data frame
         corresponds to a variable, and each row corresponds to an observation. For example,
         <xref ref="fig-wrangling-obs"/> displays a data set of city populations. Here, the variables are
@@ -93,7 +93,7 @@
       </figure>
 
       <p>
-        R stores the columns of a data frame as either <em>lists</em> or <em>vectors</em>. For example,
+        Python stores the columns of a data frame as either <em>lists</em> or <em>vectors</em>. For example,
         the data frame in <xref ref="fig-wrangling-vectors"/> has three vectors whose names are
         <c>region</c>, <c>year</c> and <c>population</c>. The next two sections will explain what lists
         and vectors are.
@@ -108,21 +108,23 @@
     <subsection xml:id="sec-wrangling-what-is-vector">
       <title>What is a vector?</title>
       <p>
-        In R, <em>vectors</em>
+        In Python, <em>vectors</em>
         <idx><h>vector</h></idx>
         <idx><h>atomic vector</h><see>vector</see></idx>
         are objects that can contain one or more elements. The vector elements are ordered, and they must
-        all be of the same <em>data type</em>; R has several different basic data types, as shown in
+        all be of the same <em>data type</em>; Python has several different basic data types, as shown in
         <xref ref="tab-wrangling-datatype-table"/>. <xref ref="fig-wrangling-vector"/> provides an example
-        of a vector where all of the elements are of character type. You can create vectors in R using the
+        of a vector where all of the elements are of character type. You can create vectors in Python using the
         <c>c</c> function
         <idx><h>c function</h></idx>
         (<c>c</c> stands for &#x201C;concatenate&#x201D;). For example, to create the vector <c>region</c>
         as shown in <xref ref="fig-wrangling-vector"/>, you would write:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-region &lt;- c("Toronto", "Montreal", "Vancouver", "Calgary", "Ottawa")
+import pandas as pd
+
+region = pd.Series([&quot;Toronto&quot;, &quot;Montreal&quot;, &quot;Vancouver&quot;, &quot;Calgary&quot;, &quot;Ottawa&quot;])
 region
         </input>
       </program>
@@ -132,13 +134,13 @@ region
       <note>
         <p>
           Technically, these objects are called &#x201C;atomic vectors.&#x201D; In this book we have chosen to
-          call them &#x201C;vectors,&#x201D; which is how they are most commonly referred to in the R community.
+          call them &#x201C;vectors,&#x201D; which is how they are most commonly referred to in the Python community.
           To be totally precise, &#x201C;vector&#x201D; is an umbrella term that encompasses both atomic vector
-          and list objects in R. But this creates a confusing situation where the term &#x201C;vector&#x201D;
+          and list objects in Python. But this creates a confusing situation where the term &#x201C;vector&#x201D;
           could mean &#x201C;atomic vector&#x201D; <em>or</em> &#x201C;the umbrella term for atomic vector and
           list,&#x201D; depending on context. So to keep things simple, in this book we <em>always</em> use
           the term &#x201C;vector&#x201D; to refer to &#x201C;atomic vector.&#x201D; We encourage readers who are
-          enthusiastic to learn more to read the Vectors chapter of <em>Advanced R</em>
+          enthusiastic to learn more to read the Vectors chapter of <em>Advanced Python</em>
           <xref ref="wickham2019advanced"/>.
         </p>
       </note>
@@ -149,7 +151,7 @@ region
       </figure>
 
       <table xml:id="tab-wrangling-datatype-table">
-        <title>Basic data types in R</title>
+        <title>Basic data types in Python</title>
         <tabular top="major" bottom="minor" left="minor" right="minor">
           <row header="yes" bottom="major">
             <cell>Data type</cell>
@@ -173,7 +175,7 @@ region
             <cell>integer</cell>
             <cell>int</cell>
             <cell>numbers that do not contain decimals</cell>
-            <cell><c>1L</c>, <c>20L</c> (where &#x201C;L&#x201D; tells R to store as an integer)</cell>
+            <cell><c>1L</c>, <c>20L</c> (where &#x201C;L&#x201D; tells Python to store as an integer)</cell>
           </row>
           <row>
             <cell>logical</cell>
@@ -197,11 +199,11 @@ region
         <idx><h>data types</h><h>double (dbl)</h></idx>
         <idx><h>data types</h><h>logical (lgl)</h></idx>
         <idx><h>data types</h><h>factor (fct)</h></idx>
-  It is important in R to make sure you represent your data with the correct type. Many 
+  It is important in Python to make sure you represent your data with the correct type. Many 
   of the <c>tidyverse</c> functions we use in this book treat the various data types 
   differently. You should use integers and double types (which both fall under the 
   <q>numeric</q> umbrella type) to represent numbers and perform arithmetic. Doubles 
-  are more common than integers in R, though; for instance, a double data type is the 
+  are more common than integers in Python, though; for instance, a double data type is the 
   default when you create a vector of numbers using <c>c()</c>, and when you read in 
   whole numbers via <c>read_csv</c>. Characters are used to represent data that should 
   be thought of as <q>text</q>, such as words, names, paths, URLs, and more. Factors 
@@ -209,8 +211,8 @@ region
   discrete set of values known as levels (one for each category). The levels can be 
   ordered or unordered. Even though factors can sometimes look like characters, they are 
   not used to represent text, words, names, and paths in the way that characters are; 
-  in fact, R internally stores factors using integers! There are other basic data types 
-  in R, such as <c>raw</c> and <c>complex</c>, but we do not use these in this textbook.
+  in fact, Python internally stores factors using integers! There are other basic data types 
+  in Python, such as <c>raw</c> and <c>complex</c>, but we do not use these in this textbook.
       </p>
     </subsection>
 
@@ -219,7 +221,7 @@ region
       <p>
         Lists
         <idx><h>list</h></idx>
-        are also objects in R that have multiple, ordered elements. Vectors and lists differ by the
+        are also objects in Python that have multiple, ordered elements. Vectors and lists differ by the
         requirement of element type consistency. All elements within a single vector must be of the same
         type (e.g., all elements are characters), whereas elements within a single list can be of
         different types (e.g., characters, integers, logicals, and even other lists). See
@@ -259,43 +261,44 @@ shows a data frame where the columns are vectors of
       </figure>
 
       <p>
-        Data frames are actually included in R itself, without the need for any additional packages.
+        Data frames are actually included in Python itself, without the need for any additional packages.
         However, the <c>tidyverse</c> functions that we use throughout this book all work with a special
         kind of data frame called a <em>tibble</em>.
         <idx><h>tibble</h></idx>
-        Tibbles have some additional features and benefits over built-in data frames in R. These include
+        Tibbles have some additional features and benefits over built-in data frames in Python. These include
         the ability to add useful attributes (such as grouping, which we will discuss later) and more
         predictable type preservation when subsetting. Because a tibble is just a data frame with some
-        added features, we will collectively refer to both built-in R data frames and tibbles as
+        added features, we will collectively refer to both built-in Python data frames and tibbles as
         <em>data frames</em> in this book.
       </p>
       <note>
         <p>
           You can use the function <c>class</c>
           <idx><h>class</h></idx>
-          on a data object to assess whether a data frame is a built-in R data frame or a tibble. If the
+          on a data object to assess whether a data frame is a built-in Python data frame or a tibble. If the
           data object is a data frame, <c>class</c> will return <c>"data.frame"</c>. If the data object
           is a tibble it will return <c>"tbl_df"  "tbl"  "data.frame"</c>. You can easily convert
-          built-in R data frames to tibbles using the <c>tidyverse</c> <c>as_tibble</c> function.
+          built-in Python data frames to tibbles using the <c>tidyverse</c> <c>as_tibble</c> function.
         </p>
-        <program language="r">
+        <program language="python">
           <input>
-class(can_lang)
+can_lang = pd.read_csv(&quot;data/can_lang.csv&quot;)
+type(can_lang)
           </input>
         </program>
         <pre>
 [1] "tbl_df"     "tbl"        "data.frame"</pre>
       </note>
       <p>
-        Vectors, data frames and lists are basic types of <em>data structure</em> in R, which are core
-        to most data analyses. We summarize them in <xref ref="tab-wrangling-datastructure-table"/>. There are several other data structures in the R programming language (e.g., matrices), but these are beyond the scope of this book.
+        Vectors, data frames and lists are basic types of <em>data structure</em> in Python, which are core
+        to most data analyses. We summarize them in <xref ref="tab-wrangling-datastructure-table"/>. There are several other data structures in the Python programming language (e.g., matrices), but these are beyond the scope of this book.
         <idx><h>data structures</h><h>vector</h></idx>
         <idx><h>data structures</h><h>list</h></idx>
         <idx><h>data structures</h><h>data frame</h></idx>
       </p>
 
       <table xml:id="tab-wrangling-datastructure-table">
-        <title>Basic data structures in R</title>
+        <title>Basic data structures in Python</title>
         <tabular top="major" bottom="minor" left="minor" right="minor">
           <row header="yes" bottom="major">
             <cell>Data Structure</cell>
@@ -382,7 +385,7 @@ class(can_lang)
       <p>
         For humans, this table is easy to read, which is why you will often find data stored in this
         wide format. However, this format is difficult to work with when performing data visualization or
-        statistical analysis using R. For example, if we wanted to find the latest year it would be
+        statistical analysis using Python. For example, if we wanted to find the latest year it would be
         challenging because the year values are stored as column names instead of as values in a single
         column. So before we could apply a function to find the latest year (for example, by using
         <c>max</c>), we would have to first extract the column names to get them as a vector and then
@@ -404,7 +407,7 @@ class(can_lang)
       </figure>
 
       <p>
-        We can achieve this effect in R using the <c>pivot_longer</c> function from the <c>tidyverse</c>
+        We can achieve this effect in Python using the <c>pivot_longer</c> function from the <c>tidyverse</c>
         package. The <c>pivot_longer</c> function combines columns, and is usually used during tidying
         data when we need to make the data frame longer and narrower. To learn how to use
         <c>pivot_longer</c>, we will work through an example with the
@@ -415,12 +418,10 @@ class(can_lang)
         To get started, we will load the <c>tidyverse</c> package and use <c>read_csv</c> to load the
         (untidy) data.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-library(tidyverse)
-
-lang_wide &lt;- read_csv("data/region_lang_top5_cities_wide.csv")
-lang_wide
+cities = [&quot;Toronto&quot;, &quot;Vancouver&quot;, &quot;Montreal&quot;, &quot;Calgary&quot;, &quot;Ottawa&quot;, &quot;Winnipeg&quot;]
+cities
         </input>
       </program>
       <pre>
@@ -476,18 +477,13 @@ lang_wide
         columns into a single column called <c>region</c>, and create a column called
         <c>mother_tongue</c> that contains the count of how many Canadians report each language as their
         mother tongue for each metropolitan area. We use a colon <c>:</c> between Toronto and Edmonton
-        to tell R to select all the columns between Toronto and Edmonton:
+        to tell Python to select all the columns between Toronto and Edmonton:
         <idx><h>column range</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-lang_mother_tidy &lt;- pivot_longer(lang_wide,
-  cols = Toronto:Edmonton,
-  names_to = "region",
-  values_to = "mother_tongue"
-)
-
-lang_mother_tidy
+cities_series = pd.Series(cities)
+cities_series
         </input>
       </program>
       <pre>
@@ -510,7 +506,7 @@ lang_mother_tidy
         <p>
           In the code above, the call to the <c>pivot_longer</c> function is split across several lines.
           This is allowed in certain cases; for example, when calling a function as above, as long as the
-          line ends with a comma <c>,</c> R knows to keep reading on the next line. Splitting long lines
+          line ends with a comma <c>,</c> Python knows to keep reading on the next line. Splitting long lines
           like this across multiple lines is encouraged as it helps significantly with code readability.
           Generally speaking, you should limit each line of code to about 80 characters.
         </p>
@@ -560,17 +556,20 @@ lang_mother_tidy
       </figure>
 
       <p>
-        To tidy this type of data in R, we can use the <c>pivot_wider</c> function. The <c>pivot_wider</c>
+        To tidy this type of data in Python, we can use the <c>pivot_wider</c> function. The <c>pivot_wider</c>
         function generally increases the number of columns (widens) and decreases the number of rows in a
         data set. To learn how to use <c>pivot_wider</c>, we will work through an example with the
         <c>region_lang_top5_cities_long.csv</c> data set. This data set contains the number of Canadians
         reporting the primary language at home and work for five major cities (Toronto, Montr&#xe9;al,
         Vancouver, Calgary, and Edmonton).
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-lang_long &lt;- read_csv("data/region_lang_top5_cities_long.csv")
-lang_long
+population_in_2016 = {
+  &quot;cities&quot;: [&quot;Toronto&quot;, &quot;Vancouver&quot;, &quot;Montreal&quot;, &quot;Calgary&quot;, &quot;Ottawa&quot;, &quot;Winnipeg&quot;],
+  &quot;population&quot;: [2235145, 1027613, 1823281, 544870, 571146, 321484]
+}
+population_in_2016
         </input>
       </program>
       <pre>
@@ -620,13 +619,10 @@ lang_long
       </figure>
 
       <p>We will apply the function as detailed in <xref ref="fig-wrangling-pivot-wider"/>:</p>
-      <program language="r">
+      <program language="python">
         <input>
-lang_home_tidy &lt;- pivot_wider(lang_long,
-  names_from = type,
-  values_from = count
-)
-lang_home_tidy
+population_in_2016_df = pd.DataFrame(population_in_2016)
+population_in_2016_df
         </input>
       </program>
       <pre>
@@ -673,10 +669,13 @@ lang_home_tidy
         <idx><h>separate</h></idx>
         <idx><h>delimiter</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-lang_messy &lt;- read_csv("data/region_lang_top5_cities_messy.csv")
-lang_messy
+population_in_2016_df = pd.DataFrame({
+  &quot;cities&quot;: [&quot;Toronto&quot;, &quot;Vancouver&quot;, &quot;Montreal&quot;, &quot;Calgary&quot;, &quot;Ottawa&quot;, &quot;Winnipeg&quot;],
+  &quot;population&quot;: [2235145, 1027613, 1823281, 544870, 571146, 321484]
+})
+population_in_2016_df
         </input>
       </program>
       <pre>
@@ -702,15 +701,10 @@ lang_messy
         further separate; that is, the number of Canadians reporting their primary language at home and
         work.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-lang_messy_longer &lt;- pivot_longer(lang_messy,
-  cols = Toronto:Edmonton,
-  names_to = "region",
-  values_to = "value"
-)
-
-lang_messy_longer
+lang_wide = pd.read_csv(&quot;data/region_lang_top5_cities_wide.csv&quot;)
+lang_wide
         </input>
       </program>
       <pre>
@@ -741,15 +735,14 @@ lang_messy_longer
         <image source="images/wrangling/separate_function.png" width="100%"/>
       </figure>
 
-      <program language="r">
+      <program language="python">
         <input>
-tidy_lang &lt;- separate(lang_messy_longer,
-  col = value,
-  into = c("most_at_home", "most_at_work"),
-  sep = "/"
+lang_mother_tidy = lang_wide.melt(
+    id_vars=[&quot;category&quot;, &quot;language&quot;],
+    var_name=&quot;region&quot;,
+    value_name=&quot;mother_tongue&quot;,
 )
-
-tidy_lang
+lang_mother_tidy
         </input>
       </program>
       <pre>
@@ -782,7 +775,7 @@ tidy_lang
         digit(s) surrounded by quotes. In the previous example in <xref ref="sec-wrangling-pivot-wider"/>,
         the <c>most_at_home</c> and <c>most_at_work</c> variables were <c>&lt;dbl&gt;</c> (double) - you can verify this by looking at the tables in the previous sections - which is a
         type of numeric data. This change is due to the delimiter (<c>/</c>) when we read in this messy
-        data set. R read these columns in as character types, and by default, <c>separate</c> will
+        data set. Python read these columns in as character types, and by default, <c>separate</c> will
         return columns as character data types.
       </p>
       <p>
@@ -794,16 +787,10 @@ tidy_lang
         fix problems like this: we can set <c>convert = TRUE</c> to convert the <c>most_at_home</c> and
         <c>most_at_work</c> columns to the correct data type.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-tidy_lang &lt;- separate(lang_messy_longer,
-  col = value,
-  into = c("most_at_home", "most_at_work"),
-  sep = "/",
-  convert = TRUE
-)
-
-tidy_lang
+lang_long = pd.read_csv(&quot;data/region_lang_top5_cities_long.csv&quot;)
+lang_long
         </input>
       </program>
       <pre>
@@ -839,14 +826,22 @@ tidy_lang
       <c>most_at_home</c> and <c>most_at_work</c> from the <c>tidy_lang</c> data set. Using what we learned in <xref ref="ch-intro"/>, we would pass the tidy_lang data frame as well as all of these column names into the select function:
       <idx><h>select</h><h>helpers</h></idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-selected_columns &lt;- select(tidy_lang,
-                           language,
-                           region,
-                           most_at_home,
-                           most_at_work)
-selected_columns
+lang_home_tidy = lang_long.pivot(
+    index=[&quot;region&quot;, &quot;category&quot;, &quot;language&quot;],
+    columns=[&quot;type&quot;],
+    values=[&quot;count&quot;]
+).reset_index()
+
+lang_home_tidy.columns = [
+    &quot;region&quot;,
+    &quot;category&quot;,
+    &quot;language&quot;,
+    &quot;most_at_home&quot;,
+    &quot;most_at_work&quot;,
+]
+lang_home_tidy
       </input>
     </program>
     <pre>
@@ -876,10 +871,9 @@ selected_columns
       <c>most_at_work</c> we pass <c>language:most_at_work</c> as the second argument to the
       <c>select</c> function.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-column_range &lt;- select(tidy_lang, language:most_at_work)
-column_range
+lang_home_tidy.info()
       </input>
     </program>
     <pre>
@@ -910,9 +904,10 @@ column_range
       <idx><h>select</h><h>starts_with</h></idx>
       <c>starts_with</c> to choose only the columns that start with the word &#x201C;most&#x201D;:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-select(tidy_lang, starts_with("most"))
+lang_messy = pd.read_csv(&quot;data/region_lang_top5_cities_messy.csv&quot;)
+lang_messy
       </input>
     </program>
     <pre>
@@ -937,9 +932,15 @@ select(tidy_lang, starts_with("most"))
       columns we want contain underscores and the others don&#x2019;t.
       <idx><h>select</h><h>contains</h></idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-select(tidy_lang, contains("_"))
+lang_messy_longer = lang_messy.melt(
+    id_vars=[&quot;category&quot;, &quot;language&quot;],
+    var_name=&quot;region&quot;,
+    value_name=&quot;value&quot;,
+)
+
+lang_messy_longer
       </input>
     </program>
     <pre>
@@ -993,10 +994,9 @@ select(tidy_lang, contains("_"))
         <c>category</c> column holds the value <c>"Official languages"</c>. We name this data frame
         <c>official_langs</c>.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-official_langs &lt;- filter(tidy_lang, category == "Official languages")
-official_langs
+&quot;50/0&quot;.split(&quot;/&quot;)
         </input>
       </program>
       <pre>
@@ -1025,9 +1025,11 @@ official_langs
         operator, which means &#x201C;not equal to&#x201D;. So if we want to find all the rows where the
         <c>category</c> does <em>not</em> equal <c>"Official languages"</c> we write the code below.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-filter(tidy_lang, category != "Official languages")
+tidy_lang = lang_messy_longer.drop(columns=[&quot;value&quot;])
+tidy_lang[[&quot;most_at_home&quot;, &quot;most_at_work&quot;]] = lang_messy_longer[&quot;value&quot;].str.split(&quot;/&quot;, expand=True)
+tidy_lang
         </input>
       </program>
       <pre>
@@ -1054,14 +1056,14 @@ filter(tidy_lang, category != "Official languages")
         Suppose now we want to look at only the rows for the French language in Montr&#xe9;al. To do this,
         we need to filter the data set to find rows that satisfy multiple conditions simultaneously. We
         can do this with the comma symbol (<c>,</c>), which in the case of <c>filter</c> is interpreted
-        by R as &#x201C;and&#x201D;. We write the code as shown below to filter the <c>official_langs</c> data
+        by Python as &#x201C;and&#x201D;. We write the code as shown below to filter the <c>official_langs</c> data
         frame to subset the rows where <c>region == "Montr&#xe9;al"</c> <em>and</em> the
         <c>language == "French"</c>.
         <idx><h>logical operator</h><h>and</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-filter(official_langs, region == "Montréal", language == "French")
+tidy_lang.info()
         </input>
       </program>
       <pre>
@@ -1075,9 +1077,11 @@ filter(official_langs, region == "Montréal", language == "French")
         <em>both</em> one condition <em>and</em> another condition are satisfied. You can use either
         comma (<c>,</c>) or ampersand (<c>&amp;</c>) in the <c>filter</c> function interchangeably.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-filter(official_langs, region == "Montréal" &amp; language == "French")
+tidy_lang[&quot;most_at_home&quot;] = tidy_lang[&quot;most_at_home&quot;].astype(&quot;int&quot;)
+tidy_lang[&quot;most_at_work&quot;] = tidy_lang[&quot;most_at_work&quot;].astype(&quot;int&quot;)
+tidy_lang
         </input>
       </program>
       <pre>
@@ -1095,14 +1099,14 @@ filter(official_langs, region == "Montréal" &amp; language == "French")
         <c>official_langs</c> data set (Edmonton and Calgary). We can&#x2019;t use <c>,</c> as we did above
         because <c>region</c> cannot be both Edmonton <em>and</em> Calgary simultaneously. Instead, we
         can use the vertical pipe (<c>|</c>) logical operator, which gives us the cases where one
-        condition <em>or</em> another condition <em>or</em> both are satisfied. In the code below, we ask R
+        condition <em>or</em> another condition <em>or</em> both are satisfied. In the code below, we ask Python
         to return the rows where the <c>region</c> column is equal to <c>"Calgary"</c> <em>or</em>
         <c>"Edmonton"</c>.
         <idx><h>logical operator</h><h>or</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-filter(official_langs, region == "Calgary" | region == "Edmonton")
+tidy_lang.info()
         </input>
       </program>
       <pre>
@@ -1123,10 +1127,9 @@ filter(official_langs, region == "Calgary" | region == "Edmonton")
         <c>region_data.csv</c> file that comes from the 2016 Canadian census, as it contains statistics
         for number of households, land area, population and number of dwellings for different regions.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-region_data &lt;- read_csv("data/region_data.csv")
-region_data
+tidy_lang[[&quot;language&quot;, &quot;region&quot;, &quot;most_at_home&quot;, &quot;most_at_work&quot;]]
         </input>
       </program>
       <pre>
@@ -1152,12 +1155,9 @@ region_data
         Here we are filtering for rows where the value in the <c>region</c> column matches any of the
         five cities we are interested in: Toronto, Montr&#xe9;al, Vancouver, Calgary, and Edmonton.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-city_names &lt;- c("Toronto", "Montréal", "Vancouver", "Calgary", "Edmonton")
-five_cities &lt;- filter(region_data,
-                      region %in% city_names)
-five_cities
+tidy_lang[[&quot;language&quot;]]
         </input>
       </program>
       <pre>
@@ -1173,18 +1173,17 @@ five_cities
       <note>
         <p>
           What&#x2019;s the difference between <c>==</c> and <c>%in%</c>? Suppose we have two vectors,
-          <c>vectorA</c> and <c>vectorB</c>. If you type <c>vectorA == vectorB</c> into R it will compare
-          the vectors element by element. R checks if the first element of <c>vectorA</c> equals the
+          <c>vectorA</c> and <c>vectorB</c>. If you type <c>vectorA == vectorB</c> into Python it will compare
+          the vectors element by element. Python checks if the first element of <c>vectorA</c> equals the
           first element of <c>vectorB</c>, the second element of <c>vectorA</c> equals the second element
           of <c>vectorB</c>, and so on. On the other hand, <c>vectorA %in% vectorB</c> compares the first
           element of <c>vectorA</c> to all the elements in <c>vectorB</c>. Then the second element of
           <c>vectorA</c> is compared to all the elements in <c>vectorB</c>, and so on. Notice the
           difference between <c>==</c> and <c>%in%</c> in the example below.
         </p>
-        <program language="r">
+        <program language="python">
           <input>
-c("Vancouver", "Toronto") == c("Toronto", "Vancouver")
-c("Vancouver", "Toronto") %in% c("Toronto", "Vancouver")
+tidy_lang[&quot;language&quot;]
           </input>
         </program>
         <pre>
@@ -1207,9 +1206,10 @@ c("Vancouver", "Toronto") %in% c("Toronto", "Vancouver")
         <idx><h>logical operator</h><h>greater than</h></idx>
         <idx><h>logical operator</h><h>less than</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-filter(official_langs, most_at_home > 2669195)
+official_langs = tidy_lang[tidy_lang[&quot;category&quot;] == &quot;Official languages&quot;]
+official_langs
         </input>
       </program>
       <pre>
@@ -1242,19 +1242,9 @@ filter(official_langs, most_at_home > 2669195)
         argument, and needed to modify the column type some other way. Below we create such a situation so that we can demonstrate how to use <c>mutate</c> to change the column types of a data frame. <c>mutate</c> is a useful function
         to modify or create new data frame columns.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-lang_messy &lt;- read_csv("data/region_lang_top5_cities_messy.csv")
-lang_messy_longer &lt;- pivot_longer(lang_messy,
-               cols = Toronto:Edmonton,
-               names_to = "region",
-               values_to = "value")
-tidy_lang_chr &lt;- separate(lang_messy_longer, col = value,
-           into = c("most_at_home", "most_at_work"),
-           sep = "/")
-official_langs_chr &lt;- filter(tidy_lang_chr, category == "Official languages")
-
-official_langs_chr
+tidy_lang[tidy_lang[&quot;category&quot;] != &quot;Official languages&quot;]
         </input>
       </program>
       <pre>
@@ -1292,14 +1282,12 @@ official_langs_chr
 
       <p>Below we use <c>mutate</c> to convert the columns <c>most_at_home</c> and <c>most_at_work</c> to numeric data types
 in the official_langs data set as described in <xref ref = "fig-wrangling-mutate"/></p>
-      <program language="r">
+      <program language="python">
         <input>
-official_langs_numeric &lt;- mutate(official_langs_chr,
-  most_at_home = as.numeric(most_at_home),
-  most_at_work = as.numeric(most_at_work)
-)
-
-official_langs_numeric
+tidy_lang[
+  (tidy_lang[&quot;region&quot;] == &quot;Montréal&quot;) &amp;
+  (tidy_lang[&quot;language&quot;] == &quot;French&quot;)
+]
         </input>
       </program>
       <pre>
@@ -1348,10 +1336,12 @@ official_langs_numeric
         Vancouver, Calgary, Edmonton), we will use the <c>c</c> function (recall that <c>c</c> stands for
         &#x201C;concatenate&#x201D;):
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-city_pops &lt;- c(5928040, 4098927, 2463431, 1392609, 1321426)
-city_pops
+official_langs[
+    (official_langs[&quot;region&quot;] == &quot;Calgary&quot;) |
+    (official_langs[&quot;region&quot;] == &quot;Edmonton&quot;)
+]
         </input>
       </program>
       <pre>
@@ -1361,10 +1351,10 @@ city_pops
         where the language is English. We will name the new data frame we get from this
         <c>english_langs</c>:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-english_langs &lt;- filter(official_langs, language == "English")
-english_langs
+region_data = pd.read_csv(&quot;data/region_data.csv&quot;)
+region_data
         </input>
       </program>
       <pre>
@@ -1383,12 +1373,11 @@ english_langs
         people reporting English as their primary language at home. We will compute this by dividing the
         column by our vector of city populations.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-english_langs &lt;- mutate(english_langs,
-                         most_at_home_proportion = most_at_home / city_pops)
-
-english_langs
+city_names = [&quot;Toronto&quot;, &quot;Montréal&quot;, &quot;Vancouver&quot;, &quot;Calgary&quot;, &quot;Edmonton&quot;]
+five_cities = region_data[region_data[&quot;region&quot;].isin(city_names)]
+five_cities
         </input>
       </program>
       <pre>
@@ -1403,7 +1392,7 @@ english_langs
       </pre>
       <p>
         In the computation above, we had to ensure that we ordered the <c>city_pops</c> vector in the
-        same order as the cities were listed in the <c>english_langs</c> data frame. This is because R
+        same order as the cities were listed in the <c>english_langs</c> data frame. This is because Python
         will perform the division computation we did by dividing each element of the
         <c>most_at_home</c> column by each element of the <c>city_pops</c> vector, matching them up by
         position. Failing to do this would have resulted in the incorrect math being performed.
@@ -1421,7 +1410,7 @@ english_langs
   <section xml:id="sec-wrangling-pipe">
     <title>Combining functions using the pipe operator, <c>|&gt;</c></title>
     <p>
-      In R, we often have to call multiple functions in a sequence to process a data frame. The basic
+      In Python, we often have to call multiple functions in a sequence to process a data frame. The basic
       ways of doing this can become quickly unreadable if there are many steps.
       <idx><h>pipe</h></idx>
       For example, suppose we need to perform three operations on a data frame called <c>data</c>:
@@ -1435,11 +1424,9 @@ english_langs
       One way of performing these three steps is to write multiple lines of code, storing temporary
       objects as you go:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-output_1 &lt;- mutate(data, new_col = old_col * 2)
-output_2 &lt;- filter(output_1, other_col > 5)
-output &lt;- select(output_2, new_col)
+pd.Series([&quot;Vancouver&quot;, &quot;Toronto&quot;]) == pd.Series([&quot;Toronto&quot;, &quot;Vancouver&quot;])
       </input>
     </program>
     <p>
@@ -1451,32 +1438,27 @@ output &lt;- select(output_2, new_col)
     <p>
       Another option for doing this would be to <em>compose</em> the functions:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-output &lt;- select(filter(mutate(data, new_col = old_col * 2),
-                        other_col > 5),
-                 new_col)
+pd.Series([&quot;Vancouver&quot;, &quot;Toronto&quot;]).isin(pd.Series([&quot;Toronto&quot;, &quot;Vancouver&quot;]))
       </input>
     </program>
     <p>
       Code like this can also be difficult to understand. Functions compose (reading from left to right)
-      in the <em>opposite order</em> in which they are computed by R (above, <c>mutate</c> happens
+      in the <em>opposite order</em> in which they are computed by Python (above, <c>mutate</c> happens
       first, then <c>filter</c>, then <c>select</c>). It is also just a really long line of code to
       read in one go.
     </p>
     <p>
       The <em>pipe operator</em> (<c>|&gt;</c>) solves this problem, resulting in cleaner and
-      easier-to-follow code. <c>|&gt;</c> is built into R so you don&#x2019;t need to load any packages to use
+      easier-to-follow code. <c>|&gt;</c> is built into Python so you don&#x2019;t need to load any packages to use
       it. You can think of the pipe as a physical pipe. It takes the output from the function on the
       left-hand side of the pipe, and passes it as the first argument to the function on the right-hand
       side of the pipe. The code below accomplishes the same thing as the previous two code blocks:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-output &lt;- data |&gt;
-  mutate(new_col = old_col * 2) |&gt;
-  filter(other_col > 5) |&gt;
-  select(new_col)
+official_langs[official_langs[&quot;most_at_home&quot;] &gt; 2669195]
       </input>
     </program>
 
@@ -1486,19 +1468,19 @@ output &lt;- data |&gt;
         similar to when we did this earlier in the chapter for long function calls. Again, this is
         allowed and recommended, especially when the piped function calls create a long line of code.
         Doing this makes your code more readable. When you do this, it is important to end each line
-        with the pipe operator <c>|&gt;</c> to tell R that your code is continuing onto the next line.
+        with the pipe operator <c>|&gt;</c> to tell Python that your code is continuing onto the next line.
       </p>
     </note>
 
     <note>
       <p>
-        In this textbook, we will be using the base R pipe operator syntax, <c>|&gt;</c>. This base R
+        In this textbook, we will be using the base Python pipe operator syntax, <c>|&gt;</c>. This base Python
         <c>|&gt;</c> pipe operator was inspired by a previous version of the pipe operator, <c>%&gt;%</c>.
         <idx><h>pipe</h></idx>
-        The <c>%&gt;%</c> pipe operator is not built into R and is from the <c>magrittr</c> R package. The
+        The <c>%&gt;%</c> pipe operator is not built into Python and is from the <c>magrittr</c> Python package. The
         <c>tidyverse</c> metapackage imports the <c>%&gt;%</c> pipe operator via <c>dplyr</c> (which in turn
-        imports the <c>magrittr</c> R package). There are some other differences between <c>%&gt;%</c> and
-        <c>|&gt;</c> related to more advanced R uses, such as sharing and distributing code as R packages;
+        imports the <c>magrittr</c> Python package). There are some other differences between <c>%&gt;%</c> and
+        <c>|&gt;</c> related to more advanced Python uses, such as sharing and distributing code as Python packages;
         however, these are beyond the scope of this textbook. We have this note in the book to make the
         reader aware that <c>%&gt;%</c> exists as it is still commonly used in data analysis code and in
         many data science books and other resources. In most cases these two pipes are interchangeable
@@ -1513,9 +1495,9 @@ output &lt;- data |&gt;
         which contains the number of Canadians reporting their primary language at home and work for five
         major cities (Toronto, Montr&#xe9;al, Vancouver, Calgary, and Edmonton):
 </p>
-      <program language="r">
+      <program language="python">
         <input>
-tidy_lang
+official_langs.query(&quot;most_at_home &gt; 2669195&quot;)
         </input>
       </program>
 <pre>
@@ -1541,10 +1523,12 @@ tidy_lang
         First, we use <c>filter</c> to create a data frame called <c>van_data</c> that contains only
         values for Vancouver:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-van_data &lt;- filter(tidy_lang, region == "Vancouver")
-van_data
+tidy_lang.loc[
+    tidy_lang[&quot;region&quot;] == &quot;Toronto&quot;,
+    [&quot;language&quot;, &quot;region&quot;, &quot;most_at_home&quot;, &quot;most_at_work&quot;]
+]
         </input>
       </program>
       <pre>
@@ -1566,10 +1550,12 @@ van_data
       <p>
         We then use <c>select</c> on this data frame to keep only the variables we want:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-van_data_selected &lt;- select(van_data, language, most_at_home)
-van_data_selected
+tidy_lang.loc[
+    tidy_lang[&quot;region&quot;] == &quot;Toronto&quot;,
+    &quot;language&quot;:&quot;most_at_work&quot;
+]
         </input>
       </program>
       <pre>
@@ -1594,12 +1580,9 @@ van_data_selected
         from <c>filter</c>. Instead, we can directly send the output of <c>filter</c> to the input of
         <c>select</c>:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-van_data_selected &lt;- filter(tidy_lang, region == "Vancouver") |&gt;
-        select(language, most_at_home)
-
-van_data_selected
+tidy_lang.loc[:, &quot;language&quot;:&quot;most_at_work&quot;]
         </input>
       </program>
       <pre>
@@ -1633,7 +1616,7 @@ van_data_selected
     <subsection xml:id="sec-wrangling-pipe-many">
       <title>Using <c>|&gt;</c> with more than two functions</title>
       <p>
-        The pipe operator (<c>|&gt;</c>) can be used with any function in R. Additionally, we can pipe
+        The pipe operator (<c>|&gt;</c>) can be used with any function in Python. Additionally, we can pipe
         together more than two functions. For example, we can pipe together three functions to:
       </p>
       <ul>
@@ -1651,13 +1634,9 @@ van_data_selected
 
 Here we pass the column name <c>most_at_home</c> to arrange the data frame rows by the values in that column, in ascending order.
 </p>
-      <program language="r">
+      <program language="python">
         <input>
-large_region_lang &lt;- filter(tidy_lang, most_at_home > 10000) |&gt;
-  select(region, language, most_at_home) |&gt;
-  arrange(most_at_home)
-
-large_region_lang
+tidy_lang.loc[:, &quot;language&quot;:]
         </input>
       </program>
       <pre>
@@ -1682,14 +1661,9 @@ large_region_lang
         it as the first argument of the first function. These two choices are equivalent, and we get the
         same result.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-large_region_lang &lt;- tidy_lang |&gt;
-  filter(most_at_home > 10000) |&gt;
-  select(region, language, most_at_home) |&gt;
-  arrange(most_at_home)
-
-large_region_lang
+tidy_lang.loc[:, :&quot;language&quot;]
         </input>
       </program>
       <pre>
@@ -1747,9 +1721,9 @@ large_region_lang
         of Canadians reporting a particular language as their primary language at home. First a reminder
         of what <c>region_lang</c> looks like:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-region_lang
+tidy_lang.loc[:, tidy_lang.columns.str.startswith(&quot;most&quot;)]
         </input>
       </program>
       <pre>
@@ -1772,11 +1746,9 @@ region_lang
         We apply <c>summarize</c> to calculate the minimum and maximum number of Canadians reporting a
         particular language as their primary language at home, for any region:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-summarize(region_lang,
-          min_most_at_home = min(most_at_home),
-          max_most_at_home = max(most_at_home))
+tidy_lang.loc[:, tidy_lang.columns.str.contains(&quot;_&quot;)]
         </input>
       </program>
       <pre>
@@ -1795,12 +1767,12 @@ summarize(region_lang,
     <subsection xml:id="sec-wrangling-summarize-na">
       <title>Calculating summary statistics when there are <c>NA</c>s</title>
       <p>
-        In data frames in R, the value <c>NA</c> is often used to denote missing data.
+        In data frames in Python, the value <c>NA</c> is often used to denote missing data.
         <idx><h>missing data</h></idx>
         <idx><h>NA</h><see>missing data</see></idx>
-        Many of the base R statistical summary functions (e.g., <c>max</c>, <c>min</c>, <c>mean</c>,
+        Many of the base Python statistical summary functions (e.g., <c>max</c>, <c>min</c>, <c>mean</c>,
         <c>sum</c>, etc) will return <c>NA</c> when applied to columns containing <c>NA</c> values.
-        Usually that is not what we want to happen; instead, we would usually like R to ignore the
+        Usually that is not what we want to happen; instead, we would usually like Python to ignore the
         missing entries and calculate the summary statistic using all of the other non-<c>NA</c> values
         in the column. Fortunately many of these functions provide an argument <c>na.rm</c> that lets us
         tell the function what to do when it encounters <c>NA</c> values. In particular, if we specify
@@ -1812,9 +1784,9 @@ summarize(region_lang,
         <c>region_lang_na</c>, that has a seemingly innocuous <c>NA</c> in the first row of the
         <c>most_at_home</c> column:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-region_lang_na
+tidy_lang.iloc[:, 1]
         </input>
       </program>
       <pre>
@@ -1837,11 +1809,9 @@ region_lang_na
         Now if we apply the <c>summarize</c> function as above, we see that we no longer get the minimum
         and maximum returned, but just an <c>NA</c> instead:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-summarize(region_lang_na,
-          min_most_at_home = min(most_at_home),
-          max_most_at_home = max(most_at_home))
+tidy_lang.iloc[:, 1:]
         </input>
       </program>
       <pre>
@@ -1853,11 +1823,9 @@ summarize(region_lang_na,
       <p>
         We can fix this by adding the <c>na.rm = TRUE</c> as explained above:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-summarize(region_lang_na,
-          min_most_at_home = min(most_at_home, na.rm = TRUE),
-          max_most_at_home = max(most_at_home, na.rm = TRUE))
+tidy_lang.iloc[:5, 1:]
         </input>
       </program>
       <pre>
@@ -1887,13 +1855,10 @@ summarize(region_lang_na,
         be grouped, and the second and onwards are columns to use in the grouping. Here we use only one
         column for grouping (<c>region</c>), but more than one can also be used. To do this, list additional columns separated by commas.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-group_by(region_lang, region) |&gt;
-  summarize(
-    min_most_at_home = min(most_at_home),
-    max_most_at_home = max(most_at_home)
-    )
+region_lang = pd.read_csv(&quot;data/region_lang.csv&quot;)
+region_lang
         </input>
       </program>
       <pre>
@@ -1918,9 +1883,9 @@ group_by(region_lang, region) |&gt;
         <c>region</c>. Instead, <c>group_by</c> simply changes how other functions work with the data,
         as we saw with <c>summarize</c> above.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-group_by(region_lang, region)
+region_lang[&quot;most_at_home&quot;].min()
         </input>
       </program>
       <pre>
@@ -1968,10 +1933,9 @@ group_by(region_lang, region)
         and use a colon <c>:</c> to specify a range of columns:
         <idx><h>column range</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-region_lang |&gt;
-  summarize(across(mother_tongue:lang_known, max))
+region_lang[&quot;most_at_home&quot;].max()
         </input>
       </program>
       <pre>
@@ -1982,9 +1946,9 @@ region_lang |&gt;
       </pre>
       <note>
 <p>
-  Similar to when we use base R statistical summary functions (e.g., <c>max</c>, 
+  Similar to when we use base Python statistical summary functions (e.g., <c>max</c>, 
   <c>min</c>, <c>mean</c>, <c>sum</c>, etc.) with <c>summarize</c> alone, the use of 
-  the <c>summarize</c> + <c>across</c> functions paired with base R statistical summary 
+  the <c>summarize</c> + <c>across</c> functions paired with base Python statistical summary 
   functions also return <c>NA</c>s when we apply them to columns that contain <c>NA</c>s 
   in the data frame.
 </p>
@@ -1996,10 +1960,9 @@ region_lang |&gt;
   <c>na.rm = TRUE</c>. For example, for the previous example with the <c>max</c> 
   function, we would write
 </p>
-        <program language="r">
+        <program language="python">
           <input>
-region_lang_na |&gt;
-  summarize(across(mother_tongue:lang_known, ~ max(.x, na.rm = TRUE)))
+region_lang[&quot;most_at_home&quot;].sum()
           </input>
         </program>
         <pre>
@@ -2025,11 +1988,9 @@ region_lang_na |&gt;
         specify <em>which</em> columns to apply the function to. Therefore, we will use the <c>select</c>
         function before calling <c>map</c> to choose the columns for which we want the maximum.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-region_lang |&gt;
-  select(mother_tongue:lang_known) |&gt;
-  map(max)
+region_lang[&quot;most_at_home&quot;].agg([&quot;min&quot;, &quot;max&quot;])
         </input>
       </program>
       <pre>
@@ -2056,12 +2017,9 @@ $lang_known
         The output looks a bit unusual&#x2014;we passed in a data frame, but the output doesn&#x2019;t look like a
         data frame. As it so happens, it is <em>not</em> a data frame, but rather a plain list:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-region_lang |&gt;
-  select(mother_tongue:lang_known) |&gt;
-  map(max) |&gt;
-  typeof()
+region_lang[&quot;most_at_home&quot;].describe()
         </input>
       </program>
       <pre>
@@ -2076,7 +2034,7 @@ region_lang |&gt;
       </p>
 
       <table xml:id="tab-wrangling-map-table">
-        <title>The <c>map</c> functions in R</title>
+        <title>The <c>map</c> functions in Python</title>
         <tabular top="major" bottom="minor" left="minor" right="minor">
           <row header="yes" bottom="major">
             <cell><c>map</c> function</cell>
@@ -2096,11 +2054,9 @@ region_lang |&gt;
         Let&#x2019;s get the columns&#x2019; maximums again, but this time use the <c>map_dfr</c> function to return
         the output as a data frame:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-region_lang |&gt;
-  select(mother_tongue:lang_known) |&gt;
-  map_dfr(max)
+region_lang.max()
         </input>
       </program>
       <pre>
@@ -2111,9 +2067,9 @@ region_lang |&gt;
       </pre>
       <note>
 <p>
-  Similar to when we use base R statistical summary functions (e.g., <c>max</c>, 
+  Similar to when we use base Python statistical summary functions (e.g., <c>max</c>, 
   <c>min</c>, <c>mean</c>, <c>sum</c>, etc.) with <c>summarize</c>, <c>map</c> 
-  functions paired with base R statistical summary functions also return <c>NA</c> 
+  functions paired with base Python statistical summary functions also return <c>NA</c> 
   values when we apply them to columns that contain <c>NA</c> values.
 </p>
 
@@ -2122,11 +2078,9 @@ region_lang |&gt;
   this with <c>map</c>, we do this by adding a <c>,</c> and then <c>na.rm = TRUE</c> 
   after specifying the function, as illustrated below:
 </p>
-        <program language="r">
+        <program language="python">
           <input>
-region_lang_na |&gt;
-  select(mother_tongue:lang_known) |&gt;
-  map_dfr(max, na.rm = TRUE)
+region_lang.max(numeric_only=True)
           </input>
         </program>
         <pre>
@@ -2138,7 +2092,7 @@ region_lang_na |&gt;
       </note>
       <p>
         The <c>map</c> functions are generally quite useful for solving many problems involving
-        repeatedly applying functions in R. Additionally, their use is not limited to columns of a data
+        repeatedly applying functions in Python. Additionally, their use is not limited to columns of a data
         frame; <c>map</c> family functions can be used to apply functions to elements of a vector, or a
         list, and even to lists of (nested!) data frames. To learn more about the <c>map</c> functions,
         see the additional resources section at the end of this chapter.
@@ -2164,9 +2118,9 @@ region_lang_na |&gt;
   can see that this would be the columns from <c>mother_tongue</c> to <c>lang_known</c>.
 </p>
 
-<program language="r">
+<program language="python">
   <input>
-    region_lang
+region_lang.mean(numeric_only=True)
   </input>
 </program>
 
@@ -2198,10 +2152,9 @@ region_lang_na |&gt;
   specified columns (here <c>mother_tongue</c> to <c>lang_known</c>).
 </p>
 
-<program language="r">
+<program language="python">
   <input>
-    region_lang |>
-      mutate(across(mother_tongue:lang_known, as.integer))
+region_lang.loc[:, &quot;mother_tongue&quot;:&quot;lang_known&quot;].agg([&quot;mean&quot;, &quot;std&quot;])
   </input>
 </program>
 
@@ -2249,10 +2202,9 @@ region_lang_na |&gt;
   demonstration, the data set we are operating on looks like this:
 </p>
 
-<program language="r">
+<program language="python">
   <input>
-    region_lang |>
-      select(mother_tongue:lang_known)
+region_lang.groupby(&quot;region&quot;)
   </input>
 </program>
   <pre>
@@ -2273,20 +2225,14 @@ region_lang_na |&gt;
   </pre>
 
 <p>
-  Now we apply <c>rowwise</c> before <c>mutate</c>, to tell R that we would like the 
+  Now we apply <c>rowwise</c> before <c>mutate</c>, to tell Python that we would like the 
   <c>mutate</c> function to be applied across, and within, a row, as opposed to being 
   applied on a column (which is the default behavior of <c>mutate</c>):
 </p>
 
-<program language="r">
+<program language="python">
   <input>
-    region_lang |>
-      select(mother_tongue:lang_known) |>
-      rowwise() |>
-      mutate(maximum = max(c(mother_tongue,
-                             most_at_home,
-                             most_at_work,
-                             lang_known)))
+region_lang.groupby(&quot;region&quot;)[&quot;most_at_home&quot;].agg([&quot;min&quot;, &quot;max&quot;])
   </input>
 </program>
   <pre>
@@ -2324,14 +2270,9 @@ region_lang_na |&gt;
   reported in every single row; this code does not provide the desired result.
 </p>
 
-<program language="r">
+<program language="python">
   <input>
-    region_lang |>
-      select(mother_tongue:lang_known) |>
-      mutate(maximum = max(c(mother_tongue,
-                             most_at_home,
-                             most_at_home,
-                             lang_known)))
+region_lang.groupby(&quot;region&quot;)[&quot;most_at_home&quot;].agg([&quot;min&quot;, &quot;max&quot;]).reset_index()
   </input>
 </program>
   <pre>
@@ -2401,24 +2342,24 @@ region_lang_na |&gt;
   <section xml:id="sec-wrangling-resources">
     <title>Additional resources</title>
     <ul>
-      <li><p>As we mentioned earlier, <c>tidyverse</c> is actually an <em>R meta package</em>: it
-        installs and loads a collection of R packages that all follow the tidy data philosophy we
+      <li><p>As we mentioned earlier, <c>tidyverse</c> is actually an <em>Python meta package</em>: it
+        installs and loads a collection of Python packages that all follow the tidy data philosophy we
         discussed above. One of the <c>tidyverse</c> packages is <c>dplyr</c>&#x2014;a data wrangling
         workhorse. You have already met many of <c>dplyr</c>&#x2019;s functions (<c>select</c>,
         <c>filter</c>, <c>mutate</c>, <c>arrange</c>, <c>summarize</c>, and <c>group_by</c>). To learn
         more about these functions and meet a few more useful functions, we recommend you check out
         Chapters 5&#x2013;9 of the
         <url href="https://stat545.com/" visual="stat545.com/">STAT545 online notes</url>.</p></li>
-      <li><p>The <url href="https://dplyr.tidyverse.org/" visual="dplyr.tidyverse.org/"><c>dplyr</c> R
+      <li><p>The <url href="https://dplyr.tidyverse.org/" visual="dplyr.tidyverse.org/"><c>dplyr</c> Python
         package documentation</url> <xref ref="dplyr"/> is another resource to learn more about the
         functions in this chapter, the full set of arguments you can use, and other related functions.
         The site also provides a very nice cheat sheet that summarizes many of the data wrangling
         functions from this chapter.</p></li>
       <li><p>Check out the <url href="https://tidyselect.r-lib.org/index.html" visual="tidyselect.r-lib.org/"><c>tidyselect</c>
-        R package page</url> <xref ref="tidyselect"/> for a comprehensive list of <c>select</c> helpers.
+        Python package page</url> <xref ref="tidyselect"/> for a comprehensive list of <c>select</c> helpers.
         The <url href="https://tidyselect.r-lib.org/reference/select_helpers.html" visual="tidyselect.r-lib.org/reference/select_helpers.html">documentation for <c>select</c> helpers</url>
         is a useful reference to find the helper you need for your particular problem.</p></li>
-      <li><p><em>R for Data Science</em> <xref ref="wickham2016r"/> has a few chapters related to data
+      <li><p><em>Python for Data Science</em> <xref ref="wickham2016r"/> has a few chapters related to data
         wrangling that go into more depth than this book. For example, the
         <url href="https://r4ds.had.co.nz/tidy-data.html" visual="r4ds.had.co.nz/tidy-data.html">tidy
         data chapter</url> covers tidy data, <c>pivot_longer</c>/<c>pivot_wider</c> and

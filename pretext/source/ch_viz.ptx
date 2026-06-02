@@ -10,7 +10,7 @@
       principles for effective data visualization and explaining visualizations
       independent of any particular tool or programming language. In the process, we
       will cover some specifics of creating visualizations (scatter plots, bar plots,
-      line plots, and histograms) for data using R.
+      line plots, and histograms) for data using Python.
     </p>
   </section>
 
@@ -32,7 +32,7 @@
   </li>
   <li>
     <p>
-      Given a data set and a question, select from the above plot types and use R to 
+      Given a data set and a question, select from the above plot types and use Python to 
       create a visualization that best answers the question.
     </p>
   </li>
@@ -54,7 +54,7 @@
   </li>
   <li>
     <p>
-      Use the <c>ggplot2</c> package in R to create and refine the above visualizations 
+      Use the <c>ggplot2</c> package in Python to create and refine the above visualizations 
       using:
     </p>
     <ul>
@@ -181,7 +181,7 @@
     <title>Refining the visualization</title>
     <p><em>Convey the message, minimize noise</em></p>
     <p>
-      Just being able to make a visualization in R (or any other language, for that matter) doesn&#x2019;t mean that it effectively
+      Just being able to make a visualization in Python (or any other language, for that matter) doesn&#x2019;t mean that it effectively
       communicates your message to others. Once you have selected a broad type of
       visualization to use, you will have to refine it to suit your particular need.
       Some rules of thumb for doing this are listed below. They generally fall into
@@ -207,7 +207,7 @@
         population&#x2014;from about 1% to 10%, depending on sex and ancestry
         <xref ref="deebblind"/>). For example,
         <url href="https://colorbrewer2.org" visual="colorbrewer2.org">ColorBrewer</url> and the
-        <url href="https://cran.r-project.org/web/packages/RColorBrewer/index.html" visual="cran.r-project.org/web/packages/RColorBrewer/index.html"><c>RColorBrewer</c> R package</url>
+        <url href="https://cran.r-project.org/web/packages/RColorBrewer/index.html" visual="cran.r-project.org/web/packages/RColorBrewer/index.html"><c>RColorBrewer</c> Python package</url>
         <xref ref="RColorBrewer"/> provide the ability to pick such color schemes, and you can check
         your visualizations after you have created them by uploading to online tools such as a
         <url href="https://www.color-blindness.com/coblis-color-blindness-simulator/" visual="color-blindness.com/coblis-color-blindness-simulator/">color blindness simulator</url>.</p></li>
@@ -236,13 +236,14 @@
     <p>
       This section will cover examples of how to choose and refine a visualization
       given a data set and a question that you want to answer, and then how to create
-      the visualization in R <idx><h>ggplot</h></idx> using the <c>ggplot2</c> R
+      the visualization in Python <idx><h>ggplot</h></idx> using the <c>ggplot2</c> Python
       package. Given that the <c>ggplot2</c> package is loaded by the
       <c>tidyverse</c> metapackage, we still need to load only <c>tidyverse</c>:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-library(tidyverse)
+import pandas as pd
+import altair as alt
       </input>
     </program>
 
@@ -265,10 +266,13 @@ library(tidyverse)
         Does the concentration of atmospheric CO<m>_2</m> change over time, and are
         there any interesting patterns to note?
       </p>
-      <program language="r">
+      <program language="python">
         <input>
 # mauna loa carbon dioxide data
-co2_df &lt;- read_csv("data/mauna_loa_data.csv")
+co2_df = pd.read_csv(
+    &quot;data/mauna_loa_data.csv&quot;,
+    parse_dates=[&quot;date_measured&quot;]
+)
 co2_df
         </input>
       </program>
@@ -303,10 +307,10 @@ co2_df
         dates correctly. For example, <c>date</c> type vectors allow functions like
         <c>ggplot</c> to treat them as numeric dates and not as character vectors, even though
         they contain non-numeric characters (e.g., in the <c>date_measured</c> column in the
-        <c>co2_df</c> data frame). This means R will not accidentally plot the dates in the
+        <c>co2_df</c> data frame). This means Python will not accidentally plot the dates in the
         wrong order (i.e., not alphanumerically as would happen if it was a character vector).
         An in-depth study of dates and times is beyond the scope of the book, but interested
-        readers may consult the Dates and Times chapter of <em>R for Data
+        readers may consult the Dates and Times chapter of <em>Python for Data
         Science</em> <xref ref="wickham2016r"/>; see the additional resources at the
         end of this chapter.</p>
       </note>
@@ -374,12 +378,9 @@ co2_df
   </li>
 </ul>
 
-      <program language="r">
+      <program language="python">
         <input>
-co2_scatter &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
-  geom_point()
-
-co2_scatter
+co2_df.info()
         </input>
       </program>
       <figure xml:id="fig-viz-co2-scatter">
@@ -412,12 +413,12 @@ co2_scatter
   arguments:
 </p>
 
-      <program language="r">
+      <program language="python">
         <input>
-co2_line &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
-  geom_line()
-
-co2_line
+co2_scatter = alt.Chart(co2_df).mark_point().encode(
+    x=&quot;date_measured&quot;,
+    y=alt.Y(&quot;ppm&quot;).scale(zero=False)
+)
         </input>
       </program>
       <figure xml:id="fig-viz-co2-line">
@@ -445,15 +446,12 @@ otherwise be clear (<term>overplotting</term>).
         <idx><h>ggplot</h><h>ylab</h></idx>
         <idx><h>ggplot</h><h>theme</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-co2_line &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
-  geom_line() +
-  xlab("Year") +
-  ylab("Atmospheric CO2 (ppm)") +
-  theme(text = element_text(size = 12))
-
-co2_line
+co2_line = alt.Chart(co2_df).mark_line().encode(
+    x=&quot;date_measured&quot;,
+    y=alt.Y(&quot;ppm&quot;).scale(zero=False)
+)
         </input>
       </program>
       <figure xml:id="fig-viz-co2-line-labels">
@@ -484,7 +482,7 @@ co2_line
         be of the same type as the data that is mapped to that axis. Here, we have
         mapped a date to the x-axis, and so we need to use the <c>date</c> function
         (from the <c>tidyverse</c> <url href="https://lubridate.tidyverse.org/" visual="lubridate.tidyverse.org/"><c>lubridate</c>
-        R package</url> <xref ref="lubridate"/> <xref ref="lubridatepaper"/>) to convert the
+        Python package</url> <xref ref="lubridate"/> <xref ref="lubridatepaper"/>) to convert the
         character strings we provide to <c>c</c> to <c>date</c> vectors.
       </p>
       <note>
@@ -492,18 +490,12 @@ co2_line
         metapackage, but is not loaded by it. Hence we need to load it separately in
         the code below.</p>
       </note>
-      <program language="r">
+      <program language="python">
         <input>
-library(lubridate)
-
-co2_line &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
-  geom_line() +
-  xlab("Year") +
-  ylab("Atmospheric CO2 (ppm)") +
-  xlim(c(date("1990-01-01"), date("1993-12-01"))) +
-  theme(text = element_text(size = 12))
-
-co2_line
+co2_line_labels = alt.Chart(co2_df).mark_line().encode(
+    x=alt.X(&quot;date_measured&quot;).title(&quot;Year&quot;),
+    y=alt.Y(&quot;ppm&quot;).scale(zero=False).title(&quot;Atmospheric CO2 (ppm)&quot;)
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-co2-line-zoom">
@@ -545,7 +537,7 @@ co2_line
         contains measurements of the waiting time between eruptions and the subsequent
         eruption duration (in minutes) of the Old Faithful geyser in Yellowstone
         National Park, Wyoming, United States. The <c>faithful</c> data set is
-        available in base R as a data frame, so it does not need to be loaded. We
+        available in base Python as a data frame, so it does not need to be loaded. We
         convert it to a tibble to take advantage of the nicer print output these
         specialized data frames provide.
       </p>
@@ -555,10 +547,16 @@ co2_line
         Is there a relationship between the waiting time before an eruption and the
         duration of the eruption?
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-faithful &lt;- as_tibble(faithful)
-faithful
+co2_line_scale = alt.Chart(co2_df).mark_line(clip=True).encode(
+    x=alt.X(&quot;date_measured&quot;)
+        .scale(domain=[&quot;1990&quot;, &quot;1995&quot;])
+        .title(&quot;Measurement Date&quot;),
+    y=alt.Y(&quot;ppm&quot;)
+        .scale(zero=False)
+        .title(&quot;Atmospheric CO2 (ppm)&quot;)
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <pre>
@@ -588,12 +586,10 @@ faithful
         <c>geom_point</c> geometric object. The result is shown in
         <xref ref="fig-viz-faithful-scatter"/>.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-faithful_scatter &lt;- ggplot(faithful, aes(x = waiting, y = eruptions)) +
-  geom_point()
-
-faithful_scatter
+faithful = pd.read_csv(&quot;data/faithful.csv&quot;)
+faithful
         </input>
       </program>
       <figure xml:id="fig-viz-faithful-scatter">
@@ -608,15 +604,12 @@ faithful_scatter
         pattern they form is clear. In order to refine the visualization, we need only
         to add axis labels and make the font more readable:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-faithful_scatter &lt;- ggplot(faithful, aes(x = waiting, y = eruptions)) +
-  geom_point() +
-  xlab("Waiting Time (mins)") +
-  ylab("Eruption Duration (mins)") +
-  theme(text = element_text(size = 12))
-
-faithful_scatter
+faithful_scatter = alt.Chart(faithful).mark_point().encode(
+    x=&quot;waiting&quot;,
+    y=&quot;eruptions&quot;
+)
         </input>
       </program>
       <figure xml:id="fig-viz-faithful-scatter-labels">
@@ -645,10 +638,12 @@ faithful_scatter
         the higher-level language categories (Official languages, Aboriginal languages,
         or non-official and non-Aboriginal languages)?
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-can_lang &lt;- read_csv("data/can_lang.csv")
-can_lang
+faithful_scatter_labels = alt.Chart(faithful).mark_point().encode(
+    x=alt.X(&quot;waiting&quot;).title(&quot;Waiting Time (mins)&quot;),
+    y=alt.Y(&quot;eruptions&quot;).title(&quot;Eruption Duration (mins)&quot;)
+)
         </input>
       </program>
       <pre>
@@ -672,10 +667,12 @@ can_lang
         <c>most_at_home</c> columns:
         <idx><h>ggplot</h><h>geom_point</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
-  geom_point()
+faithful_scatter_labels_black = alt.Chart(faithful).mark_point(size=10, color=&quot;black&quot;).encode(
+    x=alt.X(&quot;waiting&quot;).title(&quot;Waiting Time (mins)&quot;),
+    y=alt.Y(&quot;eruptions&quot;).title(&quot;Eruption Duration (mins)&quot;)
+)
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter">
@@ -692,13 +689,10 @@ ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
         <idx><h>escape character</h></idx>
         We should also increase the font size to further improve readability.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
-  geom_point() +
-  xlab("Language spoken most at home \n (number of Canadian residents)") +
-  ylab("Mother tongue \n (number of Canadian residents)") +
-  theme(text = element_text(size = 12))
+can_lang = pd.read_csv(&quot;data/can_lang.csv&quot;)
+can_lang
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter-labs">
@@ -719,10 +713,12 @@ ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
         correspond to Canada's two official languages by filtering the data:
         <idx><h>filter</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-can_lang |&gt;
-  filter(language == "English" | language == "French")
+can_lang_plot = alt.Chart(can_lang).mark_circle().encode(
+    x=&quot;most_at_home&quot;,
+    y=&quot;mother_tongue&quot;
+)
         </input>
       </program>
       <pre>
@@ -748,29 +744,27 @@ can_lang |&gt;
         distance apart! So we see that applying this function is moving big values
         closer together and moving small values farther apart. Note that if your data
         can take the value 0, logarithmic scaling may not be appropriate (since
-        <c>log10(0)</c> is <c>-Inf</c> in R). There are other ways to transform the
+        <c>log10(0)</c> is <c>-Inf</c> in Python). There are other ways to transform the
         data in such a case, but these are beyond the scope of the book.
       </p>
       <p>
         We can accomplish logarithmic scaling in a <c>ggplot</c> visualization using
         the <c>scale_x_log10</c> and <c>scale_y_log10</c> functions. Given that the x
         and y axes have large numbers, we should also format the axis labels to put
-        commas in these numbers to increase their readability. We can do this in R by
+        commas in these numbers to increase their readability. We can do this in Python by
         passing the <c>label_comma</c> function (from the <c>scales</c> package) to the
         <c>labels</c> argument of the <c>scale_x_log10</c> and <c>scale_x_log10</c>
         functions.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-library(scales)
-
-ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
-  geom_point() +
-  xlab("Language spoken most at home \n (number of Canadian residents)") +
-  ylab("Mother tongue \n (number of Canadian residents)") +
-  theme(text = element_text(size = 12)) +
-  scale_x_log10(labels = label_comma()) +
-  scale_y_log10(labels = label_comma())
+can_lang_plot_labels = alt.Chart(can_lang).mark_circle().encode(
+    x=alt.X(&quot;most_at_home&quot;)
+        .title([&quot;Language spoken most at home&quot;, &quot;(number of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue&quot;)
+        .scale(zero=False)
+        .title([&quot;Mother tongue&quot;, &quot;(number of Canadian residents)&quot;])
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter-log">
@@ -797,16 +791,12 @@ ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
         <idx><h>mutate</h></idx>
         <idx><h>select</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-can_lang &lt;- can_lang |&gt;
-  mutate(
-    mother_tongue_percent = (mother_tongue / 35151728) * 100,
-    most_at_home_percent = (most_at_home / 35151728) * 100
-  )
-
-can_lang |&gt;
-  select(mother_tongue_percent, most_at_home_percent)
+can_lang.loc[
+    (can_lang[&quot;language&quot;]==&quot;English&quot;)
+    | (can_lang[&quot;language&quot;]==&quot;French&quot;)
+]
         </input>
       </program>
       <pre>
@@ -830,15 +820,16 @@ can_lang |&gt;
         computed (and change our axis labels to reflect this change in units).
         <xref ref="fig-viz-canlang-scatter-log-pct"/> displays the final result.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-ggplot(can_lang, aes(x = most_at_home_percent, y = mother_tongue_percent)) +
-  geom_point() +
-  xlab("Language spoken most at home \n (percentage of Canadian residents)") +
-  ylab("Mother tongue \n (percentage of Canadian residents)") +
-  theme(text = element_text(size = 12)) +
-  scale_x_log10(labels = comma) +
-  scale_y_log10(labels = comma)
+can_lang_plot_log = alt.Chart(can_lang).mark_circle().encode(
+    x=alt.X(&quot;most_at_home&quot;)
+        .scale(type=&quot;log&quot;)
+        .title([&quot;Language spoken most at home&quot;, &quot;(number of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue&quot;)
+        .scale(type=&quot;log&quot;)
+        .title([&quot;Mother tongue&quot;, &quot;(number of Canadian residents)&quot;])
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter-log-pct">
@@ -910,17 +901,18 @@ ggplot(can_lang, aes(x = most_at_home_percent, y = mother_tongue_percent)) +
         this argument will color the points according to their group and add a legend
         at the side of the plot.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-ggplot(can_lang, aes(x = most_at_home_percent,
-                     y = mother_tongue_percent,
-                     color = category)) +
-  geom_point() +
-  xlab("Language spoken most at home \n (percentage of Canadian residents)") +
-  ylab("Mother tongue \n (percentage of Canadian residents)") +
-  theme(text = element_text(size = 12)) +
-  scale_x_log10(labels = comma) +
-  scale_y_log10(labels = comma)
+can_lang_plot_log_revised = alt.Chart(can_lang).mark_circle().encode(
+    x=alt.X(&quot;most_at_home&quot;)
+        .scale(type=&quot;log&quot;)
+        .title([&quot;Language spoken most at home&quot;, &quot;(number of Canadian residents)&quot;])
+        .axis(tickCount=7, format=&quot;s&quot;),
+    y=alt.Y(&quot;mother_tongue&quot;)
+        .scale(type=&quot;log&quot;)
+        .title([&quot;Mother tongue&quot;, &quot;(number of Canadian residents)&quot;])
+        .axis(tickCount=7, format=&quot;s&quot;)
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter-color">
@@ -941,19 +933,12 @@ ggplot(can_lang, aes(x = most_at_home_percent,
         that will not work well for this particular visualization because the legend
         labels are quite long and would run off the page if displayed this way.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-ggplot(can_lang, aes(x = most_at_home_percent,
-                     y = mother_tongue_percent,
-                     color = category)) +
-  geom_point() +
-  xlab("Language spoken most at home \n (percentage of Canadian residents)") +
-  ylab("Mother tongue \n (percentage of Canadian residents)") +
-  theme(text = element_text(size = 12),
-        legend.position = "top",
-        legend.direction = "vertical") +
-  scale_x_log10(labels = comma) +
-  scale_y_log10(labels = comma)
+canadian_population = 35_151_728
+can_lang[&quot;mother_tongue_percent&quot;] = can_lang[&quot;mother_tongue&quot;]/canadian_population*100
+can_lang[&quot;most_at_home_percent&quot;] = can_lang[&quot;most_at_home&quot;]/canadian_population*100
+can_lang[[&quot;mother_tongue_percent&quot;, &quot;most_at_home_percent&quot;]]
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter-color-legend">
@@ -965,7 +950,7 @@ ggplot(can_lang, aes(x = most_at_home_percent,
       <p>
         In <xref ref="fig-viz-canlang-scatter-color-legend"/>, the points are colored
         with the default <c>ggplot2</c> color palette. But what if you want to use
-        different colors? In R, two packages that provide alternative color
+        different colors? In Python, two packages that provide alternative color
         palettes
         <idx><h>color palette</h></idx>
         are <c>RColorBrewer</c> <xref ref="RColorBrewer"/> and <c>ggthemes</c>
@@ -975,14 +960,22 @@ ggplot(can_lang, aes(x = most_at_home_percent,
         You can also print a list of color-blind friendly palettes by adding
         <c>colorblindFriendly = TRUE</c> to the function.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-library(RColorBrewer)
-display.brewer.all(colorblindFriendly = TRUE)
+can_lang_plot_percent = alt.Chart(can_lang).mark_circle().encode(
+    x=alt.X(&quot;most_at_home_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Language spoken most at home&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Mother tongue&quot;, &quot;(percentage of Canadian residents)&quot;]),
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-rcolorbrewer">
-        <caption>Color palettes available from the <c>RColorBrewer</c> R
+        <caption>Color palettes available from the <c>RColorBrewer</c> Python
         package.</caption>
         <image source="images/viz/rcolorbrewer.png" width="75%"/>
       </figure>
@@ -1001,21 +994,19 @@ display.brewer.all(colorblindFriendly = TRUE)
         color and shape&#x2014;can further improve the clarity and accessibility of your
         visualization.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-ggplot(can_lang, aes(x = most_at_home_percent,
-                     y = mother_tongue_percent,
-                     color = category,
-                     shape = category)) +
-  geom_point() +
-  xlab("Language spoken most at home \n (percentage of Canadian residents)") +
-  ylab("Mother tongue \n (percentage of Canadian residents)") +
-  theme(text = element_text(size = 12),
-        legend.position = "top",
-        legend.direction = "vertical") +
-  scale_x_log10(labels = comma) +
-  scale_y_log10(labels = comma) +
-  scale_color_brewer(palette = "Set2")
+can_lang_plot_category=alt.Chart(can_lang).mark_circle().encode(
+    x=alt.X(&quot;most_at_home_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Language spoken most at home&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Mother tongue&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    color=&quot;category&quot;
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter-color-palette">
@@ -1067,10 +1058,21 @@ ggplot(can_lang, aes(x = most_at_home_percent,
         Antarctica) Earth&#x2019;s seven largest landmasses? If so, what are the next few
         largest landmasses after those?
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-islands_df &lt;- read_csv("data/islands.csv")
-islands_df
+can_lang_plot_legend = alt.Chart(can_lang).mark_circle().encode(
+    x=alt.X(&quot;most_at_home_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Language spoken most at home&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Mother tongue&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    color=alt.Color(&quot;category&quot;)
+        .legend(orient=&quot;top&quot;)
+        .title(&quot;&quot;)
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <pre>
@@ -1111,12 +1113,23 @@ islands_df
         <xref ref="fig-viz-islands-bar"/>.
         <idx><h>ggplot</h><h>geom_bar</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-islands_bar &lt;- ggplot(islands_df, aes(x = landmass, y = size)) +
-  geom_bar(stat = "identity")
-
-islands_bar
+can_lang_plot_theme = alt.Chart(can_lang).mark_point(filled=True).encode(
+    x=alt.X(&quot;most_at_home_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Language spoken most at home&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Mother tongue&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    color=alt.Color(&quot;category&quot;)
+        .legend(orient=&quot;top&quot;)
+        .title(&quot;&quot;)
+        .scale(scheme=&quot;dark2&quot;),
+    shape=&quot;category&quot;
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-islands-bar">
@@ -1148,13 +1161,24 @@ islands_bar
         because they are specialized for this purpose. In general, it is good to use
         more specialized functions when they are available!</p>
       </note>
-      <program language="r">
+      <program language="python">
         <input>
-islands_top12 &lt;- slice_max(islands_df, order_by = size, n = 12)
-islands_bar &lt;- ggplot(islands_top12, aes(x = size, y = landmass)) +
-  geom_bar(stat = "identity")
-
-islands_bar
+can_lang_plot_tooltip = alt.Chart(can_lang).mark_point(filled=True).encode(
+    x=alt.X(&quot;most_at_home_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Language spoken most at home&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Mother tongue&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    color=alt.Color(&quot;category&quot;)
+        .legend(orient=&quot;top&quot;)
+        .title(&quot;&quot;)
+        .scale(scheme=&quot;dark2&quot;),
+    shape=&quot;category&quot;,
+    tooltip=alt.Tooltip([&quot;language&quot;, &quot;mother_tongue&quot;, &quot;most_at_home&quot;])
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-islands-bar-top12">
@@ -1204,21 +1228,10 @@ islands_bar
         use the <c>theme</c> function to change the font size.
         <idx><h>ggplot</h><h>labs</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-islands_bar &lt;- ggplot(islands_top12,
-                      aes(x = size,
-                          y = fct_reorder(landmass, size, .desc = TRUE),
-                          fill = landmass_type)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Size (1000 square mi)",
-       y = "Landmass",
-       fill = "Type",
-       title = "Earth's twelve largest landmasses") +
-  scale_fill_manual(values = c("steelblue", "darkorange")) +
-  theme(text = element_text(size = 10))
-
-islands_bar
+islands_df = pd.read_csv(&quot;data/islands.csv&quot;)
+islands_df
         </input>
       </program>
       <figure xml:id="fig-viz-islands-bar-colored">
@@ -1243,7 +1256,7 @@ islands_bar
         performed in 1879. Five experiments were performed, and in each experiment,
         20 runs were performed&#x2014;meaning that 20 measurements of the speed of light
         were collected in each experiment <xref ref="lightdata"/>. The
-        <c>morley</c> data set is available in base R as a data frame, so it does not
+        <c>morley</c> data set is available in base Python as a data frame, so it does not
         need to be loaded. Because the speed of light is a very large number (the
         true value is 299,792.458 km/sec), the data is coded to be the measured speed
         of light minus 299,000. This coding allows us to focus on the variations in
@@ -1259,10 +1272,12 @@ islands_bar
         Given what we know now about the speed of light (299,792.458 kilometres per
         second), how accurate were each of the experiments?
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-morley &lt;- as_tibble(morley)
-morley
+islands_bar = alt.Chart(islands_df).mark_bar().encode(
+    x=&quot;landmass&quot;,
+    y=&quot;size&quot;
+)
         </input>
       </program>
       <pre>
@@ -1300,12 +1315,14 @@ morley
         <c>Speed</c> measurement variable. As usual, let&#x2019;s use the default arguments
         just to see how things look.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-morley_hist &lt;- ggplot(morley, aes(x = Speed)) +
-  geom_histogram()
+islands_top12 = islands_df.nlargest(12, &quot;size&quot;)
 
-morley_hist
+islands_bar_top = alt.Chart(islands_top12).mark_bar().encode(
+    x=&quot;size&quot;,
+    y=&quot;landmass&quot;
+)
         </input>
       </program>
       <figure xml:id="fig-viz-morley-hist">
@@ -1330,13 +1347,16 @@ morley_hist
         axis</em>, while <em>horizontal lines</em> are used to denote quantities on
         the <em>vertical axis</em>.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-morley_hist &lt;- ggplot(morley, aes(x = Speed)) +
-  geom_histogram() +
-  geom_vline(xintercept = 792.458, linetype = "dashed")
-
-morley_hist
+islands_plot_sorted = alt.Chart(
+	islands_top12,
+	title=&quot;Earth's seven largest landmasses are continents&quot;
+).mark_bar().encode(
+    x=alt.X(&quot;size&quot;).title(&quot;Size (1000 square mi)&quot;),
+    y=alt.Y(&quot;landmass&quot;).sort(&quot;x&quot;).title(&quot;Landmass&quot;),
+    color=alt.Color(&quot;landmass_type&quot;).title(&quot;Type&quot;)
+)
         </input>
       </program>
       <figure xml:id="fig-viz-morley-hist-vline">
@@ -1360,13 +1380,10 @@ morley_hist
         overlaid side-by-side, instead of stacked bars (which is the default for bar
         plots or histograms when they are colored by another categorical variable).
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-morley_hist &lt;- ggplot(morley, aes(x = Speed, fill = Expt)) +
-  geom_histogram(alpha = 0.5, position = "identity") +
-  geom_vline(xintercept = 792.458, linetype = "dashed")
-
-morley_hist
+morley_df = pd.read_csv(&quot;data/morley.csv&quot;)
+morley_df
         </input>
       </program>
       <figure xml:id="fig-viz-morley-hist-color">
@@ -1378,7 +1395,7 @@ morley_hist
         Alright great, <xref ref="fig-viz-morley-hist-color"/> looks...wait a
         second! The histogram is still all the same color! What is going on here?
         Well, if you recall from <xref ref="ch-wrangling"/>, the <em>data type</em>
-        you use for each variable can influence how R and <c>tidyverse</c> treats it.
+        you use for each variable can influence how Python and <c>tidyverse</c> treats it.
         Here, we indeed have an issue with the data types in the <c>morley</c> data
         frame. In particular, the <c>Expt</c> column is currently an
         <em>integer</em>
@@ -1392,18 +1409,17 @@ morley_hist
         <em>factor</em>
         <idx><h>factor</h></idx>
         by passing it to <c>as_factor</c> in the <c>fill</c> aesthetic mapping.
-        Recall that factor is a data type in R that is often used to represent
-        categories. By writing <c>as_factor(Expt)</c> we are ensuring that R will
+        Recall that factor is a data type in Python that is often used to represent
+        categories. By writing <c>as_factor(Expt)</c> we are ensuring that Python will
         treat this variable as a factor, and the color will be mapped discretely.
         <idx><h>factor</h><h>usage in ggplot</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-morley_hist &lt;- ggplot(morley, aes(x = Speed, fill = as_factor(Expt))) +
-  geom_histogram(alpha = 0.5, position = "identity") +
-  geom_vline(xintercept = 792.458, linetype = "dashed")
-
-morley_hist
+morley_bars = alt.Chart(morley_df).mark_bar().encode(
+    x=&quot;Speed&quot;,
+    y=&quot;count()&quot;
+)
         </input>
       </program>
       <figure xml:id="fig-viz-morley-hist-factor">
@@ -1441,14 +1457,12 @@ morley_hist
         to be correctly evaluated in the context of the data frame.
         <idx><h>ggplot</h><h>facet_grid</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-morley_hist &lt;- ggplot(morley, aes(x = Speed, fill = as_factor(Expt))) +
-  geom_histogram() +
-  facet_grid(rows = vars(Expt)) +
-  geom_vline(xintercept = 792.458, linetype = "dashed")
-
-morley_hist
+morley_hist = alt.Chart(morley_df).mark_bar().encode(
+    x=alt.X(&quot;Speed&quot;).bin(),
+    y=&quot;count()&quot;
+)
         </input>
       </program>
       <figure xml:id="fig-viz-morley-hist-facets">
@@ -1479,24 +1493,13 @@ morley_hist
         <idx><h>ggplot</h><h>labs</h></idx>
         <idx><h>ggplot</h><h>theme</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-morley_rel &lt;- mutate(morley,
-                     relative_accuracy = 100 *
-                       ((299000 + Speed) - 299792.458) / (299792.458))
+v_line = alt.Chart(morley_df).mark_rule(strokeDash=[6], size=1.5).encode(
+    x=alt.datum(792.458)
+)
 
-morley_hist &lt;- ggplot(morley_rel,
-                      aes(x = relative_accuracy,
-                          fill = as_factor(Expt))) +
-  geom_histogram() +
-  facet_grid(rows = vars(Expt)) +
-  geom_vline(xintercept = 0, linetype = "dashed") +
-  labs(x = "Relative Accuracy (%)",
-       y = "# Measurements",
-       fill = "Experiment ID") +
-  theme(text = element_text(size = 12))
-
-morley_hist
+morley_hist_line = morley_hist + v_line
         </input>
       </program>
       <figure xml:id="fig-viz-morley-hist-relative">
@@ -1515,7 +1518,7 @@ morley_hist
       <subsubsection xml:id="sec-viz-binwidth">
         <title>Choosing a binwidth for histograms</title>
         <p>
-          When you create a histogram in R, the default number of bins used is 30.
+          When you create a histogram in Python, the default number of bins used is 30.
           Naturally, this is not always the right number to use. You can set the
           number of bins yourself by using the <c>bins</c> argument in the
           <c>geom_histogram</c> geometric object.
@@ -1571,12 +1574,15 @@ morley_hist
           layer with the <c>ggtitle</c> function. The result is shown in
           <xref ref="fig-viz-morley-hist-title"/>.
         </p>
-        <program language="r">
+        <program language="python">
           <input>
-morley_hist_title &lt;- morley_hist +
-  ggtitle("Speed of light experiments \n were accurate to about 0.05%")
+morley_hist_colored = alt.Chart(morley_df).mark_bar().encode(
+    x=alt.X(&quot;Speed&quot;).bin(),
+    y=&quot;count()&quot;,
+    color=&quot;Expt&quot;
+)
 
-morley_hist_title
+morley_hist_colored = morley_hist_colored + v_line
           </input>
         </program>
         <figure xml:id="fig-viz-morley-hist-title">
@@ -1770,16 +1776,9 @@ morley_hist_title
       Faithful data set</url> <xref ref="faithfuldata"/>, shown in
       <xref ref="fig-viz-faithful-save"/>.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-library(svglite) # we need this to save SVG files
-faithful_plot &lt;- ggplot(data = faithful, aes(x = waiting, y = eruptions)) +
-  geom_point() +
-  labs(x = "Waiting time to next eruption \n (minutes)",
-       y = "Eruption time \n (minutes)") +
-  theme(text = element_text(size = 12))
-
-faithful_plot
+morley_df.info()
       </input>
     </program>
     <figure xml:id="fig-viz-faithful-save">
@@ -1798,13 +1797,15 @@ faithful_plot
       that the file extension is <c>.png</c>. Below we demonstrate how to save PNG,
       JPG, BMP, TIFF and SVG file types for the <c>faithful_plot</c>:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-ggsave("img/viz/faithful_plot.png", faithful_plot)
-ggsave("img/viz/faithful_plot.jpg", faithful_plot)
-ggsave("img/viz/faithful_plot.bmp", faithful_plot)
-ggsave("img/viz/faithful_plot.tiff", faithful_plot)
-ggsave("img/viz/faithful_plot.svg", faithful_plot)
+morley_hist_categorical = alt.Chart(morley_df).mark_bar(opacity=0.5).encode(
+    x=alt.X(&quot;Speed&quot;).bin(),
+    y=alt.Y(&quot;count()&quot;).stack(False),
+    color=&quot;Expt:N&quot;
+)
+
+morley_hist_categorical = morley_hist_categorical + v_line
       </input>
     </program>
     <table xml:id="tab-viz-filesizes">
@@ -1887,7 +1888,7 @@ ggsave("img/viz/faithful_plot.svg", faithful_plot)
     <title>Additional resources</title>
     <ul>
       <li><p>The
-        <url href="https://ggplot2.tidyverse.org"><c>ggplot2</c> R package page</url>
+        <url href="https://ggplot2.tidyverse.org"><c>ggplot2</c> Python package page</url>
         <xref ref="ggplot"/> is where you should look if you want to learn more about
         the functions in this chapter, the full set of arguments you can use, and
         other related functions. The site also provides a very nice cheat sheet that
@@ -1897,9 +1898,9 @@ ggsave("img/viz/faithful_plot.svg", faithful_plot)
         specific to any particular programming language or library. If you want to
         improve your visualization skills, this is the next place to
         look.</p></li>
-      <li><p><em>R for Data Science</em> <xref ref="wickham2016r"/> has a
+      <li><p><em>Python for Data Science</em> <xref ref="wickham2016r"/> has a
         <url href="https://r4ds.had.co.nz/data-visualisation.html">chapter on creating
-        visualizations using <c>ggplot2</c></url>. This reference is specific to R
+        visualizations using <c>ggplot2</c></url>. This reference is specific to Python
         and <c>ggplot2</c>, but provides a much more detailed introduction to the full
         set of tools that <c>ggplot2</c> provides. This chapter is where you should
         look if you want to learn how to make more intricate visualizations in
@@ -1908,7 +1909,7 @@ ggsave("img/viz/faithful_plot.svg", faithful_plot)
         <url href="https://ggplot2.tidyverse.org/reference/theme.html"><c>theme</c>
         function documentation</url> is an excellent reference to see how you can
         fine tune the non-data aspects of your visualization.</p></li>
-      <li><p><em>R for Data Science</em> <xref ref="wickham2016r"/> has a chapter on
+      <li><p><em>Python for Data Science</em> <xref ref="wickham2016r"/> has a chapter on
         <url href="https://r4ds.had.co.nz/dates-and-times.html">dates and times</url>.
         This chapter is where you should look if you want to learn about <c>date</c>
         vectors, including how to create them, and how to use them to effectively

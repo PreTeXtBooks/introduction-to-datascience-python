@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter xml:id="ch-intro" xmlns:xi="http://www.w3.org/2001/XInclude">
-  <title>R and the Tidyverse</title>
+  <title>Python and Pandas</title>
 
   <section xml:id="sec-intro-overview">
     <title>Overview</title>
     <p>
-      This chapter provides an introduction to data science and the R programming language.
+      This chapter provides an introduction to data science and the Python programming language.
       The goal here is to get your hands dirty right from the start! We will walk through an
       entire data analysis, and along the way introduce different types of data analysis
-      question, some fundamental programming concepts in R, and the basics of loading,
+      question, some fundamental programming concepts in Python, and the basics of loading,
       cleaning, and visualizing data. In the following chapters, we will dig into each of
       these steps in much more detail; but for now, let&#x2019;s jump in to see how much we
       can do with data science!
@@ -21,14 +21,14 @@
     <ul>
       <li><p>Identify the different types of data analysis question and categorize a question
         into the correct type.</p></li>
-      <li><p>Load the <c>tidyverse</c> package into R.</p></li>
+      <li><p>Load the <c>tidyverse</c> package into Python.</p></li>
       <li><p>Read tabular data with <c>read_csv</c>.</p></li>
-      <li><p>Create new variables and objects in R using the assignment symbol.</p></li>
+      <li><p>Create new variables and objects in Python using the assignment symbol.</p></li>
       <li><p>Create and organize subsets of tabular data using <c>filter</c>, <c>select</c>,
         <c>arrange</c>, and <c>slice</c>.</p></li>
       <li><p>Add and modify columns in tabular data using <c>mutate</c>.</p></li>
       <li><p>Visualize data with a <c>ggplot</c> bar plot.</p></li>
-      <li><p>Use <c>?</c> to access help and documentation tools in R.</p></li>
+      <li><p>Use <c>?</c> to access help and documentation tools in Python.</p></li>
     </ul>
   </section>
 
@@ -62,7 +62,7 @@
     <p>
       The data set we will study in this chapter is taken from
       <url href="https://ttimbers.github.io/canlang/" visual="ttimbers.github.io/canlang/">the
-      <c>canlang</c> R data package</url> <xref ref="timbers2020canlang"/>, which has
+      <c>canlang</c> Python data package</url> <xref ref="timbers2020canlang"/>, which has
       population language data collected during the 2016 Canadian census
       <xref ref="cancensus2016"/>. In this data, there are 214 languages recorded,
       each having six different properties:
@@ -283,10 +283,10 @@
       tabular data.
     </p>
     <p>
-      Since we are using R for data analysis in this book, the first step for us is to load
-      the data into R. When we load tabular data into R, it is represented as a <em>data
+      Since we are using Python for data analysis in this book, the first step for us is to load
+      the data into Python. When we load tabular data into Python, it is represented as a <em>data
       frame</em> object.<idx><h>data frame</h><h>overview</h></idx>
-      <xref ref="fig-spreadsheet-vs-dataframe"/> shows that an R data frame is very similar
+      <xref ref="fig-spreadsheet-vs-dataframe"/> shows that an Python data frame is very similar
       to a spreadsheet. We refer to the rows as
       <idx><h>observation</h></idx> <alert>observations</alert>; these are the individual
       objects for which we collect data. In
@@ -297,12 +297,12 @@
     </p>
 
     <figure xml:id="fig-spreadsheet-vs-dataframe">
-      <caption>A spreadsheet versus a data frame in R.</caption>
+      <caption>A spreadsheet versus a data frame in Python.</caption>
       <image source="images/intro/spreadsheet_vs_dataframe.png" width="100%"/>
     </figure>
 
     <p>
-      The first kind of data file that we will learn how to load into R as a data frame is
+      The first kind of data file that we will learn how to load into Python as a data frame is
       the <em>comma-separated values</em> format (<c>.csv</c> for
       short).<idx><h>comma-separated values</h><see>csv</see></idx><idx><h>csv</h></idx>
       These files have names ending in <c>.csv</c>, and can be opened and saved using common
@@ -329,12 +329,12 @@ Non-Official &amp; Non-Aboriginal languages,Amharic,22465,12785,200,33670
     </pre>
 
     <p>
-      To load this data into R so that we can do things with it (e.g., perform analyses or
+      To load this data into Python so that we can do things with it (e.g., perform analyses or
       create data visualizations), we will need to use a <em>function</em>.
       <idx><h>function</h></idx>
-      A function is a special word in R that takes instructions (we call these
+      A function is a special word in Python that takes instructions (we call these
       <em>arguments</em>)<idx><h>argument</h></idx> and does something. The function we will
-      use to load a <c>.csv</c> file into R is called <c>read_csv</c>.
+      use to load a <c>.csv</c> file into Python is called <c>read_csv</c>.
       <idx><h>read function</h><h>read_csv</h></idx>
       In its most basic use-case, <c>read_csv</c> expects that the data file:
     </p>
@@ -344,16 +344,16 @@ Non-Official &amp; Non-Aboriginal languages,Amharic,22465,12785,200,33670
       <li><p>does not have row names.</p></li>
     </ul>
     <p>
-      Below you&#x2019;ll see the code used to load the data into R using the <c>read_csv</c>
+      Below you&#x2019;ll see the code used to load the data into Python using the <c>read_csv</c>
       function. Note that the <c>read_csv</c> function is not included in the base
-      installation of R, meaning that it is not one of the primary functions ready to use
-      when you install R. Therefore, you need to load it from somewhere else before you can
-      use it. The place from which we will load it is called an R <em>package</em>. An R
+      installation of Python, meaning that it is not one of the primary functions ready to use
+      when you install Python. Therefore, you need to load it from somewhere else before you can
+      use it. The place from which we will load it is called a Python <em>package</em>. A Python
       package<idx><h>package</h></idx> is a collection of functions that can be used in
-      addition to the built-in R package functions once loaded. The <c>read_csv</c> function,
+      addition to the built-in Python package functions once loaded. The <c>read_csv</c> function,
       in particular, can be made accessible by loading
       <url href="https://tidyverse.tidyverse.org/" visual="tidyverse.tidyverse.org/">the
-      <c>tidyverse</c> R package</url>
+      <c>tidyverse</c> Python package</url>
       <xref ref="tidyverse"/>
       <xref ref="wickham2019tidverse"/>
       using the <c>library</c> function.<idx><h>library</h></idx> The
@@ -361,9 +361,9 @@ Non-Official &amp; Non-Aboriginal languages,Amharic,22465,12785,200,33670
       will use throughout this book to load, clean, wrangle, and visualize data.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
-library(tidyverse)
+import pandas as pd
       </input>
     </program>
 
@@ -380,8 +380,8 @@ library(tidyverse)
 
     <note>
       <p>
-        You may have noticed that we got some extra output from R regarding attached packages
-        and conflicts below our code line. These are examples of <em>messages</em> in R,
+        You may have noticed that we got some extra output from Python regarding attached packages
+        and conflicts below our code line. These are examples of <em>messages</em> in Python,
         which give the user more information that might be handy to know. The
         <c>Attaching packages</c> message is natural when loading <c>tidyverse</c>, since
         <c>tidyverse</c> actually automatically causes other packages to be imported too,
@@ -389,9 +389,9 @@ library(tidyverse)
         will silence these messages to help with the readability of the book. The
         <c>Conflicts</c> message is also totally normal in this circumstance. This message
         tells you if functions from different packages share the same name, which is
-        confusing to R. For example, in this case, the <c>dplyr</c> package and the
+        confusing to Python. For example, in this case, the <c>dplyr</c> package and the
         <c>stats</c> package both provide a function called <c>filter</c>. The message above
-        (<c>dplyr::filter() masks stats::filter()</c>) is R telling you that it is going to
+        (<c>dplyr::filter() masks stats::filter()</c>) is Python telling you that it is going to
         default to the <c>dplyr</c> package version of this function. So if you use the
         <c>filter</c> function, you will be using the <c>dplyr</c> version. In order to use
         the <c>stats</c> version, you need to use its full name <c>stats::filter</c>.
@@ -405,11 +405,11 @@ library(tidyverse)
       After loading the <c>tidyverse</c> package, we can call the <c>read_csv</c> function
       and pass it a single argument: the name of the file, <c>"can_lang.csv"</c>. We have to
       put quotes around file names and other letters and words that we use in our code to
-      distinguish it from the special words (like functions!) that make up the R programming
+      distinguish it from the special words (like functions!) that make up the Python programming
       language. The file&#x2019;s name is the only argument we need to provide because our
       file satisfies everything else that the <c>read_csv</c> function expects in the default
       use-case. <xref ref="fig-img-read-csv"/> describes how we use the <c>read_csv</c> to
-      read data into R.
+      read data into Python.
     </p>
 
     <figure xml:id="fig-img-read-csv">
@@ -417,9 +417,9 @@ library(tidyverse)
       <image source="images/intro/read_csv_function.png" width="100%"/>
     </figure>
 
-    <program language="r">
+    <program language="python">
       <input>
-read_csv("data/can_lang.csv")
+pd.read_csv(&quot;data/can_lang.csv&quot;)
       </input>
     </program>
 
@@ -452,7 +452,7 @@ read_csv("data/can_lang.csv")
   </section>
 
   <section xml:id="sec-intro-naming">
-    <title>Naming things in R</title>
+    <title>Naming things in Python</title>
     <p>
       When we loaded the 2016 Canadian census language data using <c>read_csv</c>, we did not
       give this data frame a name. Therefore the data was just printed on the screen, and we
@@ -461,28 +461,28 @@ read_csv("data/can_lang.csv")
       we can refer to it later for analysis and visualization.
     </p>
     <p>
-      The way to assign a name to a value in R is via the <em>assignment symbol</em>
+      The way to assign a name to a value in Python is via the <em>assignment symbol</em>
       <c>&lt;-</c>.
       <idx><h>assignment symbol</h></idx>
       On the left side of the assignment symbol you put the name that you want to use, and on
       the right side of the assignment symbol you put the value that you want the name to
-      refer to. Names can be used to refer to almost anything in R, such as numbers, words
+      refer to. Names can be used to refer to almost anything in Python, such as numbers, words
       (also known as <em>strings</em> of characters), and data frames! Below, we set
       <c>my_number</c> to <c>3</c> (the result of <c>1+2</c>) and we set <c>name</c> to the
       string <c>"Alice"</c>.<idx><h>string</h></idx>
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
-my_number &lt;- 1 + 2
-name &lt;- "Alice"
+my_number = 1 + 2
+name = &quot;Alice&quot;
       </input>
     </program>
 
     <p>
-      Note that when we name something in R using the assignment symbol, <c>&lt;-</c>, we do
+      Note that when we name something in Python using the assignment symbol, <c>&lt;-</c>, we do
       not need to surround the name we are creating with quotes. This is because we are
-      formally telling R that this special word denotes the value of whatever is on the
+      formally telling Python that this special word denotes the value of whatever is on the
       right-hand side. Only characters and words that act as <em>values</em> on the
       right-hand side of the assignment symbol&#x2014;e.g., the file name
       <c>"data/can_lang.csv"</c> that we specified before, or <c>"Alice"</c>
@@ -492,10 +492,10 @@ name &lt;- "Alice"
       After making the assignment, we can use the special name words we have created in place
       of their values. For example, if we want to do something with the value <c>3</c> later
       on, we can just use <c>my_number</c> instead. Let&#x2019;s try adding 2 to
-      <c>my_number</c>; you will see that R just interprets this as adding 3 and 2:
+      <c>my_number</c>; you will see that Python just interprets this as adding 3 and 2:
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
 my_number + 2
       </input>
@@ -508,13 +508,13 @@ my_number + 2
     <p>
       Object names<idx><h>object</h></idx> can consist of letters, numbers, periods
       <c>.</c> and underscores <c>_</c>. Other symbols won&#x2019;t work since they have
-      their own meanings in R. For example, <c>-</c> is the subtraction symbol; if we try to
-      assign a name with the <c>-</c> symbol, R will complain and we will get an error!
+      their own meanings in Python. For example, <c>-</c> is the subtraction symbol; if we try to
+      assign a name with the <c>-</c> symbol, Python will complain and we will get an error!
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
-my-number &lt;- 1
+my-number = 1
       </input>
     </program>
 
@@ -523,11 +523,11 @@ Error in my - number &lt;- 1 : object 'my' not found
     </pre>
 
     <p>
-      There are certain conventions for naming objects in R. When naming
+      There are certain conventions for naming objects in Python. When naming
       <idx><h>object</h><h>naming convention</h></idx>
       an object we suggest using only lowercase letters, numbers and underscores <c>_</c> to
-      separate the words in a name. R is case sensitive, which means that <c>Letter</c> and
-      <c>letter</c> would be two different objects in R. You should also try to give your
+      separate the words in a name. Python is case sensitive, which means that <c>Letter</c> and
+      <c>letter</c> would be two different objects in Python. You should also try to give your
       objects meaningful names. For instance, you <em>can</em> name a data frame <c>x</c>.
       However, using more meaningful terms, such as <c>language_data</c>, will help you
       remember what each name in your code represents. We recommend following the Tidyverse
@@ -537,9 +537,9 @@ Error in my - number &lt;- 1 : object 'my' not found
       we get from <c>read_csv</c>.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
-can_lang &lt;- read_csv("data/can_lang.csv")
+print(&quot;SyntaxError: cannot assign to expression here. Maybe you meant '==' instead of '='?&quot;)
       </input>
     </program>
 
@@ -553,9 +553,9 @@ can_lang &lt;- read_csv("data/can_lang.csv")
       this is a handy way to get a quick sense for what is contained in a data frame.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
-can_lang
+can_lang = pd.read_csv(&quot;data/can_lang.csv&quot;)
       </input>
     </program>
 
@@ -581,7 +581,7 @@ can_lang
   <section xml:id="sec-intro-filter-select">
     <title>Creating subsets of data frames with <c>filter</c> and <c>select</c></title>
     <p>
-      Now that we&#x2019;ve loaded our data into R, we can start wrangling the data to find
+      Now that we&#x2019;ve loaded our data into Python, we can start wrangling the data to find
       the ten Aboriginal languages that were most often reported in 2016 as mother tongues in
       Canada. In particular, we will construct a table with the ten Aboriginal languages that
       have the largest counts in the <c>mother_tongue</c> column. The <c>filter</c> and
@@ -620,9 +620,9 @@ can_lang
         <c>"Aboriginal languages"</c>; you will learn about many other kinds of logical
         statements in <xref ref="ch-wrangling"/>. Similar to when we loaded the data file and
         put quotes around the file name, here we need to put quotes around
-        <c>"Aboriginal languages"</c>. Using quotes tells R that this is a string
+        <c>"Aboriginal languages"</c>. Using quotes tells Python that this is a string
         <em>value</em><idx><h>string</h></idx> and not one of the special words that make up
-        the R programming language, or one of the names we have given to data frames in the
+        the Python programming language, or one of the names we have given to data frames in the
         code we have already written.
       </p>
 
@@ -637,10 +637,9 @@ can_lang
         statement.
       </p>
 
-      <program language="r">
+      <program language="python">
         <input>
-aboriginal_lang &lt;- filter(can_lang, category == "Aboriginal languages")
-aboriginal_lang
+can_lang
         </input>
       </program>
 
@@ -662,7 +661,7 @@ aboriginal_lang
       </pre>
 
       <p>
-        It&#x2019;s good practice to check the output after using a function in R. We can see
+        It&#x2019;s good practice to check the output after using a function in Python. We can see
         the original <c>can_lang</c> data set contained 214 rows with multiple kinds of
         <c>category</c>. The data frame <c>aboriginal_lang</c> contains only 67 rows, and
         looks like it only contains languages in the <c>"Aboriginal languages"</c> in the
@@ -682,7 +681,7 @@ aboriginal_lang
         names that we want to select: <c>language</c> and <c>mother_tongue</c>. After passing
         these three arguments, the <c>select</c> function returns two columns (the
         <c>language</c> and <c>mother_tongue</c> columns that we asked for) as a data frame.
-        This code is also a great example of why being able to name things in R is useful:
+        This code is also a great example of why being able to name things in Python is useful:
         you can see that we are using the result of our earlier <c>filter</c> step (which we
         named <c>aboriginal_lang</c>) here in the next step of the analysis!
       </p>
@@ -692,10 +691,9 @@ aboriginal_lang
         <image source="images/intro/select_function.png" width="100%"/>
       </figure>
 
-      <program language="r">
+      <program language="python">
         <input>
-selected_lang &lt;- select(aboriginal_lang, language, mother_tongue)
-selected_lang
+can_lang[can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;]
         </input>
       </program>
 
@@ -747,10 +745,9 @@ selected_lang
       <image source="images/intro/arrange_function.png" width="100%"/>
     </figure>
 
-    <program language="r">
+    <program language="python">
       <input>
-arranged_lang &lt;- arrange(selected_lang, by = desc(mother_tongue))
-arranged_lang
+can_lang[[&quot;language&quot;, &quot;mother_tongue&quot;]]
       </input>
     </program>
 
@@ -777,10 +774,9 @@ arranged_lang
       the rows 1 to 10 using the argument <c>1:10</c>.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
-ten_lang &lt;- slice(arranged_lang, 1:10)
-ten_lang
+aboriginal_lang = can_lang.loc[can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;, [&quot;language&quot;, &quot;mother_tongue&quot;]]
       </input>
     </program>
 
@@ -822,11 +818,9 @@ ten_lang
       <c>mother_tongue_percent</c>.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
-canadian_population = 35151728
-ten_lang_percent = mutate(ten_lang, mother_tongue_percent = 100 * mother_tongue / canadian_population)
-ten_lang_percent
+aboriginal_lang
       </input>
     </program>
 
@@ -901,10 +895,10 @@ ten_lang_percent
         <image source="images/intro/ggplot_function.png" width="100%"/>
       </figure>
 
-      <program language="r">
+      <program language="python">
         <input>
-ggplot(ten_lang, aes(x = language, y = mother_tongue)) +
-  geom_bar(stat = "identity")
+arranged_lang = aboriginal_lang.sort_values(by=&quot;mother_tongue&quot;, ascending=False)
+arranged_lang
         </input>
       </program>
 
@@ -917,10 +911,10 @@ ggplot(ten_lang, aes(x = language, y = mother_tongue)) +
 
       <note>
         <p>
-          The vast majority of the time, a single expression in R must be contained in a
+          The vast majority of the time, a single expression in Python must be contained in a
           single line of code. However, there <em>are</em> a small number of situations in
-          which you can have a single R expression span multiple lines. Above is one such
-          case: here, R knows that a line cannot end with a <c>+</c> symbol, and so it keeps
+          which you can have a single Python expression span multiple lines. Above is one such
+          case: here, Python knows that a line cannot end with a <c>+</c> symbol, and so it keeps
           reading the next line to figure out what the right-hand side of the <c>+</c> symbol
           should be. We could, of course, put all of the added layers on one line of code,
           but splitting them across multiple lines helps a lot with code readability.
@@ -934,10 +928,10 @@ ggplot(ten_lang, aes(x = language, y = mother_tongue)) +
       <p>
         It is exciting that we can already visualize our data to help answer our question, but
         we are not done yet! We can (and should) do more to improve the interpretability of
-        the data visualization that we created. For example, by default, R uses the column
+        the data visualization that we created. For example, by default, Python uses the column
         names as the axis labels. Usually these column names do not have enough information
         about the variable in the column. We really should replace this default with a more
-        informative label. For the example above, R uses the column name
+        informative label. For the example above, Python uses the column name
         <c>mother_tongue</c> as the label for the y axis, but most people will not know what
         that is. And even if they did, they will not know how we measured this variable, or
         the group of people on which the measurements were taken. An axis label that reads
@@ -960,12 +954,10 @@ ggplot(ten_lang, aes(x = language, y = mother_tongue)) +
         <xref ref="ch-viz"/>.
       </p>
 
-      <program language="r">
+      <program language="python">
         <input>
-ggplot(ten_lang, aes(x = language, y = mother_tongue)) +
-  geom_bar(stat = "identity") +
-  xlab("Language") +
-  ylab("Mother Tongue (Number of Canadian Residents)")
+ten_lang = arranged_lang.head(10)
+ten_lang
         </input>
       </program>
 
@@ -985,12 +977,11 @@ ggplot(ten_lang, aes(x = language, y = mother_tongue)) +
         accomplish this, we will swap the x and y coordinate axes:
       </p>
 
-      <program language="r">
+      <program language="python">
         <input>
-ggplot(ten_lang, aes(x = mother_tongue, y = language)) +
-  geom_bar(stat = "identity") +
-  xlab("Mother Tongue (Number of Canadian Residents)") +
-  ylab("Language")
+canadian_population = 35_151_728
+ten_lang[&quot;mother_tongue_percent&quot;] = 100 * ten_lang[&quot;mother_tongue&quot;] / canadian_population
+ten_lang
         </input>
       </program>
 
@@ -1013,13 +1004,11 @@ ggplot(ten_lang, aes(x = mother_tongue, y = language)) +
         second variable (<c>mother_tongue</c>).
       </p>
 
-      <program language="r">
+      <program language="python">
         <input>
-ggplot(ten_lang, aes(x = mother_tongue,
-                     y = reorder(language, mother_tongue))) +
-  geom_bar(stat = "identity") +
-  xlab("Mother Tongue (Number of Canadian Residents)") +
-  ylab("Language")
+aboriginal_lang = can_lang.loc[can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;, [&quot;language&quot;, &quot;mother_tongue&quot;]]
+arranged_lang_sorted = aboriginal_lang.sort_values(by=&quot;mother_tongue&quot;, ascending=False)
+ten_lang = arranged_lang_sorted.head(10)
         </input>
       </program>
 
@@ -1057,40 +1046,33 @@ ggplot(ten_lang, aes(x = mother_tongue,
         did above; since you specify the variable names to plot in the <c>ggplot</c> function,
         you don&#x2019;t actually need to <c>select</c> the columns in advance when creating
         a visualization. We have also provided <em>comments</em> next to many of the lines of
-        code below using the hash symbol <c>#</c>. When R sees a <c>#</c>
+        code below using the hash symbol <c>#</c>. When Python sees a <c>#</c>
         sign,<idx><h>comment</h></idx> it will ignore all of the text that comes after the
         symbol on that line. So you can use comments to explain lines of code for others, and
         perhaps more importantly, your future self! It&#x2019;s good practice to get in the
         habit of commenting your code to improve its readability.
       </p>
       <p>
-        This exercise demonstrates the power of R. In relatively few lines of code, we
+        This exercise demonstrates the power of Python. In relatively few lines of code, we
         performed an entire data science workflow with a highly effective data visualization!
-        We asked a question, loaded the data into R, wrangled the data (using <c>filter</c>,
+        We asked a question, loaded the data into Python, wrangled the data (using <c>filter</c>,
         <c>arrange</c> and <c>slice</c>) and created a data visualization to help answer our
         question. In this chapter, you got a quick taste of the data science workflow;
         continue on with the next few chapters to learn each of these steps in much more
         detail!
       </p>
 
-      <program language="r">
+      <program language="python">
         <input>
-library(tidyverse)
-
-# load the data set
-can_lang &lt;- read_csv("data/can_lang.csv")
-
-# obtain the 10 most common Aboriginal languages
-aboriginal_lang &lt;- filter(can_lang, category == "Aboriginal languages")
-arranged_lang &lt;- arrange(aboriginal_lang, by = desc(mother_tongue))
-ten_lang &lt;- slice(arranged_lang, 1:10)
-
-# create the visualization
-ggplot(ten_lang, aes(x = mother_tongue,
-                     y = reorder(language, mother_tongue))) +
-  geom_bar(stat = "identity") +
-  xlab("Mother Tongue (Number of Canadian Residents)") +
-  ylab("Language")
+aboriginal_lang = can_lang.loc[
+    can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;,
+    [&quot;language&quot;, &quot;mother_tongue&quot;]
+]
+arranged_lang_sorted = aboriginal_lang.sort_values(
+    by=&quot;mother_tongue&quot;,
+    ascending=False
+)
+ten_lang = arranged_lang_sorted.head(10)
         </input>
       </program>
 
@@ -1106,9 +1088,9 @@ ggplot(ten_lang, aes(x = mother_tongue,
   <section xml:id="sec-intro-documentation">
     <title>Accessing documentation</title>
     <p>
-      There are many R functions in the <c>tidyverse</c> package (and beyond!), and nobody
+      There are many Python functions in the <c>tidyverse</c> package (and beyond!), and nobody
       can be expected to remember what every one of them does or all of the arguments we have
-      to give them. Fortunately, R provides the <c>?</c> symbol,
+      to give them. Fortunately, Python provides the <c>?</c> symbol,
       <idx><h>documentation</h></idx>
       which provides an easy way to pull up the documentation for most functions quickly. To
       use the <c>?</c> symbol to access documentation, you just put the name of the function
@@ -1117,9 +1099,18 @@ ggplot(ten_lang, aes(x = mother_tongue,
       following code:
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
-?filter
+# obtain the 10 most common Aboriginal languages
+ten_lang = (
+    can_lang.loc[
+       can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;,
+       [&quot;language&quot;, &quot;mother_tongue&quot;]
+    ]
+    .sort_values(by=&quot;mother_tongue&quot;, ascending=False)
+    .head(10)
+)
+ten_lang
       </input>
     </program>
 
@@ -1150,7 +1141,7 @@ ggplot(ten_lang, aes(x = mother_tongue,
       accompanying
       <url href="https://worksheets.datasciencebook.ca"
            visual="worksheets.datasciencebook.ca">worksheets repository</url>
-      in the &#x201C;R and the tidyverse&#x201D; row. You can launch an interactive version
+      in the &#x201C;Python and pandas&#x201D; row. You can launch an interactive version
       of the worksheet in your browser by clicking the &#x201C;launch binder&#x201D; button.
       You can also preview a non-interactive version of the worksheet by clicking &#x201C;view
       worksheet.&#x201D; If you instead decide to download the worksheet and run it on your

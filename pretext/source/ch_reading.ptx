@@ -5,16 +5,16 @@
   <section xml:id="sec-reading-overview">
     <title>Overview</title>
     <p>
-      In this chapter, you'll learn to read tabular data of various formats into R
+      In this chapter, you'll learn to read tabular data of various formats into Python
       from your local device (e.g., your laptop) and the web.
       <idx><h>loading</h><see>reading</see></idx>
       <idx><h>reading</h><h>definition</h></idx>
       &#x201C;Reading&#x201D; (or &#x201C;loading&#x201D;) is the process of
       converting data (stored as plain text, a database, HTML, etc.) into an object
-      (e.g., a data frame) that R can easily access and manipulate. Thus reading data
+      (e.g., a data frame) that Python can easily access and manipulate. Thus reading data
       is the gateway to any data analysis; you won&#x2019;t be able to analyze data unless
       you&#x2019;ve loaded it first. And because there are many ways to store data, there
-      are similarly many ways to read data into R. The more time you spend upfront
+      are similarly many ways to read data into Python. The more time you spend upfront
       matching the data reading method to the type of data you have, the less time
       you will have to devote to re-formatting, cleaning and wrangling your data (the
       second step to all data analyses). It&#x2019;s like making sure your shoelaces are
@@ -33,7 +33,7 @@
           <li><p>Uniform Resource Locator (URL)</p></li>
         </ul>
       </p></li>
-      <li><p>Read data into R from various types of path using:
+      <li><p>Read data into Python from various types of path using:
         <ul>
           <li><p><c>read_csv</c></p></li>
           <li><p><c>read_tsv</c></p></li>
@@ -51,16 +51,16 @@
         </ul>
       </p></li>
       <li><p>Choose the appropriate <c>tidyverse</c> <c>read_*</c> function and function
-        arguments to load a given plain text tabular data set into R.</p></li>
+        arguments to load a given plain text tabular data set into Python.</p></li>
       <li><p>Use the <c>rename</c> function to rename columns in a data frame.</p></li>
       <li><p>Use <c>read_excel</c> function and arguments to load a sheet from an excel
-        file into R.</p></li>
+        file into Python.</p></li>
       <li><p>Work with databases using functions from <c>dbplyr</c> and <c>DBI</c>:
         <ul>
           <li><p>Connect to a database with <c>dbConnect</c>.</p></li>
           <li><p>List tables in the database with <c>dbListTables</c>.</p></li>
           <li><p>Create a reference to a database table with <c>tbl</c>.</p></li>
-          <li><p>Bring data from a database into R using <c>collect</c>.</p></li>
+          <li><p>Bring data from a database into Python using <c>collect</c>.</p></li>
         </ul>
       </p></li>
       <li><p>Use <c>write_csv</c> to save a data frame to a <c>.csv</c> file.</p></li>
@@ -81,9 +81,9 @@
     <title>Absolute and relative file paths</title>
     <p>
       This chapter will discuss the different functions we can use to import data
-      into R, but before we can talk about <em>how</em> we read the data into R with these
+      into Python, but before we can talk about <em>how</em> we read the data into Python with these
       functions, we first need to talk about <em>where</em> the data lives. When you load a
-      data set into R, you first need to tell R where those files live. The file
+      data set into Python, you first need to tell Python where those files live. The file
       could live on your computer (<em>local</em>)
       <idx><h>location</h><see>path</see></idx>
       <idx><h>path</h><h>local</h></idx>
@@ -124,9 +124,9 @@
       <c>/home/dsci-100/project3/data/happiness_report.csv</c>. We can load the file using its absolute path
       as a string passed to the <c>read_csv</c> function.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-happy_data &lt;- read_csv("/home/dsci-100/project3/data/happiness_report.csv")
+happy_data = pd.read_csv(&quot;/home/dsci-100/project3/data/happiness_report.csv&quot;)
       </input>
     </program>
     <p>
@@ -136,14 +136,14 @@ happy_data &lt;- read_csv("/home/dsci-100/project3/data/happiness_report.csv")
       to reach our desired file. Hence the relative path is <c>data/happiness_report.csv</c>, and we can
       load the file using its relative path as a string passed to <c>read_csv</c>.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-happy_data &lt;- read_csv("data/happiness_report.csv")
+happy_data = pd.read_csv(&quot;data/happiness_report.csv&quot;)
       </input>
     </program>
     <p>
       Note that there is no forward slash at the beginning of a relative path; if we accidentally typed
-      <c>"/data/happiness_report.csv"</c>, R would look for a folder named <c>data</c> in the root folder
+      <c>"/data/happiness_report.csv"</c>, Python would look for a folder named <c>data</c> in the root folder
       of the computer&#x2014;but that doesn&#x2019;t exist!
     </p>
     <p>
@@ -185,7 +185,7 @@ happy_data &lt;- read_csv("data/happiness_report.csv")
       computers; any code that uses relative paths will work on both! In the additional resources
       section, we include a link to a short video on the difference between absolute and relative paths.
       You can also check out the <c>here</c> package, which provides methods for finding and constructing
-      file paths in R.
+      file paths in Python.
     </p>
     <p>
       Beyond files stored on your computer (i.e., locally), we also need a way to locate resources
@@ -199,15 +199,15 @@ happy_data &lt;- read_csv("data/happiness_report.csv")
   </section>
 
   <section xml:id="sec-reading-plain-text">
-    <title>Reading tabular data from a plain text file into R</title>
+    <title>Reading tabular data from a plain text file into Python</title>
 
     <subsection xml:id="sec-reading-readcsv">
       <title><c>read_csv</c> to read in comma-separated values files</title>
       <p>
         Now that we have learned about <em>where</em> data could be, we will learn about <em>how</em>
-        to import data into R using various functions. Specifically, we will learn how to <em>read</em>
-        tabular data from a plain text file (a document containing only text) <em>into</em> R and
-        <em>write</em> tabular data to a file <em>out of</em> R. The function we use to do this depends
+        to import data into Python using various functions. Specifically, we will learn how to <em>read</em>
+        tabular data from a plain text file (a document containing only text) <em>into</em> Python and
+        <em>write</em> tabular data to a file <em>out of</em> Python. The function we use to do this depends
         on the file&#x2019;s format. For example, in the last chapter, we learned about using the
         <c>tidyverse</c> <c>read_csv</c> function when reading <c>.csv</c>
         (<em>c</em>omma-<em>s</em>eparated <em>v</em>alues) files.
@@ -229,7 +229,7 @@ happy_data &lt;- read_csv("data/happiness_report.csv")
         Canadian census.
         <idx><h>Canadian languages</h><h>canlang data</h></idx>
         We put <c>data/</c> before the file&#x2019;s name when we are loading the data set because this data
-        set is located in a sub-folder, named <c>data</c>, relative to where we are running our R code.
+        set is located in a sub-folder, named <c>data</c>, relative to where we are running our Python code.
         Here is what the text in the file <c>data/can_lang.csv</c> looks like.
       </p>
       <pre>
@@ -240,27 +240,28 @@ Non-Official &amp; Non-Aboriginal languages,"Afro-Asiatic languages, n.i.e.",115
 Non-Official &amp; Non-Aboriginal languages,Akan (Twi),13460,5985,25,22150
 Non-Official &amp; Non-Aboriginal languages,Albanian,26895,13135,345,31930</pre>
       <p>
-        And here is a review of how we can use <c>read_csv</c> to load it into R. First we load the
+        And here is a review of how we can use <c>read_csv</c> to load it into Python. First we load the
         <c>tidyverse</c>
         <idx><h>tidyverse</h></idx>
         package to gain access to useful functions for reading the data.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-library(tidyverse)
+import pandas as pd
         </input>
       </program>
       <p>
-        Next we use <c>read_csv</c> to load the data into R, and in that call we specify the relative path
+        Next we use <c>read_csv</c> to load the data into Python, and in that call we specify the relative path
         to the file. Note that it is normal and expected that a message is printed out after using the
         <c>read_csv</c> and related functions. This message lets you know the data types of each of the
-        columns that R inferred while reading the data into R. In the future when we use this and related
+        columns that Python inferred while reading the data into Python. In the future when we use this and related
         functions to load data in this book, we will silence these messages to help with the readability of
         the book.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-canlang_data &lt;- read_csv("data/can_lang.csv")
+canlang_data = pd.read_csv(&quot;data/can_lang.csv&quot;)
+canlang_data
         </input>
       </program>
       <pre>
@@ -274,9 +275,9 @@ dbl (4): mother_tongue, most_at_home, most_at_work, lang_known
       <p>
         Finally, to view the first 10 rows of the data frame, we must call it:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-canlang_data
+canlang_data = pd.read_csv(&quot;data/can_lang_meta-data.csv&quot;)
         </input>
       </program>
       <pre>
@@ -324,16 +325,15 @@ Non-Official &amp; Non-Aboriginal languages,American Sign Language,2685,3020,114
 Non-Official &amp; Non-Aboriginal languages,Amharic,22465,12785,200,33670</pre>
       <p>
         With this extra information being present at the top of the file, using <c>read_csv</c> as we
-        did previously does not allow us to correctly load the data into R. In the case of this file we
+        did previously does not allow us to correctly load the data into Python. In the case of this file we
         end up only reading in one column of the data set. In contrast to the normal and expected messages
-        above, this time R prints out a warning for us indicating that there might be a problem with how
+        above, this time Python prints out a warning for us indicating that there might be a problem with how
         our data is being read in.
         <idx><h>warning</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-canlang_data &lt;- read_csv("data/can_lang_meta-data.csv")
-canlang_data
+print(&quot;ParserError: Error tokenizing data. C error: Expected 1 fields in line 4, saw 6&quot;)
         </input>
       </program>
       <pre>
@@ -358,15 +358,14 @@ canlang_data
 ## # ℹ 207 more rows
       </pre>
       <p>
-        To successfully read data like this into R, the <c>skip</c> argument
+        To successfully read data like this into Python, the <c>skip</c> argument
         <idx><h>read function</h><h>skip argument</h></idx>
-        can be useful to tell R how many lines to skip before it should start reading in the data.
+        can be useful to tell Python how many lines to skip before it should start reading in the data.
         In the example above, we would set this value to 3.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-canlang_data &lt;- read_csv("data/can_lang_meta-data.csv",
-                         skip = 3)
+canlang_data = pd.read_csv(&quot;data/can_lang_meta-data.csv&quot;, skiprows=3)
 canlang_data
         </input>
       </program>
@@ -422,9 +421,9 @@ Non-Official &amp; Non-Aboriginal languages Amharic 22465   12785   200 33670
         <idx><h>read function</h><h>read_tsv</h></idx>
         to read in <c>.tsv</c> (<em>t</em>ab <em>s</em>eparated <em>v</em>alues) files.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-canlang_data &lt;- read_tsv("data/can_lang.tsv")
+canlang_data = pd.read_csv(&quot;data/can_lang.tsv&quot;, sep=&quot;\t&quot;)
 canlang_data
         </input>
       </program>
@@ -454,7 +453,7 @@ canlang_data
     </subsection>
 
     <subsection xml:id="sec-reading-delim">
-      <title><c>read_delim</c> as a more flexible method to get tabular data into R</title>
+      <title><c>read_delim</c> as a more flexible method to get tabular data into Python</title>
       <p>
         The <c>read_csv</c> and <c>read_tsv</c> functions are actually just special cases of the more
         general <c>read_delim</c> function.
@@ -478,7 +477,7 @@ Non-Official &amp; Non-Aboriginal languages Amharic 22465   12785   200 33670
 Non-Official &amp; Non-Aboriginal languages Arabic  419890  223535  5585    629055
 </pre>
       <p>
-        To read this into R using the <c>read_delim</c> function, we specify the path to the file as the
+        To read this into Python using the <c>read_delim</c> function, we specify the path to the file as the
         first argument, provide the tab character <c>"\t"</c> as the <c>delim</c> argument, and set the
         <c>col_names</c> argument
         <idx><h>read function</h><h>col_names argument</h></idx>
@@ -495,11 +494,13 @@ Non-Official &amp; Non-Aboriginal languages Arabic  419890  223535  5585    6290
           special meanings (such as quotation marks).
         </p>
       </note>
-      <program language="r">
+      <program language="python">
         <input>
-canlang_data &lt;- read_delim("data/can_lang_no_names.tsv",
-                           delim = "\t",
-                           col_names = FALSE)
+canlang_data = pd.read_csv(
+    &quot;data/can_lang_no_names.tsv&quot;,
+    sep=&quot;\t&quot;,
+    header=None
+)
 canlang_data
         </input>
       </program>
@@ -520,29 +521,31 @@ canlang_data
 ## # ℹ 204 more rows
       </pre>
       <p>
-        Data frames in R need to have column names. Thus if you read in data without column names, R will
-        assign names automatically. In this example, R assigns the column names <c>X1, X2, X3, X4, X5, X6</c>.
+        Data frames in Python need to have column names. Thus if you read in data without column names, Python will
+        assign names automatically. In this example, Python assigns the column names <c>X1, X2, X3, X4, X5, X6</c>.
         It is best to rename your columns manually in this scenario. The current column names (<c>X1, X2</c>,
         etc.) are not very descriptive and will make your analysis confusing. To rename your columns, you can
         use the <c>rename</c> function
         <idx><h>rename</h></idx>
-        from <url href="https://dplyr.tidyverse.org/" visual="dplyr.tidyverse.org/">the <c>dplyr</c> R package</url> <xref ref="dplyr"/>
+        from <url href="https://dplyr.tidyverse.org/" visual="dplyr.tidyverse.org/">the <c>dplyr</c> Python package</url> <xref ref="dplyr"/>
         <idx><h>dplyr</h></idx>
         (one of the packages loaded with <c>tidyverse</c>, so we don&#x2019;t need to load it separately).
         The first argument is the data set, and in the subsequent arguments you write
         <c>new_name = old_name</c> for the selected variables to rename. We rename the 
         <c>X1, X2, ..., X6</c> columns in the <c>canlang_data</c> data frame to more descriptive names below.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-canlang_data &lt;- rename(canlang_data,
-       category = X1,
-       language = X2,
-       mother_tongue = X3,
-       most_at_home = X4,
-       most_at_work = X5,
-       lang_known = X6)
-canlang_data
+col_map = {
+    0 : &quot;category&quot;,
+    1 : &quot;language&quot;,
+    2 : &quot;mother_tongue&quot;,
+    3 : &quot;most_at_home&quot;,
+    4 : &quot;most_at_work&quot;,
+    5 : &quot;lang_known&quot;
+}
+canlang_data_renamed = canlang_data.rename(columns=col_map)
+canlang_data_renamed
         </input>
       </program>
       <pre>
@@ -577,10 +580,21 @@ canlang_data
         All other arguments that we use are the same as when using these functions with a local file on
         our computer.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-url &lt;- "https://raw.githubusercontent.com/UBC-DSCI/data/main/can_lang.csv"
-canlang_data &lt;- read_csv(url)
+canlang_data = pd.read_csv(
+    &quot;data/can_lang_no_names.tsv&quot;,
+    sep=&quot;\t&quot;,
+    header=None,
+    names=[
+        &quot;category&quot;,
+        &quot;language&quot;,
+        &quot;mother_tongue&quot;,
+        &quot;most_at_home&quot;,
+        &quot;most_at_work&quot;,
+        &quot;lang_known&quot;,
+    ],
+)
 canlang_data
         </input>
       </program>
@@ -606,15 +620,17 @@ canlang_data
       <title>Downloading data from a URL</title>
       <p>
         Occasionally the data available at a URL is not formatted nicely enough to use <c>read_csv</c>,
-        <c>read_tsv</c>, <c>read_delim</c>, or other related functions to read the data directly into R.
+        <c>read_tsv</c>, <c>read_delim</c>, or other related functions to read the data directly into Python.
         In situations where it is necessary to download a file to our local computer prior to working with
-        it in R, we can use the <c>download.file</c> function. The first argument is the URL, and the
+        it in Python, we can use the <c>download.file</c> function. The first argument is the URL, and the
         second is a path where we would like to store the downloaded file.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-download.file(url, "data/can_lang.csv")
-canlang_data &lt;- read_csv("data/can_lang.csv")
+url = &quot;https://raw.githubusercontent.com/UBC-DSCI/introduction-to-datascience-python/reading/source/data/can_lang.csv&quot;
+pd.read_csv(url)
+canlang_data = pd.read_csv(url)
+
 canlang_data
         </input>
       </program>
@@ -637,13 +653,13 @@ canlang_data
     </subsection>
 
     <subsection xml:id="sec-reading-preview">
-      <title>Previewing a data file before reading it into R</title>
+      <title>Previewing a data file before reading it into Python</title>
       <p>
-        In many of the examples above, we gave you previews of the data file before we read it into R.
+        In many of the examples above, we gave you previews of the data file before we read it into Python.
         Previewing data is essential to see whether or not there are column names, what the delimiters are,
         and if there are lines you need to skip. You should do this yourself when trying to read in data
         files: open the file in whichever text editor you prefer to inspect its contents prior to reading
-        it into R.
+        it into Python.
       </p>
     </subsection>
   </section>
@@ -652,8 +668,8 @@ canlang_data
     <title>Reading tabular data from a Microsoft Excel file</title>
     <p>
       There are many other ways to store tabular data sets beyond plain text files, and similarly, many
-      ways to load those data sets into R. For example, it is very common to encounter, and need to load
-      into R, data stored as a Microsoft Excel
+      ways to load those data sets into Python. For example, it is very common to encounter, and need to load
+      into Python, data stored as a Microsoft Excel
       <idx><h>Excel spreadsheet</h></idx>
       <idx><h>Microsoft Excel</h><see>Excel spreadsheet</see></idx>
       <idx><h>xlsx</h><see>Excel spreadsheet</see></idx>
@@ -685,14 +701,12 @@ X?a??4VT?,D?Jq
       This type of file representation allows Excel files to store additional things that 
       you cannot store in a <c>.csv</c> file, such as fonts, text formatting, graphics, multiple
       sheets and more. And despite looking odd in a plain text editor, we can read Excel
-      spreadsheets into R using the <c>readxl</c> package developed specifically for this purpose.
+      spreadsheets into Python using the <c>readxl</c> package developed specifically for this purpose.
     </p>
 
-    <program language="r">
+    <program language="python">
       <input>
-library(readxl)
-
-canlang_data &lt;- read_excel("data/can_lang.xlsx")
+canlang_data = pd.read_excel(&quot;data/can_lang.xlsx&quot;)
 canlang_data
       </input>
     </program>
@@ -719,8 +733,8 @@ canlang_data
       many Excel spreadsheets since this makes reading in data more difficult).
     </p>
     <p>
-      As with plain text files, you should always explore the data file before importing it into R.
-      Exploring the data beforehand helps you decide which arguments you need to load the data into R
+      As with plain text files, you should always explore the data file before importing it into Python.
+      Exploring the data beforehand helps you decide which arguments you need to load the data into Python
       successfully. If you do not have the Excel program on your computer, you can use other programs to
       preview the file. Examples include Google Sheets and Libre Office.
     </p>
@@ -736,8 +750,8 @@ canlang_data
       <tabular top="major" bottom="minor" left="minor" right="minor">
         <row header="yes" bottom="major">
           <cell>Data File Type</cell>
-          <cell>R Function</cell>
-          <cell>R Package</cell>
+          <cell>Python Function</cell>
+          <cell>Python Package</cell>
         </row>
         <row>
           <cell>Comma (<c>,</c>) separated files</cell>
@@ -785,8 +799,8 @@ canlang_data
       These different relational database management systems each have their own advantages and
       limitations. Almost all employ SQL (<em>structured query language</em>) to obtain data from the
       database. But you don&#x2019;t need to know SQL to analyze data from a database; several packages have
-      been written that allow you to connect to relational databases and use the R programming language
-      to obtain data. In this book, we will give examples of how to do this using R with SQLite and
+      been written that allow you to connect to relational databases and use the Python programming language
+      to obtain data. In this book, we will give examples of how to do this using Python with SQLite and
       PostgreSQL databases.
     </p>
 
@@ -795,23 +809,23 @@ canlang_data
       <p>
         SQLite
         <idx><h>database</h><h>SQLite</h></idx>
-        is probably the simplest relational database system that one can use in combination with R.
+        is probably the simplest relational database system that one can use in combination with Python.
         SQLite databases are self-contained, and are usually stored and accessed locally on one computer
         from a file with a <c>.db</c> extension (or sometimes an <c>.sqlite</c> extension). Similar to
         Excel files, these are not plain text files and cannot be read in a plain text editor.
       </p>
       <p>
-        The first thing you need to do to read data into R from a database is to connect to the database.
+        The first thing you need to do to read data into Python from a database is to connect to the database.
         We do that using the <c>dbConnect</c> function from the <c>DBI</c> (database interface) package.
         <idx><h>database</h><h>connect</h></idx>
-        This does not read in the data, but simply tells R where the database is and opens up a
-        communication channel that R can use to send SQL commands to the database.
+        This does not read in the data, but simply tells Python where the database is and opens up a
+        communication channel that Python can use to send SQL commands to the database.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-library(DBI)
+import ibis
 
-canlang_conn &lt;- dbConnect(RSQLite::SQLite(), "data/can_lang.db")
+conn = ibis.sqlite.connect(&quot;data/can_lang.db&quot;)
         </input>
       </program>
       <p>
@@ -821,9 +835,9 @@ canlang_conn &lt;- dbConnect(RSQLite::SQLite(), "data/can_lang.db")
         <idx><h>database</h><h>tables</h></idx>
         function:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-tables &lt;- dbListTables(canlang_conn)
+tables = conn.list_tables()
 tables
         </input>
       </program>
@@ -841,12 +855,10 @@ tables
         if they were just regular data frames; but secretly, behind the scenes, <c>dbplyr</c> is turning
         your function calls (e.g., <c>select</c> and <c>filter</c>) into SQL queries!
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-library(dbplyr)
-
-lang_db &lt;- tbl(canlang_conn, "lang")
-lang_db
+canlang_table = conn.table(&quot;can_lang&quot;)
+canlang_table
         </input>
       </program>
       <pre>
@@ -870,33 +882,33 @@ lang_db
         Although it looks like we just got a data frame from the database, we didn&#x2019;t! It&#x2019;s a
         <em>reference</em>; the data is still stored only in the SQLite database. The <c>dbplyr</c> package
         works this way because databases are often more efficient at selecting, filtering and joining large
-        data sets than R.
+        data sets than Python.
         And typically the database will not even be stored on your computer, but rather a more powerful
-        machine somewhere on the web. So R is lazy and waits to bring this data into memory until you
+        machine somewhere on the web. So Python is lazy and waits to bring this data into memory until you
         explicitly tell it to using the <c>collect</c>
         <idx><h>database</h><h>collect</h></idx>
         function.
         <xref ref="fig-reading-ref-vs-tibble"/> highlights the difference between a <c>tibble</c>
-        object in R and the output we just created. Notice in the table on the right, the first two lines
+        object in Python and the output we just created. Notice in the table on the right, the first two lines
         of the output indicate the source is SQL. The last line doesn&#x2019;t show how many rows there are
-        (R is trying to avoid performing expensive query operations), whereas the output for the
+        (Python is trying to avoid performing expensive query operations), whereas the output for the
         <c>tibble</c> object does.
       </p>
 
       <figure xml:id="fig-reading-ref-vs-tibble">
-        <caption>Comparison of a reference to data in a database and a tibble in R.</caption>
+        <caption>Comparison of a reference to data in a database and a tibble in Python.</caption>
         <image source="images/reading/ref_vs_tibble.001.jpeg" width="80%"/>
       </figure>
 
       <p>
         We can look at the SQL commands that are sent to the database when we write
-        <c>tbl(canlang_conn, "lang")</c> in R with the <c>show_query</c> function from the <c>dbplyr</c>
+        <c>tbl(canlang_conn, "lang")</c> in Python with the <c>show_query</c> function from the <c>dbplyr</c>
         package.
         <idx><h>database</h><h>show_query</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-show_query(tbl(canlang_conn, "lang"))
+canlang_table.count()
         </input>
       </program>
       <pre>
@@ -905,10 +917,10 @@ SELECT *
 FROM `lang`</pre>
       <p>
         The output above shows the SQL code that is sent to the database. When we write
-        <c>tbl(canlang_conn, "lang")</c> in R, in the background, the function is translating the R code
+        <c>tbl(canlang_conn, "lang")</c> in Python, in the background, the function is translating the Python code
         into SQL, sending that SQL to the database, and then translating the response for us. So
-        <c>dbplyr</c> does all the hard work of translating from R to SQL and back for us; we can just
-        stick with R!
+        <c>dbplyr</c> does all the hard work of translating from Python to SQL and back for us; we can just
+        stick with Python!
       </p>
       <p>
         With our <c>lang_db</c> table reference for the 2016 Canadian Census data in hand, we can mostly
@@ -917,10 +929,9 @@ FROM `lang`</pre>
         and keep only the <c>language</c> and <c>mother_tongue</c> columns. We can use the <c>filter</c>
         function to obtain only certain rows. Below we filter the data to include only Aboriginal languages.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-aboriginal_lang_db &lt;- filter(lang_db, category == "Aboriginal languages")
-aboriginal_lang_db
+canlang_table.count().execute()
         </input>
       </program>
       <pre>
@@ -941,19 +952,18 @@ aboriginal_lang_db
 ## # ℹ more rows
       </pre>
       <p>
-        Above you can again see the hints that this data is not actually stored in R yet: the source is
-        <c>SQL [?? x 6]</c> and the output says <c>... more rows</c> at the end (both indicating that R
+        Above you can again see the hints that this data is not actually stored in Python yet: the source is
+        <c>SQL [?? x 6]</c> and the output says <c>... more rows</c> at the end (both indicating that Python
         does not know how many rows there are in total!), and a database type <c>sqlite</c> is listed.
-        We didn&#x2019;t use the <c>collect</c> function because we are not ready to bring the data into R yet.
+        We didn&#x2019;t use the <c>collect</c> function because we are not ready to bring the data into Python yet.
         <idx><h>collect</h></idx>
         We can still use the database to do some work to obtain <em>only</em> the small amount of data we
-        want to work with locally in R. Let&#x2019;s add the second part of our database query: selecting only
+        want to work with locally in Python. Let&#x2019;s add the second part of our database query: selecting only
         the <c>language</c> and <c>mother_tongue</c> columns using the <c>select</c> function.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-aboriginal_lang_selected_db &lt;- select(aboriginal_lang_db, language, mother_tongue)
-aboriginal_lang_selected_db
+str(canlang_table.count().compile())
         </input>
       </program>
       <pre>
@@ -975,16 +985,15 @@ aboriginal_lang_selected_db
       </pre>
       <p>
         Now you can see that the database will return only the two columns we asked for with the
-        <c>select</c> function. In order to actually retrieve this data in R as a data frame, we use the
+        <c>select</c> function. In order to actually retrieve this data in Python as a data frame, we use the
         <c>collect</c> function.
         <idx><h>filter</h></idx>
-        Below you will see that after running <c>collect</c>, R knows that the retrieved data has 67
+        Below you will see that after running <c>collect</c>, Python knows that the retrieved data has 67
         rows, and there is no database listed any more.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-aboriginal_lang_data &lt;- collect(aboriginal_lang_selected_db)
-aboriginal_lang_data
+canlang_table.head(10).execute()
         </input>
       </program>
       <pre>
@@ -1012,9 +1021,10 @@ aboriginal_lang_data
         For example, look what happens when we try to use <c>nrow</c> to count rows in a data frame:
         <idx><h>nrow</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-nrow(aboriginal_lang_selected_db)
+canlang_table_filtered = canlang_table[canlang_table[&quot;category&quot;] == &quot;Aboriginal languages&quot;]
+canlang_table_filtered
         </input>
       </program>
       <pre>
@@ -1023,9 +1033,10 @@ nrow(aboriginal_lang_selected_db)
         <idx><h>tail</h></idx>
         to preview the last six rows of a data frame:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-tail(aboriginal_lang_selected_db)
+canlang_table_selected = canlang_table_filtered[[&quot;language&quot;, &quot;mother_tongue&quot;]]
+canlang_table_selected
         </input>
       </program>
       <pre>
@@ -1033,11 +1044,11 @@ Error: tail() is not supported by sql sources</pre>
       <p>
         Additionally, some operations will not work to extract columns or single values from the reference
         given by the <c>tbl</c> function. Thus, once you have finished your data wrangling of the
-        <c>tbl</c> database reference object, it is advisable to bring it into R as a data frame using
+        <c>tbl</c> database reference object, it is advisable to bring it into Python as a data frame using
         <c>collect</c>. But be very careful using <c>collect</c>: databases are often <em>very</em> big,
-        and reading an entire table into R might take a long time to run or even possibly crash your
+        and reading an entire table into Python might take a long time to run or even possibly crash your
         machine. So make sure you use <c>filter</c> and <c>select</c> on the database table to reduce the
-        data to a reasonable size before using <c>collect</c> to read it into R!
+        data to a reasonable size before using <c>collect</c> to read it into Python!
       </p>
     </subsection>
 
@@ -1048,7 +1059,7 @@ Error: tail() is not supported by sql sources</pre>
         <idx><h>database</h><h>PostgreSQL</h></idx>
         is a very popular and open-source option for relational database software. Unlike SQLite,
         PostgreSQL uses a client&#x2013;server database engine, as it was designed to be used and accessed
-        on a network. This means that you have to provide more information to R when connecting to Postgres
+        on a network. This means that you have to provide more information to Python when connecting to Postgres
         databases. The additional information that you need to include when you call the <c>dbConnect</c>
         function is listed below:
       </p>
@@ -1056,7 +1067,7 @@ Error: tail() is not supported by sql sources</pre>
         <li><p><c>dbname</c>: the name of the database (a single PostgreSQL instance can host more than
           one database)</p></li>
         <li><p><c>host</c>: the URL pointing to where the database is located</p></li>
-        <li><p><c>port</c>: the communication endpoint between R and the PostgreSQL database (usually
+        <li><p><c>port</c>: the communication endpoint between Python and the PostgreSQL database (usually
           <c>5432</c>)</p></li>
         <li><p><c>user</c>: the username for accessing the database</p></li>
         <li><p><c>password</c>: the password for accessing the database</p></li>
@@ -1068,22 +1079,20 @@ Error: tail() is not supported by sql sources</pre>
         <c>host</c>, <c>user</c>, and <c>password</c> below are <em>not real</em>; you will not actually
         be able to connect to a database using this information.
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-library(RPostgres)
-canmov_conn &lt;- dbConnect(RPostgres::Postgres(), dbname = "can_mov_db",
-                        host = "fakeserver.stat.ubc.ca", port = 5432,
-                        user = "user0001", password = "abc123")
+aboriginal_lang_data = canlang_table_selected.execute()
+aboriginal_lang_data
         </input>
       </program>
       <p>
         After opening the connection, everything looks and behaves almost identically to when we were
-        using an SQLite database in R. For example, we can again use <c>dbListTables</c> to find out what
+        using an SQLite database in Python. For example, we can again use <c>dbListTables</c> to find out what
         tables are in the <c>can_mov_db</c> database:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-dbListTables(canmov_conn)
+canlang_table_selected.tail(6)
         </input>
       </program>
       <pre>
@@ -1094,10 +1103,9 @@ dbListTables(canmov_conn)
         We see that there are 10 tables in this database. Let&#x2019;s first look at the <c>"ratings"</c> table
         to find the lowest rating that exists in the <c>can_mov_db</c> database:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-ratings_db &lt;- tbl(canmov_conn, "ratings")
-ratings_db
+aboriginal_lang_data.tail(6)
         </input>
       </program>
       <pre>
@@ -1122,10 +1130,15 @@ ratings_db
         <c>average_rating</c> column using <c>select</c>:
         <idx><h>select</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-avg_rating_db &lt;- select(ratings_db, average_rating)
-avg_rating_db
+conn = ibis.postgres.connect(
+    database=&quot;can_mov_db&quot;,
+    host=&quot;fakeserver.stat.ubc.ca&quot;,
+    port=5432,
+    user=&quot;user0001&quot;,
+    password=&quot;abc123&quot;
+)
         </input>
       </program>
       <pre>
@@ -1149,21 +1162,20 @@ avg_rating_db
         Next we use <c>min</c> to find the minimum rating in that column:
         <idx><h>min</h></idx>
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-min(avg_rating_db)
+conn.list_tables()
         </input>
       </program>
       <pre>
 Error in min(avg_rating_db) : invalid 'type' (list) of argument</pre>
       <p>
         Instead of the minimum, we get an error! This is another example of when we need to use the
-        <c>collect</c> function to bring the data into R for further computation:
+        <c>collect</c> function to bring the data into Python for further computation:
       </p>
-      <program language="r">
+      <program language="python">
         <input>
-avg_rating_data &lt;- collect(avg_rating_db)
-min(avg_rating_data)
+print('[&quot;themes&quot;, &quot;medium&quot;, &quot;titles&quot;, &quot;title_aliases&quot;, &quot;forms&quot;, &quot;episodes&quot;, &quot;names&quot;, &quot;names_occupations&quot;, &quot;occupation&quot;, &quot;ratings&quot;]')
         </input>
       </program>
       <pre>
@@ -1198,7 +1210,7 @@ min(avg_rating_data)
   </section>
 
   <section xml:id="sec-reading-write-csv">
-    <title>Writing data from R to a <c>.csv</c> file</title>
+    <title>Writing data from Python to a <c>.csv</c> file</title>
     <p>
       At the middle and end of a data analysis, we often want to write a data frame that has changed
       (either through filtering, selecting, mutating or summarizing) to a file to share it with others
@@ -1210,10 +1222,10 @@ min(avg_rating_data)
       of the Canadian languages data set without the official languages category according to the
       Canadian 2016 Census, and then writing this to a <c>.csv</c> file:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-no_official_lang_data &lt;- filter(can_lang, category != "Official languages")
-write_csv(no_official_lang_data, "data/no_official_languages.csv")
+ratings_table = conn.table(&quot;ratings&quot;)
+ratings_table
       </input>
     </program>
   </section>
@@ -1247,9 +1259,9 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
     </p>
     <p>
       This subsection will show you the basics of both web scraping with the
-      <url href="https://rvest.tidyverse.org/" visual="rvest.tidyverse.org/"><c>rvest</c> R package</url>
+      <url href="https://rvest.tidyverse.org/" visual="rvest.tidyverse.org/"><c>rvest</c> Python package</url>
       <xref ref="rvest"/> and accessing the NASA &#x201C;Astronomy Picture of the Day&#x201D; API
-      using the <url href="https://httr2.r-lib.org/" visual="httr2.r-lib.org/"><c>httr2</c> R package</url>
+      using the <url href="https://httr2.r-lib.org/" visual="httr2.r-lib.org/"><c>httr2</c> Python package</url>
       <xref ref="httr2"/>.
     </p>
 
@@ -1280,7 +1292,7 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
 
         <p>
           Based on what our browser shows us, it&#x2019;s pretty easy to find the size and price for each
-          apartment listed. But we would like to be able to obtain that information using R, without any
+          apartment listed. But we would like to be able to obtain that information using Python, without any
           manual human effort or copying and pasting. We do this by examining the <em>source code</em> that
           the web server actually sent our browser to display for us. A snippet of HTML source code is shown
           below (the <url href="https://github.com/UBC-DSCI/introduction-to-datascience/blob/main/img/reading/website_source.txt" visual="github.com/UBC-DSCI/introduction-to-datascience/blob/main/img/reading/website_source.txt">entire source is included with the code for this book</url>):
@@ -1330,7 +1342,7 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
           closing tags like these. Tags are keywords that tell the web browser how to display or format the
           content. Above you can see that the information we want (<c>$800</c>) is stored between an opening
           and closing tag (<c>&lt;span&gt;</c> and <c>&lt;/span&gt;</c>). In the opening tag, you can also see
-          a very useful &#x201C;class&#x201D;: <c>class="result-price"</c>. Since we want R to
+          a very useful &#x201C;class&#x201D;: <c>class="result-price"</c>. Since we want Python to
           programmatically sort through all of the source code for the website to find apartment prices,
           maybe we can look for all the tags with the <c>"result-price"</c> class, and grab the
           information between the opening and closing tag. Indeed, take a look at another line of the source snippet above:
@@ -1392,7 +1404,7 @@ write_csv(no_official_lang_data, "data/no_official_languages.csv")
           So to scrape information about the square footage and rental price of apartment listings, we need
           to use the two CSS selectors <c>.housing</c> and <c>.result-price</c>, respectively. The
           SelectorGadget returns them to us as a comma-separated list (here <c>.housing , .result-price</c>),
-          which is exactly the format we need to provide to R if we are using more than one CSS selector.
+          which is exactly the format we need to provide to Python if we are using more than one CSS selector.
         </p>
 <p><alert>Caution: are you allowed to scrape that website?</alert></p>
         <p>
@@ -1442,22 +1454,28 @@ td:nth-child(4) ,
       <subsubsection xml:id="sec-reading-rvest">
         <title>Using <c>rvest</c></title>
         <p>
-          We will use the <c>rvest</c> R package
+          We will use the <c>rvest</c> Python package
           <idx><h>rvest</h></idx>
           to scrape data from the Wikipedia page. We start by loading the <c>rvest</c> package:
         </p>
-        <program language="r">
+        <program language="python">
           <input>
-library(rvest)
+print(&quot;&quot;&quot;
+AlchemyTable: ratings
+  title           string
+  average_rating  float64
+  num_votes       int64
+&quot;&quot;&quot;)
           </input>
         </program>
         <p>
-          Next, we tell R what page we want to scrape by providing the webpage&#x2019;s URL in quotations to
+          Next, we tell Python what page we want to scrape by providing the webpage&#x2019;s URL in quotations to
           the function <c>read_html</c>:
         </p>
-        <program language="r">
+        <program language="python">
           <input>
-page &lt;- read_html("https://en.wikipedia.org/wiki/Canada")
+avg_rating = ratings_table[[&quot;average_rating&quot;]]
+avg_rating
           </input>
         </program>
         <p>
@@ -1475,14 +1493,18 @@ page &lt;- read_html("https://en.wikipedia.org/wiki/Canada")
           into a list. We use this function to build the list of selectors to maintain code readability;
           this avoids having a very long line of code.
         </p>
-        <program language="r">
+        <program language="python">
           <input>
-selectors &lt;- paste("td:nth-child(8)",
-             "td:nth-child(4)",
-             ".largestCities-cell-background+ td a", sep = ",")
+print(&quot;&quot;&quot;
+r0 := AlchemyTable: ratings
+  title           string
+  average_rating  float64
+  num_votes       int64
 
-population_nodes &lt;- html_nodes(page, selectors)
-head(population_nodes)
+Selection[r0]
+  selections:
+    average_rating: r0.average_rating
+&quot;&quot;&quot;)
           </input>
         </program>
         <pre>
@@ -1496,11 +1518,11 @@ head(population_nodes)
         </pre>
         <note>
           <p>
-            <c>head</c> is a function that is often useful for viewing only a short summary of an R
+            <c>head</c> is a function that is often useful for viewing only a short summary of a Python
             object, rather than the whole thing (which may be quite a lot to look at). For example, here
             <c>head</c> shows us only the first 6 items in the <c>population_nodes</c> object. Note that
-            some R objects by default print only a small summary. For example, <c>tibble</c> data frames
-            only show you the first 10 rows. But not <em>all</em> R objects do this, and that&#x2019;s where
+            some Python objects by default print only a small summary. For example, <c>tibble</c> data frames
+            only show you the first 10 rows. But not <em>all</em> Python objects do this, and that&#x2019;s where
             the <c>head</c> function helps summarize things for you.
           </p>
         </note>
@@ -1522,10 +1544,10 @@ head(population_nodes)
           <c>html_text</c> function. In the case of the example node above, <c>html_text</c> returns
           <c>"London"</c>.
         </p>
-        <program language="r">
+        <program language="python">
           <input>
-population_text &lt;- html_text(population_nodes)
-head(population_text)
+lowest = avg_rating.order_by(&quot;average_rating&quot;).head(1)
+lowest.execute()
           </input>
         </program>
         <pre>
@@ -1539,7 +1561,7 @@ head(population_text)
           Additionally, the populations contain commas (not useful for programmatically dealing with
           numbers), and some even contain a line break character at the end (<c>\n</c>). In
           <xref ref="ch-wrangling"/>, we will learn more about how to <em>wrangle</em> data such as this
-          into a more useful format for data analysis using R.
+          into a more useful format for data analysis using Python.
         </p>
       </subsubsection>
     </subsection>
@@ -1550,13 +1572,13 @@ head(population_text)
         Rather than posting a data file at a URL for you to download, many websites these days provide an
         API
         <idx><h>API</h></idx>
-        that must be accessed through a programming language like R. The benefit of using an API is that
+        that must be accessed through a programming language like Python. The benefit of using an API is that
         data owners have much more control over the data they provide to users. However, unlike web
         scraping, there is no consistent way to access an API across websites. Every website typically has
         its own API designed especially for its own use case. Therefore we will just provide one example of
         accessing data through an API in this book, with the hope that it gives you enough of a basic idea
         that you can learn how to use another API if needed. In particular, in this book we will show you
-        the basics of how to use the <c>httr2</c> package in R
+        the basics of how to use the <c>httr2</c> package in Python
         <idx><h>API</h><h>httr2</h></idx>
         <idx><h>httr2</h></idx>
         <idx><h>NASA</h></idx>
@@ -1672,7 +1694,7 @@ Rho Ophiuchi","url":"https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph1024.p
           corresponding to July 13, 2023.
         </p>
         <p>
-          So now our job is to do all of this programmatically in R. We will load the <c>httr2</c> package,
+          So now our job is to do all of this programmatically in Python. We will load the <c>httr2</c> package,
           and construct the query using the <c>request</c> function, which takes a single URL argument;
           you will recognize the same query URL that we pasted into the browser earlier. We will then send
           the query using the <c>req_perform</c> function, and finally obtain a JSON representation of the
@@ -1680,14 +1702,10 @@ Rho Ophiuchi","url":"https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph1024.p
           <idx><h>httr2</h><h>req_perform</h></idx>
           <idx><h>httr2</h><h>resp_body_json</h></idx>
         </p>
-        <program language="r">
+        <program language="python">
           <input>
-library(httr2)
-
-req &lt;- request("https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY&amp;date=2023-07-13")
-resp &lt;- req_perform(req)
-nasa_data_single &lt;- resp_body_json(resp)
-nasa_data_single
+lowest = pd.DataFrame({&quot;average_rating&quot; : [1.0]})
+lowest
           </input>
         </program>
         <pre>
@@ -1715,16 +1733,14 @@ nasa_data_single
         <p>
           We can obtain more records at once by using the <c>start_date</c> and <c>end_date</c> parameters, as shown in the table of parameters in <xref ref = "fig-reading-nasa-parameters"/>.
           Let&#x2019;s obtain all the records between May 1, 2023, and July 13, 2023; now the response
-          will take the form of an R <em>list</em> (you&#x2019;ll learn more about these in <xref ref="ch-wrangling"/>).
+          will take the form of a Python <em>list</em> (you&#x2019;ll learn more about these in <xref ref="ch-wrangling"/>).
           Each item in the list will correspond to a single day&#x2019;s record (just like the <c>nasa_data_single</c> object),
           and there will be 74 items total, one for each day between the start and end dates:
         </p>
-        <program language="r">
+        <program language="python">
           <input>
-req &lt;- request("https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY&amp;start_date=2023-05-01&amp;end_date=2023-07-13")
-resp &lt;- req_perform(req)
-nasa_data &lt;- resp_body_json(resp)
-length(nasa_data)
+no_official_lang_data = canlang_data[canlang_data[&quot;category&quot;] != &quot;Official languages&quot;]
+no_official_lang_data.to_csv(&quot;data/no_official_languages.csv&quot;, index=False)
           </input>
         </program>
         <pre>
@@ -1741,11 +1757,13 @@ length(nasa_data)
             those readers who would like to parse JSON data into a data frame in their own data analyses.
           </p>
         </note>
-        <program language="r">
+        <program language="python">
           <input>
-nasa_df_all &lt;- tibble(bind_rows(lapply(nasa_data, as.data.frame.list)))
-nasa_df &lt;- select(nasa_df_all, date, title, copyright, url)
-nasa_df
+import requests
+import bs4
+
+wiki = requests.get(&quot;https://en.wikipedia.org/wiki/Canada&quot;)
+page = bs4.BeautifulSoup(wiki.content, &quot;html.parser&quot;)
           </input>
         </program>
         <pre>
@@ -1770,7 +1788,7 @@ nasa_df
           format, as opposed to raw HTML code (although not <em>every</em> API will provide data in such a
           nice format). From this point onward, the <c>nasa_df</c> data frame is stored on your machine, and
           you can play with it to your heart&#x2019;s content. For example, you can use <c>write_csv</c> to
-          save it to a file and <c>read_csv</c> to read it into R again later; and after reading the next
+          save it to a file and <c>read_csv</c> to read it into Python again later; and after reading the next
           few chapters you will have the skills to do even more interesting things! If you decide that you
           want to ask any of the various NASA APIs for more data (see <url href="https://api.nasa.gov/"
           visual="api.nasa.gov/">the list of awesome NASA APIs here</url> for more examples of what is
@@ -1807,16 +1825,16 @@ nasa_df
       <li><p>Sometimes you might run into data in such poor shape that none of the reading functions we
         cover in this chapter work. In that case, you can consult the
         <url href="https://r4ds.had.co.nz/data-import.html" visual="r4ds.had.co.nz/data-import.html">data
-        import chapter</url> from <em>R for Data Science</em> <xref ref="wickham2016r"/>, which goes into a
-        lot more detail about how R parses text from files into data frames.</p></li>
-      <li><p>The <url href="https://here.r-lib.org/" visual="here.r-lib.org/"><c>here</c> R package</url>
+        import chapter</url> from <em>Python for Data Science</em> <xref ref="wickham2016r"/>, which goes into a
+        lot more detail about how Python parses text from files into data frames.</p></li>
+      <li><p>The <url href="https://here.r-lib.org/" visual="here.r-lib.org/"><c>here</c> Python package</url>
         <xref ref="here"/> provides a way for you to construct or find your files&#x2019; paths.</p></li>
       <li><p>The <url href="https://readxl.tidyverse.org/" visual="readxl.tidyverse.org/"><c>readxl</c>
         documentation</url> provides more details on reading data from Excel, such as reading in data with
         multiple sheets, or specifying the cells to read in.</p></li>
-      <li><p>The <url href="https://github.com/leeper/rio" visual="github.com/leeper/rio"><c>rio</c> R
+      <li><p>The <url href="https://github.com/leeper/rio" visual="github.com/leeper/rio"><c>rio</c> Python
         package</url> <xref ref="rio"/> provides an alternative set of tools for reading and writing data
-        in R. It aims to be a &#x201C;Swiss army knife&#x201D; for data reading/writing/converting, and supports a
+        in Python. It aims to be a &#x201C;Swiss army knife&#x201D; for data reading/writing/converting, and supports a
         wide variety of data types (including data formats generated by other statistical software like
         SPSS and SAS).</p></li>
       <li><p>A <url href="https://www.youtube.com/embed/ephId3mYu9o" visual="youtube.com/embed/ephId3mYu9o">video</url>
@@ -1831,7 +1849,7 @@ nasa_df
         </ul>
       </p></li>
       <li><p>The <url href="https://dmi3kno.github.io/polite/" visual="dmi3kno.github.io/polite/"><c>polite</c>
-        R package</url> <xref ref="polite"/> provides a set of tools for responsibly scraping data from
+        Python package</url> <xref ref="polite"/> provides a set of tools for responsibly scraping data from
         websites.</p></li>
     </ul>
   </section>

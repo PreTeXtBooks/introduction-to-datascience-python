@@ -39,9 +39,9 @@
       <li><p>Recognize situations where a regression analysis would be appropriate for making predictions.</p></li>
       <li><p>Explain the K-nearest neighbors (K-NN) regression algorithm and describe how it differs from K-NN classification.</p></li>
       <li><p>Interpret the output of a K-NN regression.</p></li>
-      <li><p>In a data set with two or more variables, perform K-nearest neighbors regression in R.</p></li>
-      <li><p>Evaluate K-NN regression prediction quality in R using the root mean squared prediction error (RMSPE).</p></li>
-      <li><p>Estimate the RMSPE in R using cross-validation or a test set.</p></li>
+      <li><p>In a data set with two or more variables, perform K-nearest neighbors regression in Python.</p></li>
+      <li><p>Evaluate K-NN regression prediction quality in Python using the root mean squared prediction error (RMSPE).</p></li>
+      <li><p>Estimate the RMSPE in Python using cross-validation or a test set.</p></li>
       <li><p>Choose the number of neighbors in K-nearest neighbors regression by minimizing estimated cross-validation RMSPE.</p></li>
       <li><p>Describe underfitting and overfitting, and relate it to the number of neighbors in K-nearest neighbors regression.</p></li>
       <li><p>Describe the advantages and disadvantages of K-nearest neighbors regression.</p></li>
@@ -131,15 +131,23 @@
       seed value.
     </p>
     <idx><h>seed</h><h>set.seed</h></idx>
-    <program language="r">
+    <program language="python">
       <input>
-library(tidyverse)
-library(tidymodels)
-library(gridExtra)
+import altair as alt
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.compose import make_column_transformer
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn import set_config
 
-set.seed(5)
+# Output dataframes instead of arrays
+set_config(transform_output=&quot;pandas&quot;)
 
-sacramento &lt;- read_csv("data/sacramento.csv")
+np.random.seed(10)
+
+sacramento = pd.read_csv(&quot;data/sacramento.csv&quot;)
 sacramento
       </input>
     </program>
@@ -173,21 +181,23 @@ sacramento
       <p>
         Given that the y-axis unit is dollars, we format the axis labels to put
         dollar signs in front of the house prices, as well as commas to increase
-        the readability of the larger numbers. We can do this in R by passing the
+        the readability of the larger numbers. We can do this in Python by passing the
         <c>dollar_format</c> function (from the <c>scales</c> package) to the
         <c>labels</c> argument of the <c>scale_y_continuous</c> function.
       </p>
     </note>
-    <program language="r">
+    <program language="python">
       <input>
-eda &lt;- ggplot(sacramento, aes(x = sqft, y = price)) +
-  geom_point(alpha = 0.4) +
-  xlab("House size (square feet)") +
-  ylab("Price (USD)") +
-  scale_y_continuous(labels = dollar_format()) +
-  theme(text = element_text(size = 12))
+scatter = alt.Chart(sacramento).mark_circle().encode(
+    x=alt.X(&quot;sqft&quot;)
+        .scale(zero=False)
+        .title(&quot;House size (square feet)&quot;),
+    y=alt.Y(&quot;price&quot;)
+        .axis(format=&quot;$,.0f&quot;)
+        .title(&quot;Price (USD)&quot;)
+)
 
-eda
+scatter
       </input>
     </program>
     <figure xml:id="fig-sacr-eda">
@@ -226,9 +236,9 @@ eda
       number of rows to randomly select.
       <idx>slice_sample</idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-small_sacramento &lt;- slice_sample(sacramento, n = 30)
+small_sacramento = sacramento.sample(n=30)
       </input>
     </program>
     <p>
@@ -242,17 +252,22 @@ small_sacramento &lt;- slice_sample(sacramento, n = 30)
       observations of a house of size <em>exactly</em> 2,000 square feet.
       How can we predict the sale price?
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-small_plot &lt;- ggplot(small_sacramento, aes(x = sqft, y = price)) +
-  geom_point() +
-  xlab("House size (square feet)") +
-  ylab("Price (USD)") +
-  scale_y_continuous(labels = dollar_format()) +
-  geom_vline(xintercept = 2000, linetype = "dashed") +
-  theme(text = element_text(size = 12))
+small_plot = alt.Chart(small_sacramento).mark_circle(opacity=1).encode(
+    x=alt.X(&quot;sqft&quot;)
+        .scale(zero=False)
+        .title(&quot;House size (square feet)&quot;),
+    y=alt.Y(&quot;price&quot;)
+        .axis(format=&quot;$,.0f&quot;)
+        .title(&quot;Price (USD)&quot;)
+)
 
-small_plot
+# add an overlay to the base plot
+line_df = pd.DataFrame({&quot;x&quot;: [2000]})
+rule = alt.Chart(line_df).mark_rule(strokeDash=[6], size=1.5, color=&quot;black&quot;).encode(x=&quot;x&quot;)
+
+small_plot + rule
       </input>
     </program>
     <figure xml:id="fig-sacr-small-eda">
@@ -267,12 +282,10 @@ small_plot
       neighbors to our observation of a house that is 2,000 square feet.
       <idx>mutate</idx> <idx>slice_min</idx> <idx>abs</idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-nearest_neighbors &lt;- small_sacramento |&gt;
-  mutate(diff = abs(2000 - sqft)) |&gt;
-  slice_min(diff, n = 5)
-
+small_sacramento[&quot;dist&quot;] = (2000 - small_sacramento[&quot;sqft&quot;]).abs()
+nearest_neighbors = small_sacramento.nsmallest(5, &quot;dist&quot;)
 nearest_neighbors
       </input>
     </program>
@@ -299,11 +312,9 @@ nearest_neighbors
       values as our predicted value, as illustrated by the red point in
       <xref ref="fig-sacr-predicted-viz"/>.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-prediction &lt;- nearest_neighbors |&gt;
-  summarise(predicted = mean(price))
-
+prediction = nearest_neighbors[&quot;price&quot;].mean()
 prediction
       </input>
     </program>
@@ -349,11 +360,11 @@ prediction
       (<xref ref="fig-sacr-small-eda"/>).
       <idx>training set</idx> <idx>test set</idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-sacramento_split &lt;- initial_split(sacramento, prop = 0.75, strata = price)
-sacramento_train &lt;- training(sacramento_split)
-sacramento_test  &lt;- testing(sacramento_split)
+sacramento_train, sacramento_test = train_test_split(
+    sacramento, train_size=0.75
+)
       </input>
     </program>
     <p>
@@ -416,7 +427,7 @@ sacramento_test  &lt;- testing(sacramento_split)
     </note>
     <p>
       Now that we know how we can assess how well our model predicts a numerical
-      value, let's use R to perform cross-validation and to choose the optimal
+      value, let's use Python to perform cross-validation and to choose the optimal
       <m>K</m>. First, we will create a recipe for preprocessing our data.
       Note that we include standardization in our preprocessing to build good
       habits, but since we only have one predictor, it is technically not
@@ -431,24 +442,25 @@ sacramento_test  &lt;- testing(sacramento_split)
       recipe and model specification together in a workflow.
       <idx>tidymodels</idx> <idx>recipe</idx> <idx>workflow</idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-sacr_recipe &lt;- recipe(price ~ sqft, data = sacramento_train) |&gt;
-  step_scale(all_predictors()) |&gt;
-  step_center(all_predictors())
+# import the K-NN regression model
+from sklearn.neighbors import KNeighborsRegressor
 
-sacr_spec &lt;- nearest_neighbor(weight_func = "rectangular",
-                              neighbors = tune()) |&gt;
-  set_engine("kknn") |&gt;
-  set_mode("regression")
+# preprocess the data, make the pipeline
+sacr_preprocessor = make_column_transformer((StandardScaler(), [&quot;sqft&quot;]))
+sacr_pipeline = make_pipeline(sacr_preprocessor, KNeighborsRegressor())
 
-sacr_vfold &lt;- vfold_cv(sacramento_train, v = 5, strata = price)
-
-sacr_wkflw &lt;- workflow() |&gt;
-  add_recipe(sacr_recipe) |&gt;
-  add_model(sacr_spec)
-
-sacr_wkflw
+# create the 5-fold GridSearchCV object
+param_grid = {
+    &quot;kneighborsregressor__n_neighbors&quot;: range(1, 201, 3),
+}
+sacr_gridsearch = GridSearchCV(
+    estimator=sacr_pipeline,
+    param_grid=param_grid,
+    cv=5,
+    scoring=&quot;neg_root_mean_squared_error&quot;,
+)
       </input>
     </program>
     <pre>
@@ -487,16 +499,25 @@ sacr_wkflw
       metrics data frame, as they do not provide any additional insight.
       <idx><h>cross-validation</h><h>collect_metrics</h></idx>
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-gridvals &lt;- tibble(neighbors = seq(from = 1, to = 200, by = 3))
+# fit the GridSearchCV object
+sacr_gridsearch.fit(
+    sacramento_train[[&quot;sqft&quot;]],  # A single-column data frame
+    sacramento_train[&quot;price&quot;]  # A series
+)
 
-sacr_results &lt;- sacr_wkflw |&gt;
-  tune_grid(resamples = sacr_vfold, grid = gridvals) |&gt;
-  collect_metrics() |&gt;
-  filter(.metric == "rmse")
-
-# show the results
+# Retrieve the CV scores
+sacr_results = pd.DataFrame(sacr_gridsearch.cv_results_)
+sacr_results[&quot;sem_test_score&quot;] = sacr_results[&quot;std_test_score&quot;] / 5**(1/2)
+sacr_results = (
+    sacr_results[[
+        &quot;param_kneighborsregressor__n_neighbors&quot;,
+        &quot;mean_test_score&quot;,
+        &quot;sem_test_score&quot;
+    ]]
+    .rename(columns={&quot;param_kneighborsregressor__n_neighbors&quot;: &quot;n_neighbors&quot;})
+)
 sacr_results
       </input>
     </program>
@@ -525,13 +546,10 @@ sacr_results
       the number of neighbors <m>K</m>. We take the <em>minimum</em> RMSPE to
       find the best setting for the number of neighbors:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-# show only the row of minimum RMSPE
-sacr_min &lt;- sacr_results |&gt;
-  filter(mean == min(mean))
-
-sacr_min
+sacr_results[&quot;mean_test_score&quot;] = -sacr_results[&quot;mean_test_score&quot;]
+sacr_results
       </input>
     </program>
     <pre>
@@ -629,26 +647,9 @@ sacr_min
       knows to output a quality summary related to regression, and not, say,
       classification.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-kmin &lt;- sacr_min |&gt; pull(neighbors)
-
-sacr_spec &lt;- nearest_neighbor(weight_func = "rectangular", neighbors = kmin) |&gt;
-  set_engine("kknn") |&gt;
-  set_mode("regression")
-
-sacr_fit &lt;- workflow() |&gt;
-  add_recipe(sacr_recipe) |&gt;
-  add_model(sacr_spec) |&gt;
-  fit(data = sacramento_train)
-
-sacr_summary &lt;- sacr_fit |&gt;
-  predict(sacramento_test) |&gt;
-  bind_cols(sacramento_test) |&gt;
-  metrics(truth = price, estimate = .pred) |&gt;
-  filter(.metric == 'rmse')
-
-sacr_summary
+sacr_gridsearch.best_params_
       </input>
     </program>
     <pre>
@@ -683,33 +684,16 @@ sacr_summary
       already seen a few plots like this in this chapter, but here we also
       provide the code that generated it as a learning opportunity.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-sqft_prediction_grid &lt;- tibble(
-    sqft = seq(
-        from = sacramento |&gt; select(sqft) |&gt; min(),
-        to   = sacramento |&gt; select(sqft) |&gt; max(),
-        by   = 10
-    )
-)
+from sklearn.metrics import mean_squared_error
 
-sacr_preds &lt;- sacr_fit |&gt;
-  predict(sqft_prediction_grid) |&gt;
-  bind_cols(sqft_prediction_grid)
-
-plot_final &lt;- ggplot(sacramento, aes(x = sqft, y = price)) +
-  geom_point(alpha = 0.4) +
-  geom_line(data = sacr_preds,
-            mapping = aes(x = sqft, y = .pred),
-            color = "steelblue",
-            linewidth = 1) +
-  xlab("House size (square feet)") +
-  ylab("Price (USD)") +
-  scale_y_continuous(labels = dollar_format()) +
-  ggtitle(paste0("K = ", kmin)) +
-  theme(text = element_text(size = 12))
-
-plot_final
+sacramento_test[&quot;predicted&quot;] = sacr_gridsearch.predict(sacramento_test)
+RMSPE = mean_squared_error(
+    y_true=sacramento_test[&quot;price&quot;],
+    y_pred=sacramento_test[&quot;predicted&quot;]
+)**(1/2)
+RMSPE
       </input>
     </program>
     <figure xml:id="fig-sacr-predict-all">
@@ -751,14 +735,37 @@ plot_final
       <xref ref="fig-sacr-bedscatter"/> shows that the number of bedrooms
       might provide useful information to help predict the sale price of a house.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-plot_beds &lt;- sacramento |&gt;
-  ggplot(aes(x = beds, y = price)) +
-  geom_point(alpha = 0.4) +
-  labs(x = 'Number of Bedrooms', y = 'Price (USD)') +
-  theme(text = element_text(size = 12))
-plot_beds
+# Create a grid of evenly spaced values along the range of the sqft data
+sqft_prediction_grid = pd.DataFrame({
+    &quot;sqft&quot;: np.arange(sacramento[&quot;sqft&quot;].min(), sacramento[&quot;sqft&quot;].max(), 10)
+})
+# Predict the price for each of the sqft values in the grid
+sqft_prediction_grid[&quot;predicted&quot;] = sacr_gridsearch.predict(sqft_prediction_grid)
+
+# Plot all the houses
+base_plot = alt.Chart(sacramento).mark_circle(opacity=0.4).encode(
+    x=alt.X(&quot;sqft&quot;)
+        .scale(zero=False)
+        .title(&quot;House size (square feet)&quot;),
+    y=alt.Y(&quot;price&quot;)
+        .axis(format=&quot;$,.0f&quot;)
+        .title(&quot;Price (USD)&quot;)
+)
+
+# Add the predictions as a line
+sacr_preds_plot = base_plot + alt.Chart(
+    sqft_prediction_grid,
+    title=f&quot;K = {best_k_sacr}&quot;
+).mark_line(
+    color=&quot;#ff7f0e&quot;
+).encode(
+    x=&quot;sqft&quot;,
+    y=&quot;predicted&quot;
+)
+
+sacr_preds_plot
       </input>
     </program>
     <figure xml:id="fig-sacr-bedscatter">
@@ -780,36 +787,24 @@ plot_beds
       we have two predictors, and set <c>neighbors = tune()</c> to tell
       <c>tidymodels</c> to tune the number of neighbors for us.
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-sacr_recipe &lt;- recipe(price ~ sqft + beds, data = sacramento_train) |&gt;
-  step_scale(all_predictors()) |&gt;
-  step_center(all_predictors())
-sacr_spec &lt;- nearest_neighbor(weight_func = "rectangular",
-                              neighbors = tune()) |&gt;
-  set_engine("kknn") |&gt;
-  set_mode("regression")
+plot_beds = alt.Chart(sacramento).mark_circle().encode(
+    x=alt.X(&quot;beds&quot;).title(&quot;Number of Bedrooms&quot;),
+    y=alt.Y(&quot;price&quot;).title(&quot;Price (USD)&quot;).axis(format=&quot;$,.0f&quot;),
+)
+
+plot_beds
       </input>
     </program>
     <p>
       Next, we'll use 5-fold cross-validation to choose the number of neighbors
       via the minimum RMSPE:
     </p>
-    <program language="r">
+    <program language="python">
       <input>
-gridvals &lt;- tibble(neighbors = seq(1, 200))
-
-sacr_multi &lt;- workflow() |&gt;
-  add_recipe(sacr_recipe) |&gt;
-  add_model(sacr_spec) |&gt;
-  tune_grid(sacr_vfold, grid = gridvals) |&gt;
-  collect_metrics() |&gt;
-  filter(.metric == "rmse") |&gt;
-  filter(mean == min(mean))
-
-sacr_k &lt;- sacr_multi |&gt;
-              pull(neighbors)
-sacr_multi
+sacr_preprocessor = make_column_transformer((StandardScaler(), [&quot;sqft&quot;, &quot;beds&quot;]))
+sacr_pipeline = make_pipeline(sacr_preprocessor, KNeighborsRegressor())
       </input>
     </program>
     <pre>
@@ -836,26 +831,40 @@ sacr_multi
   first need to re-train the model on the entire training data set with <m>K = 11</m>, 
   and then use that model to make predictions on the test data.
 </p>
-    <program language="r">
+    <program language="python">
       <input>
-sacr_spec &lt;- nearest_neighbor(weight_func = "rectangular",
-                              neighbors = sacr_k) |&gt;
-  set_engine("kknn") |&gt;
-  set_mode("regression")
+# create the 5-fold GridSearchCV object
+param_grid = {
+    &quot;kneighborsregressor__n_neighbors&quot;: range(1, 50),
+}
 
-knn_mult_fit &lt;- workflow() |&gt;
-  add_recipe(sacr_recipe) |&gt;
-  add_model(sacr_spec) |&gt;
-  fit(data = sacramento_train)
+sacr_gridsearch = GridSearchCV(
+    estimator=sacr_pipeline,
+    param_grid=param_grid,
+    cv=5,
+    scoring=&quot;neg_root_mean_squared_error&quot;
+)
 
-knn_mult_preds &lt;- knn_mult_fit |&gt;
-  predict(sacramento_test) |&gt;
-  bind_cols(sacramento_test)
+sacr_gridsearch.fit(
+  sacramento_train[[&quot;sqft&quot;, &quot;beds&quot;]],
+  sacramento_train[&quot;price&quot;]
+)
 
-knn_mult_mets &lt;- metrics(knn_mult_preds, truth = price, estimate = .pred) |&gt;
-                     filter(.metric == 'rmse')
+# retrieve the CV scores
+sacr_results = pd.DataFrame(sacr_gridsearch.cv_results_)
+sacr_results[&quot;sem_test_score&quot;] = sacr_results[&quot;std_test_score&quot;] / 5**(1/2)
+sacr_results[&quot;mean_test_score&quot;] = -sacr_results[&quot;mean_test_score&quot;]
+sacr_results = (
+    sacr_results[[
+        &quot;param_kneighborsregressor__n_neighbors&quot;,
+        &quot;mean_test_score&quot;,
+        &quot;sem_test_score&quot;
+    ]]
+    .rename(columns={&quot;param_kneighborsregressor__n_neighbors&quot; : &quot;n_neighbors&quot;})
+)
 
-knn_mult_mets
+# show only the row of minimum RMSPE
+sacr_results.nsmallest(1, &quot;mean_test_score&quot;)
       </input>
     </program>
     <pre>
