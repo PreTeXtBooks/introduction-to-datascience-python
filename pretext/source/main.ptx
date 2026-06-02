@@ -23,7 +23,7 @@
     <!-- out for now and write this when the book is more complete -->
     <xi:include href="./meta_frontmatter.ptx" />
 
-    <!-- Chapter 1: R and the Tidyverse -->
+    <!-- Chapter 1: Python and Pandas -->
     <xi:include href="./ch_intro.ptx" />
 
     <!-- Chapter 2: Reading in data locally and from the web -->
