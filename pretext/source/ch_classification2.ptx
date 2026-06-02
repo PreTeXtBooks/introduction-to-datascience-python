@@ -22,13 +22,13 @@
       <li><p>Split data into training, validation, and test data sets.</p></li>
       <li><p>Describe what a random seed is and its importance in reproducible
         data analysis.</p></li>
-      <li><p>Set the random seed in R using the <c>set.seed</c>
+      <li><p>Set the random seed in Python using the <c>set.seed</c>
         function.</p></li>
       <li><p>Describe and interpret accuracy, precision, recall, and confusion
         matrices.</p></li>
-      <li><p>Evaluate classification accuracy, precision, and recall in R using
+      <li><p>Evaluate classification accuracy, precision, and recall in Python using
         a test set, a single validation set, and cross-validation.</p></li>
-      <li><p>Produce a confusion matrix in R.</p></li>
+      <li><p>Produce a confusion matrix in Python.</p></li>
       <li><p>Choose the number of neighbors in a K-nearest neighbors classifier
         by maximizing estimated cross-validation accuracy.</p></li>
       <li><p>Describe underfitting and overfitting, and relate it to the number
@@ -289,7 +289,7 @@
       set and test set to evaluate our classifier. We certainly do not want to
       choose how to split the data ourselves by hand, as we want to avoid
       accidentally influencing the result of the evaluation. So instead, we
-      let R <em>randomly</em> split the data. In future chapters we will use
+      let Python <em>randomly</em> split the data. In future chapters we will use
       randomness in many other ways, e.g., to help us select a small subset of
       data from a larger data set, to pick groupings of data, and more.
     </p>
@@ -300,8 +300,8 @@
       <em>reproducibility</em>. Recall that a reproducible analysis produces
       the same result each time it is run; if we include randomness in the
       analysis, would we not get a different result each time? The trick is
-      that in R&#x2014;and other programming languages&#x2014;randomness is
-      not actually random! Instead, R uses a <em>random number generator</em>
+      that in Python&#x2014;and other programming languages&#x2014;randomness is
+      not actually random! Instead, Python uses a <em>random number generator</em>
       that produces a sequence of numbers that are completely determined by a
       <idx><h>seed</h></idx>
       <term>seed value</term>. Once you set the seed value using the
@@ -311,8 +311,8 @@
       same seed value, you get the same result!
     </p>
     <p>
-      Let's use an example to investigate how seeds work in R. Say we want to
-      randomly pick 10 numbers from 0 to 9 in R using the
+      Let's use an example to investigate how seeds work in Python. Say we want to
+      randomly pick 10 numbers from 0 to 9 in Python using the
       <idx><h>sample!function</h></idx>
       <c>sample</c> function, but we want it to be reproducible. Before using
       the sample function, we call <c>set.seed</c>, and pass it any integer as
@@ -350,7 +350,7 @@ random_numbers2
  [1] 4 9 5 9 6 8 4 4 8 8
     </pre>
     <p>
-      If we want to force R to produce the same sequences of random numbers,
+      If we want to force Python to produce the same sequences of random numbers,
       we can simply call the <c>set.seed</c> function again with the same
       argument value.
     </p>
@@ -385,25 +385,25 @@ random_numbers2_again
  [1] 3 7 8 2 8 8 6 3 3 8
     </pre>
     <p>
-      In other words, even though the sequences of numbers that R is
+      In other words, even though the sequences of numbers that Python is
       generating <em>look</em> random, they are totally determined when we set
       a seed value!
     </p>
     <p>
       So what does this mean for data analysis? Well, <c>sample</c> is
-      certainly not the only function that uses randomness in R. Many of the
+      certainly not the only function that uses randomness in Python. Many of the
       functions that we use in <c>tidymodels</c>, <c>tidyverse</c>, and beyond
       use randomness&#x2014;some of them without even telling you about it.
       So at the beginning of every data analysis you do, right after loading
       packages, you should call the <c>set.seed</c> function and pass it an
-      integer that you pick. Also note that when R starts up, it creates its
+      integer that you pick. Also note that when Python starts up, it creates its
       own seed to use. So if you do not explicitly call the <c>set.seed</c>
       function in your code, your results will likely not be reproducible.
       And finally, be careful to set the seed <em>only once</em> at the
       beginning of a data analysis. Each time you set the seed, you are
       inserting your own human input, thereby influencing the analysis. If you
       use <c>set.seed</c> many times throughout your analysis, the randomness
-      that R uses will not look as random as it should.
+      that Python uses will not look as random as it should.
     </p>
     <p>
       In summary: if you want your analysis to be reproducible, i.e., produce
@@ -419,7 +419,7 @@ random_numbers2_again
   <section xml:id="sec-classif2-tidymodels-eval">
     <title>Evaluating performance with <c>tidymodels</c></title>
     <p>
-      Back to evaluating classifiers now! In R, we can use the
+      Back to evaluating classifiers now! In Python, we can use the
       <idx><h>tidymodels</h></idx>
       <c>tidymodels</c> package not only to perform K-nearest neighbors
       classification, but also to assess how well our classification worked.
@@ -836,7 +836,7 @@ pd.crosstab(
   mistakes; in particular, it classified 7 observations as benign when they were 
   actually malignant, and 14 observations as malignant when they were actually benign. 
   Using our formulas from earlier, we see that the accuracy, precision, and recall agree 
-  with what R reported.
+  with what Python reported.
 </p>
 
 <md>
@@ -1003,7 +1003,7 @@ cancer_train[&quot;Class&quot;].value_counts(normalize=True)
         of training data.
       </p>
       <p>
-        Let's investigate this idea in R! In particular, we will generate five
+        Let's investigate this idea in Python! In particular, we will generate five
         different train/validation splits of our overall training data, train
         five different K-nearest neighbors models, and evaluate their
         accuracy. We will start with just a single split.
@@ -1068,7 +1068,7 @@ acc
       </figure>
 
       <p>
-        To perform 5-fold cross-validation in R with <c>tidymodels</c>, we
+        To perform 5-fold cross-validation in Python with <c>tidymodels</c>, we
         use another function:
         <idx><h>tidymodels!vfold_cv</h></idx>
         <idx><h>cross-validation!vfold_cv</h></idx>
@@ -1922,9 +1922,9 @@ cancer_tune_grid.score(
     </subsection>
 
     <subsection xml:id="subsec-classif2-fwdsel-r">
-      <title>Forward selection in R</title>
+      <title>Forward selection in Python</title>
       <p>
-        We now turn to implementing forward selection in R.
+        We now turn to implementing forward selection in Python.
         <idx><h>variable selection!implementation</h></idx>
         Unfortunately there is no built-in way to do this using the
         <c>tidymodels</c> framework, so we will have to code it ourselves.
@@ -1991,7 +1991,7 @@ recall_score(
         earlier, and in these cases one typically resorts to a <em>for loop</em>;
         see
         <url href="https://r4ds.had.co.nz/iteration.html" visual="r4ds.had.co.nz/iteration.html">the chapter on iteration</url>
-        in <em>R for Data Science</em> (<xref ref="wickham2016r"/>).
+        in <em>Python for Data Science</em> (<xref ref="wickham2016r"/>).
   Here we will use two <c>for</c> loops: one over increasing predictor set sizes 
   (where you see <c>for (i in 1:length(names))</c> below), and another to check which 
   predictor to add in each round (where you see <c>for (j in 1:length(names))</c> 

@@ -39,9 +39,9 @@
       <li><p>Recognize situations where a regression analysis would be appropriate for making predictions.</p></li>
       <li><p>Explain the K-nearest neighbors (K-NN) regression algorithm and describe how it differs from K-NN classification.</p></li>
       <li><p>Interpret the output of a K-NN regression.</p></li>
-      <li><p>In a data set with two or more variables, perform K-nearest neighbors regression in R.</p></li>
-      <li><p>Evaluate K-NN regression prediction quality in R using the root mean squared prediction error (RMSPE).</p></li>
-      <li><p>Estimate the RMSPE in R using cross-validation or a test set.</p></li>
+      <li><p>In a data set with two or more variables, perform K-nearest neighbors regression in Python.</p></li>
+      <li><p>Evaluate K-NN regression prediction quality in Python using the root mean squared prediction error (RMSPE).</p></li>
+      <li><p>Estimate the RMSPE in Python using cross-validation or a test set.</p></li>
       <li><p>Choose the number of neighbors in K-nearest neighbors regression by minimizing estimated cross-validation RMSPE.</p></li>
       <li><p>Describe underfitting and overfitting, and relate it to the number of neighbors in K-nearest neighbors regression.</p></li>
       <li><p>Describe the advantages and disadvantages of K-nearest neighbors regression.</p></li>
@@ -181,7 +181,7 @@ sacramento
       <p>
         Given that the y-axis unit is dollars, we format the axis labels to put
         dollar signs in front of the house prices, as well as commas to increase
-        the readability of the larger numbers. We can do this in R by passing the
+        the readability of the larger numbers. We can do this in Python by passing the
         <c>dollar_format</c> function (from the <c>scales</c> package) to the
         <c>labels</c> argument of the <c>scale_y_continuous</c> function.
       </p>
@@ -427,7 +427,7 @@ sacramento_train, sacramento_test = train_test_split(
     </note>
     <p>
       Now that we know how we can assess how well our model predicts a numerical
-      value, let's use R to perform cross-validation and to choose the optimal
+      value, let's use Python to perform cross-validation and to choose the optimal
       <m>K</m>. First, we will create a recipe for preprocessing our data.
       Note that we include standardization in our preprocessing to build good
       habits, but since we only have one predictor, it is technically not

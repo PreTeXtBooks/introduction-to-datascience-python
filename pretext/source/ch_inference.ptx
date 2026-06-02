@@ -26,11 +26,11 @@
       <li><p>Define common population parameters (e.g., mean, proportion, standard deviation) that are often estimated using sampled data, and estimate these from a sample.</p></li>
       <li><p>Define the following statistical sampling terms: population, sample, population parameter, point estimate, and sampling distribution.</p></li>
       <li><p>Explain the difference between a population parameter and a sample point estimate.</p></li>
-      <li><p>Use R to draw random samples from a finite population.</p></li>
-      <li><p>Use R to create a sampling distribution from a finite population.</p></li>
+      <li><p>Use Python to draw random samples from a finite population.</p></li>
+      <li><p>Use Python to create a sampling distribution from a finite population.</p></li>
       <li><p>Describe how sample size influences the sampling distribution.</p></li>
       <li><p>Define bootstrapping.</p></li>
-      <li><p>Use R to create a bootstrap distribution to approximate a sampling distribution.</p></li>
+      <li><p>Use Python to create a bootstrap distribution to approximate a sampling distribution.</p></li>
       <li><p>Contrast the bootstrap and sampling distributions.</p></li>
     </ul>
   </section>
@@ -302,7 +302,7 @@ samples
       </pre>
       <p>
         Notice that the column <c>replicate</c> indicates the replicate, or sample, to which
-        each listing belongs. Above, since by default R only prints the first few rows,
+        each listing belongs. Above, since by default Python only prints the first few rows,
         it looks like all of the listings have <c>replicate</c> set to 1. But you can
         check the last few entries using the <c>tail()</c> function to verify that
         we indeed created 20,000 samples (or replicates).
@@ -509,7 +509,7 @@ population_distribution
         and resources allow. Let&#x2019;s say we could do this for 40 listings. What would
         such a sample look like? Let&#x2019;s take advantage of the fact that we do have
         access to the population data and simulate taking one random sample of 40
-        listings in R, again using <c>rep_sample_n</c>.
+        listings in Python, again using <c>rep_sample_n</c>.
         <idx><h>rep_sample_n</h></idx>
       </p>
       <program language="python">
@@ -776,7 +776,7 @@ one_sample[&quot;price&quot;].mean()
       </note>
       <p>
         This section will explore how to create a bootstrap distribution from a single
-        sample using R. The process is visualized in <xref ref="fig-inference-intro-bootstrap"/>.
+        sample using Python. The process is visualized in <xref ref="fig-inference-intro-bootstrap"/>.
         For a sample of size <m>n</m>, you would do the following:
       </p>
       <ol>
@@ -796,7 +796,7 @@ one_sample[&quot;price&quot;].mean()
     </subsection>
 
     <subsection xml:id="sec-inference-bootstrap-r">
-      <title>Bootstrapping in R</title>
+      <title>Bootstrapping in Python</title>
       <p>
         Let&#x2019;s continue working with our Airbnb example to illustrate how we might create
         and use a bootstrap distribution using just a single sample from the population.
@@ -849,13 +849,13 @@ sample_estimates
       </p>
       <p>
         We now perform steps 1&#x2013;5 listed above to generate a single bootstrap
-        sample in R and calculate a point estimate from that bootstrap sample. We will
+        sample in Python and calculate a point estimate from that bootstrap sample. We will
         use the <c>rep_sample_n</c> function as we did when we were
         creating our sampling distribution. But critically, note that we now
         pass <c>one_sample</c>&#x2014;our single sample of size 40&#x2014;as the first argument.
         And since we need to sample with replacement,
         we change the argument for <c>replace</c> from its default value of <c>FALSE</c> to <c>TRUE</c>.
-        <idx><h>bootstrap</h><h>in R</h></idx>
+        <idx><h>bootstrap</h><h>in Python</h></idx>
         <idx><h>rep_sample_n</h><h>bootstrap</h></idx>
       </p>
       <program language="python">
@@ -1104,7 +1104,7 @@ boot1[&quot;price&quot;].mean()
         <li><p>Find the value such that 97.5% of observations fall below it (the 97.5% percentile). Use that value as the upper bound of the interval.</p></li>
       </ol>
       <p>
-        To do this in R, we can use the <c>quantile()</c> function. Quantiles are expressed in proportions rather than
+        To do this in Python, we can use the <c>quantile()</c> function. Quantiles are expressed in proportions rather than
         percentages, so the 2.5th and 97.5th percentiles would be the 0.025 and 0.975 quantiles, respectively.
         <idx><h>percentile</h></idx>
         <idx><h>quantile</h></idx>

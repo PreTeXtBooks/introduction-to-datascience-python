@@ -29,7 +29,7 @@
       <li><p>Download the worksheets that accompany this book.</p></li>
       <li><p>Install the Docker virtualization engine.</p></li>
       <li><p>Edit and run the worksheets using JupyterLab running inside a Docker container.</p></li>
-      <li><p>Install Git, JupyterLab Desktop, and R packages.</p></li>
+      <li><p>Install Git, JupyterLab Desktop, and Python packages.</p></li>
       <li><p>Edit and run the worksheets using JupyterLab Desktop.</p></li>
     </ul>
   </section>
@@ -72,10 +72,10 @@
         A <em>container</em> is a virtual user space within your computer.
         Within the container, you can run software in isolation without interfering with the
         other software that already exists on your machine. In this book, we use
-        a container to run a specific version of the R programming
+        a container to run a specific version of the Python programming
         language, as well as other necessary packages. The container ensures that
-        the worksheets function correctly, even if you have a different version of R
-        installed on your computer&#x2014;or even if you haven't installed R at all!
+        the worksheets function correctly, even if you have a different version of Python
+        installed on your computer&#x2014;or even if you haven't installed Python at all!
       </p>
     </note>
 
@@ -246,13 +246,13 @@ docker run --rm -v $(pwd):/home/jovyan/work -p 8888:8888 ubcdsci/r-dsci-100:TAG 
       The advantage of JupyterLab Desktop over Docker is that it can be easier to install;
       Docker can sometimes run into some fairly technical issues (especially on Windows computers)
       that require expert troubleshooting. The downside of JupyterLab Desktop is that there is a (very) small chance that
-      you may not end up with the right versions of all the R packages needed for the worksheets. Docker, on the other hand,
+      you may not end up with the right versions of all the Python packages needed for the worksheets. Docker, on the other hand,
       <em>guarantees</em> that the worksheets will work exactly as intended.
     </p>
     <p>
       In this section, we will cover how to install JupyterLab Desktop,
       Git and the JupyterLab Git extension (for version control, as discussed in <xref ref="ch-version-control"/>), and
-      all of the R packages needed to run
+      all of the Python packages needed to run
       the code in this book.
       <idx>git!installation</idx>
     </p>
@@ -285,8 +285,8 @@ docker run --rm -v $(pwd):/home/jovyan/work -p 8888:8888 ubcdsci/r-dsci-100:TAG 
       <p>
         Next, we need to add the JupyterLab Git extension (so that
         we can use version control directly from within JupyterLab Desktop),
-        the IRkernel (to enable the R programming language),
-        and various R software packages. Click "New session..." in the JupyterLab Desktop
+        the IRkernel (to enable the Python programming language),
+        and various Python software packages. Click "New session..." in the JupyterLab Desktop
         user interface, then scroll to the bottom, and click "Terminal" under the "Other" heading (<xref ref="fig-setup-jlab-gui-2"/>).
       </p>
 
@@ -303,7 +303,7 @@ pip install --upgrade jupyterlab-git
 conda env update --file https://raw.githubusercontent.com/UBC-DSCI/data-science-a-first-intro-worksheets/main/environment.yml
       </pre>
       <p>
-        The second command installs the specific R and package versions specified in
+        The second command installs the specific Python and package versions specified in
         the <c>environment.yml</c> file found in
         <url href="https://worksheets.datasciencebook.ca">the worksheets repository</url>.
         We will always keep the versions in the <c>environment.yml</c> file updated
@@ -341,7 +341,7 @@ xcode-select --install
         <em>Configuring JupyterLab Desktop</em> From this point onward, with JupyterLab Desktop running,
         follow the instructions in the Windows section on <em>Configuring JupyterLab Desktop</em> to set up the
         environment, install the JupyterLab Git extension, and install
-        the various R software packages needed for the worksheets.
+        the various Python software packages needed for the worksheets.
       </p>
     </subsection>
 
@@ -374,7 +374,7 @@ jlab
         <em>Configuring JupyterLab Desktop</em> From this point onward, with JupyterLab Desktop running,
         follow the instructions in the Windows section on <em>Configuring JupyterLab Desktop</em> to set up the
         environment, install the JupyterLab Git extension, and install
-        the various R software packages needed for the worksheets.
+        the various Python software packages needed for the worksheets.
       </p>
     </subsection>
   </section>

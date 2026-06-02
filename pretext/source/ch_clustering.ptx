@@ -24,10 +24,10 @@
       <li><p>Explain the K-means clustering algorithm.</p></li>
       <li><p>Interpret the output of a K-means analysis.</p></li>
       <li><p>Differentiate between clustering, classification, and regression.</p></li>
-      <li><p>Identify when it is necessary to scale variables before clustering, and do this using R.</p></li>
-      <li><p>Perform K-means clustering in R using <c>tidymodels</c> workflows.</p></li>
+      <li><p>Identify when it is necessary to scale variables before clustering, and do this using Python.</p></li>
+      <li><p>Perform K-means clustering in Python using <c>tidymodels</c> workflows.</p></li>
       <li><p>Use the elbow method to choose the number of clusters for K-means.</p></li>
-      <li><p>Visualize the output of K-means clustering in R using colored scatter plots.</p></li>
+      <li><p>Visualize the output of K-means clustering in Python using colored scatter plots.</p></li>
       <li><p>Describe the advantages, limitations and assumptions of the K-means clustering algorithm.</p></li>
     </ul>
   </section>
@@ -109,7 +109,7 @@
       <idx><h>Palmer penguins</h></idx>
       from the
       <url href="https://allisonhorst.github.io/palmerpenguins/"><c>palmerpenguins</c>
-      R package</url>
+      Python package</url>
       <xref ref="palmerpenguins"/>. This data set was collected by Dr. Kristen
       Gorman and the Palmer Station, Antarctica Long Term Ecological Research
       Site, and includes measurements for adult penguins
@@ -542,9 +542,9 @@ scatter_plot = alt.Chart(penguins_standardized).mark_circle().encode(
 
   <!-- ============================================================ -->
   <section xml:id="sec-kmeans-in-r">
-    <title>K-means in R</title>
+    <title>K-means in Python</title>
     <p>
-      We can perform K-means clustering in R using a <c>tidymodels</c> workflow
+      We can perform K-means clustering in Python using a <c>tidymodels</c> workflow
       similar to those in the earlier classification and regression chapters. We
       will begin by loading the <c>tidyclust</c>
       <idx><h>K-means</h></idx>
@@ -591,7 +591,7 @@ preprocessor
       <p>
         Recipes were originally designed specifically for <em>predictive</em>
         data analysis problems&#x2014;like classification and
-        regression&#x2014;not clustering problems. So the functions in R that we
+        regression&#x2014;not clustering problems. So the functions in Python that we
         use to construct recipes are a little bit awkward in the setting of
         clustering. In particular, we will have to treat
         &#x201C;predictors&#x201D; here as if it meant &#x201C;variables to be

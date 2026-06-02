@@ -30,7 +30,7 @@
       <li><p>Compute, by hand, the straight-line (Euclidean) distance between points
         on a graph when there are two predictor variables.</p></li>
       <li><p>Explain the K-nearest neighbors classification algorithm.</p></li>
-      <li><p>Perform K-nearest neighbors classification in R using
+      <li><p>Perform K-nearest neighbors classification in Python using
         <c>tidymodels</c>.</p></li>
       <li><p>Use a <c>recipe</c> to center, scale, balance, and impute data as a
         preprocessing step.</p></li>
@@ -676,12 +676,12 @@ cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
   <section xml:id="sec-classif1-tidymodels">
     <title>K-nearest neighbors with <c>tidymodels</c></title>
     <p>
-      Coding the K-nearest neighbors algorithm in R ourselves can get complicated,
+      Coding the K-nearest neighbors algorithm in Python ourselves can get complicated,
       especially if we want to handle multiple classes, more than two variables, or
-      predict the class for multiple new observations. Thankfully, in R, the K-nearest
+      predict the class for multiple new observations. Thankfully, in Python, the K-nearest
       neighbors algorithm is implemented in
       <url href="https://parsnip.tidymodels.org/" visual="parsnip.tidymodels.org/">the
-      <c>parsnip</c> R package</url> <xref ref="parsnip"/>
+      <c>parsnip</c> Python package</url> <xref ref="parsnip"/>
       included in <c>tidymodels</c>, along with many
       <url href="https://www.tidymodels.org/find/parsnip/" visual="www.tidymodels.org/find/parsnip/">other models</url>
       <idx><h>tidymodels</h></idx>
@@ -807,7 +807,7 @@ else:
       <c>parsnip</c> website</url>. In the <c>set_engine</c>
       <idx><h>tidymodels</h><h>engine</h></idx>
       argument, we specify which package or system will be used for training the model.
-      Here <c>kknn</c> is the R package we will use for performing K-nearest neighbors
+      Here <c>kknn</c> is the Python package we will use for performing K-nearest neighbors
       classification. Finally, we specify that this is a classification problem with
       the <c>set_mode</c> function.
     </p>
@@ -878,8 +878,8 @@ cancer_train
       will ignore this for now and discuss it in more detail in the next chapter.
       Finally, it shows (somewhat confusingly) that the &#x201C;best&#x201D; weight
       function was &#x201C;rectangular&#x201D; and &#x201C;best&#x201D; setting of
-      <m>K</m> was 5; but since we specified these earlier, R is just repeating those
-      settings to us here. In the next chapter, we will actually let R find the value
+      <m>K</m> was 5; but since we specified these earlier, Python is just repeating those
+      settings to us here. In the next chapter, we will actually let Python find the value
       of <m>K</m> for us.
     </p>
     <p>
@@ -998,7 +998,7 @@ knn.fit(X=cancer_train[[&quot;Perimeter&quot;, &quot;Concavity&quot;]], y=cancer
         In the <c>tidymodels</c> framework, all data preprocessing happens using a
         <c>recipe</c> from
         <url href="https://recipes.tidymodels.org/" visual="recipes.tidymodels.org/">the
-        <c>recipes</c> R package</url> <xref ref="recipes"/>.
+        <c>recipes</c> Python package</url> <xref ref="recipes"/>.
         Here we will initialize a recipe
         <idx><h>recipe</h></idx>
         <idx><h>tidymodels</h><h>recipe</h><see>recipe</see></idx>
@@ -1264,7 +1264,7 @@ preprocessor
         set to give them more voting power in the K-nearest neighbors algorithm. In
         order to do this, we will add an oversampling step to the earlier
         <c>uc_recipe</c> recipe with the <c>step_upsample</c> function from the
-        <c>themis</c> R package.
+        <c>themis</c> Python package.
         <idx><h>recipe</h><h>step_upsample</h></idx>
         We show below how to do this, and also use the <c>group_by</c> and
         <c>summarize</c> functions to see that our classes are now balanced:

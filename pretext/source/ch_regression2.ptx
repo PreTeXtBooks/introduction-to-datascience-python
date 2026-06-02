@@ -14,7 +14,7 @@
       <idx><h>regression</h><h>linear</h></idx>
       This chapter provides an introduction to the basic concept of linear
       regression, shows how to use <c>tidymodels</c> to perform linear
-      regression in R, and characterizes its strengths and weaknesses compared
+      regression in Python, and characterizes its strengths and weaknesses compared
       to K-NN regression. The focus is, as usual, on the case where there is a
       single predictor and single response variable of interest; but the chapter
       concludes with an example using <em>multivariable linear regression</em>
@@ -27,7 +27,7 @@
     <title>Chapter learning objectives</title>
     <p>By the end of the chapter, readers will be able to do the following:</p>
     <ul>
-      <li><p>Use R to fit simple and multivariable linear regression models on training data.</p></li>
+      <li><p>Use Python to fit simple and multivariable linear regression models on training data.</p></li>
       <li><p>Evaluate the linear regression model on test data.</p></li>
       <li><p>Compare and contrast predictions obtained from K-nearest neighbors regression to those obtained using linear regression from the same data set.</p></li>
       <li><p>Describe how linear regression is affected by outliers and multicollinearity.</p></li>
@@ -179,9 +179,9 @@ By using simple linear regression on this small data set to predict the sale pri
 
   <!-- ============================================================ -->
   <section xml:id="sec-regression2-in-r">
-    <title>Linear regression in R</title>
+    <title>Linear regression in Python</title>
     <p>
-      We can perform simple linear regression in R using <c>tidymodels</c>
+      We can perform simple linear regression in Python using <c>tidymodels</c>
       <idx>tidymodels</idx>
       in a very similar manner to how we performed K-NN regression.
       To do this, instead of creating a <c>nearest_neighbor</c> model
