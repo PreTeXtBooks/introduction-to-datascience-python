@@ -1,6 +1,6 @@
 # PreTeXt Book Version
 
-This directory contains the PreTeXt version of *Data Science: A First Introduction (Python Edition)*.
+This directory contains the PreTeXt version of *Learning Statistics with R*.
 
 ## Building the Book
 
