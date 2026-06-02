@@ -126,7 +126,7 @@
     </p>
     <program language="python">
       <input>
-happy_data &lt;- read_csv("/home/dsci-100/project3/data/happiness_report.csv")
+happy_data = pd.read_csv(&quot;/home/dsci-100/project3/data/happiness_report.csv&quot;)
       </input>
     </program>
     <p>
@@ -138,7 +138,7 @@ happy_data &lt;- read_csv("/home/dsci-100/project3/data/happiness_report.csv")
     </p>
     <program language="python">
       <input>
-happy_data &lt;- read_csv("data/happiness_report.csv")
+happy_data = pd.read_csv(&quot;data/happiness_report.csv&quot;)
       </input>
     </program>
     <p>
@@ -247,7 +247,7 @@ Non-Official &amp; Non-Aboriginal languages,Albanian,26895,13135,345,31930</pre>
       </p>
       <program language="python">
         <input>
-library(tidyverse)
+import pandas as pd
         </input>
       </program>
       <p>
@@ -260,7 +260,8 @@ library(tidyverse)
       </p>
       <program language="python">
         <input>
-canlang_data &lt;- read_csv("data/can_lang.csv")
+canlang_data = pd.read_csv(&quot;data/can_lang.csv&quot;)
+canlang_data
         </input>
       </program>
       <pre>
@@ -276,7 +277,7 @@ dbl (4): mother_tongue, most_at_home, most_at_work, lang_known
       </p>
       <program language="python">
         <input>
-canlang_data
+canlang_data = pd.read_csv(&quot;data/can_lang_meta-data.csv&quot;)
         </input>
       </program>
       <pre>
@@ -332,8 +333,7 @@ Non-Official &amp; Non-Aboriginal languages,Amharic,22465,12785,200,33670</pre>
       </p>
       <program language="python">
         <input>
-canlang_data &lt;- read_csv("data/can_lang_meta-data.csv")
-canlang_data
+print(&quot;ParserError: Error tokenizing data. C error: Expected 1 fields in line 4, saw 6&quot;)
         </input>
       </program>
       <pre>
@@ -365,8 +365,7 @@ canlang_data
       </p>
       <program language="python">
         <input>
-canlang_data &lt;- read_csv("data/can_lang_meta-data.csv",
-                         skip = 3)
+canlang_data = pd.read_csv(&quot;data/can_lang_meta-data.csv&quot;, skiprows=3)
 canlang_data
         </input>
       </program>
@@ -424,7 +423,7 @@ Non-Official &amp; Non-Aboriginal languages Amharic 22465   12785   200 33670
       </p>
       <program language="python">
         <input>
-canlang_data &lt;- read_tsv("data/can_lang.tsv")
+canlang_data = pd.read_csv(&quot;data/can_lang.tsv&quot;, sep=&quot;\t&quot;)
 canlang_data
         </input>
       </program>
@@ -497,9 +496,11 @@ Non-Official &amp; Non-Aboriginal languages Arabic  419890  223535  5585    6290
       </note>
       <program language="python">
         <input>
-canlang_data &lt;- read_delim("data/can_lang_no_names.tsv",
-                           delim = "\t",
-                           col_names = FALSE)
+canlang_data = pd.read_csv(
+    &quot;data/can_lang_no_names.tsv&quot;,
+    sep=&quot;\t&quot;,
+    header=None
+)
 canlang_data
         </input>
       </program>
@@ -535,14 +536,16 @@ canlang_data
       </p>
       <program language="python">
         <input>
-canlang_data &lt;- rename(canlang_data,
-       category = X1,
-       language = X2,
-       mother_tongue = X3,
-       most_at_home = X4,
-       most_at_work = X5,
-       lang_known = X6)
-canlang_data
+col_map = {
+    0 : &quot;category&quot;,
+    1 : &quot;language&quot;,
+    2 : &quot;mother_tongue&quot;,
+    3 : &quot;most_at_home&quot;,
+    4 : &quot;most_at_work&quot;,
+    5 : &quot;lang_known&quot;
+}
+canlang_data_renamed = canlang_data.rename(columns=col_map)
+canlang_data_renamed
         </input>
       </program>
       <pre>
@@ -579,8 +582,19 @@ canlang_data
       </p>
       <program language="python">
         <input>
-url &lt;- "https://raw.githubusercontent.com/UBC-DSCI/data/main/can_lang.csv"
-canlang_data &lt;- read_csv(url)
+canlang_data = pd.read_csv(
+    &quot;data/can_lang_no_names.tsv&quot;,
+    sep=&quot;\t&quot;,
+    header=None,
+    names=[
+        &quot;category&quot;,
+        &quot;language&quot;,
+        &quot;mother_tongue&quot;,
+        &quot;most_at_home&quot;,
+        &quot;most_at_work&quot;,
+        &quot;lang_known&quot;,
+    ],
+)
 canlang_data
         </input>
       </program>
@@ -613,8 +627,10 @@ canlang_data
       </p>
       <program language="python">
         <input>
-download.file(url, "data/can_lang.csv")
-canlang_data &lt;- read_csv("data/can_lang.csv")
+url = &quot;https://raw.githubusercontent.com/UBC-DSCI/introduction-to-datascience-python/reading/source/data/can_lang.csv&quot;
+pd.read_csv(url)
+canlang_data = pd.read_csv(url)
+
 canlang_data
         </input>
       </program>
@@ -690,9 +706,7 @@ X?a??4VT?,D?Jq
 
     <program language="python">
       <input>
-library(readxl)
-
-canlang_data &lt;- read_excel("data/can_lang.xlsx")
+canlang_data = pd.read_excel(&quot;data/can_lang.xlsx&quot;)
 canlang_data
       </input>
     </program>
@@ -809,9 +823,9 @@ canlang_data
       </p>
       <program language="python">
         <input>
-library(DBI)
+import ibis
 
-canlang_conn &lt;- dbConnect(RSQLite::SQLite(), "data/can_lang.db")
+conn = ibis.sqlite.connect(&quot;data/can_lang.db&quot;)
         </input>
       </program>
       <p>
@@ -823,7 +837,7 @@ canlang_conn &lt;- dbConnect(RSQLite::SQLite(), "data/can_lang.db")
       </p>
       <program language="python">
         <input>
-tables &lt;- dbListTables(canlang_conn)
+tables = conn.list_tables()
 tables
         </input>
       </program>
@@ -843,10 +857,8 @@ tables
       </p>
       <program language="python">
         <input>
-library(dbplyr)
-
-lang_db &lt;- tbl(canlang_conn, "lang")
-lang_db
+canlang_table = conn.table(&quot;can_lang&quot;)
+canlang_table
         </input>
       </program>
       <pre>
@@ -896,7 +908,7 @@ lang_db
       </p>
       <program language="python">
         <input>
-show_query(tbl(canlang_conn, "lang"))
+canlang_table.count()
         </input>
       </program>
       <pre>
@@ -919,8 +931,7 @@ FROM `lang`</pre>
       </p>
       <program language="python">
         <input>
-aboriginal_lang_db &lt;- filter(lang_db, category == "Aboriginal languages")
-aboriginal_lang_db
+canlang_table.count().execute()
         </input>
       </program>
       <pre>
@@ -952,8 +963,7 @@ aboriginal_lang_db
       </p>
       <program language="python">
         <input>
-aboriginal_lang_selected_db &lt;- select(aboriginal_lang_db, language, mother_tongue)
-aboriginal_lang_selected_db
+str(canlang_table.count().compile())
         </input>
       </program>
       <pre>
@@ -983,8 +993,7 @@ aboriginal_lang_selected_db
       </p>
       <program language="python">
         <input>
-aboriginal_lang_data &lt;- collect(aboriginal_lang_selected_db)
-aboriginal_lang_data
+canlang_table.head(10).execute()
         </input>
       </program>
       <pre>
@@ -1014,7 +1023,8 @@ aboriginal_lang_data
       </p>
       <program language="python">
         <input>
-nrow(aboriginal_lang_selected_db)
+canlang_table_filtered = canlang_table[canlang_table[&quot;category&quot;] == &quot;Aboriginal languages&quot;]
+canlang_table_filtered
         </input>
       </program>
       <pre>
@@ -1025,7 +1035,8 @@ nrow(aboriginal_lang_selected_db)
       </p>
       <program language="python">
         <input>
-tail(aboriginal_lang_selected_db)
+canlang_table_selected = canlang_table_filtered[[&quot;language&quot;, &quot;mother_tongue&quot;]]
+canlang_table_selected
         </input>
       </program>
       <pre>
@@ -1070,10 +1081,8 @@ Error: tail() is not supported by sql sources</pre>
       </p>
       <program language="python">
         <input>
-library(RPostgres)
-canmov_conn &lt;- dbConnect(RPostgres::Postgres(), dbname = "can_mov_db",
-                        host = "fakeserver.stat.ubc.ca", port = 5432,
-                        user = "user0001", password = "abc123")
+aboriginal_lang_data = canlang_table_selected.execute()
+aboriginal_lang_data
         </input>
       </program>
       <p>
@@ -1083,7 +1092,7 @@ canmov_conn &lt;- dbConnect(RPostgres::Postgres(), dbname = "can_mov_db",
       </p>
       <program language="python">
         <input>
-dbListTables(canmov_conn)
+canlang_table_selected.tail(6)
         </input>
       </program>
       <pre>
@@ -1096,8 +1105,7 @@ dbListTables(canmov_conn)
       </p>
       <program language="python">
         <input>
-ratings_db &lt;- tbl(canmov_conn, "ratings")
-ratings_db
+aboriginal_lang_data.tail(6)
         </input>
       </program>
       <pre>
@@ -1124,8 +1132,13 @@ ratings_db
       </p>
       <program language="python">
         <input>
-avg_rating_db &lt;- select(ratings_db, average_rating)
-avg_rating_db
+conn = ibis.postgres.connect(
+    database=&quot;can_mov_db&quot;,
+    host=&quot;fakeserver.stat.ubc.ca&quot;,
+    port=5432,
+    user=&quot;user0001&quot;,
+    password=&quot;abc123&quot;
+)
         </input>
       </program>
       <pre>
@@ -1151,7 +1164,7 @@ avg_rating_db
       </p>
       <program language="python">
         <input>
-min(avg_rating_db)
+conn.list_tables()
         </input>
       </program>
       <pre>
@@ -1162,8 +1175,7 @@ Error in min(avg_rating_db) : invalid 'type' (list) of argument</pre>
       </p>
       <program language="python">
         <input>
-avg_rating_data &lt;- collect(avg_rating_db)
-min(avg_rating_data)
+print('[&quot;themes&quot;, &quot;medium&quot;, &quot;titles&quot;, &quot;title_aliases&quot;, &quot;forms&quot;, &quot;episodes&quot;, &quot;names&quot;, &quot;names_occupations&quot;, &quot;occupation&quot;, &quot;ratings&quot;]')
         </input>
       </program>
       <pre>
@@ -1212,8 +1224,8 @@ min(avg_rating_data)
     </p>
     <program language="python">
       <input>
-no_official_lang_data &lt;- filter(can_lang, category != "Official languages")
-write_csv(no_official_lang_data, "data/no_official_languages.csv")
+ratings_table = conn.table(&quot;ratings&quot;)
+ratings_table
       </input>
     </program>
   </section>
@@ -1448,7 +1460,12 @@ td:nth-child(4) ,
         </p>
         <program language="python">
           <input>
-library(rvest)
+print(&quot;&quot;&quot;
+AlchemyTable: ratings
+  title           string
+  average_rating  float64
+  num_votes       int64
+&quot;&quot;&quot;)
           </input>
         </program>
         <p>
@@ -1457,7 +1474,8 @@ library(rvest)
         </p>
         <program language="python">
           <input>
-page &lt;- read_html("https://en.wikipedia.org/wiki/Canada")
+avg_rating = ratings_table[[&quot;average_rating&quot;]]
+avg_rating
           </input>
         </program>
         <p>
@@ -1477,12 +1495,16 @@ page &lt;- read_html("https://en.wikipedia.org/wiki/Canada")
         </p>
         <program language="python">
           <input>
-selectors &lt;- paste("td:nth-child(8)",
-             "td:nth-child(4)",
-             ".largestCities-cell-background+ td a", sep = ",")
+print(&quot;&quot;&quot;
+r0 := AlchemyTable: ratings
+  title           string
+  average_rating  float64
+  num_votes       int64
 
-population_nodes &lt;- html_nodes(page, selectors)
-head(population_nodes)
+Selection[r0]
+  selections:
+    average_rating: r0.average_rating
+&quot;&quot;&quot;)
           </input>
         </program>
         <pre>
@@ -1524,8 +1546,8 @@ head(population_nodes)
         </p>
         <program language="python">
           <input>
-population_text &lt;- html_text(population_nodes)
-head(population_text)
+lowest = avg_rating.order_by(&quot;average_rating&quot;).head(1)
+lowest.execute()
           </input>
         </program>
         <pre>
@@ -1682,12 +1704,8 @@ Rho Ophiuchi","url":"https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph1024.p
         </p>
         <program language="python">
           <input>
-library(httr2)
-
-req &lt;- request("https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY&amp;date=2023-07-13")
-resp &lt;- req_perform(req)
-nasa_data_single &lt;- resp_body_json(resp)
-nasa_data_single
+lowest = pd.DataFrame({&quot;average_rating&quot; : [1.0]})
+lowest
           </input>
         </program>
         <pre>
@@ -1721,10 +1739,8 @@ nasa_data_single
         </p>
         <program language="python">
           <input>
-req &lt;- request("https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY&amp;start_date=2023-05-01&amp;end_date=2023-07-13")
-resp &lt;- req_perform(req)
-nasa_data &lt;- resp_body_json(resp)
-length(nasa_data)
+no_official_lang_data = canlang_data[canlang_data[&quot;category&quot;] != &quot;Official languages&quot;]
+no_official_lang_data.to_csv(&quot;data/no_official_languages.csv&quot;, index=False)
           </input>
         </program>
         <pre>
@@ -1743,9 +1759,11 @@ length(nasa_data)
         </note>
         <program language="python">
           <input>
-nasa_df_all &lt;- tibble(bind_rows(lapply(nasa_data, as.data.frame.list)))
-nasa_df &lt;- select(nasa_df_all, date, title, copyright, url)
-nasa_df
+import requests
+import bs4
+
+wiki = requests.get(&quot;https://en.wikipedia.org/wiki/Canada&quot;)
+page = bs4.BeautifulSoup(wiki.content, &quot;html.parser&quot;)
           </input>
         </program>
         <pre>

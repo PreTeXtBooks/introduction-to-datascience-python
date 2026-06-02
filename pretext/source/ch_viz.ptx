@@ -242,7 +242,8 @@
     </p>
     <program language="python">
       <input>
-library(tidyverse)
+import pandas as pd
+import altair as alt
       </input>
     </program>
 
@@ -268,7 +269,10 @@ library(tidyverse)
       <program language="python">
         <input>
 # mauna loa carbon dioxide data
-co2_df &lt;- read_csv("data/mauna_loa_data.csv")
+co2_df = pd.read_csv(
+    &quot;data/mauna_loa_data.csv&quot;,
+    parse_dates=[&quot;date_measured&quot;]
+)
 co2_df
         </input>
       </program>
@@ -376,10 +380,7 @@ co2_df
 
       <program language="python">
         <input>
-co2_scatter &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
-  geom_point()
-
-co2_scatter
+co2_df.info()
         </input>
       </program>
       <figure xml:id="fig-viz-co2-scatter">
@@ -414,10 +415,10 @@ co2_scatter
 
       <program language="python">
         <input>
-co2_line &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
-  geom_line()
-
-co2_line
+co2_scatter = alt.Chart(co2_df).mark_point().encode(
+    x=&quot;date_measured&quot;,
+    y=alt.Y(&quot;ppm&quot;).scale(zero=False)
+)
         </input>
       </program>
       <figure xml:id="fig-viz-co2-line">
@@ -447,13 +448,10 @@ otherwise be clear (<term>overplotting</term>).
       </p>
       <program language="python">
         <input>
-co2_line &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
-  geom_line() +
-  xlab("Year") +
-  ylab("Atmospheric CO2 (ppm)") +
-  theme(text = element_text(size = 12))
-
-co2_line
+co2_line = alt.Chart(co2_df).mark_line().encode(
+    x=&quot;date_measured&quot;,
+    y=alt.Y(&quot;ppm&quot;).scale(zero=False)
+)
         </input>
       </program>
       <figure xml:id="fig-viz-co2-line-labels">
@@ -494,16 +492,10 @@ co2_line
       </note>
       <program language="python">
         <input>
-library(lubridate)
-
-co2_line &lt;- ggplot(co2_df, aes(x = date_measured, y = ppm)) +
-  geom_line() +
-  xlab("Year") +
-  ylab("Atmospheric CO2 (ppm)") +
-  xlim(c(date("1990-01-01"), date("1993-12-01"))) +
-  theme(text = element_text(size = 12))
-
-co2_line
+co2_line_labels = alt.Chart(co2_df).mark_line().encode(
+    x=alt.X(&quot;date_measured&quot;).title(&quot;Year&quot;),
+    y=alt.Y(&quot;ppm&quot;).scale(zero=False).title(&quot;Atmospheric CO2 (ppm)&quot;)
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-co2-line-zoom">
@@ -557,8 +549,14 @@ co2_line
       </p>
       <program language="python">
         <input>
-faithful &lt;- as_tibble(faithful)
-faithful
+co2_line_scale = alt.Chart(co2_df).mark_line(clip=True).encode(
+    x=alt.X(&quot;date_measured&quot;)
+        .scale(domain=[&quot;1990&quot;, &quot;1995&quot;])
+        .title(&quot;Measurement Date&quot;),
+    y=alt.Y(&quot;ppm&quot;)
+        .scale(zero=False)
+        .title(&quot;Atmospheric CO2 (ppm)&quot;)
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <pre>
@@ -590,10 +588,8 @@ faithful
       </p>
       <program language="python">
         <input>
-faithful_scatter &lt;- ggplot(faithful, aes(x = waiting, y = eruptions)) +
-  geom_point()
-
-faithful_scatter
+faithful = pd.read_csv(&quot;data/faithful.csv&quot;)
+faithful
         </input>
       </program>
       <figure xml:id="fig-viz-faithful-scatter">
@@ -610,13 +606,10 @@ faithful_scatter
       </p>
       <program language="python">
         <input>
-faithful_scatter &lt;- ggplot(faithful, aes(x = waiting, y = eruptions)) +
-  geom_point() +
-  xlab("Waiting Time (mins)") +
-  ylab("Eruption Duration (mins)") +
-  theme(text = element_text(size = 12))
-
-faithful_scatter
+faithful_scatter = alt.Chart(faithful).mark_point().encode(
+    x=&quot;waiting&quot;,
+    y=&quot;eruptions&quot;
+)
         </input>
       </program>
       <figure xml:id="fig-viz-faithful-scatter-labels">
@@ -647,8 +640,10 @@ faithful_scatter
       </p>
       <program language="python">
         <input>
-can_lang &lt;- read_csv("data/can_lang.csv")
-can_lang
+faithful_scatter_labels = alt.Chart(faithful).mark_point().encode(
+    x=alt.X(&quot;waiting&quot;).title(&quot;Waiting Time (mins)&quot;),
+    y=alt.Y(&quot;eruptions&quot;).title(&quot;Eruption Duration (mins)&quot;)
+)
         </input>
       </program>
       <pre>
@@ -674,8 +669,10 @@ can_lang
       </p>
       <program language="python">
         <input>
-ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
-  geom_point()
+faithful_scatter_labels_black = alt.Chart(faithful).mark_point(size=10, color=&quot;black&quot;).encode(
+    x=alt.X(&quot;waiting&quot;).title(&quot;Waiting Time (mins)&quot;),
+    y=alt.Y(&quot;eruptions&quot;).title(&quot;Eruption Duration (mins)&quot;)
+)
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter">
@@ -694,11 +691,8 @@ ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
       </p>
       <program language="python">
         <input>
-ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
-  geom_point() +
-  xlab("Language spoken most at home \n (number of Canadian residents)") +
-  ylab("Mother tongue \n (number of Canadian residents)") +
-  theme(text = element_text(size = 12))
+can_lang = pd.read_csv(&quot;data/can_lang.csv&quot;)
+can_lang
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter-labs">
@@ -721,8 +715,10 @@ ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
       </p>
       <program language="python">
         <input>
-can_lang |&gt;
-  filter(language == "English" | language == "French")
+can_lang_plot = alt.Chart(can_lang).mark_circle().encode(
+    x=&quot;most_at_home&quot;,
+    y=&quot;mother_tongue&quot;
+)
         </input>
       </program>
       <pre>
@@ -762,15 +758,13 @@ can_lang |&gt;
       </p>
       <program language="python">
         <input>
-library(scales)
-
-ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
-  geom_point() +
-  xlab("Language spoken most at home \n (number of Canadian residents)") +
-  ylab("Mother tongue \n (number of Canadian residents)") +
-  theme(text = element_text(size = 12)) +
-  scale_x_log10(labels = label_comma()) +
-  scale_y_log10(labels = label_comma())
+can_lang_plot_labels = alt.Chart(can_lang).mark_circle().encode(
+    x=alt.X(&quot;most_at_home&quot;)
+        .title([&quot;Language spoken most at home&quot;, &quot;(number of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue&quot;)
+        .scale(zero=False)
+        .title([&quot;Mother tongue&quot;, &quot;(number of Canadian residents)&quot;])
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter-log">
@@ -799,14 +793,10 @@ ggplot(can_lang, aes(x = most_at_home, y = mother_tongue)) +
       </p>
       <program language="python">
         <input>
-can_lang &lt;- can_lang |&gt;
-  mutate(
-    mother_tongue_percent = (mother_tongue / 35151728) * 100,
-    most_at_home_percent = (most_at_home / 35151728) * 100
-  )
-
-can_lang |&gt;
-  select(mother_tongue_percent, most_at_home_percent)
+can_lang.loc[
+    (can_lang[&quot;language&quot;]==&quot;English&quot;)
+    | (can_lang[&quot;language&quot;]==&quot;French&quot;)
+]
         </input>
       </program>
       <pre>
@@ -832,13 +822,14 @@ can_lang |&gt;
       </p>
       <program language="python">
         <input>
-ggplot(can_lang, aes(x = most_at_home_percent, y = mother_tongue_percent)) +
-  geom_point() +
-  xlab("Language spoken most at home \n (percentage of Canadian residents)") +
-  ylab("Mother tongue \n (percentage of Canadian residents)") +
-  theme(text = element_text(size = 12)) +
-  scale_x_log10(labels = comma) +
-  scale_y_log10(labels = comma)
+can_lang_plot_log = alt.Chart(can_lang).mark_circle().encode(
+    x=alt.X(&quot;most_at_home&quot;)
+        .scale(type=&quot;log&quot;)
+        .title([&quot;Language spoken most at home&quot;, &quot;(number of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue&quot;)
+        .scale(type=&quot;log&quot;)
+        .title([&quot;Mother tongue&quot;, &quot;(number of Canadian residents)&quot;])
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter-log-pct">
@@ -912,15 +903,16 @@ ggplot(can_lang, aes(x = most_at_home_percent, y = mother_tongue_percent)) +
       </p>
       <program language="python">
         <input>
-ggplot(can_lang, aes(x = most_at_home_percent,
-                     y = mother_tongue_percent,
-                     color = category)) +
-  geom_point() +
-  xlab("Language spoken most at home \n (percentage of Canadian residents)") +
-  ylab("Mother tongue \n (percentage of Canadian residents)") +
-  theme(text = element_text(size = 12)) +
-  scale_x_log10(labels = comma) +
-  scale_y_log10(labels = comma)
+can_lang_plot_log_revised = alt.Chart(can_lang).mark_circle().encode(
+    x=alt.X(&quot;most_at_home&quot;)
+        .scale(type=&quot;log&quot;)
+        .title([&quot;Language spoken most at home&quot;, &quot;(number of Canadian residents)&quot;])
+        .axis(tickCount=7, format=&quot;s&quot;),
+    y=alt.Y(&quot;mother_tongue&quot;)
+        .scale(type=&quot;log&quot;)
+        .title([&quot;Mother tongue&quot;, &quot;(number of Canadian residents)&quot;])
+        .axis(tickCount=7, format=&quot;s&quot;)
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter-color">
@@ -943,17 +935,10 @@ ggplot(can_lang, aes(x = most_at_home_percent,
       </p>
       <program language="python">
         <input>
-ggplot(can_lang, aes(x = most_at_home_percent,
-                     y = mother_tongue_percent,
-                     color = category)) +
-  geom_point() +
-  xlab("Language spoken most at home \n (percentage of Canadian residents)") +
-  ylab("Mother tongue \n (percentage of Canadian residents)") +
-  theme(text = element_text(size = 12),
-        legend.position = "top",
-        legend.direction = "vertical") +
-  scale_x_log10(labels = comma) +
-  scale_y_log10(labels = comma)
+canadian_population = 35_151_728
+can_lang[&quot;mother_tongue_percent&quot;] = can_lang[&quot;mother_tongue&quot;]/canadian_population*100
+can_lang[&quot;most_at_home_percent&quot;] = can_lang[&quot;most_at_home&quot;]/canadian_population*100
+can_lang[[&quot;mother_tongue_percent&quot;, &quot;most_at_home_percent&quot;]]
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter-color-legend">
@@ -977,8 +962,16 @@ ggplot(can_lang, aes(x = most_at_home_percent,
       </p>
       <program language="python">
         <input>
-library(RColorBrewer)
-display.brewer.all(colorblindFriendly = TRUE)
+can_lang_plot_percent = alt.Chart(can_lang).mark_circle().encode(
+    x=alt.X(&quot;most_at_home_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Language spoken most at home&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Mother tongue&quot;, &quot;(percentage of Canadian residents)&quot;]),
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-rcolorbrewer">
@@ -1003,19 +996,17 @@ display.brewer.all(colorblindFriendly = TRUE)
       </p>
       <program language="python">
         <input>
-ggplot(can_lang, aes(x = most_at_home_percent,
-                     y = mother_tongue_percent,
-                     color = category,
-                     shape = category)) +
-  geom_point() +
-  xlab("Language spoken most at home \n (percentage of Canadian residents)") +
-  ylab("Mother tongue \n (percentage of Canadian residents)") +
-  theme(text = element_text(size = 12),
-        legend.position = "top",
-        legend.direction = "vertical") +
-  scale_x_log10(labels = comma) +
-  scale_y_log10(labels = comma) +
-  scale_color_brewer(palette = "Set2")
+can_lang_plot_category=alt.Chart(can_lang).mark_circle().encode(
+    x=alt.X(&quot;most_at_home_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Language spoken most at home&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Mother tongue&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    color=&quot;category&quot;
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-canlang-scatter-color-palette">
@@ -1069,8 +1060,19 @@ ggplot(can_lang, aes(x = most_at_home_percent,
       </p>
       <program language="python">
         <input>
-islands_df &lt;- read_csv("data/islands.csv")
-islands_df
+can_lang_plot_legend = alt.Chart(can_lang).mark_circle().encode(
+    x=alt.X(&quot;most_at_home_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Language spoken most at home&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Mother tongue&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    color=alt.Color(&quot;category&quot;)
+        .legend(orient=&quot;top&quot;)
+        .title(&quot;&quot;)
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <pre>
@@ -1113,10 +1115,21 @@ islands_df
       </p>
       <program language="python">
         <input>
-islands_bar &lt;- ggplot(islands_df, aes(x = landmass, y = size)) +
-  geom_bar(stat = "identity")
-
-islands_bar
+can_lang_plot_theme = alt.Chart(can_lang).mark_point(filled=True).encode(
+    x=alt.X(&quot;most_at_home_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Language spoken most at home&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Mother tongue&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    color=alt.Color(&quot;category&quot;)
+        .legend(orient=&quot;top&quot;)
+        .title(&quot;&quot;)
+        .scale(scheme=&quot;dark2&quot;),
+    shape=&quot;category&quot;
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-islands-bar">
@@ -1150,11 +1163,22 @@ islands_bar
       </note>
       <program language="python">
         <input>
-islands_top12 &lt;- slice_max(islands_df, order_by = size, n = 12)
-islands_bar &lt;- ggplot(islands_top12, aes(x = size, y = landmass)) +
-  geom_bar(stat = "identity")
-
-islands_bar
+can_lang_plot_tooltip = alt.Chart(can_lang).mark_point(filled=True).encode(
+    x=alt.X(&quot;most_at_home_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Language spoken most at home&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    y=alt.Y(&quot;mother_tongue_percent&quot;)
+        .scale(type=&quot;log&quot;)
+        .axis(tickCount=7)
+        .title([&quot;Mother tongue&quot;, &quot;(percentage of Canadian residents)&quot;]),
+    color=alt.Color(&quot;category&quot;)
+        .legend(orient=&quot;top&quot;)
+        .title(&quot;&quot;)
+        .scale(scheme=&quot;dark2&quot;),
+    shape=&quot;category&quot;,
+    tooltip=alt.Tooltip([&quot;language&quot;, &quot;mother_tongue&quot;, &quot;most_at_home&quot;])
+).configure_axis(titleFontSize=12)
         </input>
       </program>
       <figure xml:id="fig-viz-islands-bar-top12">
@@ -1206,19 +1230,8 @@ islands_bar
       </p>
       <program language="python">
         <input>
-islands_bar &lt;- ggplot(islands_top12,
-                      aes(x = size,
-                          y = fct_reorder(landmass, size, .desc = TRUE),
-                          fill = landmass_type)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Size (1000 square mi)",
-       y = "Landmass",
-       fill = "Type",
-       title = "Earth's twelve largest landmasses") +
-  scale_fill_manual(values = c("steelblue", "darkorange")) +
-  theme(text = element_text(size = 10))
-
-islands_bar
+islands_df = pd.read_csv(&quot;data/islands.csv&quot;)
+islands_df
         </input>
       </program>
       <figure xml:id="fig-viz-islands-bar-colored">
@@ -1261,8 +1274,10 @@ islands_bar
       </p>
       <program language="python">
         <input>
-morley &lt;- as_tibble(morley)
-morley
+islands_bar = alt.Chart(islands_df).mark_bar().encode(
+    x=&quot;landmass&quot;,
+    y=&quot;size&quot;
+)
         </input>
       </program>
       <pre>
@@ -1302,10 +1317,12 @@ morley
       </p>
       <program language="python">
         <input>
-morley_hist &lt;- ggplot(morley, aes(x = Speed)) +
-  geom_histogram()
+islands_top12 = islands_df.nlargest(12, &quot;size&quot;)
 
-morley_hist
+islands_bar_top = alt.Chart(islands_top12).mark_bar().encode(
+    x=&quot;size&quot;,
+    y=&quot;landmass&quot;
+)
         </input>
       </program>
       <figure xml:id="fig-viz-morley-hist">
@@ -1332,11 +1349,14 @@ morley_hist
       </p>
       <program language="python">
         <input>
-morley_hist &lt;- ggplot(morley, aes(x = Speed)) +
-  geom_histogram() +
-  geom_vline(xintercept = 792.458, linetype = "dashed")
-
-morley_hist
+islands_plot_sorted = alt.Chart(
+	islands_top12,
+	title=&quot;Earth's seven largest landmasses are continents&quot;
+).mark_bar().encode(
+    x=alt.X(&quot;size&quot;).title(&quot;Size (1000 square mi)&quot;),
+    y=alt.Y(&quot;landmass&quot;).sort(&quot;x&quot;).title(&quot;Landmass&quot;),
+    color=alt.Color(&quot;landmass_type&quot;).title(&quot;Type&quot;)
+)
         </input>
       </program>
       <figure xml:id="fig-viz-morley-hist-vline">
@@ -1362,11 +1382,8 @@ morley_hist
       </p>
       <program language="python">
         <input>
-morley_hist &lt;- ggplot(morley, aes(x = Speed, fill = Expt)) +
-  geom_histogram(alpha = 0.5, position = "identity") +
-  geom_vline(xintercept = 792.458, linetype = "dashed")
-
-morley_hist
+morley_df = pd.read_csv(&quot;data/morley.csv&quot;)
+morley_df
         </input>
       </program>
       <figure xml:id="fig-viz-morley-hist-color">
@@ -1399,11 +1416,10 @@ morley_hist
       </p>
       <program language="python">
         <input>
-morley_hist &lt;- ggplot(morley, aes(x = Speed, fill = as_factor(Expt))) +
-  geom_histogram(alpha = 0.5, position = "identity") +
-  geom_vline(xintercept = 792.458, linetype = "dashed")
-
-morley_hist
+morley_bars = alt.Chart(morley_df).mark_bar().encode(
+    x=&quot;Speed&quot;,
+    y=&quot;count()&quot;
+)
         </input>
       </program>
       <figure xml:id="fig-viz-morley-hist-factor">
@@ -1443,12 +1459,10 @@ morley_hist
       </p>
       <program language="python">
         <input>
-morley_hist &lt;- ggplot(morley, aes(x = Speed, fill = as_factor(Expt))) +
-  geom_histogram() +
-  facet_grid(rows = vars(Expt)) +
-  geom_vline(xintercept = 792.458, linetype = "dashed")
-
-morley_hist
+morley_hist = alt.Chart(morley_df).mark_bar().encode(
+    x=alt.X(&quot;Speed&quot;).bin(),
+    y=&quot;count()&quot;
+)
         </input>
       </program>
       <figure xml:id="fig-viz-morley-hist-facets">
@@ -1481,22 +1495,11 @@ morley_hist
       </p>
       <program language="python">
         <input>
-morley_rel &lt;- mutate(morley,
-                     relative_accuracy = 100 *
-                       ((299000 + Speed) - 299792.458) / (299792.458))
+v_line = alt.Chart(morley_df).mark_rule(strokeDash=[6], size=1.5).encode(
+    x=alt.datum(792.458)
+)
 
-morley_hist &lt;- ggplot(morley_rel,
-                      aes(x = relative_accuracy,
-                          fill = as_factor(Expt))) +
-  geom_histogram() +
-  facet_grid(rows = vars(Expt)) +
-  geom_vline(xintercept = 0, linetype = "dashed") +
-  labs(x = "Relative Accuracy (%)",
-       y = "# Measurements",
-       fill = "Experiment ID") +
-  theme(text = element_text(size = 12))
-
-morley_hist
+morley_hist_line = morley_hist + v_line
         </input>
       </program>
       <figure xml:id="fig-viz-morley-hist-relative">
@@ -1573,10 +1576,13 @@ morley_hist
         </p>
         <program language="python">
           <input>
-morley_hist_title &lt;- morley_hist +
-  ggtitle("Speed of light experiments \n were accurate to about 0.05%")
+morley_hist_colored = alt.Chart(morley_df).mark_bar().encode(
+    x=alt.X(&quot;Speed&quot;).bin(),
+    y=&quot;count()&quot;,
+    color=&quot;Expt&quot;
+)
 
-morley_hist_title
+morley_hist_colored = morley_hist_colored + v_line
           </input>
         </program>
         <figure xml:id="fig-viz-morley-hist-title">
@@ -1772,14 +1778,7 @@ morley_hist_title
     </p>
     <program language="python">
       <input>
-library(svglite) # we need this to save SVG files
-faithful_plot &lt;- ggplot(data = faithful, aes(x = waiting, y = eruptions)) +
-  geom_point() +
-  labs(x = "Waiting time to next eruption \n (minutes)",
-       y = "Eruption time \n (minutes)") +
-  theme(text = element_text(size = 12))
-
-faithful_plot
+morley_df.info()
       </input>
     </program>
     <figure xml:id="fig-viz-faithful-save">
@@ -1800,11 +1799,13 @@ faithful_plot
     </p>
     <program language="python">
       <input>
-ggsave("img/viz/faithful_plot.png", faithful_plot)
-ggsave("img/viz/faithful_plot.jpg", faithful_plot)
-ggsave("img/viz/faithful_plot.bmp", faithful_plot)
-ggsave("img/viz/faithful_plot.tiff", faithful_plot)
-ggsave("img/viz/faithful_plot.svg", faithful_plot)
+morley_hist_categorical = alt.Chart(morley_df).mark_bar(opacity=0.5).encode(
+    x=alt.X(&quot;Speed&quot;).bin(),
+    y=alt.Y(&quot;count()&quot;).stack(False),
+    color=&quot;Expt:N&quot;
+)
+
+morley_hist_categorical = morley_hist_categorical + v_line
       </input>
     </program>
     <table xml:id="tab-viz-filesizes">

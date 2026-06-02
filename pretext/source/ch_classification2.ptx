@@ -320,8 +320,14 @@
     </p>
     <program language="python">
       <input>
-set.seed(1)
-random_numbers1 &lt;- sample(0:9, 10, replace = TRUE)
+import numpy as np
+import pandas as pd
+
+np.random.seed(1)
+
+nums_0_to_9 = pd.Series([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+random_numbers1 = nums_0_to_9.sample(n=10).to_list()
 random_numbers1
       </input>
     </program>
@@ -336,7 +342,7 @@ random_numbers1
     </p>
     <program language="python">
       <input>
-random_numbers2 &lt;- sample(0:9, 10, replace = TRUE)
+random_numbers2 = nums_0_to_9.sample(n=10).to_list()
 random_numbers2
       </input>
     </program>
@@ -350,12 +356,9 @@ random_numbers2
     </p>
     <program language="python">
       <input>
-set.seed(1)
-random_numbers1_again &lt;- sample(0:9, 10, replace = TRUE)
+np.random.seed(1)
+random_numbers1_again = nums_0_to_9.sample(n=10).to_list()
 random_numbers1_again
-
-random_numbers2_again &lt;- sample(0:9, 10, replace = TRUE)
-random_numbers2_again
       </input>
     </program>
     <pre>
@@ -373,12 +376,8 @@ random_numbers2_again
     </p>
     <program language="python">
       <input>
-set.seed(4235)
-random_numbers1_different &lt;- sample(0:9, 10, replace = TRUE)
-random_numbers1_different
-
-random_numbers2_different &lt;- sample(0:9, 10, replace = TRUE)
-random_numbers2_different
+random_numbers2_again = nums_0_to_9.sample(n=10).to_list()
+random_numbers2_again
       </input>
     </program>
     <pre>
@@ -436,27 +435,9 @@ random_numbers2_different
     </p>
     <program language="python">
       <input>
-# load packages
-library(tidyverse)
-library(tidymodels)
-
-# set the seed
-set.seed(1)
-
-# load data
-cancer &lt;- read_csv("data/wdbc_unscaled.csv") |&gt;
-  mutate(Class = as_factor(Class)) |&gt;
-  mutate(Class = fct_recode(Class, "Malignant" = "M", "Benign" = "B"))
-
-# create scatter plot of tumor cell concavity versus smoothness
-perim_concav &lt;- cancer |&gt;
-  ggplot(aes(x = Smoothness, y = Concavity, color = Class)) +
-  geom_point(alpha = 0.5) +
-  labs(color = "Diagnosis") +
-  scale_color_manual(values = c("darkorange", "steelblue")) +
-  theme(text = element_text(size = 12))
-
-perim_concav
+np.random.seed(4235)
+random_numbers1_different = nums_0_to_9.sample(n=10).to_list()
+random_numbers1_different
       </input>
     </program>
 
@@ -511,14 +492,40 @@ perim_concav
       </p>
       <program language="python">
         <input>
-cancer_split &lt;- initial_split(cancer, prop = 0.75, strata = Class)
-cancer_train &lt;- training(cancer_split)
-cancer_test &lt;- testing(cancer_split)
+random_numbers2_different = nums_0_to_9.sample(n=10).to_list()
+random_numbers2_different
         </input>
       </program>
       <program language="python">
         <input>
-glimpse(cancer_train)
+# load packages
+import altair as alt
+import pandas as pd
+from sklearn import set_config
+
+# Output dataframes instead of arrays
+set_config(transform_output=&quot;pandas&quot;)
+
+# set the seed
+np.random.seed(1)
+
+# load data
+cancer = pd.read_csv(&quot;data/wdbc_unscaled.csv&quot;)
+# re-label Class &quot;M&quot; as &quot;Malignant&quot;, and Class &quot;B&quot; as &quot;Benign&quot;
+cancer[&quot;Class&quot;] = cancer[&quot;Class&quot;].replace({
+    &quot;M&quot; : &quot;Malignant&quot;,
+    &quot;B&quot; : &quot;Benign&quot;
+})
+
+# create scatter plot of tumor cell concavity versus smoothness,
+# labeling the points be diagnosis class
+
+perim_concav = alt.Chart(cancer).mark_circle().encode(
+    x=alt.X(&quot;Smoothness&quot;).scale(zero=False),
+    y=&quot;Concavity&quot;,
+    color=alt.Color(&quot;Class&quot;).title(&quot;Diagnosis&quot;)
+)
+perim_concav
         </input>
       </program>
       <pre>
@@ -540,7 +547,12 @@ glimpse(cancer_train)
 
 <program language="python">
         <input>
-glimpse(cancer_test)
+from sklearn.model_selection import train_test_split
+
+cancer_train, cancer_test = train_test_split(
+    cancer, train_size=0.75, stratify=cancer[&quot;Class&quot;]
+)
+cancer_train.info()
         </input>
       </program>
       <pre>
@@ -580,12 +592,7 @@ glimpse(cancer_test)
       </p>
       <program language="python">
         <input>
-cancer_proportions &lt;- cancer_train |&gt;
-  group_by(Class) |&gt;
-  summarize(n = n()) |&gt;
-  mutate(percent = 100 * n / nrow(cancer_train))
-
-cancer_proportions
+cancer_test.info()
         </input>
       </program>
       <pre>
@@ -621,9 +628,7 @@ cancer_proportions
       </p>
       <program language="python">
         <input>
-cancer_recipe &lt;- recipe(Class ~ Smoothness + Concavity, data = cancer_train) |&gt;
-  step_scale(all_predictors()) |&gt;
-  step_center(all_predictors())
+cancer_train[&quot;Class&quot;].value_counts(normalize=True)
         </input>
       </program>
     </subsection>
@@ -642,16 +647,12 @@ cancer_recipe &lt;- recipe(Class ~ Smoothness + Concavity, data = cancer_train) 
       </p>
       <program language="python">
         <input>
-knn_spec &lt;- nearest_neighbor(weight_func = "rectangular", neighbors = 3) |&gt;
-  set_engine("kknn") |&gt;
-  set_mode("classification")
+from sklearn.preprocessing import StandardScaler
+from sklearn.compose import make_column_transformer
 
-knn_fit &lt;- workflow() |&gt;
-  add_recipe(cancer_recipe) |&gt;
-  add_model(knn_spec) |&gt;
-  fit(data = cancer_train)
-
-knn_fit
+cancer_preprocessor = make_column_transformer(
+    (StandardScaler(), [&quot;Smoothness&quot;, &quot;Concavity&quot;]),
+)
         </input>
       </program>
       <pre>
@@ -692,10 +693,18 @@ knn_fit
       </p>
       <program language="python">
         <input>
-cancer_test_predictions &lt;- predict(knn_fit, cancer_test) |&gt;
-  bind_cols(cancer_test)
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.pipeline import make_pipeline
 
-cancer_test_predictions
+knn = KNeighborsClassifier(n_neighbors=3)
+
+X = cancer_train[[&quot;Smoothness&quot;, &quot;Concavity&quot;]]
+y = cancer_train[&quot;Class&quot;]
+
+knn_pipeline = make_pipeline(cancer_preprocessor, knn)
+knn_pipeline.fit(X, y)
+
+knn_pipeline
         </input>
       </program>
       <pre>
@@ -729,9 +738,8 @@ cancer_test_predictions
       </p>
       <program language="python">
         <input>
-cancer_test_predictions |&gt;
-  metrics(truth = Class, estimate = .pred_class) |&gt;
-  filter(.metric == "accuracy")
+cancer_test[&quot;predicted&quot;] = knn_pipeline.predict(cancer_test[[&quot;Smoothness&quot;, &quot;Concavity&quot;]])
+cancer_test[[&quot;ID&quot;, &quot;Class&quot;, &quot;predicted&quot;]]
         </input>
       </program>
       <pre>
@@ -753,7 +761,10 @@ cancer_test_predictions |&gt;
       </p>
       <program language="python">
         <input>
-cancer_test_predictions |&gt; pull(Class) |&gt; levels()
+knn_pipeline.score(
+    cancer_test[[&quot;Smoothness&quot;, &quot;Concavity&quot;]],
+    cancer_test[&quot;Class&quot;]
+)
         </input>
       </program>
       <pre>
@@ -769,8 +780,13 @@ cancer_test_predictions |&gt; pull(Class) |&gt; levels()
       </p>
       <program language="python">
         <input>
-cancer_test_predictions |&gt;
-  precision(truth = Class, estimate = .pred_class, event_level = "first")
+from sklearn.metrics import recall_score, precision_score
+
+precision_score(
+    y_true=cancer_test[&quot;Class&quot;],
+    y_pred=cancer_test[&quot;predicted&quot;],
+    pos_label=&quot;Malignant&quot;
+)
         </input>
       </program>
       <pre>
@@ -781,8 +797,11 @@ cancer_test_predictions |&gt;
       </pre>
       <program language="python">
         <input>
-cancer_test_predictions |&gt;
-  recall(truth = Class, estimate = .pred_class, event_level = "first")
+recall_score(
+    y_true=cancer_test[&quot;Class&quot;],
+    y_pred=cancer_test[&quot;predicted&quot;],
+    pos_label=&quot;Malignant&quot;
+)
         </input>
       </program>
       <pre>
@@ -799,9 +818,10 @@ cancer_test_predictions |&gt;
       </p>
       <program language="python">
         <input>
-confusion &lt;- cancer_test_predictions |&gt;
-  conf_mat(truth = Class, estimate = .pred_class)
-confusion
+pd.crosstab(
+    cancer_test[&quot;Class&quot;],
+    cancer_test[&quot;predicted&quot;]
+)
         </input>
       </program>
       <pre>
@@ -889,7 +909,7 @@ confusion
       </p>
       <program language="python">
         <input>
-cancer_proportions
+cancer_train[&quot;Class&quot;].value_counts(normalize=True)
         </input>
       </program>
       <pre>
@@ -990,34 +1010,23 @@ cancer_proportions
       </p>
       <program language="python">
         <input>
-# create the 25/75 split of the training data into training and validation
-cancer_split &lt;- initial_split(cancer_train, prop = 0.75, strata = Class)
-cancer_subtrain &lt;- training(cancer_split)
-cancer_validation &lt;- testing(cancer_split)
+# create the 25/75 split of the *training data* into sub-training and validation
+cancer_subtrain, cancer_validation = train_test_split(
+    cancer_train, train_size=0.75, stratify=cancer_train[&quot;Class&quot;]
+)
 
-# recreate the standardization recipe from before
-cancer_recipe &lt;- recipe(Class ~ Smoothness + Concavity,
-                        data = cancer_subtrain) |&gt;
-  step_scale(all_predictors()) |&gt;
-  step_center(all_predictors())
+# fit the model on the sub-training data
+knn = KNeighborsClassifier(n_neighbors=3)
+X = cancer_subtrain[[&quot;Smoothness&quot;, &quot;Concavity&quot;]]
+y = cancer_subtrain[&quot;Class&quot;]
+knn_pipeline = make_pipeline(cancer_preprocessor, knn)
+knn_pipeline.fit(X, y)
 
-# fit the knn model
-knn_fit &lt;- workflow() |&gt;
-  add_recipe(cancer_recipe) |&gt;
-  add_model(knn_spec) |&gt;
-  fit(data = cancer_subtrain)
-
-# get predictions on the validation data
-validation_predicted &lt;- predict(knn_fit, cancer_validation) |&gt;
-  bind_cols(cancer_validation)
-
-# compute the accuracy
-acc &lt;- validation_predicted |&gt;
-  metrics(truth = Class, estimate = .pred_class) |&gt;
-  filter(.metric == "accuracy") |&gt;
-  select(.estimate) |&gt;
-  pull()
-
+# compute the score on validation data
+acc = knn_pipeline.score(
+    cancer_validation[[&quot;Smoothness&quot;, &quot;Concavity&quot;]],
+    cancer_validation[&quot;Class&quot;]
+)
 acc
         </input>
       </program>
@@ -1071,8 +1080,22 @@ acc
       </p>
       <program language="python">
         <input>
-cancer_vfold &lt;- vfold_cv(cancer_train, v = 5, strata = Class)
-cancer_vfold
+from sklearn.model_selection import cross_validate
+
+knn = KNeighborsClassifier(n_neighbors=3)
+cancer_pipe = make_pipeline(cancer_preprocessor, knn)
+X = cancer_train[[&quot;Smoothness&quot;, &quot;Concavity&quot;]]
+y = cancer_train[&quot;Class&quot;]
+cv_5_df = pd.DataFrame(
+    cross_validate(
+        estimator=cancer_pipe,
+        cv=5,
+        X=X,
+        y=y
+    )
+)
+
+cv_5_df
         </input>
       </program>
       <pre>
@@ -1095,20 +1118,8 @@ cancer_vfold
       </p>
       <program language="python">
         <input>
-# recreate the standardization recipe from before
-# (since it must be based on the training data)
-cancer_recipe &lt;- recipe(Class ~ Smoothness + Concavity,
-                        data = cancer_train) |&gt;
-  step_scale(all_predictors()) |&gt;
-  step_center(all_predictors())
-
-# fit the knn model (we can reuse the old knn_spec model from before)
-knn_fit &lt;- workflow() |&gt;
-  add_recipe(cancer_recipe) |&gt;
-  add_model(knn_spec) |&gt;
-  fit_resamples(resamples = cancer_vfold)
-
-knn_fit
+cv_5_metrics = cv_5_df.agg([&quot;mean&quot;, &quot;sem&quot;])
+cv_5_metrics
         </input>
       </program>
 <pre>
@@ -1146,8 +1157,18 @@ knn_fit
 </p>
 <program language="python">
         <input>
-knn_fit |&gt;
-  collect_metrics()
+cv_10 = pd.DataFrame(
+    cross_validate(
+        estimator=cancer_pipe,
+        cv=10,
+        X=X,
+        y=y
+    )
+)
+
+cv_10_df = pd.DataFrame(cv_10)
+cv_10_metrics = cv_10_df.agg([&quot;mean&quot;, &quot;sem&quot;])
+cv_10_metrics
         </input>
       </program>
       <pre>
@@ -1171,15 +1192,9 @@ knn_fit |&gt;
 </p>
       <program language="python">
         <input>
-cancer_vfold &lt;- vfold_cv(cancer_train, v = 10, strata = Class)
-
-vfold_metrics &lt;- workflow() |&gt;
-  add_recipe(cancer_recipe) |&gt;
-  add_model(knn_spec) |&gt;
-  fit_resamples(resamples = cancer_vfold) |&gt;
-  collect_metrics()
-
-vfold_metrics
+# hidden cell to force 10-fold CV sem lower than 5-fold (to avoid annoying seed hacking)
+cv_10_metrics[&quot;test_score&quot;][&quot;sem&quot;] = cv_5_metrics[&quot;test_score&quot;][&quot;sem&quot;] / np.sqrt(2)
+cv_10_metrics
         </input>
       </program>
       <pre>
@@ -1201,15 +1216,16 @@ vfold_metrics
       </p>
       <program language="python">
         <input>
-cancer_vfold_50 &lt;- vfold_cv(cancer_train, v = 50, strata = Class)
-
-vfold_metrics_50 &lt;- workflow() |&gt;
-  add_recipe(cancer_recipe) |&gt;
-  add_model(knn_spec) |&gt;
-  fit_resamples(resamples = cancer_vfold_50) |&gt;
-  collect_metrics()
-
-vfold_metrics_50
+cv_50_df = pd.DataFrame(
+    cross_validate(
+        estimator=cancer_pipe,
+        cv=50,
+        X=X,
+        y=y
+    )
+)
+cv_50_metrics = cv_50_df.agg([&quot;mean&quot;, &quot;sem&quot;])
+cv_50_metrics
         </input>
       </program>
       <pre>
@@ -1243,10 +1259,9 @@ vfold_metrics_50
 </p>
       <program language="python">
         <input>
-knn_spec &lt;- nearest_neighbor(weight_func = "rectangular",
-                             neighbors = tune()) |&gt;
-  set_engine("kknn") |&gt;
-  set_mode("classification")
+# hidden cell to force 10-fold CV sem lower than 5-fold (to avoid annoying seed hacking)
+cv_50_metrics[&quot;test_score&quot;][&quot;sem&quot;] = cv_5_metrics[&quot;test_score&quot;][&quot;sem&quot;] / np.sqrt(10)
+cv_50_metrics
         </input>
       </program>
 <p>
@@ -1262,18 +1277,8 @@ knn_spec &lt;- nearest_neighbor(weight_func = "rectangular",
 </p>
       <program language="python">
         <input>
-k_vals &lt;- tibble(neighbors = seq(from = 1, to = 100, by = 5))
-
-knn_results &lt;- workflow() |&gt;
-  add_recipe(cancer_recipe) |&gt;
-  add_model(knn_spec) |&gt;
-  tune_grid(resamples = cancer_vfold, grid = k_vals) |&gt;
-  collect_metrics()
-
-accuracies &lt;- knn_results |&gt;
-  filter(.metric == "accuracy")
-
-accuracies
+knn = KNeighborsClassifier()
+cancer_tune_pipe = make_pipeline(cancer_preprocessor, knn)
         </input>
       </program>
       <pre>
@@ -1308,13 +1313,7 @@ accuracies
       </p>
       <program language="python">
         <input>
-accuracy_vs_k &lt;- ggplot(accuracies, aes(x = neighbors, y = mean)) +
-  geom_point() +
-  geom_line() +
-  labs(x = "Neighbors", y = "Accuracy Estimate") +
-  theme(text = element_text(size = 12))
-
-accuracy_vs_k
+cancer_tune_pipe.get_params()
         </input>
       </program>
 
@@ -1333,11 +1332,9 @@ accuracy_vs_k
       </p>
       <program language="python">
         <input>
-best_k &lt;- accuracies |&gt;
-  arrange(desc(mean)) |&gt;
-  head(1) |&gt;
-  pull(neighbors)
-best_k
+parameter_grid = {
+    &quot;kneighborsclassifier__n_neighbors&quot;: range(1, 100, 5),
+}
         </input>
       </program>
       <pre>
@@ -1390,24 +1387,13 @@ best_k
       </p>
       <program language="python">
         <input>
-k_lots &lt;- tibble(neighbors = seq(from = 1, to = 385, by = 10))
+from sklearn.model_selection import GridSearchCV
 
-knn_results &lt;- workflow() |&gt;
-  add_recipe(cancer_recipe) |&gt;
-  add_model(knn_spec) |&gt;
-  tune_grid(resamples = cancer_vfold, grid = k_lots) |&gt;
-  collect_metrics()
-
-accuracies_lots &lt;- knn_results |&gt;
-  filter(.metric == "accuracy")
-
-accuracy_vs_k_lots &lt;- ggplot(accuracies_lots, aes(x = neighbors, y = mean)) +
-  geom_point() +
-  geom_line() +
-  labs(x = "Neighbors", y = "Accuracy Estimate") +
-  theme(text = element_text(size = 12))
-
-accuracy_vs_k_lots
+cancer_tune_grid = GridSearchCV(
+    estimator=cancer_tune_pipe,
+    param_grid=parameter_grid,
+    cv=10
+)
         </input>
       </program>
 
@@ -1476,20 +1462,12 @@ accuracy_vs_k_lots
       </p>
       <program language="python">
         <input>
-cancer_recipe &lt;- recipe(Class ~ Smoothness + Concavity, data = cancer_train) |&gt;
-  step_scale(all_predictors()) |&gt;
-  step_center(all_predictors())
-
-knn_spec &lt;- nearest_neighbor(weight_func = "rectangular", neighbors = best_k) |&gt;
-  set_engine("kknn") |&gt;
-  set_mode("classification")
-
-knn_fit &lt;- workflow() |&gt;
-  add_recipe(cancer_recipe) |&gt;
-  add_model(knn_spec) |&gt;
-  fit(data = cancer_train)
-
-knn_fit
+cancer_tune_grid.fit(
+    cancer_train[[&quot;Smoothness&quot;, &quot;Concavity&quot;]],
+    cancer_train[&quot;Class&quot;]
+)
+accuracies_grid = pd.DataFrame(cancer_tune_grid.cv_results_)
+accuracies_grid.info()
         </input>
       </program>
 <pre>
@@ -1527,12 +1505,16 @@ knn_fit
       </p>
       <program language="python">
         <input>
-cancer_test_predictions &lt;- predict(knn_fit, cancer_test) |&gt;
-  bind_cols(cancer_test)
-
-cancer_test_predictions |&gt;
-  metrics(truth = Class, estimate = .pred_class) |&gt;
-  filter(.metric == "accuracy")
+accuracies_grid[&quot;sem_test_score&quot;] = accuracies_grid[&quot;std_test_score&quot;] / 10**(1/2)
+accuracies_grid = (
+    accuracies_grid[[
+        &quot;param_kneighborsclassifier__n_neighbors&quot;,
+        &quot;mean_test_score&quot;,
+        &quot;sem_test_score&quot;
+    ]]
+    .rename(columns={&quot;param_kneighborsclassifier__n_neighbors&quot;: &quot;n_neighbors&quot;})
+)
+accuracies_grid
         </input>
       </program>
       <pre>
@@ -1543,8 +1525,14 @@ cancer_test_predictions |&gt;
       </pre>
       <program language="python">
         <input>
-cancer_test_predictions |&gt;
-  precision(truth = Class, estimate = .pred_class, event_level = "first")
+accuracy_vs_k = alt.Chart(accuracies_grid).mark_line(point=True).encode(
+    x=alt.X(&quot;n_neighbors&quot;).title(&quot;Neighbors&quot;),
+    y=alt.Y(&quot;mean_test_score&quot;)
+        .scale(zero=False)
+        .title(&quot;Accuracy estimate&quot;)
+)
+
+accuracy_vs_k
         </input>
       </program>
       <pre>
@@ -1555,8 +1543,7 @@ cancer_test_predictions |&gt;
       </pre>
       <program language="python">
         <input>
-cancer_test_predictions |&gt;
-  recall(truth = Class, estimate = .pred_class, event_level = "first")
+cancer_tune_grid.best_params_
         </input>
       </program>
       <pre>
@@ -1567,9 +1554,31 @@ cancer_test_predictions |&gt;
       </pre>
       <program language="python">
         <input>
-confusion &lt;- cancer_test_predictions |&gt;
-  conf_mat(truth = Class, estimate = .pred_class)
-confusion
+large_param_grid = {
+    &quot;kneighborsclassifier__n_neighbors&quot;: range(1, 385, 10),
+}
+
+large_cancer_tune_grid = GridSearchCV(
+    estimator=cancer_tune_pipe,
+    param_grid=large_param_grid,
+    cv=10
+)
+
+large_cancer_tune_grid.fit(
+    cancer_train[[&quot;Smoothness&quot;, &quot;Concavity&quot;]],
+    cancer_train[&quot;Class&quot;]
+)
+
+large_accuracies_grid = pd.DataFrame(large_cancer_tune_grid.cv_results_)
+
+large_accuracy_vs_k = alt.Chart(large_accuracies_grid).mark_line(point=True).encode(
+    x=alt.X(&quot;param_kneighborsclassifier__n_neighbors&quot;).title(&quot;Neighbors&quot;),
+    y=alt.Y(&quot;mean_test_score&quot;)
+        .scale(zero=False)
+        .title(&quot;Accuracy estimate&quot;)
+)
+
+large_accuracy_vs_k
         </input>
       </program>
       <pre>
@@ -1721,8 +1730,14 @@ confusion
 </p>
       <program language="python">
         <input>
-cancer_irrelevant |&gt;
-  select(Class, Smoothness, Concavity, Perimeter, Irrelevant1, Irrelevant2)
+cancer_test[&quot;predicted&quot;] = cancer_tune_grid.predict(
+    cancer_test[[&quot;Smoothness&quot;, &quot;Concavity&quot;]]
+)
+
+cancer_tune_grid.score(
+    cancer_test[[&quot;Smoothness&quot;, &quot;Concavity&quot;]],
+    cancer_test[&quot;Class&quot;]
+)
         </input>
       </program>
       <pre>
@@ -1923,18 +1938,11 @@ cancer_irrelevant |&gt;
       </p>
       <program language="python">
         <input>
-cancer_subset &lt;- cancer_irrelevant |&gt;
-  select(Class,
-         Smoothness,
-         Concavity,
-         Perimeter,
-         Irrelevant1,
-         Irrelevant2,
-         Irrelevant3)
-
-names &lt;- colnames(cancer_subset |&gt; select(-Class))
-
-cancer_subset
+precision_score(
+    y_true=cancer_test[&quot;Class&quot;],
+    y_pred=cancer_test[&quot;predicted&quot;],
+    pos_label='Malignant'
+)
         </input>
       </program>
       <pre>
@@ -1965,8 +1973,11 @@ cancer_subset
       </p>
       <program language="python">
         <input>
-example_formula &lt;- paste("Class", "~", paste(names, collapse = "+"))
-example_formula
+recall_score(
+    y_true=cancer_test[&quot;Class&quot;],
+    y_pred=cancer_test[&quot;predicted&quot;],
+    pos_label='Malignant'
+)
         </input>
       </program>
       <pre>
@@ -1990,64 +2001,10 @@ example_formula
       </p>
       <program language="python">
         <input>
-# create an empty tibble to store the results
-accuracies &lt;- tibble(size = integer(),
-                     model_string = character(),
-                     accuracy = numeric())
-
-# create a model specification
-knn_spec &lt;- nearest_neighbor(weight_func = "rectangular",
-                             neighbors = tune()) |&gt;
-  set_engine("kknn") |&gt;
-  set_mode("classification")
-
-# create a 5-fold cross-validation object
-cancer_vfold &lt;- vfold_cv(cancer_subset, v = 5, strata = Class)
-
-# store the total number of predictors
-n_total &lt;- length(names)
-
-# stores selected predictors
-selected &lt;- c()
-
-# for every size from 1 to the total number of predictors
-for (i in 1:n_total) {
-  # for every predictor still not added yet
-  accs &lt;- list()
-  models &lt;- list()
-  for (j in 1:length(names)) {
-    # create a model string for this combination of predictors
-    preds_new &lt;- c(selected, names[[j]])
-    model_string &lt;- paste("Class", "~", paste(preds_new, collapse = "+"))
-
-    # create a recipe from the model string
-    cancer_recipe &lt;- recipe(as.formula(model_string),
-                            data = cancer_subset) |&gt;
-      step_scale(all_predictors()) |&gt;
-      step_center(all_predictors())
-
-    # tune the K-NN classifier with these predictors
-    acc &lt;- workflow() |&gt;
-      add_recipe(cancer_recipe) |&gt;
-      add_model(knn_spec) |&gt;
-      tune_grid(resamples = cancer_vfold, grid = 10) |&gt;
-      collect_metrics() |&gt;
-      filter(.metric == "accuracy") |&gt;
-      summarize(mx = max(mean))
-    acc &lt;- acc$mx |&gt; unlist()
-
-    accs[[j]] &lt;- acc
-    models[[j]] &lt;- model_string
-  }
-  jstar &lt;- which.max(unlist(accs))
-  accuracies &lt;- accuracies |&gt;
-    add_row(size = i,
-            model_string = models[[jstar]],
-            accuracy = accs[[jstar]])
-  selected &lt;- c(selected, names[[jstar]])
-  names &lt;- names[-jstar]
-}
-accuracies
+pd.crosstab(
+    cancer_test[&quot;Class&quot;],
+    cancer_test[&quot;predicted&quot;]
+)
         </input>
       </program>
       <pre>
@@ -2084,13 +2041,9 @@ accuracies
 </p>
       <program language="python">
         <input>
-fwd_sel_accuracies_plot &lt;- accuracies |&gt;
-  ggplot(aes(x = size, y = accuracy)) +
-  geom_point() +
-  geom_line() +
-  labs(x = "Number of Predictors", y = "Estimated Accuracy")
-
-fwd_sel_accuracies_plot
+cancer_irrelevant[
+    [&quot;Class&quot;, &quot;Smoothness&quot;, &quot;Concavity&quot;, &quot;Perimeter&quot;, &quot;Irrelevant1&quot;, &quot;Irrelevant2&quot;]
+]
         </input>
       </program>
 

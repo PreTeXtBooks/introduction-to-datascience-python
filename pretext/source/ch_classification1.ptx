@@ -132,7 +132,8 @@
       </p>
       <program language="python">
         <input>
-library(tidyverse)
+import pandas as pd
+import altair as alt
         </input>
       </program>
       <p>
@@ -143,7 +144,7 @@ library(tidyverse)
       </p>
       <program language="python">
         <input>
-cancer &lt;- read_csv("data/wdbc.csv")
+cancer = pd.read_csv(&quot;data/wdbc.csv&quot;)
 cancer
         </input>
       </program>
@@ -210,7 +211,7 @@ cancer
       </p>
       <program language="python">
         <input>
-glimpse(cancer)
+cancer.info()
         </input>
       </program>
       <pre>
@@ -239,8 +240,7 @@ glimpse(cancer)
       </p>
       <program language="python">
         <input>
-cancer |>
-  distinct(Class)
+cancer[&quot;Class&quot;].unique()
         </input>
       </program>
       <pre>
@@ -265,10 +265,12 @@ cancer |>
       </p>
       <program language="python">
         <input>
-cancer &lt;- cancer |>
-  mutate(Class = as_factor(Class)) |>
-  mutate(Class = fct_recode(Class, "Malignant" = "M", "Benign" = "B"))
-glimpse(cancer)
+cancer[&quot;Class&quot;] = cancer[&quot;Class&quot;].replace({
+    &quot;M&quot; : &quot;Malignant&quot;,
+    &quot;B&quot; : &quot;Benign&quot;
+})
+
+cancer[&quot;Class&quot;].unique()
         </input>
       </program>
 <pre>
@@ -294,8 +296,7 @@ glimpse(cancer)
       </p>
       <program language="python">
         <input>
-cancer |>
-  distinct(Class)
+100 * cancer.groupby(&quot;Class&quot;).size() / cancer.shape[0]
         </input>
       </program>
       <pre>
@@ -323,13 +324,7 @@ cancer |>
       </p>
       <program language="python">
         <input>
-num_obs &lt;- nrow(cancer)
-cancer |>
-  group_by(Class) |>
-  summarize(
-    count = n(),
-    percentage = n() / num_obs * 100
-  )
+cancer[&quot;Class&quot;].value_counts()
         </input>
       </program>
       <pre>
@@ -350,15 +345,7 @@ cancer |>
       </p>
       <program language="python">
         <input>
-perim_concav &lt;- cancer |>
-  ggplot(aes(x = Perimeter, y = Concavity, color = Class)) +
-  geom_point(alpha = 0.6) +
-  labs(x = "Perimeter (standardized)",
-       y = "Concavity (standardized)",
-       color = "Diagnosis") +
-  scale_color_manual(values = c("darkorange", "steelblue")) +
-  theme(text = element_text(size = 12))
-perim_concav
+cancer[&quot;Class&quot;].value_counts(normalize=True)
         </input>
       </program>
       <figure xml:id="fig-classif1-cancer-scatter">
@@ -506,13 +493,12 @@ perim_concav
       </figure>
       <program language="python">
         <input>
-new_obs_Perimeter &lt;- 0
-new_obs_Concavity &lt;- 3.5
-cancer |>
-  select(ID, Perimeter, Concavity, Class) |>
-  mutate(dist_from_new = sqrt((Perimeter - new_obs_Perimeter)^2 +
-                              (Concavity - new_obs_Concavity)^2)) |>
-  slice_min(dist_from_new, n = 5)
+perim_concav = alt.Chart(cancer).mark_circle().encode(
+    x=alt.X(&quot;Perimeter&quot;).title(&quot;Perimeter (standardized)&quot;),
+    y=alt.Y(&quot;Concavity&quot;).title(&quot;Concavity (standardized)&quot;),
+    color=alt.Color(&quot;Class&quot;).title(&quot;Diagnosis&quot;)
+)
+perim_concav
         </input>
       </program>
       <pre>
@@ -626,15 +612,18 @@ cancer |>
       </p>
       <program language="python">
         <input>
-new_obs_Perimeter &lt;- 0
-new_obs_Concavity &lt;- 3.5
-new_obs_Symmetry &lt;- 1
-cancer |>
-  select(ID, Perimeter, Concavity, Symmetry, Class) |>
-  mutate(dist_from_new = sqrt((Perimeter - new_obs_Perimeter)^2 +
-                              (Concavity - new_obs_Concavity)^2 +
-                                (Symmetry - new_obs_Symmetry)^2)) |>
-  slice_min(dist_from_new, n = 5)
+new_obs_Perimeter = 0
+new_obs_Concavity = 3.5
+cancer[&quot;dist_from_new&quot;] = (
+       (cancer[&quot;Perimeter&quot;] - new_obs_Perimeter) ** 2
+     + (cancer[&quot;Concavity&quot;] - new_obs_Concavity) ** 2
+)**(1/2)
+cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
+    &quot;Perimeter&quot;,
+    &quot;Concavity&quot;,
+    &quot;Class&quot;,
+    &quot;dist_from_new&quot;
+]]
         </input>
       </program>
       <pre>
@@ -705,7 +694,21 @@ cancer |>
     </p>
     <program language="python">
       <input>
-library(tidymodels)
+new_obs_Perimeter = 0
+new_obs_Concavity = 3.5
+new_obs_Symmetry = 1
+cancer[&quot;dist_from_new&quot;] = (
+      (cancer[&quot;Perimeter&quot;] - new_obs_Perimeter) ** 2
+    + (cancer[&quot;Concavity&quot;] - new_obs_Concavity) ** 2
+    + (cancer[&quot;Symmetry&quot;] - new_obs_Symmetry) ** 2
+)**(1/2)
+cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
+    &quot;Perimeter&quot;,
+    &quot;Concavity&quot;,
+    &quot;Symmetry&quot;,
+    &quot;Class&quot;,
+    &quot;dist_from_new&quot;
+]]
       </input>
     </program>
     <p>
@@ -719,9 +722,56 @@ library(tidymodels)
     </p>
     <program language="python">
       <input>
-cancer_train &lt;- cancer |>
-  select(Class, Perimeter, Concavity)
-cancer_train
+fig = px.scatter_3d(
+    perim_concav_with_new_point_df4,
+    x=&quot;Perimeter&quot;,
+    y=&quot;Concavity&quot;,
+    z=&quot;Symmetry&quot;,
+    color=&quot;Class&quot;,
+    symbol=&quot;Class&quot;,
+    opacity=0.5,
+)
+# specify trace names and symbols in a dict
+symbols = {&quot;Malignant&quot;: &quot;circle&quot;, &quot;Benign&quot;: &quot;circle&quot;, &quot;Unknown&quot;: &quot;diamond&quot;}
+
+# set all symbols in fig
+for i, d in enumerate(fig.data):
+    fig.data[i].marker.symbol = symbols[fig.data[i].name]
+
+# specify trace names and colors in a dict
+colors = {&quot;Malignant&quot;: &quot;#ff7f0e&quot;, &quot;Benign&quot;: &quot;#1f77b4&quot;, &quot;Unknown&quot;: &quot;red&quot;}
+
+# set all colors in fig
+for i, d in enumerate(fig.data):
+    fig.data[i].marker.color = colors[fig.data[i].name]
+
+# set a fixed custom marker size
+fig.update_traces(marker={&quot;size&quot;: 5})
+
+# add lines
+for neighbor_df in neighbor_df_list:
+    fig.add_trace(
+        go.Scatter3d(
+            x=neighbor_df[&quot;Perimeter&quot;],
+            y=neighbor_df[&quot;Concavity&quot;],
+            z=neighbor_df[&quot;Symmetry&quot;],
+            line_color=colors[neighbor_df.iloc[0][&quot;Class&quot;]],
+            name=neighbor_df.iloc[0][&quot;Class&quot;],
+            mode=&quot;lines&quot;,
+            line=dict(width=2),
+            showlegend=False,
+        )
+    )
+
+
+# tight layout
+fig.update_layout(margin=dict(l=0, r=0, b=0, t=1), template=&quot;plotly_white&quot;)
+
+# if HTML, use the plotly 3d image; if PDF, use static image
+if &quot;BOOK_BUILD_TYPE&quot; in os.environ and os.environ[&quot;BOOK_BUILD_TYPE&quot;] == &quot;PDF&quot;:
+    glue(&quot;fig:05-more&quot;, Image(&quot;img/classification1/plot3d_knn_classification.png&quot;))
+else:
+    glue(&quot;fig:05-more&quot;, fig)
       </input>
     </program>
     <pre>
@@ -763,10 +813,10 @@ cancer_train
     </p>
     <program language="python">
       <input>
-knn_spec &lt;- nearest_neighbor(weight_func = "rectangular", neighbors = 5) |>
-  set_engine("kknn") |>
-  set_mode("classification")
-knn_spec
+from sklearn import set_config
+
+# Output dataframes instead of arrays
+set_config(transform_output=&quot;pandas&quot;)
       </input>
     </program>
     <pre>
@@ -788,8 +838,7 @@ knn_spec
     </p>
     <program language="python">
       <input>
-knn_fit &lt;- knn_spec |>
-  fit(Class ~ Perimeter + Concavity, data = cancer_train)
+from sklearn.neighbors import KNeighborsClassifier
       </input>
     </program>
     <p>
@@ -805,9 +854,8 @@ knn_fit &lt;- knn_spec |>
     </p>
     <program language="python">
       <input>
-knn_fit &lt;- knn_spec |>
-  fit(Class ~ ., data = cancer_train)
-knn_fit
+cancer_train = cancer[[&quot;Class&quot;, &quot;Perimeter&quot;, &quot;Concavity&quot;]]
+cancer_train
       </input>
     </program>
     <pre>
@@ -846,8 +894,8 @@ knn_fit
     </p>
     <program language="python">
       <input>
-new_obs &lt;- tibble(Perimeter = 0, Concavity = 3.5)
-predict(knn_fit, new_obs)
+knn = KNeighborsClassifier(n_neighbors=5)
+knn
       </input>
     </program>
     <pre>
@@ -918,11 +966,7 @@ predict(knn_fit, new_obs)
       </p>
       <program language="python">
         <input>
-unscaled_cancer &lt;- read_csv("data/wdbc_unscaled.csv") |>
-  mutate(Class = as_factor(Class)) |>
-  mutate(Class = fct_recode(Class, "Benign" = "B", "Malignant" = "M")) |>
-  select(Class, Area, Smoothness)
-unscaled_cancer
+knn.fit(X=cancer_train[[&quot;Perimeter&quot;, &quot;Concavity&quot;]], y=cancer_train[&quot;Class&quot;]);
         </input>
       </program>
       <pre>
@@ -963,8 +1007,8 @@ unscaled_cancer
       </p>
       <program language="python">
         <input>
-uc_recipe &lt;- recipe(Class ~ ., data = unscaled_cancer)
-uc_recipe
+new_obs = pd.DataFrame({&quot;Perimeter&quot;: [0], &quot;Concavity&quot;: [3.5]})
+knn.predict(new_obs)
         </input>
       </program>
       <pre>
@@ -996,11 +1040,12 @@ uc_recipe
       </p>
       <program language="python">
         <input>
-uc_recipe &lt;- uc_recipe |>
-  step_scale(all_predictors()) |>
-  step_center(all_predictors()) |>
-  prep()
-uc_recipe
+unscaled_cancer = pd.read_csv(&quot;data/wdbc_unscaled.csv&quot;)[[&quot;Class&quot;, &quot;Area&quot;, &quot;Smoothness&quot;]]
+unscaled_cancer[&quot;Class&quot;] = unscaled_cancer[&quot;Class&quot;].replace({
+   &quot;M&quot; : &quot;Malignant&quot;,
+   &quot;B&quot; : &quot;Benign&quot;
+})
+unscaled_cancer
         </input>
       </program>
       <pre>
@@ -1057,8 +1102,13 @@ uc_recipe
       </p>
       <program language="python">
         <input>
-scaled_cancer &lt;- bake(uc_recipe, unscaled_cancer)
-scaled_cancer
+from sklearn.preprocessing import StandardScaler
+from sklearn.compose import make_column_transformer
+
+preprocessor = make_column_transformer(
+    (StandardScaler(), [&quot;Area&quot;, &quot;Smoothness&quot;]),
+)
+preprocessor
         </input>
       </program>
       <pre>
@@ -1162,22 +1212,12 @@ scaled_cancer
       </p>
       <program language="python">
         <input>
-rare_cancer &lt;- bind_rows(
-      filter(cancer, Class == "Benign"),
-      cancer |> filter(Class == "Malignant") |> slice_head(n = 3)
-    ) |>
-    select(Class, Perimeter, Concavity)
+from sklearn.compose import make_column_selector
 
-rare_plot &lt;- rare_cancer |>
-  ggplot(aes(x = Perimeter, y = Concavity, color = Class)) +
-  geom_point(alpha = 0.5) +
-  labs(x = "Perimeter (standardized)",
-       y = "Concavity (standardized)",
-       color = "Diagnosis") +
-  scale_color_manual(values = c("darkorange", "steelblue")) +
-  theme(text = element_text(size = 12))
-
-rare_plot
+preprocessor = make_column_transformer(
+    (StandardScaler(), make_column_selector(dtype_include=&quot;number&quot;)),
+)
+preprocessor
         </input>
       </program>
       <figure xml:id="fig-classif1-imbalanced">
@@ -1231,13 +1271,9 @@ rare_plot
       </p>
       <program language="python">
         <input>
-library(themis)
-
-ups_recipe &lt;- recipe(Class ~ ., data = rare_cancer) |>
-  step_upsample(Class, over_ratio = 1, skip = FALSE) |>
-  prep()
-
-ups_recipe
+preprocessor.fit(unscaled_cancer)
+scaled_cancer = preprocessor.transform(unscaled_cancer)
+scaled_cancer
         </input>
       </program>
       <pre>
@@ -1257,11 +1293,14 @@ ups_recipe
       </pre>
       <program language="python">
         <input>
-upsampled_cancer &lt;- bake(ups_recipe, rare_cancer)
-
-upsampled_cancer |>
-  group_by(Class) |>
-  summarize(n = n())
+preprocessor_keep_all = make_column_transformer(
+    (StandardScaler(), make_column_selector(dtype_include=&quot;number&quot;)),
+    remainder=&quot;passthrough&quot;,
+    verbose_feature_names_out=False
+)
+preprocessor_keep_all.fit(unscaled_cancer)
+scaled_cancer_all = preprocessor_keep_all.transform(unscaled_cancer)
+scaled_cancer_all
         </input>
       </program>
       <pre>
@@ -1317,11 +1356,17 @@ upsampled_cancer |>
       </p>
       <program language="python">
         <input>
-missing_cancer &lt;- read_csv("data/wdbc_missing.csv") |>
-  select(Class, Radius, Texture, Perimeter) |>
-  mutate(Class = as_factor(Class)) |>
-  mutate(Class = fct_recode(Class, "Malignant" = "M", "Benign" = "B"))
-missing_cancer
+rare_cancer = pd.concat((
+    cancer[cancer[&quot;Class&quot;] == &quot;Benign&quot;],
+    cancer[cancer[&quot;Class&quot;] == &quot;Malignant&quot;].head(3)
+))
+
+rare_plot = alt.Chart(rare_cancer).mark_circle().encode(
+    x=alt.X(&quot;Perimeter&quot;).title(&quot;Perimeter (standardized)&quot;),
+    y=alt.Y(&quot;Concavity&quot;).title(&quot;Concavity (standardized)&quot;),
+    color=alt.Color(&quot;Class&quot;).title(&quot;Diagnosis&quot;)
+)
+rare_plot
         </input>
       </program>
       <pre>
@@ -1350,8 +1395,7 @@ missing_cancer
       </p>
       <program language="python">
         <input>
-no_missing_cancer &lt;- missing_cancer |> drop_na()
-no_missing_cancer
+rare_cancer[&quot;Class&quot;].value_counts()
         </input>
       </program>
       <pre>
@@ -1378,10 +1422,13 @@ no_missing_cancer
       </p>
       <program language="python">
         <input>
-impute_missing_recipe &lt;- recipe(Class ~ ., data = missing_cancer) |>
-  step_impute_mean(all_predictors()) |>
-  prep()
-impute_missing_recipe
+malignant_cancer = rare_cancer[rare_cancer[&quot;Class&quot;] == &quot;Malignant&quot;]
+benign_cancer = rare_cancer[rare_cancer[&quot;Class&quot;] == &quot;Benign&quot;]
+malignant_cancer_upsample = malignant_cancer.sample(
+    n=benign_cancer.shape[0], replace=True
+)
+upsampled_cancer = pd.concat((malignant_cancer_upsample, benign_cancer))
+upsampled_cancer[&quot;Class&quot;].value_counts()
         </input>
       </program>
       <pre>
@@ -1407,8 +1454,12 @@ impute_missing_recipe
       </p>
       <program language="python">
         <input>
-imputed_cancer &lt;- bake(impute_missing_recipe, missing_cancer)
-imputed_cancer
+missing_cancer = pd.read_csv(&quot;data/wdbc_missing.csv&quot;)[[&quot;Class&quot;, &quot;Radius&quot;, &quot;Texture&quot;, &quot;Perimeter&quot;]]
+missing_cancer[&quot;Class&quot;] = missing_cancer[&quot;Class&quot;].replace({
+   &quot;M&quot; : &quot;Malignant&quot;,
+   &quot;B&quot; : &quot;Benign&quot;
+})
+missing_cancer
         </input>
       </program>
       <pre>
@@ -1448,21 +1499,8 @@ imputed_cancer
     </p>
     <program language="python">
       <input>
-# load the unscaled cancer data
-# and make sure the response variable, Class, is a factor
-unscaled_cancer &lt;- read_csv("data/wdbc_unscaled.csv") |>
-  mutate(Class = as_factor(Class)) |>
-  mutate(Class = fct_recode(Class, "Malignant" = "M", "Benign" = "B"))
-
-# create the K-NN model
-knn_spec &lt;- nearest_neighbor(weight_func = "rectangular", neighbors = 7) |>
-  set_engine("kknn") |>
-  set_mode("classification")
-
-# create the centering / scaling recipe
-uc_recipe &lt;- recipe(Class ~ Area + Smoothness, data = unscaled_cancer) |>
-  step_scale(all_predictors()) |>
-  step_center(all_predictors())
+no_missing_cancer = missing_cancer.dropna()
+no_missing_cancer
       </input>
     </program>
     <p>
@@ -1488,12 +1526,13 @@ uc_recipe &lt;- recipe(Class ~ Area + Smoothness, data = unscaled_cancer) |>
     </p>
     <program language="python">
       <input>
-knn_fit &lt;- workflow() |>
-  add_recipe(uc_recipe) |>
-  add_model(knn_spec) |>
-  fit(data = unscaled_cancer)
+from sklearn.impute import SimpleImputer
 
-knn_fit
+preprocessor = make_column_transformer(
+    (SimpleImputer(), [&quot;Radius&quot;, &quot;Texture&quot;, &quot;Perimeter&quot;]),
+    verbose_feature_names_out=False
+)
+preprocessor
       </input>
     </program>
     <pre>
@@ -1533,10 +1572,9 @@ knn_fit
     </p>
     <program language="python">
       <input>
-new_observation &lt;- tibble(Area = c(500, 1500), Smoothness = c(0.075, 0.1))
-prediction &lt;- predict(knn_fit, new_observation)
-
-prediction
+preprocessor.fit(missing_cancer)
+imputed_cancer = preprocessor.transform(missing_cancer)
+imputed_cancer
       </input>
     </program>
     <pre>
@@ -1566,46 +1604,21 @@ prediction
     </note>
     <program language="python">
       <input>
-# create the grid of area/smoothness vals, and arrange in a data frame
-are_grid &lt;- seq(min(unscaled_cancer$Area),
-                max(unscaled_cancer$Area),
-                length.out = 100)
-smo_grid &lt;- seq(min(unscaled_cancer$Smoothness),
-                max(unscaled_cancer$Smoothness),
-                length.out = 100)
-asgrid &lt;- as_tibble(expand.grid(Area = are_grid,
-                                Smoothness = smo_grid))
+# load the unscaled cancer data, make Class readable
+unscaled_cancer = pd.read_csv(&quot;data/wdbc_unscaled.csv&quot;)
+unscaled_cancer[&quot;Class&quot;] = unscaled_cancer[&quot;Class&quot;].replace({
+   &quot;M&quot; : &quot;Malignant&quot;,
+   &quot;B&quot; : &quot;Benign&quot;
+})
+unscaled_cancer
 
-# use the fit workflow to make predictions at the grid points
-knnPredGrid &lt;- predict(knn_fit, asgrid)
+# create the K-NN model
+knn = KNeighborsClassifier(n_neighbors=7)
 
-# bind the predictions as a new column with the grid points
-prediction_table &lt;- bind_cols(knnPredGrid, asgrid) |>
-  rename(Class = .pred_class)
-
-# plot:
-# 1. the colored scatter of the original data
-# 2. the faded colored scatter for the grid points
-wkflw_plot &lt;-
-  ggplot() +
-  geom_point(data = unscaled_cancer,
-             mapping = aes(x = Area,
-                           y = Smoothness,
-                           color = Class),
-             alpha = 0.75) +
-  geom_point(data = prediction_table,
-             mapping = aes(x = Area,
-                           y = Smoothness,
-                           color = Class),
-             alpha = 0.02,
-             size = 5) +
-  labs(color = "Diagnosis",
-       x = "Area",
-       y = "Smoothness") +
-  scale_color_manual(values = c("darkorange", "steelblue")) +
-  theme(text = element_text(size = 12))
-
-wkflw_plot
+# create the centering / scaling preprocessor
+preprocessor = make_column_transformer(
+    (StandardScaler(), [&quot;Area&quot;, &quot;Smoothness&quot;]),
+)
       </input>
     </program>
     <figure xml:id="fig-classif1-workflow">

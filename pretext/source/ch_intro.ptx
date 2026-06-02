@@ -363,7 +363,7 @@ Non-Official &amp; Non-Aboriginal languages,Amharic,22465,12785,200,33670
 
     <program language="python">
       <input>
-library(tidyverse)
+import pandas as pd
       </input>
     </program>
 
@@ -419,7 +419,7 @@ library(tidyverse)
 
     <program language="python">
       <input>
-read_csv("data/can_lang.csv")
+pd.read_csv(&quot;data/can_lang.csv&quot;)
       </input>
     </program>
 
@@ -474,8 +474,8 @@ read_csv("data/can_lang.csv")
 
     <program language="python">
       <input>
-my_number &lt;- 1 + 2
-name &lt;- "Alice"
+my_number = 1 + 2
+name = &quot;Alice&quot;
       </input>
     </program>
 
@@ -514,7 +514,7 @@ my_number + 2
 
     <program language="python">
       <input>
-my-number &lt;- 1
+my-number = 1
       </input>
     </program>
 
@@ -539,7 +539,7 @@ Error in my - number &lt;- 1 : object 'my' not found
 
     <program language="python">
       <input>
-can_lang &lt;- read_csv("data/can_lang.csv")
+print(&quot;SyntaxError: cannot assign to expression here. Maybe you meant '==' instead of '='?&quot;)
       </input>
     </program>
 
@@ -555,7 +555,7 @@ can_lang &lt;- read_csv("data/can_lang.csv")
 
     <program language="python">
       <input>
-can_lang
+can_lang = pd.read_csv(&quot;data/can_lang.csv&quot;)
       </input>
     </program>
 
@@ -639,8 +639,7 @@ can_lang
 
       <program language="python">
         <input>
-aboriginal_lang &lt;- filter(can_lang, category == "Aboriginal languages")
-aboriginal_lang
+can_lang
         </input>
       </program>
 
@@ -694,8 +693,7 @@ aboriginal_lang
 
       <program language="python">
         <input>
-selected_lang &lt;- select(aboriginal_lang, language, mother_tongue)
-selected_lang
+can_lang[can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;]
         </input>
       </program>
 
@@ -749,8 +747,7 @@ selected_lang
 
     <program language="python">
       <input>
-arranged_lang &lt;- arrange(selected_lang, by = desc(mother_tongue))
-arranged_lang
+can_lang[[&quot;language&quot;, &quot;mother_tongue&quot;]]
       </input>
     </program>
 
@@ -779,8 +776,7 @@ arranged_lang
 
     <program language="python">
       <input>
-ten_lang &lt;- slice(arranged_lang, 1:10)
-ten_lang
+aboriginal_lang = can_lang.loc[can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;, [&quot;language&quot;, &quot;mother_tongue&quot;]]
       </input>
     </program>
 
@@ -824,9 +820,7 @@ ten_lang
 
     <program language="python">
       <input>
-canadian_population = 35151728
-ten_lang_percent = mutate(ten_lang, mother_tongue_percent = 100 * mother_tongue / canadian_population)
-ten_lang_percent
+aboriginal_lang
       </input>
     </program>
 
@@ -903,8 +897,8 @@ ten_lang_percent
 
       <program language="python">
         <input>
-ggplot(ten_lang, aes(x = language, y = mother_tongue)) +
-  geom_bar(stat = "identity")
+arranged_lang = aboriginal_lang.sort_values(by=&quot;mother_tongue&quot;, ascending=False)
+arranged_lang
         </input>
       </program>
 
@@ -962,10 +956,8 @@ ggplot(ten_lang, aes(x = language, y = mother_tongue)) +
 
       <program language="python">
         <input>
-ggplot(ten_lang, aes(x = language, y = mother_tongue)) +
-  geom_bar(stat = "identity") +
-  xlab("Language") +
-  ylab("Mother Tongue (Number of Canadian Residents)")
+ten_lang = arranged_lang.head(10)
+ten_lang
         </input>
       </program>
 
@@ -987,10 +979,9 @@ ggplot(ten_lang, aes(x = language, y = mother_tongue)) +
 
       <program language="python">
         <input>
-ggplot(ten_lang, aes(x = mother_tongue, y = language)) +
-  geom_bar(stat = "identity") +
-  xlab("Mother Tongue (Number of Canadian Residents)") +
-  ylab("Language")
+canadian_population = 35_151_728
+ten_lang[&quot;mother_tongue_percent&quot;] = 100 * ten_lang[&quot;mother_tongue&quot;] / canadian_population
+ten_lang
         </input>
       </program>
 
@@ -1015,11 +1006,9 @@ ggplot(ten_lang, aes(x = mother_tongue, y = language)) +
 
       <program language="python">
         <input>
-ggplot(ten_lang, aes(x = mother_tongue,
-                     y = reorder(language, mother_tongue))) +
-  geom_bar(stat = "identity") +
-  xlab("Mother Tongue (Number of Canadian Residents)") +
-  ylab("Language")
+aboriginal_lang = can_lang.loc[can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;, [&quot;language&quot;, &quot;mother_tongue&quot;]]
+arranged_lang_sorted = aboriginal_lang.sort_values(by=&quot;mother_tongue&quot;, ascending=False)
+ten_lang = arranged_lang_sorted.head(10)
         </input>
       </program>
 
@@ -1075,22 +1064,15 @@ ggplot(ten_lang, aes(x = mother_tongue,
 
       <program language="python">
         <input>
-library(tidyverse)
-
-# load the data set
-can_lang &lt;- read_csv("data/can_lang.csv")
-
-# obtain the 10 most common Aboriginal languages
-aboriginal_lang &lt;- filter(can_lang, category == "Aboriginal languages")
-arranged_lang &lt;- arrange(aboriginal_lang, by = desc(mother_tongue))
-ten_lang &lt;- slice(arranged_lang, 1:10)
-
-# create the visualization
-ggplot(ten_lang, aes(x = mother_tongue,
-                     y = reorder(language, mother_tongue))) +
-  geom_bar(stat = "identity") +
-  xlab("Mother Tongue (Number of Canadian Residents)") +
-  ylab("Language")
+aboriginal_lang = can_lang.loc[
+    can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;,
+    [&quot;language&quot;, &quot;mother_tongue&quot;]
+]
+arranged_lang_sorted = aboriginal_lang.sort_values(
+    by=&quot;mother_tongue&quot;,
+    ascending=False
+)
+ten_lang = arranged_lang_sorted.head(10)
         </input>
       </program>
 
@@ -1119,7 +1101,16 @@ ggplot(ten_lang, aes(x = mother_tongue,
 
     <program language="python">
       <input>
-?filter
+# obtain the 10 most common Aboriginal languages
+ten_lang = (
+    can_lang.loc[
+       can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;,
+       [&quot;language&quot;, &quot;mother_tongue&quot;]
+    ]
+    .sort_values(by=&quot;mother_tongue&quot;, ascending=False)
+    .head(10)
+)
+ten_lang
       </input>
     </program>
 

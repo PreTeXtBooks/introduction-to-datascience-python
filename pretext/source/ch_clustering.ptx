@@ -141,8 +141,9 @@
 
     <program language="python">
       <input>
-library(tidyverse)
-set.seed(1)
+import numpy as np
+
+np.random.seed(6)
       </input>
     </program>
 
@@ -152,7 +153,9 @@ set.seed(1)
     </p>
     <program language="python">
       <input>
-penguins &lt;- read_csv("data/penguins.csv")
+import pandas as pd
+
+penguins = pd.read_csv(&quot;data/penguins.csv&quot;)
 penguins
       </input>
     </program>
@@ -191,10 +194,6 @@ penguins
 
     <program language="python">
       <input>
-penguins_standardized &lt;- penguins |&gt;
-  mutate(bill_length_standardized = (bill_length_mm - mean(bill_length_mm))/sd(bill_length_mm)) |&gt;
-  mutate(flipper_length_standardized = (flipper_length_mm - mean(flipper_length_mm))/sd(flipper_length_mm)) |&gt;
-  select(bill_length_standardized, flipper_length_standardized)
 penguins_standardized
       </input>
     </program>
@@ -229,13 +228,12 @@ penguins_standardized
 
     <program language="python">
       <input>
-ggplot(penguins_standardized,
-       aes(x = flipper_length_standardized,
-           y = bill_length_standardized)) +
-  geom_point() +
-  xlab("Flipper Length (standardized)") +
-  ylab("Bill Length (standardized)") +
-  theme(text = element_text(size = 12))
+import altair as alt
+
+scatter_plot = alt.Chart(penguins_standardized).mark_circle().encode(
+    x=alt.X(&quot;flipper_length_standardized&quot;).title(&quot;Flipper Length (standardized)&quot;),
+    y=alt.Y(&quot;bill_length_standardized&quot;).title(&quot;Bill Length (standardized)&quot;)
+)
       </input>
     </program>
 
@@ -556,7 +554,18 @@ ggplot(penguins_standardized,
 
     <program language="python">
       <input>
-library(tidyclust)
+from sklearn.preprocessing import StandardScaler
+from sklearn.compose import make_column_transformer
+from sklearn import set_config
+
+# Output dataframes instead of arrays
+set_config(transform_output=&quot;pandas&quot;)
+
+preprocessor = make_column_transformer(
+    (StandardScaler(), [&quot;bill_length_mm&quot;, &quot;flipper_length_mm&quot;]),
+    verbose_feature_names_out=False,
+)
+preprocessor
       </input>
     </program>
 
@@ -596,10 +605,10 @@ library(tidyclust)
 
     <program language="python">
       <input>
-kmeans_recipe &lt;- recipe(~ ., data = penguins) |&gt;
-    step_scale(all_predictors()) |&gt;
-    step_center(all_predictors())
-kmeans_recipe
+from sklearn.cluster import KMeans
+
+kmeans = KMeans(n_clusters=3)
+kmeans
       </input>
     </program>
     <pre>
@@ -627,9 +636,11 @@ kmeans_recipe
 
     <program language="python">
       <input>
-kmeans_spec &lt;- k_means(num_clusters = 3) |&gt;
-    set_engine("stats")
-kmeans_spec
+from sklearn.pipeline import make_pipeline
+
+penguin_clust = make_pipeline(preprocessor, kmeans)
+penguin_clust.fit(penguins)
+penguin_clust
       </input>
     </program>
     <pre>
@@ -650,12 +661,8 @@ kmeans_spec
 
     <program language="python">
       <input>
-kmeans_fit &lt;- workflow() |&gt;
-    add_recipe(kmeans_recipe) |&gt;
-    add_model(kmeans_spec) |&gt;
-    fit(data = penguins)
-
-kmeans_fit
+penguins[&quot;cluster&quot;] = penguin_clust[1].labels_
+penguins
       </input>
     </program>
     <pre>
@@ -704,9 +711,11 @@ kmeans_fit
 
     <program language="python">
       <input>
-clustered_data &lt;- kmeans_fit |&gt;
-                    augment(penguins)
-clustered_data
+cluster_plot=alt.Chart(penguins).mark_circle().encode(
+    x=alt.X(&quot;flipper_length_mm&quot;).title(&quot;Flipper Length&quot;).scale(zero=False),
+    y=alt.Y(&quot;bill_length_mm&quot;).title(&quot;Bill Length&quot;).scale(zero=False),
+    color=alt.Color(&quot;cluster:N&quot;).title(&quot;Cluster&quot;),
+)
       </input>
     </program>
     <pre>
@@ -744,21 +753,7 @@ clustered_data
 
     <program language="python">
       <input>
-cluster_plot &lt;- ggplot(clustered_data,
-  aes(x = flipper_length_mm,
-      y = bill_length_mm,
-      color = .pred_cluster),
-  size = 2) +
-  geom_point() +
-  labs(x = "Flipper Length",
-       y = "Bill Length",
-       color = "Cluster") +
-  scale_color_manual(values = c("steelblue",
-                                "darkorange",
-                                "goldenrod1")) +
-  theme(text = element_text(size = 12))
-
-cluster_plot
+penguin_clust[1].inertia_
       </input>
     </program>
 
@@ -777,7 +772,7 @@ cluster_plot
 
     <program language="python">
       <input>
-glance(kmeans_fit)
+[n for n in range(3)]
       </input>
     </program>
     <pre>
@@ -795,8 +790,7 @@ glance(kmeans_fit)
 
     <program language="python">
       <input>
-penguin_clust_ks &lt;- tibble(num_clusters = 1:9)
-penguin_clust_ks
+[number**2 for number in range(1, 5)]
       </input>
     </program>
     <pre>
@@ -821,9 +815,21 @@ penguin_clust_ks
 
     <program language="python">
       <input>
-kmeans_spec &lt;- k_means(num_clusters = tune()) |&gt;
-    set_engine("stats")
-kmeans_spec
+ks = range(1, 10)
+wssds = [
+    make_pipeline(
+    	preprocessor,
+    	KMeans(n_clusters=k)  # Create a new KMeans model with `k` clusters
+    ).fit(penguins)[1].inertia_
+    for k in ks
+]
+
+penguin_clust_ks = pd.DataFrame({
+    &quot;k&quot;: ks,
+    &quot;wssd&quot;: wssds,
+})
+
+penguin_clust_ks
       </input>
     </program>
     <pre>
@@ -853,12 +859,10 @@ kmeans_spec
 
     <program language="python">
       <input>
-kmeans_results &lt;- workflow() |&gt;
-    add_recipe(kmeans_recipe) |&gt;
-    add_model(kmeans_spec) |&gt;
-    tune_cluster(resamples = apparent(penguins), grid = penguin_clust_ks) |&gt;
-    collect_metrics()
-kmeans_results
+elbow_plot = alt.Chart(penguin_clust_ks).mark_line(point=True).encode(
+    x=alt.X(&quot;k&quot;).title(&quot;Number of clusters&quot;),
+    y=alt.Y(&quot;wssd&quot;).title(&quot;Total within-cluster sum of squares&quot;),
+)
       </input>
     </program>
     <pre>
@@ -896,11 +900,11 @@ kmeans_results
 
     <program language="python">
       <input>
-kmeans_results &lt;- kmeans_results |&gt;
-    filter(.metric == "sse_within_total") |&gt;
-    mutate(total_WSSD = mean) |&gt;
-    select(num_clusters, total_WSSD)
-kmeans_results
+# get rid of futurewarnings from sklearn kmeans
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
+from chapter_preamble import *
       </input>
     </program>
     <pre>
@@ -928,15 +932,12 @@ kmeans_results
 
     <program language="python">
       <input>
-elbow_plot &lt;- ggplot(kmeans_results, aes(x = num_clusters, y = total_WSSD)) +
-  geom_point() +
-  geom_line() +
-  xlab("K") +
-  ylab("Total within-cluster sum of squares") +
-  scale_x_continuous(breaks = 1:9) +
-  theme(text = element_text(size = 12))
-
-elbow_plot
+penguins_standardized = penguins.assign(
+	bill_length_standardized=(penguins[&quot;bill_length_mm&quot;] - penguins[&quot;bill_length_mm&quot;].mean())/penguins[&quot;bill_length_mm&quot;].std(),
+    flipper_length_standardized=(penguins[&quot;flipper_length_mm&quot;] - penguins[&quot;flipper_length_mm&quot;].mean())/penguins[&quot;flipper_length_mm&quot;].std()
+).drop(
+    columns=[&quot;bill_length_mm&quot;, &quot;flipper_length_mm&quot;]
+)
       </input>
     </program>
 
@@ -960,9 +961,7 @@ elbow_plot
 
     <program language="python">
       <input>
-kmeans_spec &lt;- k_means(num_clusters = tune()) |&gt;
-    set_engine("stats", nstart = 10)
-kmeans_spec
+clus = penguins_clustered[penguins_clustered[&quot;cluster&quot;] == 0][[&quot;bill_length_standardized&quot;, &quot;flipper_length_standardized&quot;]]
       </input>
     </program>
     <pre>
@@ -996,24 +995,55 @@ kmeans_spec
 
     <program language="python">
       <input>
-kmeans_results &lt;- workflow() |&gt;
-    add_recipe(kmeans_recipe) |&gt;
-    add_model(kmeans_spec) |&gt;
-    tune_cluster(resamples = apparent(penguins), grid = penguin_clust_ks) |&gt;
-    collect_metrics() |&gt;
-    filter(.metric == "sse_within_total") |&gt;
-    mutate(total_WSSD = mean) |&gt;
-    select(num_clusters, total_WSSD)
+from sklearn.metrics import euclidean_distances
 
-elbow_plot &lt;- ggplot(kmeans_results, aes(x = num_clusters, y = total_WSSD)) +
-  geom_point() +
-  geom_line() +
-  xlab("K") +
-  ylab("Total within-cluster sum of squares") +
-  scale_x_continuous(breaks = 1:9) +
-  theme(text = element_text(size = 12))
+def plot_kmean_iterations(iterations, data, centroid_init):
+    &quot;&quot;&quot;Plot kmeans cluster and label updates for multiple iterations&quot;&quot;&quot;
+    dfs = []
+    centroid_inits = []
+    for i in range(1, iterations+1):
+        data['iteration'] = f'Iteration {i}'
+        data['update_type'] = 'Center Update'
+        data['flipper_centroid'] = data['label'].map(centroid_init['flipper_length_standardized'])
+        data['bill_centroid'] = data['label'].map(centroid_init['bill_length_standardized'])
+        dfs.append(data.copy())
 
-elbow_plot
+        data['iteration'] = f'Iteration {i}'
+        data['update_type'] = 'Label Update'
+        cluster_columns = ['bill_length_standardized', 'flipper_length_standardized']
+        data['label'] = np.argmin(euclidean_distances(data[cluster_columns], centroid_init), axis=1)
+        data['flipper_centroid'] = data['label'].map(centroid_init['flipper_length_standardized'])
+        data['bill_centroid'] = data['label'].map(centroid_init['bill_length_standardized'])
+        dfs.append(data.copy())
+
+        centroid_init = data.groupby('label')[cluster_columns].mean()
+
+    points = alt.Chart(
+        pd.concat(dfs),
+        width=200,
+        height=200
+    ).mark_point(filled=True, size=50, opacity=1).encode(
+        alt.X(&quot;flipper_length_standardized&quot;).scale(domain=(-2, 2)),
+        alt.Y(&quot;bill_length_standardized&quot;).scale(domain=(-2, 2)),
+        alt.Color('label:N').legend(None),
+        alt.Shape('label:N').legend(None).scale(range=['square', 'circle', 'triangle']),
+        alt.Size('label:O').legend(None).scale(type='ordinal', range=[50, 50, 100]),
+    )
+
+    centroids = points.mark_point(filled=True, stroke='black', strokeWidth=1.25).encode(
+        alt.X(&quot;mean(flipper_centroid)&quot;)
+            .scale(domain=(-2, 2))
+            .title(&quot;Flipper Length (standardized)&quot;),
+        alt.Y(&quot;mean(bill_centroid)&quot;)
+            .scale(domain=(-2, 2))
+            .title(&quot;Bill Length (standardized)&quot;),
+        size=alt.value(200)
+    )
+
+    return (points + centroids).facet(
+        row=alt.Row('iteration', header=alt.Header(title='', labelFontSize=18)),
+        column=alt.Column('update_type', header=alt.Header(title='', labelFontSize=18))
+    )
       </input>
     </program>
 
