@@ -108,7 +108,7 @@
       The equation for the straight line is:
       <idx>straight line equation</idx>
     </p>
-    <me>\text{house sale price} = \beta_0 + \beta_1 \cdot (\text{house size}),</me>
+    <md>\text{house sale price} = \beta_0 + \beta_1 \cdot (\text{house size}),</md>
     <p>where</p>
     <ul>
       <li><p><m>\beta_0</m> is the <em>vertical intercept</em> of the line (the price when house size is 0), and</p></li>
@@ -274,7 +274,7 @@ pd.DataFrame({&quot;slope&quot;: [lm.coef_[0]], &quot;intercept&quot;: [lm.inter
       (slope) <m>\beta_1 \approx 135</m>. This means that the equation of the
       line of best fit is
     </p>
-    <me>\text{house sale price} = 18450 + 135 \cdot (\text{house size}).</me>
+    <md>\text{house sale price} = 18450 + 135 \cdot (\text{house size}).</md>
     <p>
       In other words, the model predicts that houses start at $18,450 for 0
       square feet, and that every extra square foot increases the cost of the
@@ -611,7 +611,7 @@ mlm.intercept_
       the prediction plane:
       <idx>plane equation</idx>
     </p>
-    <me>\text{house sale price} = \beta_0 + \beta_1\cdot(\text{house size}) + \beta_2\cdot(\text{number of bedrooms}),</me>
+    <md>\text{house sale price} = \beta_0 + \beta_1\cdot(\text{house size}) + \beta_2\cdot(\text{number of bedrooms}),</md>
     <p>where:</p>
     <ul>
       <li><p><m>\beta_0</m> is the <em>vertical intercept</em> of the hyperplane (the price when both house size and number of bedrooms are 0),</p></li>
@@ -621,7 +621,7 @@ mlm.intercept_
     <p>
       Filling in the values, the equation of the plane of best fit is:
     </p>
-    <me>\text{house sale price} = 72548 + 161\cdot (\text{house size}) - 29,649 \cdot (\text{number of bedrooms}).</me>
+    <md>\text{house sale price} = 72548 + 161\cdot (\text{house size}) - 29,649 \cdot (\text{number of bedrooms}).</md>
     <p>
       This model is more interpretable than the multivariable K-NN regression
       model; we can write a mathematical equation that explains how each

@@ -325,9 +325,9 @@ scatter_plot = alt.Chart(penguins_standardized).mark_circle().encode(
         would compute the coordinates, <m>\mu_x</m> and <m>\mu_y</m>, of the
         cluster center via
       </p>
-      <me>
+      <md>
         \mu_x = \frac{1}{4}(x_1+x_2+x_3+x_4) \quad \mu_y = \frac{1}{4}(y_1+y_2+y_3+y_4).
-      </me>
+      </md>
       <p>
         In the first cluster from the example, there are 5 data points. These
         are shown with their cluster center highlighted in

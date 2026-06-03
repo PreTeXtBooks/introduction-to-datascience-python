@@ -466,7 +466,7 @@ cancer[&quot;Class&quot;].value_counts(normalize=True)
         <m>a</m> and <m>b</m> on the x-y plane can be computed using the following
         formula:
       </p>
-      <me>\mathrm{Distance} = \sqrt{(a_x - b_x)^2 + (a_y - b_y)^2}</me>
+      <md>\mathrm{Distance} = \sqrt{(a_x - b_x)^2 + (a_y - b_y)^2}</md>
       <p>
         To find the <m>K</m> nearest neighbors to our new observation, we compute the
         distance from that new observation to each observation in our training data,
@@ -592,7 +592,7 @@ perim_concav
         The distance formula becomes
         <idx><h>distance</h><h>more than two variables</h></idx>
       </p>
-      <me>\mathrm{Distance} = \sqrt{(a_{1}-b_{1})^2 + (a_{2}-b_{2})^2 + \cdots + (a_{m}-b_{m})^2}.</me>
+      <md>\mathrm{Distance} = \sqrt{(a_{1}-b_{1})^2 + (a_{2}-b_{2})^2 + \cdots + (a_{m}-b_{m})^2}.</md>
       <p>
         This formula still corresponds to a straight-line distance, just in a space
         with more dimensions. Suppose we want to calculate the distance between a new
@@ -604,7 +604,7 @@ perim_concav
         variables, and then took the square root. Now we will do the same, except for
         our three variables. We calculate the distance as follows
       </p>
-      <me>\mathrm{Distance} =\sqrt{(0 - 0.417)^2 + (3.5 - 2.31)^2 + (1 - 0.837)^2} = 1.27.</me>
+      <md>\mathrm{Distance} =\sqrt{(0 - 0.417)^2 + (3.5 - 2.31)^2 + (1 - 0.837)^2} = 1.27.</md>
       <p>
         Let's calculate the distances between our new observation and each of the
         observations in the training set to find the <m>K=5</m> neighbors when we
@@ -1491,7 +1491,7 @@ missing_cancer
       The <c>tidymodels</c> package collection also provides the <c>workflow</c>, a
       way to chain
       <idx><h>tidymodels</h><h>workflow</h></idx>
-      <idx><h>workflow</h><see>tidymodels</see></idx>
+      <idx><h>workflow</h><seealso>tidymodels</seealso></idx>
       together multiple data analysis steps without a lot of otherwise necessary code
       for intermediate steps. To illustrate the whole pipeline, let's start from
       scratch with the <c>wdbc_unscaled.csv</c> data. First we will load the data,
