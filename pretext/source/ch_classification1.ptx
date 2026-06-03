@@ -128,7 +128,7 @@
       <p>
         Our first step is to load, wrangle, and explore the data using visualizations
         in order to better understand the data we are working with. We start by
-        loading the <c>tidyverse</c> package needed for our analysis.
+        loading the <c>pandas</c> and <c>altair</c> packages needed for our analysis.
       </p>
       <program language="python">
         <input>

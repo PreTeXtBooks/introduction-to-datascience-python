@@ -54,52 +54,45 @@
   </li>
   <li>
     <p>
-      Use the <c>ggplot2</c> package in Python to create and refine the above visualizations 
+      Use the <c>altair</c> library in Python to create and refine the above visualizations
       using:
     </p>
     <ul>
       <li>
         <p>
-          geometric objects: <c>geom_point</c>, <c>geom_line</c>, 
-          <c>geom_histogram</c>, <c>geom_bar</c>, <c>geom_vline</c>, <c>geom_hline</c>
+          graphical marks: <c>mark_point</c>, <c>mark_line</c>, <c>mark_circle</c>,
+          <c>mark_bar</c>, <c>mark_rule</c>
         </p>
       </li>
       <li>
         <p>
-          scales: <c>xlim</c>, <c>ylim</c>
+          encoding channels: <c>x</c>, <c>y</c>, <c>color</c>, <c>shape</c>
         </p>
       </li>
       <li>
         <p>
-          aesthetic mappings: <c>x</c>, <c>y</c>, <c>fill</c>, <c>color</c>, 
-          <c>shape</c>
+          labeling: <c>title</c>
         </p>
       </li>
       <li>
         <p>
-          labeling: <c>xlab</c>, <c>ylab</c>, <c>labs</c>
+          transformations: <c>scale</c>
         </p>
       </li>
       <li>
         <p>
-          font control and legend positioning: <c>theme</c>
-        </p>
-      </li>
-      <li>
-        <p>
-          subplots: <c>facet_grid</c>
+          subplots: <c>facet</c>
         </p>
       </li>
     </ul>
   </li>
   <li>
     <p>
-      Define the three key aspects of <c>ggplot2</c> objects:
+      Define the two key aspects of <c>altair</c> charts:
     </p>
     <ul>
-      <li><p>aesthetic mappings</p></li>
-      <li><p>geometric objects</p></li>
-      <li><p>scales</p></li>
+      <li><p>graphical marks</p></li>
+      <li><p>encoding channels</p></li>
     </ul>
   </li>
   <li>
@@ -109,7 +102,7 @@
   </li>
   <li>
     <p>
-      Use <c>ggsave</c> to save visualizations in <c>.png</c> and <c>.svg</c> format.
+      Use <c>chart.save()</c> to save visualizations in <c>.png</c> and <c>.svg</c> format.
     </p>
   </li>
 </ul>
@@ -231,14 +224,13 @@
   </section>
 
   <section xml:id="sec-viz-ggplot2">
-    <title>Creating visualizations with <c>ggplot2</c></title>
+    <title>Creating visualizations with <c>altair</c></title>
     <p><em>Build the visualization iteratively</em></p>
     <p>
-      This section will cover examples of how to choose and refine a visualization
-      given a data set and a question that you want to answer, and then how to create
-      the visualization in Python <idx><h>ggplot</h></idx> using the <c>ggplot2</c> Python
-      package. Given that the <c>ggplot2</c> package is loaded by the
-      <c>tidyverse</c> metapackage, we still need to load only <c>tidyverse</c>:
+      This section will cover examples of how to choose and refine a visualization given a data
+      set and a question that you want to answer, and then how to create the visualization in
+      Python using <c>altair</c>. To use the <c>altair</c> package, we need to first import it.
+      We will also import <c>pandas</c> to use for reading in the data:
     </p>
     <program language="python">
       <input>
@@ -301,28 +293,23 @@ co2_df
 </p>
       <note>
         <p><c>read_csv</c> was able to parse the <c>date_measured</c> column into the
-        <c>date</c> vector type because it was entered in the international standard date
-        format, called ISO 8601, which lists dates as <c>year-month-day</c>. <c>date</c>
+        <c>datetime</c> vector type because it was entered in the international standard date
+        format, called ISO 8601, which lists dates as <c>year-month-day</c>. <c>datetime</c>
         vectors are <c>double</c> vectors with special properties that allow them to handle
-        dates correctly. For example, <c>date</c> type vectors allow functions like
-        <c>ggplot</c> to treat them as numeric dates and not as character vectors, even though
-        they contain non-numeric characters (e.g., in the <c>date_measured</c> column in the
-        <c>co2_df</c> data frame). This means Python will not accidentally plot the dates in the
-        wrong order (i.e., not alphanumerically as would happen if it was a character vector).
-        An in-depth study of dates and times is beyond the scope of the book, but interested
-        readers may consult the Dates and Times chapter of <em>Python for Data
-        Science</em> <xref ref="wickham2016r"/>; see the additional resources at the
-        end of this chapter.</p>
+        dates correctly. For example, <c>datetime</c> type vectors allow functions like
+        <c>altair</c> to treat them as numeric dates and not as character vectors, even though
+        they contain non-numeric characters. This means Python will not accidentally plot the
+        dates in the wrong order.</p>
       </note>
 <p>
   Since we are investigating a relationship between two variables (CO<m>_2</m> concentration 
   and date), a scatter plot is a good place to start. Scatter plots show the data as 
   individual points with <c>x</c> (horizontal axis) and <c>y</c> (vertical axis) 
-        <idx><h>ggplot</h><h>aesthetic mapping</h></idx>
-        <idx><h>ggplot</h><h>geometric object</h></idx>
+        <idx><h>altair</h><h>encoding channel</h></idx>
+        <idx><h>altair</h><h>graphical mark</h></idx>
   coordinates. Here, we will use the measurement date as the <c>x</c> coordinate and 
-  the CO<m>_2</m> concentration as the <c>y</c> coordinate. When using the <c>ggplot2</c> 
-  package, we create a plot object with the <c>ggplot</c> function. There are a few 
+  the CO<m>_2</m> concentration as the <c>y</c> coordinate. We create a chart with the
+  <c>alt.Chart</c> function. There are a few
   basic aspects of a plot that we need to specify:
 </p>
 
@@ -337,41 +324,28 @@ co2_df
   </li>
   <li>
     <p>
-      The aesthetic mapping, which tells <c>ggplot</c> how the columns in the data 
-      frame map to properties of the visualization.
+      The graphical mark, which specifies how the mapped data should be displayed.
     </p>
     <ul>
-      <li><p>To create an aesthetic mapping, we use the <c>aes</c> function.</p></li>
+      <li><p>To create a graphical mark, we use <c>Chart.mark_*</c> methods.</p></li>
       <li>
         <p>
-          Here, we set the plot <c>x</c> axis to the <c>date_measured</c> variable, 
-          and the plot <c>y</c> axis to the <c>ppm</c> variable.
+          Here, we use the <c>mark_point</c> function to visualize our data as a scatter plot.
         </p>
       </li>
     </ul>
   </li>
   <li>
     <p>
-      The <c>+</c> operator, which tells <c>ggplot</c> that we would like to add 
-      another layer to the plot.
-    </p>
-  </li>
-  <li>
-    <p>
-      The geometric object, which specifies how the mapped data should be displayed.
+      The encoding channels, which tell <c>altair</c> how the columns in the data frame map
+      to visual properties in the chart.
     </p>
     <ul>
+      <li><p>To create an encoding, we use the <c>encode</c> function.</p></li>
       <li>
         <p>
-          To create a geometric object, we use a <c>geom_*</c> function (see the 
-          <url href="https://ggplot2.tidyverse.org/reference/">ggplot reference</url> 
-          for a list of geometric objects).
-        </p>
-      </li>
-      <li>
-        <p>
-          Here, we use the <c>geom_point</c> function to visualize our data as a 
-          scatter plot.
+          Here, we set the <c>x</c> axis of the plot to the <c>date_measured</c> variable, and
+          on the <c>y</c> axis, we plot the <c>ppm</c> variable.
         </p>
       </li>
     </ul>
@@ -408,7 +382,7 @@ co2_df.info()
 </p>
 
 <p>
-  We can create a line plot in <c>ggplot</c> using the <c>geom_line</c> function. 
+  We can create a line plot in <c>altair</c> using the <c>mark_line</c> function.
   Let's now try to visualize the <c>co2_df</c> as a line plot with just the default 
   arguments:
 </p>
@@ -439,12 +413,12 @@ otherwise be clear (<term>overplotting</term>).
         to refine things. This plot is fairly straightforward, and there is not much
         visual noise to remove. But there are a few things we must do to improve
         clarity, such as adding informative axis labels and making the font a more
-        readable size. To add axis labels, we use the <c>xlab</c> and <c>ylab</c>
-        functions. To change the font size, we use the <c>theme</c> function with the
-        <c>text</c> argument:
-        <idx><h>ggplot</h><h>xlab</h></idx>
-        <idx><h>ggplot</h><h>ylab</h></idx>
-        <idx><h>ggplot</h><h>theme</h></idx>
+        readable size. To add axis labels, we use the <c>title</c> method along with
+        <c>alt.X</c> and <c>alt.Y</c>. To change the font size, we use the
+        <c>configure_axis</c> function with the <c>titleFontSize</c> argument:
+        <idx><h>altair</h><h>alt.X</h></idx>
+        <idx><h>altair</h><h>alt.Y</h></idx>
+        <idx><h>altair</h><h>configure_axis</h></idx>
       </p>
       <program language="python">
         <input>
@@ -460,36 +434,20 @@ co2_line = alt.Chart(co2_df).mark_line().encode(
         <image source="images/viz/co2-line-labels.png" width="75%"/>
       </figure>
       <note>
-        <p>The <c>theme</c> function is quite complex and has many arguments that can
-        be specified to control many non-data aspects of a visualization. An in-depth
-        discussion of the <c>theme</c> function is beyond the scope of this book.
-        Interested readers may consult the <c>theme</c> function documentation; see
-        the additional resources section at the end of this chapter.</p>
+        <p>The <c>configure_*</c> functions in <c>altair</c> support additional customization,
+        such as updating the size of the plot, changing the font color, and many other
+        options.</p>
       </note>
       <p>
         Finally, let's see if we can better understand the oscillation by changing the
         visualization slightly. Note that it is totally fine to use a small number of
         visualizations to answer different aspects of the question you are trying to
-        answer. We will accomplish this by using <em>scales</em>,
-        <idx><h>ggplot</h><h>scales</h></idx>
-        another important feature of <c>ggplot2</c> that easily transforms the different
-        variables and set limits. We scale the horizontal axis using the <c>xlim</c>
-        function, and the vertical axis with the <c>ylim</c> function. In particular,
-        here, we will use the <c>xlim</c> function to zoom in on just five years of data
-        (say, 1990&#x2013;1994). <c>xlim</c> takes a vector of length two to specify the upper
-        and lower bounds to limit the axis. We can create that using the <c>c</c>
-        function. Note that it is important that the vector given to <c>xlim</c> must
-        be of the same type as the data that is mapped to that axis. Here, we have
-        mapped a date to the x-axis, and so we need to use the <c>date</c> function
-        (from the <c>tidyverse</c> <url href="https://lubridate.tidyverse.org/" visual="lubridate.tidyverse.org/"><c>lubridate</c>
-        Python package</url> <xref ref="lubridate"/> <xref ref="lubridatepaper"/>) to convert the
-        character strings we provide to <c>c</c> to <c>date</c> vectors.
+        answer.         We will accomplish this by using <em>scale</em>,
+        <idx><h>altair</h><h>scale</h></idx>
+        another important feature of <c>altair</c> that easily transforms the different
+        variables and sets limits. In particular, here, we will use the <c>alt.Scale</c>
+        function to zoom in on just a few years of data.
       </p>
-      <note>
-        <p><c>lubridate</c> is a package that is installed by the <c>tidyverse</c>
-        metapackage, but is not loaded by it. Hence we need to load it separately in
-        the code below.</p>
-      </note>
       <program language="python">
         <input>
 co2_line_labels = alt.Chart(co2_df).mark_line().encode(
@@ -512,20 +470,17 @@ co2_line_labels = alt.Chart(co2_df).mark_line().encode(
         matches up fairly closely with the two seasons.
       </p>
       <p>
-        As you might have noticed from the code used to create the final visualization
-        of the <c>co2_df</c> data frame, we construct the visualizations in <c>ggplot</c>
-        with layers. New layers are added with the <c>+</c> operator, and we can really
-        add as many as we would like! A useful analogy to constructing a data
-        visualization is painting a picture. We start with a blank canvas, and the
-        first thing we do is prepare the surface for our painting by adding primer. In
-        our data visualization this is akin to calling <c>ggplot</c> and specifying the
-        data set we will be using. Next, we sketch out the background of the painting.
-        In our data visualization, this would be when we map data to the axes in the
-        <c>aes</c> function. Then we add our key visual subjects to the painting. In our
-        data visualization, this would be the geometric objects (e.g., <c>geom_point</c>,
-        <c>geom_line</c>, etc.). And finally, we work on adding details and refinements
-        to the painting. In our data visualization this would be when we fine tune axis
-        labels, change the font, adjust the point size, and do other related things.
+        As you might have noticed from the code used to create the final visualization of the
+        <c>co2_df</c> data frame, we construct visualizations in <c>altair</c> by starting with
+        a chart and then refining it. A useful analogy to constructing a data visualization is
+        painting a picture. We start with a blank canvas, and the first thing we do is prepare
+        the surface for our painting by adding primer. In our data visualization this is akin to
+        calling <c>alt.Chart</c> and specifying the data set we will be using. Next, we sketch
+        out the background of the painting. In our data visualization, this would be when we map
+        data to the axes in the <c>encode</c> function. Then we add our key visual subjects to
+        the painting. In our data visualization, this would be the graphical marks (e.g.,
+        <c>mark_point</c>, <c>mark_line</c>, etc.). And finally, we work on adding details and
+        refinements to the painting.
       </p>
     </subsection>
 
@@ -537,9 +492,7 @@ co2_line_labels = alt.Chart(co2_df).mark_line().encode(
         contains measurements of the waiting time between eruptions and the subsequent
         eruption duration (in minutes) of the Old Faithful geyser in Yellowstone
         National Park, Wyoming, United States. The <c>faithful</c> data set is
-        available in base Python as a data frame, so it does not need to be loaded. We
-        convert it to a tibble to take advantage of the nicer print output these
-        specialized data frames provide.
+        available as a csv file for this book, so we simply read it into a pandas data frame.
       </p>
       <p>
         <term>Question:</term>
@@ -580,10 +533,10 @@ co2_line_scale = alt.Chart(co2_df).mark_line(clip=True).encode(
         (waiting time and eruption time). But if you look at the output of the data
         frame, you'll notice that unlike time in the Mauna Loa CO<m>_2</m> data set,
         neither of the variables here have a natural order to them. So a scatter plot
-        is likely to be the most appropriate visualization. Let's create a scatter plot
-        using the <c>ggplot</c> function with the <c>waiting</c> variable on the
-        horizontal axis, the <c>eruptions</c> variable on the vertical axis, and the
-        <c>geom_point</c> geometric object. The result is shown in
+        is likely to be the most appropriate visualization. Let&#x2019;s create a scatter plot
+        using <c>altair</c> with the <c>waiting</c> variable on the horizontal axis, the
+        <c>eruptions</c> variable on the vertical axis, and <c>mark_point</c> as the graphical
+        mark. The result is shown in
         <xref ref="fig-viz-faithful-scatter"/>.
       </p>
       <program language="python">
@@ -748,13 +701,9 @@ can_lang_plot = alt.Chart(can_lang).mark_circle().encode(
         data in such a case, but these are beyond the scope of the book.
       </p>
       <p>
-        We can accomplish logarithmic scaling in a <c>ggplot</c> visualization using
-        the <c>scale_x_log10</c> and <c>scale_y_log10</c> functions. Given that the x
-        and y axes have large numbers, we should also format the axis labels to put
-        commas in these numbers to increase their readability. We can do this in Python by
-        passing the <c>label_comma</c> function (from the <c>scales</c> package) to the
-        <c>labels</c> argument of the <c>scale_x_log10</c> and <c>scale_x_log10</c>
-        functions.
+        We can accomplish logarithmic scaling in an <c>altair</c> visualization by setting the
+        axis scale type to <c>"log"</c>. Given that the x and y axes have large numbers, we
+        should also format the axis labels to improve readability.
       </p>
       <program language="python">
         <input>
@@ -783,13 +732,10 @@ can_lang_plot_labels = alt.Chart(can_lang).mark_circle().encode(
         2016 Canadian census was 19,460,850 / 35,151,728 × 100% = 55.36%.
       </p>
       <p>
-        Below we use <c>mutate</c> to calculate the percentage of people reporting a
-        given language as their mother tongue and primary language at home for all the
-        languages in the <c>can_lang</c> data set. Since the new columns are appended
-        to the end of the data table, we selected the new columns after the
-        transformation so you can clearly see the mutated output from the table.
-        <idx><h>mutate</h></idx>
-        <idx><h>select</h></idx>
+        Below we calculate the percentage of people reporting a given language as their mother
+        tongue and primary language at home for all the languages in the <c>can_lang</c> data
+        set. Since the new columns are appended to the end of the data table, we then select the
+        new columns so you can clearly see the updated output from the table.
       </p>
       <program language="python">
         <input>
@@ -1104,14 +1050,11 @@ can_lang_plot_legend = alt.Chart(can_lang).mark_circle().encode(
         histogram, which we will discuss further in <xref ref="sec-viz-morley"/>.
       </p>
       <p>
-        We specify that we would like to use a bar plot via the <c>geom_bar</c>
-        function in <c>ggplot2</c>. However, by default, <c>geom_bar</c> sets the
-        heights of bars to the number of times a value appears in a data frame (its
-        <em>count</em>); here, we want to plot exactly the values in the data frame,
-        i.e., the landmass sizes. So we have to pass the <c>stat = "identity"</c>
-        argument to <c>geom_bar</c>. The result is shown in
+        We specify that we would like to use a bar plot via the <c>mark_bar</c> function in
+        <c>altair</c>. Here, we want to plot exactly the values in the data frame, i.e., the
+        landmass sizes. The result is shown in
         <xref ref="fig-viz-islands-bar"/>.
-        <idx><h>ggplot</h><h>geom_bar</h></idx>
+        <idx><h>altair</h><h>mark_bar</h></idx>
       </p>
       <program language="python">
         <input>
