@@ -378,9 +378,9 @@ sacramento_train, sacramento_test = train_test_split(
       <idx>RMSPE</idx> (RMSPE) instead. The mathematical formula for calculating
       RMSPE is:
     </p>
-    <me>
+    <md>
       \text{RMSPE} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}
-    </me>
+    </md>
     <p>where:</p>
     <ul>
       <li><p><m>n</m> is the number of observations,</p></li>

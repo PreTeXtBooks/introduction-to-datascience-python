@@ -401,6 +401,22 @@
       <em>Journal of Statistical Software</em>, 40(3):1&#x2013;25, 2011.
     </biblio>
 
+    <biblio type="raw" xml:id="reback2020pandas">
+      The Pandas Development Team.
+      <em>pandas-dev/pandas: Pandas</em>.
+      Zenodo, February 2020.
+      <url href="https://doi.org/10.5281/zenodo.3509134" visual="doi.org/10.5281/zenodo.3509134"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="mckinney-proc-scipy-2010">
+      W. McKinney.
+      Data structures for statistical computing in Python.
+      In S. van der Walt and J. Millman, editors,
+      <em>Proceedings of the 9th Python in Science Conference</em>,
+      pages 56&#x2013;61, 2010.
+      <url href="https://doi.org/10.25080/Majora-92bf1922-00a" visual="doi.org/10.25080/Majora-92bf1922-00a"/>
+    </biblio>
+
   </references>
   <index>
     <title>Index</title>

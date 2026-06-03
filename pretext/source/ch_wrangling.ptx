@@ -974,7 +974,7 @@ lang_messy_longer
       the first is the name of the data frame object, and the second is a <em>logical statement</em> to
       use when filtering the rows.
       <idx><h>filter</h><h>logical statements</h></idx>
-      <idx><h>logical statement</h><see>logical operator</see></idx>
+      <idx><h>logical statement</h><seealso>logical operator</seealso></idx>
       <c>filter</c> works by returning the rows where the logical statement evaluates to <c>TRUE</c>.
       This section will highlight more advanced usage of the <c>filter</c> function. In particular, this
       section provides an in-depth treatment of the variety of logical statements one can use in the
