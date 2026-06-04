@@ -13,7 +13,7 @@
       known as <em>linear regression</em>.
       <idx><h>regression</h><h>linear</h></idx>
       This chapter provides an introduction to the basic concept of linear
-      regression, shows how to use <c>tidymodels</c> to perform linear
+      regression, shows how to use <c>scikit-learn</c> to perform linear
       regression in Python, and characterizes its strengths and weaknesses compared
       to K-NN regression. The focus is, as usual, on the case where there is a
       single predictor and single response variable of interest; but the chapter
@@ -126,16 +126,16 @@
       price of a house with size 6 <em>million</em> square feet? Or what about
       <em>negative</em> 2,000 square feet? As it turns out, nothing in the
       formula breaks; linear regression will happily make predictions for
-      nonsensical predictor values if you ask it to. But even though you
+      crazy predictor values if you ask it to. But even though you
       <em>can</em> make these wild predictions, you shouldn&#x2019;t. You
       should only make predictions roughly within the range of your original
       data, and perhaps a bit beyond it only if it makes sense. For example,
       the data in <xref ref="fig-regression2-lin-reg1"/> only reaches around
-      800 square feet on the low end, but it would probably be reasonable to use
-      the linear regression model to make a prediction at 600 square feet, say.
+      600 square feet on the low end, but it would probably be reasonable to use
+      the linear regression model to make a prediction at 500 square feet, say.
     </p>
     <p>
-      Once we have the coefficients <m>\beta_0</m> and <m>\beta_1</m>, we can
+      Back to the example! Once we have the coefficients <m>\beta_0</m> and <m>\beta_1</m>, we can
       use the equation above to evaluate the predicted sale price given the
       value we have for the predictor variable&#x2014;here 2,000 square feet.
       <xref ref="fig-regression2-lin-reg2"/> demonstrates this process.
@@ -147,7 +147,7 @@
     </figure>
 
     <p>
-By using simple linear regression on this small data set to predict the sale price for a 2,000 square-foot house, we get a predicted value of $295,564.
+By using simple linear regression on this small data set to predict the sale price for a 2,000 square-foot house, we get a predicted value of $276,027.
       But wait a minute&#x2026; how exactly does simple linear regression
       choose the line of best fit? Many different lines could be drawn through
       the data points. Some plausible examples are shown in
@@ -165,14 +165,14 @@ By using simple linear regression on this small data set to predict the sale pri
       distance</term> between itself and each of the observed data points in
       the training data (equivalent to minimizing the RMSE).
       <xref ref="fig-regression2-vertical-dist"/> illustrates these vertical
-      distances as red lines. Finally, to assess the predictive accuracy of a
+      distances as lines. Finally, to assess the predictive accuracy of a
       simple linear regression model, we use RMSPE&#x2014;the same measure of
       predictive performance we used with K-NN regression.
       <idx>RMSPE</idx>
     </p>
 
     <figure xml:id="fig-regression2-vertical-dist">
-      <caption>Scatter plot of sale price versus size with red lines denoting the vertical distances between the predicted values and the observed data points.</caption>
+      <caption>Scatter plot of sale price versus size with lines denoting the vertical distances between the predicted values and the observed data points.</caption>
       <image source="images/regression2/sacr-vertical-dist.png" width="70%"/>
     </figure>
   </section>
@@ -181,24 +181,24 @@ By using simple linear regression on this small data set to predict the sale pri
   <section xml:id="sec-regression2-in-r">
     <title>Linear regression in Python</title>
     <p>
-      We can perform simple linear regression in Python using <c>tidymodels</c>
-      <idx>tidymodels</idx>
+      We can perform simple linear regression in Python using <c>scikit-learn</c>
+      <idx>scikit-learn</idx>
       in a very similar manner to how we performed K-NN regression.
-      To do this, instead of creating a <c>nearest_neighbor</c> model
-      specification with the <c>kknn</c> engine, we use a <c>linear_reg</c>
-      model specification with the <c>lm</c> engine.
+      To do this, instead of creating a <c>KNeighborsRegressor</c> model object,
+      we use a <c>LinearRegression</c> model object; and as usual, we first have
+      to import it from <c>sklearn</c>.
       Another difference is that we do not need to choose <m>K</m> in the
       context of linear regression, and so we do not need to perform
       cross-validation. Below we illustrate how we can use the usual
-      <c>tidymodels</c> workflow to predict house sale price given house size
-      using a simple linear regression approach using the full Sacramento real
+      <c>scikit-learn</c> workflow to predict house sale price given house size.
+      We use a simple linear regression approach on the full Sacramento real
       estate data set.
     </p>
     <p>
       As usual, we start by loading packages, setting the seed, loading data,
       and putting some test data away in a lock box that we can come back to
       after we choose our final model. Let's take care of that now.
-      <idx><h>seed</h><h>set.seed</h></idx>
+      <idx><h>seed</h><h>numpy.random.seed</h></idx>
     </p>
     <program language="python">
       <input>
@@ -223,8 +223,12 @@ sacramento_train, sacramento_test = train_test_split(
       </input>
     </program>
     <p>
-      Now that we have our training data, we will create the model specification
-      and recipe, and fit our simple linear regression model:
+      Now that we have our training data, we will create
+      and fit the linear regression model object.
+      We will also extract the slope of the line
+      via the <c>coef_[0]</c> property, as well as the
+      intercept of the line via the <c>intercept_</c> property.
+      <idx><h>scikit-learn</h><h>fit</h></idx>
     </p>
     <program language="python">
       <input>
@@ -240,21 +244,8 @@ pd.DataFrame({&quot;slope&quot;: [lm.coef_[0]], &quot;intercept&quot;: [lm.inter
       </input>
     </program>
     <pre>
-## ══ Workflow [trained] ══════════
-## Preprocessor: Recipe
-## Model: linear_reg()
-## 
-## ── Preprocessor ──────────
-## 0 Recipe Steps
-## 
-## ── Model ──────────
-## 
-## Call:
-## stats::lm(formula = ..y ~ ., data = data)
-## 
-## Coefficients:
-## (Intercept)         sqft  
-##     18450.3        134.8
+        slope     intercept
+0  137.285652  15642.309105
     </pre>
     <note>
       <p>
@@ -270,15 +261,15 @@ pd.DataFrame({&quot;slope&quot;: [lm.coef_[0]], &quot;intercept&quot;: [lm.inter
       </p>
     </note>
     <p>
-      Our coefficients are (intercept) <m>\beta_0 \approx 18450</m> and
-      (slope) <m>\beta_1 \approx 135</m>. This means that the equation of the
+      Our coefficients are (intercept) <m>\beta_0 =</m> 15642 and
+      (slope) <m>\beta_1 =</m> 137. This means that the equation of the
       line of best fit is
     </p>
-    <md>\text{house sale price} = 18450 + 135 \cdot (\text{house size}).</md>
+    <md>\text{house sale price} = 15642 + 137 \cdot (\text{house size}).</md>
     <p>
-      In other words, the model predicts that houses start at $18,450 for 0
+      In other words, the model predicts that houses start at $15,642 for 0
       square feet, and that every extra square foot increases the cost of the
-      house by approximately $135. Finally, we predict on the test data set to
+      house by $137. Finally, we predict on the test data set to
       assess how well our model does:
     </p>
     <program language="python">
@@ -296,17 +287,12 @@ RMSPE
       </input>
     </program>
     <pre>
-## # A tibble: 3 × 3
-##   .metric .estimator .estimate
-##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rmse    standard   88528.   
-## 2 rsq     standard       0.608
-## 3 mae     standard   61892.
+85376.59691629931
     </pre>
     <p>
       Our final model&#x2019;s test error as assessed by RMSPE
       <idx>RMSPE</idx>
-      is approximately $88,528. Remember that this is in units of the response
+      is $85,377. Remember that this is in units of the response
       variable, and here that is US Dollars (USD). Does this mean our model is
       &#x201C;good&#x201D; at predicting house sale price based off of the
       predictor of home size? Again, answering this is tricky and requires
@@ -350,31 +336,6 @@ sacr_preds_plot
       <caption>Scatter plot of sale price versus size with line of best fit for the full Sacramento housing data.</caption>
       <image source="images/regression2/sacr-lm-predict-all.png" width="70%"/>
     </figure>
-
-    <p>
-      We can extract the coefficients from our model by accessing the fit
-      object that is output by the <c>fit</c>
-      <idx><h>tidymodels</h><h>fit</h></idx>
-      function; we first have to extract it from the workflow using the
-      <c>extract_fit_parsnip</c> function, and then apply the <c>tidy</c>
-      function to convert the result into a data frame:
-    </p>
-    <program language="python">
-      <input>
-mlm = LinearRegression()
-mlm.fit(
-    sacramento_train[[&quot;sqft&quot;, &quot;beds&quot;]],
-    sacramento_train[&quot;price&quot;]
-)
-      </input>
-    </program>
-    <pre>
-## # A tibble: 2 × 5
-##   term        estimate std.error statistic   p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 (Intercept)   18450.   7916.        2.33 2.01e-  2
-## 2 sqft            135.      4.31     31.2  1.37e-134
-    </pre>
   </section>
 
   <!-- ============================================================ -->
@@ -398,8 +359,8 @@ mlm.fit(
     </figure>
 
     <p>
-      What differences do we observe? One obvious difference is the shape of
-      the blue lines. In simple linear regression we are restricted to a
+      What differences do we observe in <xref ref="fig-regression2-compare-regression"/>? One obvious difference is the shape of
+      the orange lines. In simple linear regression we are restricted to a
       straight line, whereas in K-NN regression our line is much more flexible
       and can be quite wiggly. But there is a major interpretability advantage
       in limiting the model to a straight line. A straight line can be defined
@@ -413,7 +374,7 @@ mlm.fit(
     <p>
       There can, however, also be a disadvantage to using a simple linear
       regression model in some cases, particularly when the relationship
-      between the response and the predictor is not linear, but instead some
+      between the response variable and the predictor is not linear, but instead some
       other shape (e.g., curved or oscillating). In these cases the prediction
       model from a simple linear regression will underfit,
       <idx><h>underfitting</h><h>regression</h></idx>
@@ -462,24 +423,38 @@ mlm.fit(
       known as <term>multivariable linear regression</term>.
       <idx><h>regression</h><h>multivariable linear</h></idx>
       To do this, we follow a very similar approach to what we did for K-NN
-      regression: we just add more predictors to the model formula in the
-      recipe. But recall that we do not need to use cross-validation to choose
-      any parameters, nor do we need to standardize (i.e., center and scale)
+      regression: we just specify the training data by adding more predictors.
+      But recall that we do not need to use cross-validation to choose any
+      parameters, nor do we need to standardize (i.e., center and scale)
       the data for linear regression. Note once again that we have the same
       concerns regarding multiple predictors as in the settings of multivariable
       K-NN regression and classification: having more predictors is <em>not</em>
-      always better. But because the same predictor selection algorithm from the
-      classification chapter extends to the setting of linear regression, it
-      will not be covered again in this chapter.
+      always better. But because the same predictor selection algorithm from
+      <xref ref="ch-classification2"/> extends to the setting of linear
+      regression, it will not be covered again in this chapter.
     </p>
     <p>
       We will demonstrate multivariable linear regression using the Sacramento
       real estate <idx>Sacramento real estate</idx>
       data with both house size (measured in square feet) as well as number of
       bedrooms as our predictors, and continue to use house sale price as our
-      response variable. We will start by changing the formula in the recipe
-      to include both the <c>sqft</c> and <c>beds</c> variables as predictors:
+      response variable. The <c>scikit-learn</c> framework makes this easy to do:
+      we just need to set both the <c>sqft</c> and <c>beds</c> variables as
+      predictors, and then use the <c>fit</c> method as usual.
     </p>
+    <program language="python">
+      <input>
+mlm = LinearRegression()
+mlm.fit(
+    sacramento_train[[&quot;sqft&quot;, &quot;beds&quot;]],
+    sacramento_train[&quot;price&quot;]
+)
+      </input>
+    </program>
+    <pre>
+LinearRegression()
+    </pre>
+    <p>Finally, we make predictions on the test data set to assess the quality of our model.</p>
     <program language="python">
       <input>
 sacramento_test[&quot;predicted&quot;] = mlm.predict(sacramento_test[[&quot;sqft&quot;,&quot;beds&quot;]])
@@ -491,91 +466,13 @@ lm_mult_test_RMSPE = mean_squared_error(
 lm_mult_test_RMSPE
       </input>
     </program>
-    <p>Now we can build our workflow and fit the model:</p>
-    <program language="python">
-      <input>
-# create a prediction pt grid
-xvals = np.linspace(
-    sacramento_train[&quot;sqft&quot;].min(), sacramento_train[&quot;sqft&quot;].max(), 50
-)
-yvals = np.linspace(
-    sacramento_train[&quot;beds&quot;].min(), sacramento_train[&quot;beds&quot;].max(), 50
-)
-xygrid = np.array(np.meshgrid(xvals, yvals)).reshape(2, -1).T
-xygrid = pd.DataFrame(xygrid, columns=[&quot;sqft&quot;, &quot;beds&quot;])
-
-# add prediction
-mlmPredGrid = mlm.predict(xygrid)
-
-fig = px.scatter_3d(
-    sacramento_train,
-    x=&quot;sqft&quot;,
-    y=&quot;beds&quot;,
-    z=&quot;price&quot;,
-    opacity=0.4,
-    labels={&quot;sqft&quot;: &quot;Size (sq ft)&quot;, &quot;beds&quot;: &quot;Bedrooms&quot;, &quot;price&quot;: &quot;Price (USD)&quot;},
-)
-
-fig.update_traces(marker={&quot;size&quot;: 2, &quot;color&quot;: &quot;red&quot;})
-
-fig.add_trace(
-    go.Surface(
-        x=xvals,
-        y=yvals,
-        z=mlmPredGrid.reshape(50, -1),
-        name=&quot;Predictions&quot;,
-        colorscale=&quot;viridis&quot;,
-        colorbar={&quot;title&quot;: &quot;Price (USD)&quot;}
-    )
-)
-
-fig.update_layout(
-    margin=dict(l=0, r=0, b=0, t=1),
-    template=&quot;plotly_white&quot;,
-)
-
-# if HTML, use the plotly 3d image; if PDF, use static image
-if &quot;BOOK_BUILD_TYPE&quot; in os.environ and os.environ[&quot;BOOK_BUILD_TYPE&quot;] == &quot;PDF&quot;:
-    glue(&quot;fig:08-3DlinReg&quot;, Image(&quot;img/regression2/plot3d_linear_regression.png&quot;))
-else:
-    glue(&quot;fig:08-3DlinReg&quot;, fig)
-      </input>
-    </program>
     <pre>
-## ══ Workflow [trained] ══════════
-## Preprocessor: Recipe
-## Model: linear_reg()
-## 
-## ── Preprocessor ──────────
-## 0 Recipe Steps
-## 
-## ── Model ──────────
-## 
-## Call:
-## stats::lm(formula = ..y ~ ., data = data)
-## 
-## Coefficients:
-## (Intercept)         sqft         beds  
-##     72547.8        160.6     -29644.3
-    </pre>
-    <p>And finally, we make predictions on the test data set to assess the quality of our model:</p>
-    <program language="python">
-      <input>
-mlm.coef_
-      </input>
-    </program>
-    <pre>
-## # A tibble: 3 × 3
-##   .metric .estimator .estimate
-##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rmse    standard   88739.   
-## 2 rsq     standard       0.603
-## 3 mae     standard   61732.
+82331.04630202598
     </pre>
     <p>
-      Our model&#x2019;s test error as assessed by RMSPE is approximately
-      $88,739. In the case of two predictors, the predictions from linear
-      regression create a <em>plane</em> of best fit, as shown in
+      Our model&#x2019;s test error as assessed by RMSPE is $82,331.
+      In the case of two predictors, we can plot the predictions made by our
+      linear regression creates a <em>plane</em> of best fit, as shown in
       <xref ref="fig-regression2-3d-lin-reg"/>.
     </p>
 
@@ -590,38 +487,53 @@ mlm.coef_
       from the wiggly, flexible surface we get from other methods such as K-NN
       regression. As discussed, this can be advantageous in one aspect, which
       is that for each predictor, we can get slopes/intercept from linear
-      regression, and thus describe the plane mathematically. We can extract the
-      slope values from our model object as shown below:
+      regression, and thus describe the plane mathematically. We can extract
+      those slope values from the <c>coef_</c> property of our model object, and
+      the intercept from the <c>intercept_</c> property, as shown below.
     </p>
+    <program language="python">
+      <input>
+mlm.coef_
+      </input>
+    </program>
+    <pre>
+array([   154.59235377, -20333.43213798])
+    </pre>
     <program language="python">
       <input>
 mlm.intercept_
       </input>
     </program>
     <pre>
-## # A tibble: 3 × 5
-##   term        estimate std.error statistic   p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1 (Intercept)   72548.  11670.        6.22 8.76e- 10
-## 2 sqft            161.      5.93     27.1  8.34e-111
-## 3 beds         -29644.   4799.       -6.18 1.11e-  9
+53180.26906624224
     </pre>
     <p>
-      And then use those slopes to write a mathematical equation to describe
-      the prediction plane:
+      When we have multiple predictor variables, it is not easy to know which
+      variable goes with which coefficient in <c>mlm.coef_</c>. In particular,
+      you will see that <c>mlm.coef_</c> above is just an array of values without
+      any variable names. Unfortunately you have to do this mapping yourself: the
+      coefficients in <c>mlm.coef_</c> appear in the <em>same order</em> as the
+      columns of the predictor data frame you used when training. So since we
+      used <c>sacramento_train[["sqft", "beds"]]</c> when training, we have that
+      <c>mlm.coef_[0]</c> corresponds to <c>sqft</c>, and <c>mlm.coef_[1]</c>
+      corresponds to <c>beds</c>. Once you sort out the correspondence, you can
+      then use those slopes to write a mathematical equation to describe the
+      prediction plane:
       <idx>plane equation</idx>
     </p>
     <md>\text{house sale price} = \beta_0 + \beta_1\cdot(\text{house size}) + \beta_2\cdot(\text{number of bedrooms}),</md>
     <p>where:</p>
     <ul>
       <li><p><m>\beta_0</m> is the <em>vertical intercept</em> of the hyperplane (the price when both house size and number of bedrooms are 0),</p></li>
-      <li><p><m>\beta_1</m> is the <em>slope</em> for the first predictor (how quickly the price changes as you increase house size, holding number of bedrooms constant), and</p></li>
-      <li><p><m>\beta_2</m> is the <em>slope</em> for the second predictor (how quickly the price changes as you increase the number of bedrooms, holding house size constant).</p></li>
+      <li><p><m>\beta_1</m> is the <em>slope</em> for the first predictor (how quickly the price increases as you increase house size), and</p></li>
+      <li><p><m>\beta_2</m> is the <em>slope</em> for the second predictor (how quickly the price increases as you increase the number of bedrooms).</p></li>
     </ul>
     <p>
-      Filling in the values, the equation of the plane of best fit is:
+      Finally, we can fill in the values for <m>\beta_0</m>, <m>\beta_1</m> and
+      <m>\beta_2</m> from the model output above to create the equation of the
+      plane of best fit to the data:
     </p>
-    <md>\text{house sale price} = 72548 + 161\cdot (\text{house size}) - 29,649 \cdot (\text{number of bedrooms}).</md>
+    <md>\text{house sale price} = 53{,}180 + 155\cdot (\text{house size}) -20{,}333 \cdot (\text{number of bedrooms})</md>
     <p>
       This model is more interpretable than the multivariable K-NN regression
       model; we can write a mathematical equation that explains how each
@@ -635,36 +547,29 @@ mlm.intercept_
       have already decided on a small number (e.g., 2 or 3) of tuned candidate
       models and we want to make a final comparison, we can do so by comparing
       the prediction error of the methods on the test data.
-</p>
+    </p>
     <program language="python">
       <input>
 lm_mult_test_RMSPE
       </input>
     </program>
     <pre>
-## # A tibble: 3 × 3
-##   .metric .estimator .estimate
-##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rmse    standard   88739.   
-## 2 rsq     standard       0.603
-## 3 mae     standard   61732.
+82331.04630202598
     </pre>
-<p>The RMSPE for the
-      multivariable linear regression model is approximately $88,739, which is
-      less than the prediction error for the multivariable K-NN regression
-      model, indicating that we should likely choose linear regression for
-      predictions of house sale price on this data set. Revisiting the simple
-      linear regression model with only a single predictor from earlier in this
-      chapter, we see that the RMSPE for that model was $88,527.75, which is
-      almost the same as that of our more complex model. As mentioned earlier,
-      this is not always the case: often including more predictors will either
-      positively or negatively impact the prediction performance on unseen test
-      data.
-    </p>
     <p>
-      We obtain the RMSPE for the multivariable model via:
+      We obtain an RMSPE for the multivariable linear regression model
+      <idx>RMSPE</idx>
+      of $82,331. This prediction error is less than the prediction error for
+      the multivariable K-NN regression model, indicating that we should likely
+      choose linear regression for predictions of house sale price on this data
+      set. Revisiting the simple linear regression model with only a single
+      predictor from earlier in this chapter, we see that the RMSPE for that
+      model was $85,377, which is slightly higher than that of our more complex
+      model. Our model with two predictors provided a slightly better fit on test
+      data than our model with just one. As mentioned earlier, this is not always
+      the case: sometimes including more predictors can negatively impact the
+      prediction performance on unseen test data.
     </p>
-
   </section>
 
   <!-- ============================================================ -->
@@ -691,17 +596,17 @@ lm_mult_test_RMSPE
         book.
       </p>
       <p>
-        To illustrate what can happen when you have outliers,
+        But to illustrate what can happen when you have outliers,
         <xref ref="fig-regression2-outlier-small"/> shows a small subset of
-        the Sacramento housing data, except we have added a <em>single</em>
+        the Sacramento housing data again, except we have added a <em>single</em>
         data point (highlighted in red). This house is 5,000 square feet in
         size, and sold for only $50,000. Unbeknownst to the data analyst, this
         house was sold by a parent to their child for an absurdly low price.
-        This is not representative of the real housing market values that the
-        other data points follow; the data point is an <em>outlier</em>. In blue
+        Of course, this is not representative of the real housing market values that the
+        other data points follow; the data point is an <em>outlier</em>. In orange
         we plot the original line of best fit, and in red we plot the new line
         of best fit including the outlier. You can see how different the red
-        line is from the blue line, which is entirely caused by that one extra
+        line is from the orange line, which is entirely caused by that one extra
         outlier data point.
       </p>
 
@@ -751,7 +656,7 @@ lm_mult_test_RMSPE
       </figure>
 
       <p>
-        If we fit the multivariable linear regression model on this data, then
+        If we again fit the multivariable linear regression model on this data, then
         the plane of best fit has regression coefficients that are very
         sensitive to the exact values in the data. For example, if we change
         the data ever so slightly&#x2014;e.g., by running cross-validation,
@@ -759,13 +664,13 @@ lm_mult_test_RMSPE
         chunks&#x2014;the coefficients vary by large amounts:
       </p>
       <p>
-        Best Fit 1: <m>\text{house sale price} = 18450 + (220)\cdot (\text{house size 1 (ft}^2)) + (-86) \cdot (\text{house size 2 (ft}^2)).</m>
+        Best Fit 1: <m>\text{house sale price} = 17{,}238 + 169\cdot (\text{house size 1 (ft}^2)) + -32 \cdot (\text{house size 2 (ft}^2)).</m>
       </p>
       <p>
-        Best Fit 2: <m>\text{house sale price} = 18450 + (86)\cdot (\text{house size 1 (ft}^2)) + (49) \cdot (\text{house size 2 (ft}^2)).</m>
+        Best Fit 2: <m>\text{house sale price} = 7{,}041 + -28\cdot (\text{house size 1 (ft}^2)) + 166 \cdot (\text{house size 2 (ft}^2)).</m>
       </p>
       <p>
-        Best Fit 3: <m>\text{house sale price} = 18450 + (107)\cdot (\text{house size 1 (ft}^2)) + (27) \cdot (\text{house size 2 (ft}^2)).</m>
+        Best Fit 3: <m>\text{house sale price} = 15{,}539 + 135\cdot (\text{house size 1 (ft}^2)) + 2 \cdot (\text{house size 2 (ft}^2)).</m>
       </p>
       <p>
         Therefore, when performing multivariable linear regression, it is
@@ -811,20 +716,20 @@ df
       </input>
     </program>
     <pre>
-## # A tibble: 100 × 2
-##        x      y
-##    &lt;dbl&gt;  &lt;dbl&gt;
-##  1 0.102 0.0720
-##  2 0.800 0.532 
-##  3 0.478 0.148 
-##  4 0.972 1.01  
-##  5 0.846 0.677 
-##  6 0.405 0.157 
-##  7 0.879 0.768 
-##  8 0.130 0.0402
-##  9 0.852 0.576 
-## 10 0.180 0.0847
-## # ℹ 90 more rows
+         x         y
+0   0.5994  0.288853
+1   0.1688  0.092090
+2   0.9859  1.021194
+3   0.9160  0.812375
+4   0.6400  0.212624
+..     ...       ...
+95  0.7341  0.333609
+96  0.8434  0.656970
+97  0.3329  0.106273
+98  0.7170  0.311442
+99  0.7895  0.567003
+
+[100 rows x 2 columns]
     </pre>
 
     <figure xml:id="fig-regression2-curve">
@@ -837,7 +742,7 @@ df
       regression on <c>x</c>, we might have some scientific background about
       our problem to suggest that <c>y</c> should be a cubic function of
       <c>x</c>. So before performing regression, we might <em>create a new
-      predictor variable</em> <c>z</c> using the <c>mutate</c> function:
+      predictor variable</em> <c>z</c>:
       <idx>predictor design</idx>
     </p>
     <program language="python">
@@ -908,7 +813,7 @@ df[&quot;z&quot;] = df[&quot;x&quot;] ** 3
     <p>
       Practice exercises for the material covered in this chapter can be found
       in the accompanying
-      <url href="https://worksheets.datasciencebook.ca" visual="worksheets.datasciencebook.ca">worksheets repository</url>
+      <url href="https://worksheets.python.datasciencebook.ca" visual="worksheets.python.datasciencebook.ca">worksheets repository</url>
       in the &#x201C;Regression II: linear regression&#x201D; row.
       You can launch an interactive version of the worksheet in your browser
       by clicking the &#x201C;launch binder&#x201D; button. You can also
@@ -928,27 +833,14 @@ df[&quot;z&quot;] = df[&quot;x&quot;] ** 3
       <li>
         <p>
           The
-          <url href="https://tidymodels.org/packages" visual="tidymodels.org/packages"><c>tidymodels</c> website</url>
+          <url href="https://scikit-learn.org/stable/"><c>scikit-learn</c> website</url>
           is an excellent reference for more details on, and advanced usage of,
           the functions and packages in the past two chapters. Aside from that,
-          it also has a
-          <url href="https://www.tidymodels.org/start/" visual="tidymodels.org/start/">nice beginner&#x2019;s tutorial</url>
+          it also offers many useful
+          <url href="https://scikit-learn.org/stable/tutorial/index.html">tutorials</url>
           and
-          <url href="https://www.tidymodels.org/learn/" visual="tidymodels.org/learn/">an extensive list of more advanced examples</url>
+          <url href="https://scikit-learn.org/stable/auto_examples/index.html#general-examples">an extensive list of more advanced examples</url>
           that you can use to continue learning beyond the scope of this book.
-        </p>
-      </li>
-      <li>
-        <p>
-          <em>Modern Dive</em> (<xref ref="moderndive"/>) is another textbook
-          that uses the <c>tidyverse</c> / <c>tidymodels</c> framework.
-          Chapter 6 complements the material in the current chapter well; it
-          covers some slightly more advanced concepts than we do without getting
-          mathematical. Give this chapter a read before moving on to the next
-          reference. It is also worth noting that this book takes a more
-          &#x201C;explanatory&#x201D; / &#x201C;inferential&#x201D; approach to
-          regression in general (in Chapters 5, 6, and 10), which provides a
-          nice complement to the predictive tack we take in the present book.
         </p>
       </li>
       <li>
@@ -962,6 +854,12 @@ df[&quot;z&quot;] = df[&quot;x&quot;] ** 3
         </p>
       </li>
     </ul>
+  </section>
+
+  <!-- ============================================================ -->
+  <section xml:id="sec-regression2-references">
+    <title>References</title>
+    <p>References for this chapter are listed in <xref ref="references"/>.</p>
   </section>
 
 </chapter>

@@ -286,6 +286,15 @@
       <url href="https://recipes.tidymodels.org/" visual="recipes.tidymodels.org/"/>
     </biblio>
 
+    <biblio type="raw" xml:id="sklearn_api">
+      Buitinck, L., Louppe, G., Blondel, M., Pedregosa, F., Mueller, A., Grisel, O.,
+      Niculae, V., Prettenhofer, P., Gramfort, A., Grobler, J., Layton, R.,
+      VanderPlas, J., Joly, A., Holt, B., and Varoquaux, G. (2013).
+      API design for machine learning software: experiences from the scikit-learn
+      project. In <em>ECML PKDD Workshop: Languages for Data Mining and Machine
+      Learning</em>, pages 108&#x2013;122.
+    </biblio>
+
     <biblio type="raw" xml:id="bealesubset">
       Beale, E. M. L., Kendall, M. G., and Mann, D. W. (1967).
       The discarding of variables in multivariate analysis.

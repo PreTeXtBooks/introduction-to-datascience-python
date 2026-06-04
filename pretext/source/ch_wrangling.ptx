@@ -18,38 +18,33 @@
     <ul>
       <li><p>Define the term &#x201C;tidy data&#x201D;.</p></li>
       <li><p>Discuss the advantages of storing data in a tidy data format.</p></li>
-      <li><p>Define what vectors, lists, and data frames are in Python, and describe how they relate to
-        each other.</p></li>
+      <li><p>Define what series and data frames are in Python, and describe how they relate to each other.</p></li>
       <li><p>Describe the common types of data in Python and their uses.</p></li>
       <li><p>Use the following functions for their intended data wrangling tasks:
         <ul>
-          <li><p><c>c</c></p></li>
-          <li><p><c>pivot_longer</c></p></li>
-          <li><p><c>pivot_wider</c></p></li>
-          <li><p><c>separate</c></p></li>
-          <li><p><c>select</c></p></li>
-          <li><p><c>filter</c></p></li>
-          <li><p><c>mutate</c></p></li>
-          <li><p><c>summarize</c></p></li>
-          <li><p><c>map</c></p></li>
-          <li><p><c>group_by</c></p></li>
-          <li><p><c>across</c></p></li>
-          <li><p><c>rowwise</c></p></li>
+          <li><p><c>melt</c></p></li>
+          <li><p><c>pivot</c></p></li>
+          <li><p><c>reset_index</c></p></li>
+          <li><p><c>str.split</c></p></li>
+          <li><p><c>agg</c></p></li>
+          <li><p><c>assign</c> and regular column assignment</p></li>
+          <li><p><c>groupby</c></p></li>
+          <li><p><c>merge</c></p></li>
         </ul>
       </p></li>
       <li><p>Use the following operators for their intended data wrangling tasks:
         <ul>
-          <li><p><c>==</c>, <c>!=</c>, <c>&lt;</c>, <c>&lt;=</c>, <c>&gt;</c>, and <c>&gt;=</c></p></li>
-          <li><p><c>%in%</c></p></li>
-          <li><p><c>!</c>, <c>&amp;</c>, and <c>|</c></p></li>
-          <li><p><c>|&gt;</c> and <c>%&gt;%</c></p></li>
+          <li><p><c>==</c>, <c>!=</c>, <c>&lt;</c>, <c>&gt;</c>, <c>&lt;=</c>, and <c>&gt;=</c></p></li>
+          <li><p><c>isin</c></p></li>
+          <li><p><c>&amp;</c> and <c>|</c></p></li>
+          <li><p><c>[]</c>, <c>loc[]</c>, and <c>iloc[]</c></p></li>
         </ul>
       </p></li>
     </ul>
   </section>
 
   <section xml:id="sec-wrangling-dataframes">
-    <title>Data frames, vectors, and lists</title>
+    <title>Data frames and series</title>
     <p>
       In <xref ref="ch-intro"/> and <xref ref="ch-reading"/>, <em>data frames</em> were the focus:
       we learned how to import data into Python as a data frame, and perform basic operations on data frames
@@ -106,19 +101,19 @@
     </subsection>
 
     <subsection xml:id="sec-wrangling-what-is-vector">
-      <title>What is a vector?</title>
+      <title>What is a series?</title>
       <p>
-        In Python, <em>vectors</em>
-        <idx><h>vector</h></idx>
-        <idx><h>atomic vector</h><see>vector</see></idx>
-        are objects that can contain one or more elements. The vector elements are ordered, and they must
-        all be of the same <em>data type</em>; Python has several different basic data types, as shown in
+        In Python, <em>series</em>
+        <idx><h>Series</h></idx>
+        are objects that can contain one or more elements (like a list).
+        They are a single column, are ordered, can be indexed, and can contain any data type.
+        Python has several different basic data types, as shown in
         <xref ref="tab-wrangling-datatype-table"/>. <xref ref="fig-wrangling-vector"/> provides an example
-        of a vector where all of the elements are of character type. You can create vectors in Python using the
-        <c>c</c> function
-        <idx><h>c function</h></idx>
-        (<c>c</c> stands for &#x201C;concatenate&#x201D;). For example, to create the vector <c>region</c>
-        as shown in <xref ref="fig-wrangling-vector"/>, you would write:
+        of a series whose type is string. The <c>pandas</c> package uses <c>Series</c> objects to represent the columns in a data frame.
+        <c>Series</c> can contain a mix of data types, but it is good practice to only include a single type in a series
+        because all observations of one variable should be the same type. You can create a <c>pandas</c> series using the
+        <c>pd.Series()</c> function. For example, to create the series <c>region</c> as shown in
+        <xref ref="fig-wrangling-vector"/>, you can write the following:
       </p>
       <program language="python">
         <input>
@@ -129,24 +124,16 @@ region
         </input>
       </program>
       <pre>
-[1] "Toronto"   "Montreal"  "Vancouver" "Calgary"   "Ottawa"</pre>
+0      Toronto
+1     Montreal
+2    Vancouver
+3      Calgary
+4       Ottawa
+dtype: object</pre>
 
-      <note>
-        <p>
-          Technically, these objects are called &#x201C;atomic vectors.&#x201D; In this book we have chosen to
-          call them &#x201C;vectors,&#x201D; which is how they are most commonly referred to in the Python community.
-          To be totally precise, &#x201C;vector&#x201D; is an umbrella term that encompasses both atomic vector
-          and list objects in Python. But this creates a confusing situation where the term &#x201C;vector&#x201D;
-          could mean &#x201C;atomic vector&#x201D; <em>or</em> &#x201C;the umbrella term for atomic vector and
-          list,&#x201D; depending on context. So to keep things simple, in this book we <em>always</em> use
-          the term &#x201C;vector&#x201D; to refer to &#x201C;atomic vector.&#x201D; We encourage readers who are
-          enthusiastic to learn more to read the Vectors chapter of <em>Advanced Python</em>
-          <xref ref="wickham2019advanced"/>.
-        </p>
-      </note>
 
       <figure xml:id="fig-wrangling-vector">
-        <caption>Example of a vector whose type is character.</caption>
+        <caption>Example of a <c>pandas</c> series whose type is string.</caption>
         <image source="images/wrangling/data_frame_slides_cdn.007.png" width="100%"/>
       </figure>
 
@@ -160,59 +147,52 @@ region
             <cell>Example</cell>
           </row>
           <row>
-            <cell>character</cell>
-            <cell>chr</cell>
-            <cell>letters or numbers surrounded by quotes</cell>
-            <cell><c>"1"</c>, <c>"Hello world!"</c></cell>
-          </row>
-          <row>
-            <cell>double</cell>
-            <cell>dbl</cell>
-            <cell>numbers with decimal values</cell>
-            <cell><c>1.2333</c></cell>
-          </row>
-          <row>
             <cell>integer</cell>
             <cell>int</cell>
-            <cell>numbers that do not contain decimals</cell>
-            <cell><c>1L</c>, <c>20L</c> (where &#x201C;L&#x201D; tells Python to store as an integer)</cell>
+            <cell>positive/negative/zero whole numbers</cell>
+            <cell><c>42</c></cell>
           </row>
           <row>
-            <cell>logical</cell>
-            <cell>lgl</cell>
-            <cell>either true or false</cell>
-            <cell><c>TRUE</c>, <c>FALSE</c></cell>
+            <cell>floating point number</cell>
+            <cell>float</cell>
+            <cell>real number in decimal form</cell>
+            <cell><c>3.14159</c></cell>
+          </row>
+          <row>
+            <cell>boolean</cell>
+            <cell>bool</cell>
+            <cell>true or false</cell>
+            <cell><c>True</c></cell>
+          </row>
+          <row>
+            <cell>string</cell>
+            <cell>str</cell>
+            <cell>text</cell>
+            <cell><c>"Hello World"</c></cell>
           </row>
           <row bottom="major">
-            <cell>factor</cell>
-            <cell>fct</cell>
-            <cell>used to represent data with a limited number of values (usually categories)</cell>
-            <cell>a <c>color</c> variable with levels <c>red</c>, <c>green</c> and <c>orange</c></cell>
+            <cell>none</cell>
+            <cell>NoneType</cell>
+            <cell>represents no value</cell>
+            <cell><c>None</c></cell>
           </row>
         </tabular>
       </table>
 
       <p>
         <idx><h>data types</h></idx>
-        <idx><h>data types</h><h>character (chr)</h></idx>
+        <idx><h>data types</h><h>string (str)</h></idx>
         <idx><h>data types</h><h>integer (int)</h></idx>
-        <idx><h>data types</h><h>double (dbl)</h></idx>
-        <idx><h>data types</h><h>logical (lgl)</h></idx>
-        <idx><h>data types</h><h>factor (fct)</h></idx>
-  It is important in Python to make sure you represent your data with the correct type. Many 
-  of the <c>tidyverse</c> functions we use in this book treat the various data types 
-  differently. You should use integers and double types (which both fall under the 
-  <q>numeric</q> umbrella type) to represent numbers and perform arithmetic. Doubles 
-  are more common than integers in Python, though; for instance, a double data type is the 
-  default when you create a vector of numbers using <c>c()</c>, and when you read in 
-  whole numbers via <c>read_csv</c>. Characters are used to represent data that should 
-  be thought of as <q>text</q>, such as words, names, paths, URLs, and more. Factors 
-  help us encode variables that represent categories; a factor variable takes one of a 
-  discrete set of values known as levels (one for each category). The levels can be 
-  ordered or unordered. Even though factors can sometimes look like characters, they are 
-  not used to represent text, words, names, and paths in the way that characters are; 
-  in fact, Python internally stores factors using integers! There are other basic data types 
-  in Python, such as <c>raw</c> and <c>complex</c>, but we do not use these in this textbook.
+        <idx><h>data types</h><h>floating point number (float)</h></idx>
+        <idx><h>data types</h><h>boolean (bool)</h></idx>
+        <idx><h>data types</h><h>NoneType (none)</h></idx>
+        It is important in Python to make sure you represent your data with the correct type.
+        Many of the <c>pandas</c> functions we use in this book treat the various data types
+        differently. You should use <c>int</c> and <c>float</c> types to represent numbers and
+        perform arithmetic. The <c>bool</c> type can only take one of two values: <c>True</c> or
+        <c>False</c>. The <c>string</c> type is used to represent text data, such as words, names,
+        paths, URLs, and more. A <c>NoneType</c> is used to indicate no value; this can occur,
+        for example, when you have missing data.
       </p>
     </subsection>
 
@@ -372,10 +352,10 @@ type(can_lang)
     </note>
 
     <subsection xml:id="sec-wrangling-pivot-longer">
-      <title>Tidying up: going from wide to long using <c>pivot_longer</c></title>
+      <title>Tidying up: going from wide to long using <c>melt</c></title>
       <p>
         One task that is commonly performed to get data into a tidy format
-        <idx><h>pivot_longer</h></idx>
+        <idx><h>DataFrame</h><h>melt</h></idx>
         is to combine values that are stored in separate columns, but are really part of the same
         variable, into one. Data is often stored this way because this format is sometimes more intuitive
         for human readability and understanding, and humans create data sets. In
@@ -525,7 +505,7 @@ cities_series
     </subsection>
 
     <subsection xml:id="sec-wrangling-pivot-wider">
-      <title>Tidying up: going from long to wide using <c>pivot_wider</c></title>
+      <title>Tidying up: going from long to wide using <c>pivot</c></title>
       <p>
         Suppose we have observations spread across multiple rows rather than in a single row. For
         example, in <xref ref="fig-wrangling-long-to-wide"/>, the table on the left is in an untidy,
@@ -534,7 +514,7 @@ cities_series
         (here, population, commuter, and incorporated values for a region) is split across three rows.
         Remember: one of the criteria for tidy data
         is that each observation must be in a single row.
-        <idx><h>pivot_wider</h></idx>
+        <idx><h>DataFrame</h><h>pivot</h></idx>
       </p>
 
       <p>
@@ -657,7 +637,7 @@ population_in_2016_df
    </subsection>
 
     <subsection xml:id="sec-wrangling-separate">
-      <title>Tidying up: using <c>separate</c> to deal with multiple delimiters</title>
+      <title>Tidying up: using <c>str.split</c> to deal with multiple delimiters</title>
       <p>
         Data are also not considered tidy when multiple values are stored in the same cell. The data set
         we show below is even messier than the ones we dealt with above: the <c>Toronto</c>,
