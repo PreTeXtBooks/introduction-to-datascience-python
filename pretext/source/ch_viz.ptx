@@ -174,7 +174,8 @@
     <title>Refining the visualization</title>
     <p><em>Convey the message, minimize noise</em></p>
     <p>
-      Just being able to make a visualization in Python (or any other language, for that matter) doesn&#x2019;t mean that it effectively
+      Just being able to make a visualization in Python with <c>altair</c> (or any other tool
+      for that matter) doesn't mean that it effectively
       communicates your message to others. Once you have selected a broad type of
       visualization to use, you will have to refine it to suit your particular need.
       Some rules of thumb for doing this are listed below. They generally fall into
@@ -199,9 +200,8 @@
         colorblindness (a surprisingly large fraction of the overall
         population&#x2014;from about 1% to 10%, depending on sex and ancestry
         <xref ref="deebblind"/>). For example,
-        <url href="https://colorbrewer2.org" visual="colorbrewer2.org">ColorBrewer</url> and the
-        <url href="https://cran.r-project.org/web/packages/RColorBrewer/index.html" visual="cran.r-project.org/web/packages/RColorBrewer/index.html"><c>RColorBrewer</c> Python package</url>
-        <xref ref="RColorBrewer"/> provide the ability to pick such color schemes, and you can check
+        <url href="https://altair-viz.github.io/user_guide/customization.html#customizing-colors" visual="altair-viz.github.io/user_guide/customization.html#customizing-colors">Color Schemes</url>
+        provide the ability to pick such color schemes, and you can check
         your visualizations after you have created them by uploading to online tools such as a
         <url href="https://www.color-blindness.com/coblis-color-blindness-simulator/" visual="color-blindness.com/coblis-color-blindness-simulator/">color blindness simulator</url>.</p></li>
       <li><p>Redundancy can be helpful; sometimes conveying the same message in
@@ -223,7 +223,7 @@
     </ul>
   </section>
 
-  <section xml:id="sec-viz-ggplot2">
+  <section xml:id="sec-viz-altair">
     <title>Creating visualizations with <c>altair</c></title>
     <p><em>Build the visualization iteratively</em></p>
     <p>
@@ -618,7 +618,7 @@ faithful_scatter_labels = alt.Chart(faithful).mark_point().encode(
       <p>
         We begin with a scatter plot of the <c>mother_tongue</c> and
         <c>most_at_home</c> columns:
-        <idx><h>ggplot</h><h>geom_point</h></idx>
+        <idx><h>altair</h><h>mark_point</h></idx>
       </p>
       <program language="python">
         <input>
@@ -692,7 +692,7 @@ can_lang_plot = alt.Chart(can_lang).mark_circle().encode(
         small</em> values, because it helps space out small values and squishes larger
         values together. For example, log10(1) = 0, log10(10) = 1, log10(100) = 2,
         and log10(1000) = 3;
-        <idx><h>ggplot</h><h>logarithmic scaling</h></idx>
+        <idx><h>altair</h><h>logarithmic scaling</h></idx>
         on the logarithmic scale, the values 1, 10, 100, and 1000 are all the same
         distance apart! So we see that applying this function is moving big values
         closer together and moving small values farther apart. Note that if your data
@@ -895,16 +895,10 @@ can_lang[[&quot;mother_tongue_percent&quot;, &quot;most_at_home_percent&quot;]]
       </figure>
       <p>
         In <xref ref="fig-viz-canlang-scatter-color-legend"/>, the points are colored
-        with the default <c>ggplot2</c> color palette. But what if you want to use
-        different colors? In Python, two packages that provide alternative color
-        palettes
+        with the default palette. But what if you want to use different colors?
+        In Python, <c>altair</c> supports many alternative color palettes
         <idx><h>color palette</h></idx>
-        are <c>RColorBrewer</c> <xref ref="RColorBrewer"/> and <c>ggthemes</c>
-        <xref ref="ggthemes"/>; in this book we will cover how to use
-        <c>RColorBrewer</c>. You can visualize the list of color palettes that
-        <c>RColorBrewer</c> has to offer with the <c>display.brewer.all</c> function.
-        You can also print a list of color-blind friendly palettes by adding
-        <c>colorblindFriendly = TRUE</c> to the function.
+        through chart encodings and scale configuration.
       </p>
       <program language="python">
         <input>
@@ -920,25 +914,15 @@ can_lang_plot_percent = alt.Chart(can_lang).mark_circle().encode(
 ).configure_axis(titleFontSize=12)
         </input>
       </program>
-      <figure xml:id="fig-viz-rcolorbrewer">
-        <caption>Color palettes available from the <c>RColorBrewer</c> Python
-        package.</caption>
-        <image source="images/viz/rcolorbrewer.png" width="75%"/>
-      </figure>
       <p>
-        From <xref ref="fig-viz-rcolorbrewer"/>, we can choose the color palette we
-        want to use in our plot. To change the color palette, we add the
-        <c>scale_color_brewer</c> layer indicating the palette we want to use. You can
+        You can
         use this <url href="https://www.color-blindness.com/coblis-color-blindness-simulator/">color blindness simulator</url> to check
         if your visualizations
-        <idx><h>color blindness simulator</h></idx>
-        are color-blind friendly. Below we pick the <c>"Set2"</c> palette, with the
-        result shown in <xref ref="fig-viz-canlang-scatter-color-palette"/>. We also
-        set the <c>shape</c> aesthetic mapping to the <c>category</c> variable as well;
-        this makes the scatter point shapes different for each category. This kind of
-        visual redundancy&#x2014;i.e., conveying the same information with both scatter point
-        color and shape&#x2014;can further improve the clarity and accessibility of your
-        visualization.
+        <idx><h>color blindness simulator</h><h>visualization accessibility</h></idx>
+        are color-blind friendly. Below we color by <c>category</c> and also set
+        <c>shape</c> to <c>category</c>; this kind of visual redundancy&#x2014;i.e.,
+        conveying the same information with both scatter point color and shape&#x2014;can
+        further improve the clarity and accessibility of your visualization.
       </p>
       <program language="python">
         <input>
@@ -1161,15 +1145,11 @@ can_lang_plot_tooltip = alt.Chart(can_lang).mark_point(filled=True).encode(
         displayed, e.g., &#x201C;Earth&#x2019;s twelve largest landmasses.&#x201D;
       </p>
       <p>
-        To make these final adjustments we will use the <c>labs</c> function rather
-        than the <c>xlab</c> and <c>ylab</c> functions we have seen earlier in this
-        chapter, as <c>labs</c> lets us modify the legend label and title in addition
-        to axis labels. We provide a label for each aesthetic mapping in the plot&#x2014;in
-        this case, <c>x</c>, <c>y</c>, and <c>fill</c>&#x2014;as well as one for the
-        <c>title</c> argument. Finally, we again
-        <idx><h>ggplot</h><h>reorder</h></idx>
-        use the <c>theme</c> function to change the font size.
-        <idx><h>ggplot</h><h>labs</h></idx>
+        To make these final adjustments we set more descriptive axis and legend
+        labels and specify a chart title. We also configure axis label formatting
+        and text size so the final chart is easier to read.
+        <idx><h>altair</h><h>sort</h></idx>
+        <idx><h>altair</h><h>title</h></idx>
       </p>
       <program language="python">
         <input>
@@ -1247,16 +1227,15 @@ islands_bar = alt.Chart(islands_df).mark_bar().encode(
         To tell how accurate the experiments were, we need to visualize the
         distribution of the measurements (i.e., all their possible values and how
         often each occurs). We can do this using a <em>histogram</em>.
-        <idx><h>ggplot</h><h>histogram</h></idx>
+        <idx><h>altair</h><h>histogram</h></idx>
         A histogram helps us visualize how a particular variable is distributed in a
         data set by separating the data into bins, and then using vertical bars to
         show how many data points fell in each bin.
       </p>
       <p>
-        To create a histogram in <c>ggplot2</c> we will use the
-        <c>geom_histogram</c> geometric object, setting the <c>x</c> axis to the
-        <c>Speed</c> measurement variable. As usual, let&#x2019;s use the default arguments
-        just to see how things look.
+        To create a histogram in <c>altair</c>, we use a bar mark with binned values
+        on the <c>x</c> axis and <c>count()</c> on the <c>y</c> axis. As usual, let&#x2019;s
+        use the default settings just to see how things look.
       </p>
       <program language="python">
         <input>
@@ -1276,16 +1255,16 @@ islands_bar_top = alt.Chart(islands_top12).mark_bar().encode(
         <xref ref="fig-viz-morley-hist"/> is a great start. However, we cannot tell
         how accurate the measurements are using this visualization unless we can see
         the true value. In order to visualize the true speed of light, we will add a
-        vertical line with the <c>geom_vline</c> function. To draw a vertical line
-        with <c>geom_vline</c>,
-        <idx><h>ggplot</h><h>geom_vline</h></idx>
+        vertical line with the <c>mark_rule</c> function. To draw a vertical line
+        with <c>mark_rule</c>,
+        <idx><h>altair</h><h>mark_rule</h></idx>
         we need to specify where on the x-axis the line should be drawn. We can do
-        this by setting the <c>xintercept</c> argument. Here we set it to 792.458,
+        this by encoding a fixed <c>x</c> value. Here we set it to 792.458,
         which is the true value of light speed minus 299,000; this ensures it is
         coded the same way as the measurements in the <c>morley</c> data frame. We
         would also like to fine tune this vertical line, styling it so that it is
-        dashed by setting <c>linetype = "dashed"</c>. There is a similar function,
-        <c>geom_hline</c>, that is used for plotting horizontal lines. Note that
+        dashed by setting <c>strokeDash=[6]</c>. There is a similar approach for
+        horizontal lines where you encode a fixed <c>y</c> value. Note that
         <em>vertical lines</em> are used to denote quantities on the <em>horizontal
         axis</em>, while <em>horizontal lines</em> are used to denote quantities on
         the <em>vertical axis</em>.
@@ -1315,11 +1294,11 @@ islands_plot_sorted = alt.Chart(
         can try to do this using a <em>colored</em> histogram, where counts from
         different experiments are stacked on top of each other in different colors.
         We can create a histogram colored by the <c>Expt</c> variable by adding it to
-        the <c>fill</c> aesthetic mapping. We make sure the different colors can be
+        the <c>color</c> encoding. We make sure the different colors can be
         seen (despite them all sitting on top of each other) by setting the
-        <c>alpha</c> argument in <c>geom_histogram</c> to <c>0.5</c> to make the bars
-        slightly translucent. We also specify <c>position = "identity"</c> in
-        <c>geom_histogram</c> to ensure the histograms for each experiment will be
+        mark opacity to <c>0.5</c> to make the bars
+        slightly translucent. We also specify <c>stack=False</c> in
+        the <c>y</c> encoding to ensure the histograms for each experiment will be
         overlaid side-by-side, instead of stacked bars (which is the default for bar
         plots or histograms when they are colored by another categorical variable).
       </p>
@@ -1355,7 +1334,7 @@ morley_df
         Recall that factor is a data type in Python that is often used to represent
         categories. By writing <c>as_factor(Expt)</c> we are ensuring that Python will
         treat this variable as a factor, and the color will be mapped discretely.
-        <idx><h>factor</h><h>usage in ggplot</h></idx>
+        <idx><h>factor</h><h>usage in altair</h></idx>
       </p>
       <program language="python">
         <input>
@@ -1373,7 +1352,7 @@ morley_bars = alt.Chart(morley_df).mark_bar().encode(
       <note>
         <p>Factors impact plots in two ways: (1) ensuring a color is mapped as
         discretely where appropriate (as in this example) and (2) the ordering of
-        levels in a plot. <c>ggplot</c> takes into account the order of the factor
+        levels in a plot. <c>altair</c> takes into account the order of the factor
         levels as opposed to the order of data in your data frame. Learning how to
         reorder your factor levels will help you with reordering the labels of a
         factor on a plot.</p>
@@ -1388,8 +1367,8 @@ morley_bars = alt.Chart(morley_df).mark_bar().encode(
         different strategy of creating a grid of separate histogram plots.
       </p>
       <p>
-        We use the <c>facet_grid</c> function to create a plot that has multiple
-        subplots arranged in a grid. The argument to <c>facet_grid</c> specifies the
+        We use the <c>facet</c> function to create a plot that has multiple
+        subplots arranged in a grid. The argument to <c>facet</c> specifies the
         variable(s) used to split the plot into subplots, and how to split them
         (i.e., into rows or columns). If the plot is to be split horizontally, into
         rows, then the <c>rows</c> argument is used. If the plot is to be split
@@ -1398,7 +1377,7 @@ morley_bars = alt.Chart(morley_df).mark_bar().encode(
         the data when creating the subplots. Note that the column names must be
         surrounded by the <c>vars</c> function. This function allows the column names
         to be correctly evaluated in the context of the data frame.
-        <idx><h>ggplot</h><h>facet_grid</h></idx>
+        <idx><h>altair</h><h>facet</h></idx>
       </p>
       <program language="python">
         <input>
@@ -1433,8 +1412,8 @@ morley_hist = alt.Chart(morley_df).mark_bar().encode(
         speed of light? To answer this question, we&#x2019;ll use the <c>mutate</c>
         function to transform our data into a relative measure of accuracy rather
         than absolute measurements:
-        <idx><h>ggplot</h><h>labs</h></idx>
-        <idx><h>ggplot</h><h>theme</h></idx>
+        <idx><h>altair</h><h>title</h></idx>
+        <idx><h>altair</h><h>configure_axis</h></idx>
       </p>
       <program language="python">
         <input>
@@ -1463,12 +1442,12 @@ morley_hist_line = morley_hist + v_line
         <p>
           When you create a histogram in Python, the default number of bins used is 30.
           Naturally, this is not always the right number to use. You can set the
-          number of bins yourself by using the <c>bins</c> argument in the
-          <c>geom_histogram</c> geometric object.
-          <idx><h>ggplot</h><h>bins</h></idx>
+          number of bins yourself by using the <c>maxbins</c> argument in the
+          binning configuration of the <c>x</c> encoding.
+          <idx><h>altair</h><h>maxbins</h></idx>
           You can also set the <em>width</em> of the bins using the <c>binwidth</c>
-          argument in the <c>geom_histogram</c> geometric object.
-          <idx><h>ggplot</h><h>binwidth</h></idx>
+          argument in the binning configuration of the <c>x</c> encoding.
+          <idx><h>altair</h><h>binwidth</h></idx>
           But what number of bins, or bin width, is the right one to use?
         </p>
         <p>
@@ -1505,16 +1484,16 @@ morley_hist_line = morley_hist + v_line
       </subsubsection>
 
       <subsubsection xml:id="sec-viz-addlayer">
-        <title>Adding layers to a <c>ggplot</c> plot object</title>
+        <title>Adding layers to an <c>altair</c> chart object</title>
         <p>
-          One of the powerful features of <c>ggplot</c> is that you can continue to
+          One of the powerful features of <c>altair</c> is that you can continue to
           iterate on a single plot object, adding and refining one layer
-          <idx><h>ggplot</h><h>add layer</h></idx>
+          <idx><h>altair</h><h>add layer</h></idx>
           at a time. If you stored your plot as a named object using the assignment
-          symbol (<c>&lt;-</c>), you can add to it using the <c>+</c> operator. For
-          example, if we wanted to add a title to the last plot we created
-          (<c>morley_hist</c>), we can use the <c>+</c> operator to add a title
-          layer with the <c>ggtitle</c> function. The result is shown in
+          operator (<c>=</c>), you can add to it using the <c>+</c> operator. For
+          example, if we wanted to add a vertical reference line to the last plot we
+          created (<c>morley_hist_colored</c>), we can use the <c>+</c> operator to
+          overlay the line layer. The result is shown in
           <xref ref="fig-viz-morley-hist-title"/>.
         </p>
         <program language="python">
@@ -1713,15 +1692,15 @@ morley_hist_colored = morley_hist_colored + v_line
       <idx><h>PDF</h></idx></p>
     </note>
     <p>
-      Let's learn how to save plot images to these different file formats using a
-      scatter plot of the
+      Let's learn how to save plot images to these different file formats using the
+      <c>faithful_scatter_labels</c> scatter plot of the
       <url href="https://www.stat.cmu.edu/~larry/all-of-statistics/=data/faithful.dat">Old
       Faithful data set</url> <xref ref="faithfuldata"/>, shown in
       <xref ref="fig-viz-faithful-save"/>.
     </p>
     <program language="python">
       <input>
-morley_df.info()
+faithful_scatter_labels
       </input>
     </program>
     <figure xml:id="fig-viz-faithful-save">
@@ -1729,26 +1708,18 @@ morley_df.info()
       <image source="images/viz/faithful_plot.png" width="60%"/>
     </figure>
     <p>
-      Now that we have a named <c>ggplot</c> plot object, we can use the
-      <c>ggsave</c> function to save a file containing this image. <c>ggsave</c>
-      works by taking a file name to create for the image as its first argument.
-      This can include the path to the directory where you would like to save the
-      file (e.g., <c>img/viz/filename.png</c> to save a file named
-      <c>filename</c> to the <c>img/viz/</c> directory), and the name of the plot
-      object to save as its second argument. The kind of image to save is specified
-      by the file extension. For example, to create a PNG image file, we specify
-      that the file extension is <c>.png</c>. Below we demonstrate how to save PNG,
-      JPG, BMP, TIFF and SVG file types for the <c>faithful_plot</c>:
+      Now that we have a named chart object, we can use the <c>save</c> method to
+      save a file containing this image. The method takes the path to the filename
+      where you would like to save the file (e.g., <c>img/viz/filename.png</c> to
+      save a file named <c>filename.png</c> to the <c>img/viz/</c> directory). The
+      kind of image to save is specified by the file extension. Below we
+      demonstrate how to save PNG and SVG file types for
+      <c>faithful_scatter_labels</c>:
     </p>
     <program language="python">
       <input>
-morley_hist_categorical = alt.Chart(morley_df).mark_bar(opacity=0.5).encode(
-    x=alt.X(&quot;Speed&quot;).bin(),
-    y=alt.Y(&quot;count()&quot;).stack(False),
-    color=&quot;Expt:N&quot;
-)
-
-morley_hist_categorical = morley_hist_categorical + v_line
+faithful_scatter_labels.save(&quot;img/viz/faithful_plot.png&quot;)
+faithful_scatter_labels.save(&quot;img/viz/faithful_plot.svg&quot;)
       </input>
     </program>
     <table xml:id="tab-viz-filesizes">
@@ -1766,21 +1737,6 @@ morley_hist_categorical = morley_hist_categorical + v_line
           <cell>0.15 MB</cell>
         </row>
         <row>
-          <cell>Raster</cell>
-          <cell>JPG</cell>
-          <cell>0.42 MB</cell>
-        </row>
-        <row>
-          <cell>Raster</cell>
-          <cell>BMP</cell>
-          <cell>3.15 MB</cell>
-        </row>
-        <row>
-          <cell>Raster</cell>
-          <cell>TIFF</cell>
-          <cell>9.44 MB</cell>
-        </row>
-        <row>
           <cell>Vector</cell>
           <cell>SVG</cell>
           <cell>0.03 MB</cell>
@@ -1788,16 +1744,15 @@ morley_hist_categorical = morley_hist_categorical + v_line
       </tabular>
     </table>
     <p>
-      Take a look at the file sizes in <xref ref="tab-viz-filesizes"/>. Wow, that's
-      quite a difference! Notice that for such a simple plot with few graphical elements
-      (points), the vector graphics format (SVG) is over 100 times smaller than the
-      uncompressed raster images (BMP, TIFF). Also, note that the JPG format is twice as
-      large as the PNG format since the JPG compression algorithm is designed for natural
-      images (not plots).
+      Take a look at the file sizes in <xref ref="tab-viz-filesizes"/>.
+      Wow, that's quite a difference! In this case, the PNG image is smaller than
+      the SVG image. Since there are a decent number of points in the plot, the
+      vector graphics format image (SVG) is bigger than the raster image (PNG),
+      which just stores the image data itself.
     </p>
     <p>
       In <xref ref="fig-viz-raster-image"/>, we also show what the images look like
-      when we zoom in to a rectangle with only 2 data points. You can see why vector
+      when we zoom in to a rectangle with only 3 data points. You can see why vector
       graphics formats are so useful: because they&#x2019;re just based on mathematical
       formulas, vector graphics can be scaled up to arbitrary sizes. This makes them
       great for presentation media of all sizes, from papers to posters to
@@ -1815,7 +1770,8 @@ morley_hist_categorical = morley_hist_categorical + v_line
     <p>
       Practice exercises for the material covered in this chapter can be found in
       the accompanying
-      <url href="https://worksheets.datasciencebook.ca">worksheets repository</url>
+      <url href="https://worksheets.python.datasciencebook.ca"
+           visual="worksheets.python.datasciencebook.ca">worksheets repository</url>
       in the &#x201C;Effective data visualization&#x201D; row. You can launch an interactive
       version of the worksheet in your browser by clicking the &#x201C;launch binder&#x201D;
       button. You can also preview a non-interactive version of the worksheet by
@@ -1831,34 +1787,26 @@ morley_hist_categorical = morley_hist_categorical + v_line
     <title>Additional resources</title>
     <ul>
       <li><p>The
-        <url href="https://ggplot2.tidyverse.org"><c>ggplot2</c> Python package page</url>
-        <xref ref="ggplot"/> is where you should look if you want to learn more about
+        <url href="https://altair-viz.github.io/">altair documentation</url>
+        is where you should look if you want to learn more about
         the functions in this chapter, the full set of arguments you can use, and
-        other related functions. The site also provides a very nice cheat sheet that
-        summarizes many of the data wrangling functions from this chapter.</p></li>
+        other related functions.</p></li>
       <li><p>The <em>Fundamentals of Data Visualization</em> <xref ref="wilkeviz"/>
         has a wealth of information on designing effective visualizations. It is not
         specific to any particular programming language or library. If you want to
         improve your visualization skills, this is the next place to
         look.</p></li>
-      <li><p><em>Python for Data Science</em> <xref ref="wickham2016r"/> has a
-        <url href="https://r4ds.had.co.nz/data-visualisation.html">chapter on creating
-        visualizations using <c>ggplot2</c></url>. This reference is specific to Python
-        and <c>ggplot2</c>, but provides a much more detailed introduction to the full
-        set of tools that <c>ggplot2</c> provides. This chapter is where you should
-        look if you want to learn how to make more intricate visualizations in
-        <c>ggplot2</c> than what is included in this chapter.</p></li>
       <li><p>The
-        <url href="https://ggplot2.tidyverse.org/reference/theme.html"><c>theme</c>
-        function documentation</url> is an excellent reference to see how you can
-        fine tune the non-data aspects of your visualization.</p></li>
-      <li><p><em>Python for Data Science</em> <xref ref="wickham2016r"/> has a chapter on
-        <url href="https://r4ds.had.co.nz/dates-and-times.html">dates and times</url>.
-        This chapter is where you should look if you want to learn about <c>date</c>
-        vectors, including how to create them, and how to use them to effectively
-        handle durations, periods and intervals using the <c>lubridate</c>
-        package.</p></li>
+        <url href="https://wesmckinney.com/book/time-series.html">dates and times</url>
+        chapter of <url href="https://wesmckinney.com/book/"><em>Python for Data Analysis</em></url>
+        is where you should look if you want to learn more about date and time
+        data, including how to create them and use them effectively.</p></li>
     </ul>
+  </section>
+
+  <section xml:id="sec-viz-references">
+    <title>References</title>
+    <p>References for this chapter are listed in <xref ref="references"/>.</p>
   </section>
 
 </chapter>
