@@ -27,6 +27,7 @@
       <li><p>Create and organize subsets of tabular data using <c>[]</c>,
         <c>loc[]</c>, <c>sort_values</c>, and <c>head</c>.</p></li>
       <li><p>Add and modify columns in tabular data using column assignment.</p></li>
+      <li><p>Chain multiple operations in sequence.</p></li>
       <li><p>Visualize data with an <c>altair</c> bar plot.</p></li>
       <li><p>Use <c>help()</c> and <c>?</c> to access help and documentation tools in
         Python.</p></li>
