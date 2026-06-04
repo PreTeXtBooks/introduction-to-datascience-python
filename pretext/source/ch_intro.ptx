@@ -569,28 +569,40 @@ can_lang
 
   <section xml:id="sec-intro-filter-select">
     <title>Creating subsets of data frames with <c>[]</c> and <c>loc[]</c></title>
+    <idx><h>[]</h><see>DataFrame</see></idx>
+    <idx><h>loc[]</h><see>DataFrame</see></idx>
+    <idx><h>DataFrame</h><h>[]</h></idx>
+    <idx><h>DataFrame</h><h>loc[]</h><h>selecting columns</h></idx>
     <p>
       Now that we&#x2019;ve loaded our data into Python, we can start wrangling the data to find
       the ten Aboriginal languages that were most often reported in 2016 as mother tongues in
-      Canada. In particular, we will construct a table with the ten Aboriginal languages that
-      have the largest counts in the <c>mother_tongue</c> column. The <c>[]</c> and
-      <c>loc[]</c> operations on the <c>pandas</c> data frame will help us here. The
-      <c>[]</c> operation allows you to obtain a subset of the rows of a data frame, or to
-      obtain a subset of the columns of a data frame. The <c>loc[]</c> operation allows you to
-      both filter rows and select columns at the same time. We will first investigate
-      filtering rows and selecting columns with the <c>[]</c> operation, and then use
-      <c>loc[]</c> to do both in our analysis of the Aboriginal languages data.
+      Canada. In particular, we want to construct a table with the ten Aboriginal languages that
+      have the largest counts in the <c>mother_tongue</c> column. The first step is to extract
+      from our <c>can_lang</c> data only those rows that correspond to Aboriginal languages, and
+      then the second step is to keep only the <c>language</c> and <c>mother_tongue</c> columns.
+      The <c>[]</c> and <c>loc[]</c> operations on the <c>pandas</c> data frame will help us
+      here. The <c>[]</c> allows you to obtain a subset of (i.e., <em>filter</em>) the rows of a
+      data frame, or to obtain a subset of (i.e., <em>select</em>) the columns of a data frame.
+      The <c>loc[]</c> operation allows you to both filter rows and select columns at the same
+      time. We will first investigate filtering rows and selecting columns with the <c>[]</c>
+      operation, and then use <c>loc[]</c> to do both in our analysis of the Aboriginal
+      languages data.
     </p>
+    <note>
+      The <c>[]</c> and <c>loc[]</c> operations, and related operations, in <c>pandas</c> are
+      much more powerful than we describe in this chapter. You will learn more sophisticated ways
+      to index data frames later on in <xref ref="ch-wrangling"/>.
+    </note>
 
     <subsection xml:id="subsec-intro-filter">
       <title>Using <c>[]</c> to filter rows</title>
       <p>
-        Looking at the <c>can_lang</c> data above, we see the <c>category</c> column contains
+        Looking at the <c>can_lang</c> data above, we see the column <c>category</c> contains
         different high-level categories of languages, which include
-        <c>"Aboriginal languages"</c>, <c>"Non-Official &amp; Non-Aboriginal languages"</c>
-        and <c>"Official languages"</c>. To answer our question we want to filter our data
-        set so we restrict our attention to only those languages in the
-        <c>"Aboriginal languages"</c> category.
+        <c>"Aboriginal languages"</c>, <c>"Non-Official &amp; Non-Aboriginal languages"</c> and
+        <c>"Official languages"</c>. To answer our question we want to filter our data set so we
+        restrict our attention to only those languages in the <c>"Aboriginal languages"</c>
+        category.
       </p>
       <p>
         We can use the <c>[]</c> operation to obtain the subset of rows with desired values from
@@ -604,9 +616,21 @@ can_lang
         interested in keeping only languages in the <c>"Aboriginal languages"</c>
         higher-level category. We can use the <em>equivalency operator</em> <c>==</c>
         <idx><h>logical operator</h><h>equivalency</h></idx> to compare the values of the
-        <c>category</c> column with the value <c>"Aboriginal languages"</c>; you will learn
-        about many other kinds of logical statements in <xref ref="ch-wrangling"/>.
+        <c>category</c> column&#x2014;denoted by <c>can_lang["category"]</c>&#x2014;with the
+        value <c>"Aboriginal languages"</c>. You will learn about many other kinds of logical
+        statement in <xref ref="ch-wrangling"/>. Similar to when we loaded the data file and put
+        quotes around the file name, here we need to put quotes around both
+        <c>"Aboriginal languages"</c> and <c>"category"</c>. Using quotes tells Python that this
+        is a <em>string value</em> (e.g., a column name, or word data) and not one of the special
+        words that make up the Python programming language, or one of the names we have given to
+        objects in the code we have already written.
       </p>
+      <note>
+        In Python, single quotes (<c>'</c>) and double quotes (<c>"</c>) are generally treated
+        the same. So we could have written <c>'Aboriginal languages'</c> instead of
+        <c>"Aboriginal languages"</c> above, or <c>'category'</c> instead of <c>"category"</c>.
+        Try both out for yourself!
+      </note>
 
       <figure xml:id="fig-img-filter">
         <caption>Syntax for using the <c>[]</c> operation to filter rows.</caption>
@@ -624,31 +648,6 @@ can_lang
 can_lang[can_lang["category"] == "Aboriginal languages"]
         </input>
       </program>
-
-      <pre>
-# A tibble: 67 x 6
-   category             language                   mother_tongue most_at_home
-   &lt;chr&gt;                &lt;chr&gt;                              &lt;dbl&gt;        &lt;dbl&gt;
- 1 Aboriginal languages Aboriginal languages, n.o…           590          235
- 2 Aboriginal languages Algonquian languages, n.i…            45           10
- 3 Aboriginal languages Algonquin                           1260          370
- 4 Aboriginal languages Athabaskan languages, n.i…            50           10
- 5 Aboriginal languages Atikamekw                           6150         5465
- 6 Aboriginal languages Babine (Wetsuwet'en)                 110           20
- 7 Aboriginal languages Beaver                               190           50
- 8 Aboriginal languages Blackfoot                           2815         1110
- 9 Aboriginal languages Carrier                             1025          250
-10 Aboriginal languages Cayuga                                45           10
-# … with 57 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
-      </pre>
-
-      <p>
-        It&#x2019;s good practice to check the output after using a function in Python. We can see
-        the original <c>can_lang</c> data set contained 214 rows with multiple kinds of
-        <c>category</c>. The data frame <c>aboriginal_lang</c> contains only 67 rows, and
-        looks like it only contains languages in the <c>"Aboriginal languages"</c> in the
-        <c>category</c> column. So it looks like the function gave us the result we wanted!
-      </p>
     </subsection>
 
     <subsection xml:id="subsec-intro-select">
@@ -658,6 +657,8 @@ can_lang[can_lang["category"] == "Aboriginal languages"]
         <xref ref="fig-img-select"/> displays the syntax needed to select columns. We again
         first type the name of the data frame&#x2014;here, <c>can_lang</c>&#x2014;followed by
         square brackets. Inside the square brackets, we provide a <em>list</em> of column names.
+        In Python, we denote a <em>list</em> using square brackets, where each item is separated
+        by a comma (<c>,</c>).
         If we are interested in selecting only the <c>language</c> and <c>mother_tongue</c>
         columns from our original <c>can_lang</c> data frame, we put the list
         <c>[&quot;language&quot;, &quot;mother_tongue&quot;]</c> containing those two column
@@ -675,23 +676,6 @@ can_lang[["language", "mother_tongue"]]
         </input>
       </program>
 
-      <pre>
-# A tibble: 214 x 2
-   language                              mother_tongue
-   &lt;chr&gt;                                         &lt;dbl&gt;
- 1 Aboriginal languages, n.o.s.                    590
- 2 Afrikaans                                     10260
- 3 Afro-Asiatic languages, n.i.e.                 1150
- 4 Akan (Twi)                                    13460
- 5 Albanian                                      26895
- 6 Algonquian languages, n.i.e.                     45
- 7 Algonquin                                      1260
- 8 American Sign Language                         2685
- 9 Amharic                                       22465
-10 Arabic                                       419890
-# … with 204 more rows
-      </pre>
-
     </subsection>
 
     <subsection xml:id="subsec-intro-loc">
@@ -705,10 +689,12 @@ can_lang[["language", "mother_tongue"]]
         the <c>loc[]</c> operation, which lets us do just that.
       </p>
       <p>
-        The syntax is very similar to the <c>[]</c> operation we have already covered: we first
-        write the name of the data frame, then follow that with <c>.loc[]</c>. Inside the
-        square brackets, we write our row filtering logical statement, then a comma, then our
-        list of columns to select.
+        The syntax is very similar to the <c>[]</c> operation we have already covered: we will
+        essentially combine both our row filtering and column selection steps from before. In
+        particular, we first write the name of the data frame&#x2014;<c>can_lang</c>
+        again&#x2014;then follow that with the <c>.loc[]</c> operation. Inside the square
+        brackets, we write our row filtering logical statement, then a comma, then our list of
+        columns to select.
       </p>
       <figure xml:id="fig-img-loc">
         <caption>Syntax for using the <c>loc[]</c> operation to filter rows and select columns.</caption>
@@ -719,6 +705,34 @@ can_lang[["language", "mother_tongue"]]
 aboriginal_lang = can_lang.loc[can_lang["category"] == "Aboriginal languages", ["language", "mother_tongue"]]
         </input>
       </program>
+      <p>
+        There is one very important thing to notice in this code example. The first is that we
+        used the <c>loc[]</c> operation on the <c>can_lang</c> data frame by writing
+        <c>can_lang.loc[]</c>&#x2014;first the data frame name, then a dot, then <c>loc[]</c>.
+        There&#x2019;s that dot again! If you recall, earlier in this chapter we used the
+        <c>read_csv</c> function from <c>pandas</c> (aliased as <c>pd</c>), and wrote
+        <c>pd.read_csv</c>. The dot means that the thing on the left (<c>pd</c>, i.e., the
+        <c>pandas</c> package) <em>provides</em> the thing on the right (the <c>read_csv</c>
+        function). In the case of <c>can_lang.loc[]</c>, the thing on the left (the
+        <c>can_lang</c> data frame) <em>provides</em> the thing on the right (the <c>loc[]</c>
+        operation). In Python, both packages (like <c>pandas</c>) <em>and</em> objects (like our
+        <c>can_lang</c> data frame) can provide functions and other objects that we access using
+        the dot syntax.
+      </p>
+      <note>
+        A note on terminology: when an object <c>obj</c> provides a function <c>f</c> with the
+        dot syntax (as in <c>obj.f()</c>), sometimes we call that function <c>f</c> a
+        <em>method</em> of <c>obj</c> or an <em>operation</em> on <c>obj</c>. Similarly, when an
+        object <c>obj</c> provides another object <c>x</c> with the dot syntax (as in
+        <c>obj.x</c>), sometimes we call the object <c>x</c> an <em>attribute</em> of
+        <c>obj</c>. We will use all of these terms throughout the book, as you will see them
+        used commonly in the community. And just because we programmers like to be confusing for
+        no apparent reason: we <em>don&#x2019;t</em> use the &#x201C;method&#x201D;,
+        &#x201C;operation&#x201D;, or &#x201C;attribute&#x201D; terminology when referring to
+        functions and objects from packages, like <c>pandas</c>. So for example,
+        <c>pd.read_csv</c> would typically just be referred to as a function, but not as a method
+        or operation, even though it uses the dot syntax.
+      </note>
       <program language="python">
         <input>
 aboriginal_lang
@@ -726,9 +740,14 @@ aboriginal_lang
       </program>
       <p>
         At this point, if we have done everything correctly, <c>aboriginal_lang</c> should be
-        a data frame containing only rows where <c>category</c> is
-        <c>"Aboriginal languages"</c>, and containing only the
-        <c>language</c> and <c>mother_tongue</c> columns.
+        a data frame containing <em>only</em> rows where the <c>category</c> is
+        <c>"Aboriginal languages"</c>, and containing <em>only</em> the <c>language</c> and
+        <c>mother_tongue</c> columns. Any time you take a step in a data analysis, it&#x2019;s
+        good practice to check the output by printing the result. We can see the original
+        <c>can_lang</c> data set contained 214 rows with multiple kinds of <c>category</c>. The
+        data frame <c>aboriginal_lang</c> contains only 67 rows, and looks like it only contains
+        Aboriginal languages. So it looks like the <c>loc[]</c> operation gave us the result we
+        wanted!
       </p>
     </subsection>
   </section>
