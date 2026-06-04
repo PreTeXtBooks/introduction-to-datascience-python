@@ -63,7 +63,7 @@
     <p>
       The data set we will study in this chapter is taken from
       <url href="https://ttimbers.github.io/canlang/" visual="ttimbers.github.io/canlang/">the
-      <c>canlang</c> Python data package</url> <xref ref="timbers2020canlang"/>, which has
+      <c>canlang</c> R data package</url> <xref ref="timbers2020canlang"/>, which has
       population language data collected during the 2016 Canadian census
       <xref ref="cancensus2016"/>. In this data, there are 214 languages recorded,
       each having six different properties:
@@ -372,7 +372,9 @@ import pandas as pd
       <c>pandas</c> package. The second is <c>as pd</c>, which gives the <c>pandas</c> package
       the much shorter <em>alias</em> (another name) <c>pd</c>. We can now use the
       <c>read_csv</c> function by writing <c>pd.read_csv</c>, i.e., the package name, then a
-      dot, then the function name.
+      dot, then the function name. You can see why we gave <c>pandas</c> a shorter alias;
+      if we had to type <c>pandas.</c> before every function we wanted to use, our code would
+      become much longer and harder to read!
     </p>
 
     <p>
