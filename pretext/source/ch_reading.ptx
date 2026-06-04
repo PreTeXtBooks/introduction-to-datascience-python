@@ -181,14 +181,12 @@ happy_data = pd.read_csv(&quot;data/happiness_report.csv&quot;)
       from inside the <c>project3</c> folder (<c>data/happiness_report.csv</c>) is the same on both
       computers; any code that uses relative paths will work on both! In the additional resources
       section, we include a link to a short video on the difference between absolute and relative paths.
-      You can also check out the <c>here</c> package, which provides methods for finding and constructing
-      file paths in Python.
     </p>
     <p>
       Beyond files stored on your computer (i.e., locally), we also need a way to locate resources
       stored elsewhere on the internet (i.e., remotely). For this purpose we use a
       <em>Uniform Resource Locator (URL)</em>, i.e., a web address that looks something
-      like <url href="https://datasciencebook.ca/">https://datasciencebook.ca/</url>. URLs indicate the
+      like <url href="https://python.datasciencebook.ca/">https://python.datasciencebook.ca/</url>. URLs indicate the
       location of a resource on the internet, and start with a web domain, followed by a forward slash
       <c>/</c>, and then a path to where the resource is located on the remote machine.
       <idx><h>URL</h></idx>
@@ -206,7 +204,7 @@ happy_data = pd.read_csv(&quot;data/happiness_report.csv&quot;)
         tabular data from a plain text file (a document containing only text) <em>into</em> Python and
         <em>write</em> tabular data to a file <em>out of</em> Python. The function we use to do this depends
         on the file&#x2019;s format. For example, in the last chapter, we learned about using the
-        <c>tidyverse</c> <c>read_csv</c> function when reading <c>.csv</c>
+        <c>read_csv</c> function from the <c>pandas</c> when reading <c>.csv</c>
         (<em>c</em>omma-<em>s</em>eparated <em>v</em>alues) files.
         <idx><h>csv</h></idx>
         In that case, the separator or <em>delimiter</em>
@@ -220,7 +218,7 @@ happy_data = pd.read_csv(&quot;data/happiness_report.csv&quot;)
       </p>
       <p>
         Before we jump into the cases where the data aren&#x2019;t in the expected default format for
-        <c>tidyverse</c> and <c>read_csv</c>, let&#x2019;s revisit the more straightforward case where the
+        <c>pandas</c> and <c>read_csv</c>, let&#x2019;s revisit the more straightforward case where the
         defaults hold, and the only argument we need to give to the function is the path to the file,
         <c>data/can_lang.csv</c>. The <c>can_lang</c> data set contains language data from the 2016
         Canadian census.
@@ -238,9 +236,7 @@ Non-Official &amp; Non-Aboriginal languages,Akan (Twi),13460,5985,25,22150
 Non-Official &amp; Non-Aboriginal languages,Albanian,26895,13135,345,31930</pre>
       <p>
         And here is a review of how we can use <c>read_csv</c> to load it into Python. First we load the
-        <c>tidyverse</c>
-        <idx><h>tidyverse</h></idx>
-        package to gain access to useful functions for reading the data.
+        <c>pandas</c> package to gain access to useful functions for reading the data.
       </p>
       <program language="python">
         <input>
@@ -249,32 +245,12 @@ import pandas as pd
       </program>
       <p>
         Next we use <c>read_csv</c> to load the data into Python, and in that call we specify the relative path
-        to the file. Note that it is normal and expected that a message is printed out after using the
-        <c>read_csv</c> and related functions. This message lets you know the data types of each of the
-        columns that Python inferred while reading the data into Python. In the future when we use this and related
-        functions to load data in this book, we will silence these messages to help with the readability of
-        the book.
+        to the file. 
       </p>
       <program language="python">
         <input>
 canlang_data = pd.read_csv(&quot;data/can_lang.csv&quot;)
 canlang_data
-        </input>
-      </program>
-      <pre>
-Rows: 214 Columns: 6
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr (2): category, language
-dbl (4): mother_tongue, most_at_home, most_at_work, lang_known
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</pre>
-      <p>
-        Finally, to view the first 10 rows of the data frame, we must call it:
-      </p>
-      <program language="python">
-        <input>
-canlang_data = pd.read_csv(&quot;data/can_lang_meta-data.csv&quot;)
         </input>
       </program>
       <pre>
@@ -301,7 +277,7 @@ canlang_data = pd.read_csv(&quot;data/can_lang_meta-data.csv&quot;)
       <p>
         Oftentimes, information about how data was collected, or other relevant information, is included
         at the top of the data file. This information is usually written in sentence and paragraph form,
-        with no delimiter because it is not organized into columns. An example of this is shown below.
+        with no separator because it is not organized into columns. An example of this is shown below.
         This information gives the data scientist useful context and information about the data; however,
         it is not well formatted or intended to be read into a data frame cell along with the tabular data
         that follows later in the file.
@@ -322,66 +298,41 @@ Non-Official &amp; Non-Aboriginal languages,American Sign Language,2685,3020,114
 Non-Official &amp; Non-Aboriginal languages,Amharic,22465,12785,200,33670</pre>
       <p>
         With this extra information being present at the top of the file, using <c>read_csv</c> as we
-        did previously does not allow us to correctly load the data into Python. In the case of this file we
-        end up only reading in one column of the data set. In contrast to the normal and expected messages
-        above, this time Python prints out a warning for us indicating that there might be a problem with how
-        our data is being read in.
+        did previously does not allow us to correctly load the data into Python. In the case of this file,
+        Python just prints a <c>ParserError</c> message, indicating that it wasn’t able to read the file.
         <idx><h>warning</h></idx>
       </p>
       <program language="python">
         <input>
-print(&quot;ParserError: Error tokenizing data. C error: Expected 1 fields in line 4, saw 6&quot;)
+canlang_data = pd.read_csv("data/can_lang_meta-data.csv")
         </input>
       </program>
       <pre>
-## Warning: One or more parsing issues, call `problems()` on your data frame for details,
-## e.g.:
-##   dat &lt;- vroom(...)
-##   problems(dat)
-
-## # A tibble: 217 × 1
-##    `Data source: https://ttimbers.github.io/canlang/`                           
-##    &lt;chr&gt;                                                                          
-##  1 "Data originally published in: Statistics Canada Census of Population 2016." 
-##  2 "Reproduced and distributed on an as-is basis with their permission."        
-##  3 "category,language,mother_tongue,most_at_home,most_at_work,lang_known"       
-##  4 "Aboriginal languages,\"Aboriginal languages, n.o.s.\",590,235,30,665"       
-##  5 "Non-Official &amp; Non-Aboriginal languages,Afrikaans,10260,4785,85,23415"      
-##  6 "Non-Official &amp; Non-Aboriginal languages,\"Afro-Asiatic languages, n.i.e.\",…
-##  7 "Non-Official &amp; Non-Aboriginal languages,Akan (Twi),13460,5985,25,22150"     
-##  8 "Non-Official &amp; Non-Aboriginal languages,Albanian,26895,13135,345,31930"     
-##  9 "Aboriginal languages,\"Algonquian languages, n.i.e.\",45,10,0,120"          
-## 10 "Aboriginal languages,Algonquin,1260,370,40,2480"                            
-## # ℹ 207 more rows
-      </pre>
-      <p>
-        To successfully read data like this into Python, the <c>skip</c> argument
-        <idx><h>read function</h><h>skip argument</h></idx>
-        can be useful to tell Python how many lines to skip before it should start reading in the data.
-        In the example above, we would set this value to 3.
-      </p>
+ParserError: Error tokenizing data. C error: Expected 1 fields in line 4, saw 6
+</pre>
+<p>
+To successfully read data like this into Python, the <c>skiprows</c> argument can be useful to tell Python how many rows to skip before it should start reading in the data. In the example above, we would set this value to 3 to read and load the data correctly.
+</p>
       <program language="python">
         <input>
-canlang_data = pd.read_csv(&quot;data/can_lang_meta-data.csv&quot;, skiprows=3)
-canlang_data
-        </input>
+canlang_data = pd.read_csv("data/can_lang_meta-data.csv", skiprows=3)
+canlang_data        </input>
       </program>
-      <pre>
-## # A tibble: 214 × 6
-##    category          language mother_tongue most_at_home most_at_work lang_known
-##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 Aboriginal langu… Aborigi…           590          235           30        665
-##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
-##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
-##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
-##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
-##  6 Aboriginal langu… Algonqu…            45           10            0        120
-##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
-##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
-##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
-## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
-## # ℹ 204 more rows
-      </pre>
+<pre>
+	category	                              language	                     mother_tongue	most_at_home	most_at_work	lang_known
+0	Aboriginal languages	                  Aboriginal languages, n.o.s.  	590	                   235	          30	       665
+1	Non-Official & Non-Aboriginal languages	Afrikaans	                     10260	                4785		        85	     23415
+2	Non-Official & Non-Aboriginal languages	Afro-Asiatic languages, n.i.e.  1150		               445		        10	      2775
+3	Non-Official & Non-Aboriginal languages	Akan (Twi)	                   13460		              5985		        25	     22150
+4	Non-Official & Non-Aboriginal languages	Albanian	                     26895		             13135		        345	     31930
+...	...	...	...	...	...	...
+209	Non-Official & Non-Aboriginal languages	Wolof		                      3990		              1385		        10	      8240
+210	Aboriginal languages	                  Woods Cree		                1840		               800		        75	      2665
+211	Non-Official & Non-Aboriginal languages	Wu (Shanghainese)	           12915	               	7650		        105	     16530
+212	Non-Official & Non-Aboriginal languages	Yiddish		                   13555		              7085		        895	     20985
+213	Non-Official & Non-Aboriginal languages	Yoruba	                      9080		              2615		         15	     22415
+214 rows × 6 columns
+     </pre>
       <p>
         How did we know to skip three lines? We looked at the data! The first three lines of the data
         had information we didn&#x2019;t need to import:
@@ -1156,9 +1107,9 @@ print('[&quot;themes&quot;, &quot;medium&quot;, &quot;titles&quot;, &quot;title_
         <idx><h>database</h><h>reasons to use</h></idx>
         involved a lot more effort than just opening a <c>.csv</c>, <c>.tsv</c>, or any of the other
         plain text or Excel formats. We had to open a connection to the database, then use <c>ibis</c>
-        to translate <c>tidyverse</c>-like commands (<c>filter</c>, <c>select</c> etc.) into SQL commands
+        to translate <c>pandas</c>-like commands (<c>filter</c>, <c>select</c> etc.) into SQL commands
         that the database understands, and then finally <c>execute</c> the results. And not all
-        <c>tidyverse</c> commands can currently be translated to work with databases. For example, we
+        <c>pandas</c> commands can currently be translated to work with databases. For example, we
         can compute a mean with a database but can&#x2019;t easily compute a median. So you might be wondering:
         why should we use databases at all?
       </p>
@@ -1779,15 +1730,14 @@ page = bs4.BeautifulSoup(wiki.content, &quot;html.parser&quot;)
   <section xml:id="sec-reading-resources">
     <title>Additional resources</title>
     <ul>
-      <li><p>The <url href="https://readr.tidyverse.org/" visual="readr.tidyverse.org/"><c>readr</c>
-        documentation</url> provides the documentation for many of the reading functions we cover in this
-        chapter. It is where you should look if you want to learn more about the functions in this chapter,
-        the full set of arguments you can use, and other related functions. The site also provides a very
-        nice cheat sheet that summarizes many of the data wrangling functions from this chapter.</p></li>
+      <li><p>The <url href="https://pandas.pydata.org/docs/getting_started/index.html"><c>pandas</c>
+        documentation</url> provides the documentation for the functions we cover in this chapter. 
+        It is where you should look if you want to learn more about these functions, the full set of
+        arguments you can use, and other related functions.</p></li>
       <li><p>Sometimes you might run into data in such poor shape that none of the reading functions we
         cover in this chapter work. In that case, you can consult the
-        <url href="https://r4ds.had.co.nz/data-import.html" visual="r4ds.had.co.nz/data-import.html">data
-        import chapter</url> from <em>Python for Data Science</em> <xref ref="wickham2016r"/>, which goes into a
+        <url href="https://wesmckinney.com/book/accessing-data.html#io_flat_files">data
+        loading chapter</url> from <em>Python for Data Science</em> <xref ref="wickham2016r"/>, which goes into a
         lot more detail about how Python parses text from files into data frames.</p></li>
       <li><p>The <url href="https://here.r-lib.org/" visual="here.r-lib.org/"><c>here</c> Python package</url>
         <xref ref="here"/> provides a way for you to construct or find your files&#x2019; paths.</p></li>
