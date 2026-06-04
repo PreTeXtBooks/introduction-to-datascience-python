@@ -494,7 +494,7 @@ my-number = 1
     </program>
 
     <pre>
-Error in my - number &lt;- 1 : object 'my' not found
+SyntaxError: cannot assign to expression here. Maybe you meant '==' instead of '='?
     </pre>
 
     <p>
@@ -515,7 +515,7 @@ Error in my - number &lt;- 1 : object 'my' not found
 
     <program language="python">
       <input>
-print(&quot;SyntaxError: cannot assign to expression here. Maybe you meant '==' instead of '='?&quot;)
+can_lang = pd.read_csv(&quot;data/can_lang.csv&quot;)
       </input>
     </program>
 
@@ -531,7 +531,7 @@ print(&quot;SyntaxError: cannot assign to expression here. Maybe you meant '==' 
 
     <program language="python">
       <input>
-can_lang = pd.read_csv(&quot;data/can_lang.csv&quot;)
+can_lang
       </input>
     </program>
 
