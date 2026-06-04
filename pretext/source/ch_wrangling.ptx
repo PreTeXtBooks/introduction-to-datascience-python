@@ -241,24 +241,15 @@ shows a data frame where the columns are vectors of
       </figure>
 
       <p>
-        Data frames are actually included in Python itself, without the need for any additional packages.
-        However, the <c>tidyverse</c> functions that we use throughout this book all work with a special
-        kind of data frame called a <em>tibble</em>.
-        <idx><h>tibble</h></idx>
-        Tibbles have some additional features and benefits over built-in data frames in Python. These include
-        the ability to add useful attributes (such as grouping, which we will discuss later) and more
-        predictable type preservation when subsetting. Because a tibble is just a data frame with some
-        added features, we will collectively refer to both built-in Python data frames and tibbles as
-        <em>data frames</em> in this book.
+        A data frame is really just a collection of series that are stuck together, where each series
+        corresponds to one column and all must have the same length.
       </p>
       <note>
         <p>
-          You can use the function <c>class</c>
-          <idx><h>class</h></idx>
-          on a data object to assess whether a data frame is a built-in Python data frame or a tibble. If the
-          data object is a data frame, <c>class</c> will return <c>"data.frame"</c>. If the data object
-          is a tibble it will return <c>"tbl_df"  "tbl"  "data.frame"</c>. You can easily convert
-          built-in Python data frames to tibbles using the <c>tidyverse</c> <c>as_tibble</c> function.
+          You can use the function <c>type</c>
+          <idx><h>type</h></idx>
+          on a data object. For example, we can check the class of the Canadian languages data set,
+          <c>can_lang</c>, and see it is a <c>pandas.core.frame.DataFrame</c>.
         </p>
         <program language="python">
           <input>
@@ -266,8 +257,6 @@ can_lang = pd.read_csv(&quot;data/can_lang.csv&quot;)
 type(can_lang)
           </input>
         </program>
-        <pre>
-[1] "tbl_df"     "tbl"        "data.frame"</pre>
       </note>
       <p>
         Vectors, data frames and lists are basic types of <em>data structure</em> in Python, which are core
@@ -329,7 +318,7 @@ type(can_lang)
     <p>
       There are many good reasons for making sure your data are tidy as a first step in your analysis.
       The most important is that it is a single, consistent format that nearly every function in the
-      <c>tidyverse</c> recognizes. No matter what the variables and observations in your data represent,
+      <c>pandas</c> recognizes. No matter what the variables and observations in your data represent,
       as long as the data frame
       <idx><h>tidy data</h><h>arguments for</h></idx>
       is tidy, you can manipulate it, plot it, and analyze it using the same tools.
@@ -337,7 +326,7 @@ type(can_lang)
       will not only be error-prone, but hard for others to understand. Beyond making your analysis more
       accessible to others and less error-prone, tidy data is also typically easy for humans to
       interpret. Given these benefits, it is well worth spending the time to get your data into a tidy
-      format upfront. Fortunately, there are many well-designed <c>tidyverse</c> data cleaning/wrangling
+      format upfront. Fortunately, there are many well-designed <c>pandas</c> data cleaning/wrangling
       tools to help you easily tidy your data. Let&#x2019;s explore them below!
     </p>
     <note>
@@ -387,15 +376,15 @@ type(can_lang)
       </figure>
 
       <p>
-        We can achieve this effect in Python using the <c>pivot_longer</c> function from the <c>tidyverse</c>
-        package. The <c>pivot_longer</c> function combines columns, and is usually used during tidying
+        We can achieve this effect in Python using the <c>melt</c> function from the <c>pandas</c>
+        package. The <c>melt</c> function combines columns, and is usually used during tidying
         data when we need to make the data frame longer and narrower. To learn how to use
-        <c>pivot_longer</c>, we will work through an example with the
+        <c>melt</c>, we will work through an example with the
         <c>region_lang_top5_cities_wide.csv</c> data set. This data set contains the counts of how many
         Canadians cited each language as their mother tongue for five major Canadian cities (Toronto,
         Montr&#xe9;al, Vancouver, Calgary, and Edmonton) from the 2016 Canadian census.
         <idx><h>Canadian languages</h></idx>
-        To get started, we will load the <c>tidyverse</c> package and use <c>read_csv</c> to load the
+        To get started, we will load the <c>pandas</c> package and use <c>read_csv</c> to load the
         (untidy) data.
       </p>
       <program language="python">
@@ -404,22 +393,6 @@ cities = [&quot;Toronto&quot;, &quot;Vancouver&quot;, &quot;Montreal&quot;, &quo
 cities
         </input>
       </program>
-      <pre>
-## # A tibble: 214 × 7
-##    category                 language Toronto Montréal Vancouver Calgary Edmonton
-##    &lt;chr&gt;                    &lt;chr&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
-##  1 Aboriginal languages     Aborigi…      80       30        70      20       25
-##  2 Non-Official &amp; Non-Abor… Afrikaa…     985       90      1435     960      575
-##  3 Non-Official &amp; Non-Abor… Afro-As…     360      240        45      45       65
-##  4 Non-Official &amp; Non-Abor… Akan (T…    8485     1015       400     705      885
-##  5 Non-Official &amp; Non-Abor… Albanian   13260     2450      1090    1365      770
-##  6 Aboriginal languages     Algonqu…       5        5         0       0        0
-##  7 Aboriginal languages     Algonqu…       5       30         5       5        0
-##  8 Non-Official &amp; Non-Abor… America…     470       50       265     100      180
-##  9 Non-Official &amp; Non-Abor… Amharic     7460      665      1140    4075     2515
-## 10 Non-Official &amp; Non-Abor… Arabic     85175   151955     14320   18965    17525
-## # ℹ 204 more rows
-      </pre>
       <p>
         What is wrong with the untidy format above? The table on the left in
         <xref ref="fig-wrangling-pivot-longer-with-table"/> represents the data in the &#x201C;wide&#x201D;
@@ -438,22 +411,22 @@ cities
       </p>
 
       <figure xml:id="fig-wrangling-pivot-longer-with-table">
-        <caption>Going from wide to long with the <c>pivot_longer</c> function.</caption>
+        <caption>Going from wide to long with the <c>melt</c> function.</caption>
         <image source="images/wrangling/pivot_functions.003.png" width="100%"/>
       </figure>
 
       <p>
         <xref ref="fig-wrangling-pivot-longer"/> details the arguments that we need to specify in the
-        <c>pivot_longer</c> function to accomplish this data transformation.
+        <c>melt</c> function to accomplish this data transformation.
       </p>
 
       <figure xml:id="fig-wrangling-pivot-longer">
-        <caption>Syntax for the <c>pivot_longer</c> function.</caption>
+        <caption>Syntax for the <c>melt</c> function.</caption>
         <image source="images/wrangling/pivot_longer.png" width="100%"/>
       </figure>
 
       <p>
-        We use <c>pivot_longer</c> to combine the Toronto, Montr&#xe9;al, Vancouver, Calgary, and Edmonton
+        We use <c>melt</c> to combine the Toronto, Montr&#xe9;al, Vancouver, Calgary, and Edmonton
         columns into a single column called <c>region</c>, and create a column called
         <c>mother_tongue</c> that contains the count of how many Canadians report each language as their
         mother tongue for each metropolitan area. We use a colon <c>:</c> between Toronto and Edmonton
@@ -466,25 +439,9 @@ cities_series = pd.Series(cities)
 cities_series
         </input>
       </program>
-      <pre>
-## # A tibble: 1,070 × 4
-##    category                                language         region mother_tongue
-##    &lt;chr&gt;                                   &lt;chr&gt;            &lt;chr&gt;          &lt;dbl&gt;
-##  1 Aboriginal languages                    Aboriginal lang… Toron…            80
-##  2 Aboriginal languages                    Aboriginal lang… Montr…            30
-##  3 Aboriginal languages                    Aboriginal lang… Vanco…            70
-##  4 Aboriginal languages                    Aboriginal lang… Calga…            20
-##  5 Aboriginal languages                    Aboriginal lang… Edmon…            25
-##  6 Non-Official &amp; Non-Aboriginal languages Afrikaans        Toron…           985
-##  7 Non-Official &amp; Non-Aboriginal languages Afrikaans        Montr…            90
-##  8 Non-Official &amp; Non-Aboriginal languages Afrikaans        Vanco…          1435
-##  9 Non-Official &amp; Non-Aboriginal languages Afrikaans        Calga…           960
-## 10 Non-Official &amp; Non-Aboriginal languages Afrikaans        Edmon…           575
-## # ℹ 1,060 more rows
-      </pre>
       <note>
         <p>
-          In the code above, the call to the <c>pivot_longer</c> function is split across several lines.
+          In the code above, the call to the <c>melt</c> function is split across several lines.
           This is allowed in certain cases; for example, when calling a function as above, as long as the
           line ends with a comma <c>,</c> Python knows to keep reading on the next line. Splitting long lines
           like this across multiple lines is encouraged as it helps significantly with code readability.
@@ -519,7 +476,7 @@ cities_series
 
       <p>
         Using data in this format&#x2014;where two or more variables are mixed together
-        in a single column&#x2014;makes it harder to apply many usual <c>tidyverse</c> functions.
+        in a single column&#x2014;makes it harder to apply many usual <c>pandas</c> functions.
         For example, finding the maximum number of commuters
         would require an additional step of filtering for the commuter values
         before the maximum can be computed.
@@ -536,9 +493,9 @@ cities_series
       </figure>
 
       <p>
-        To tidy this type of data in Python, we can use the <c>pivot_wider</c> function. The <c>pivot_wider</c>
+        To tidy this type of data in Python, we can use the <c>pivot</c> function. The <c>pivot</c>
         function generally increases the number of columns (widens) and decreases the number of rows in a
-        data set. To learn how to use <c>pivot_wider</c>, we will work through an example with the
+        data set. To learn how to use <c>pivot</c>, we will work through an example with the
         <c>region_lang_top5_cities_long.csv</c> data set. This data set contains the number of Canadians
         reporting the primary language at home and work for five major cities (Toronto, Montr&#xe9;al,
         Vancouver, Calgary, and Edmonton).
@@ -552,22 +509,6 @@ population_in_2016 = {
 population_in_2016
         </input>
       </program>
-      <pre>
-## # A tibble: 2,140 × 5
-##    region    category             language                     type         count
-##    &lt;chr&gt;     &lt;chr&gt;                &lt;chr&gt;                        &lt;chr&gt;        &lt;dbl&gt;
-##  1 Montréal  Aboriginal languages Aboriginal languages, n.o.s. most_at_home    15
-##  2 Montréal  Aboriginal languages Aboriginal languages, n.o.s. most_at_work     0
-##  3 Toronto   Aboriginal languages Aboriginal languages, n.o.s. most_at_home    50
-##  4 Toronto   Aboriginal languages Aboriginal languages, n.o.s. most_at_work     0
-##  5 Calgary   Aboriginal languages Aboriginal languages, n.o.s. most_at_home     5
-##  6 Calgary   Aboriginal languages Aboriginal languages, n.o.s. most_at_work     0
-##  7 Edmonton  Aboriginal languages Aboriginal languages, n.o.s. most_at_home    10
-##  8 Edmonton  Aboriginal languages Aboriginal languages, n.o.s. most_at_work     0
-##  9 Vancouver Aboriginal languages Aboriginal languages, n.o.s. most_at_home    15
-## 10 Vancouver Aboriginal languages Aboriginal languages, n.o.s. most_at_work     0
-## # ℹ 2,130 more rows
-      </pre>
       <p>
         What makes the data set shown above untidy?
         In this example, each observation is a language in a region.
@@ -580,21 +521,21 @@ population_in_2016
         Doing that would be difficult with this data in its current form,
         since these two variables are stored in the same column.
         <xref ref="fig-wrangling-pivot-wider-table"/> shows how this data
-        will be tidied using the <c>pivot_wider</c> function.
+        will be tidied using the <c>pivot</c> function.
       </p>
 
       <figure xml:id="fig-wrangling-pivot-wider-table">
-        <caption>Going from long to wide with the <c>pivot_wider</c> function.</caption>
+        <caption>Going from long to wide with the <c>pivot</c> function.</caption>
         <image source="images/wrangling/pivot_functions.004.png" width="100%"/>
       </figure>
 
       <p>
         <xref ref="fig-wrangling-pivot-wider"/> details the arguments that we need to specify in the
-        <c>pivot_wider</c> function.
+        <c>pivot</c> function.
       </p>
 
       <figure xml:id="fig-wrangling-pivot-wider">
-        <caption>Syntax for the <c>pivot_wider</c> function.</caption>
+        <caption>Syntax for the <c>pivot</c> function.</caption>
         <image source="images/wrangling/pivot_wider.png" width="100%"/>
       </figure>
 
@@ -605,22 +546,6 @@ population_in_2016_df = pd.DataFrame(population_in_2016)
 population_in_2016_df
         </input>
       </program>
-      <pre>
-## # A tibble: 1,070 × 5
-##    region    category                         language most_at_home most_at_work
-##    &lt;chr&gt;     &lt;chr&gt;                            &lt;chr&gt;           &lt;dbl&gt;        &lt;dbl&gt;
-##  1 Montréal  Aboriginal languages             Aborigi…           15            0
-##  2 Toronto   Aboriginal languages             Aborigi…           50            0
-##  3 Calgary   Aboriginal languages             Aborigi…            5            0
-##  4 Edmonton  Aboriginal languages             Aborigi…           10            0
-##  5 Vancouver Aboriginal languages             Aborigi…           15            0
-##  6 Montréal  Non-Official &amp; Non-Aboriginal l… Afrikaa…           10            0
-##  7 Toronto   Non-Official &amp; Non-Aboriginal l… Afrikaa…          265            0
-##  8 Calgary   Non-Official &amp; Non-Aboriginal l… Afrikaa…          505           15
-##  9 Edmonton  Non-Official &amp; Non-Aboriginal l… Afrikaa…          300            0
-## 10 Vancouver Non-Official &amp; Non-Aboriginal l… Afrikaa…          520           10
-## # ℹ 1,060 more rows
-      </pre>
       <p>The data above is now tidy! We can go through the three criteria again to check that this data is a tidy data set.</p>
       <ol>
         <li><p>All the statistical variables are their own columns in the data frame (i.e., <c>most_at_home</c> and <c>most_at_work</c> have been separated into their own columns in the data frame).</p></li>
@@ -629,9 +554,9 @@ population_in_2016_df
       </ol>
       <p>
         You might notice that we have the same number of columns in the tidy data set as we did in the
-        messy one. Therefore <c>pivot_wider</c> didn&#x2019;t really &#x201C;widen&#x201D; the data, as the name suggests.
+        messy one. Therefore <c>pivot</c> didn&#x2019;t really &#x201C;widen&#x201D; the data, as the name suggests.
         This is just because the original <c>type</c> column only had two categories in it. If it had
-        more than two, <c>pivot_wider</c> would have created more columns, and we would see the data set
+        more than two, <c>pivot</c> would have created more columns, and we would see the data set
         &#x201C;widen.&#x201D;
       </p>
    </subsection>
@@ -658,24 +583,8 @@ population_in_2016_df = pd.DataFrame({
 population_in_2016_df
         </input>
       </program>
-      <pre>
-## # A tibble: 214 × 7
-##    category                 language Toronto Montréal Vancouver Calgary Edmonton
-##    &lt;chr&gt;                    &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;   
-##  1 Aboriginal languages     Aborigi… 50/0    15/0     15/0      5/0     10/0    
-##  2 Non-Official &amp; Non-Abor… Afrikaa… 265/0   10/0     520/10    505/15  300/0   
-##  3 Non-Official &amp; Non-Abor… Afro-As… 185/10  65/0     10/0      15/0    20/0    
-##  4 Non-Official &amp; Non-Abor… Akan (T… 4045/20 440/0    125/10    330/0   445/0   
-##  5 Non-Official &amp; Non-Abor… Albanian 6380/2… 1445/20  530/10    620/25  370/10  
-##  6 Aboriginal languages     Algonqu… 5/0     0/0      0/0       0/0     0/0     
-##  7 Aboriginal languages     Algonqu… 0/0     10/0     0/0       0/0     0/0     
-##  8 Non-Official &amp; Non-Abor… America… 720/245 70/0     300/140   85/25   190/85  
-##  9 Non-Official &amp; Non-Abor… Amharic  3820/55 315/0    540/10    2730/50 1695/35 
-## 10 Non-Official &amp; Non-Abor… Arabic   45025/… 72980/1… 8680/275  11010/… 10590/3…
-## # ℹ 204 more rows
-      </pre>
       <p>
-        First we&#x2019;ll use <c>pivot_longer</c> to create two columns, <c>region</c> and <c>value</c>,
+        First we&#x2019;ll use <c>melt</c> to create two columns, <c>region</c> and <c>value</c>,
         similar to what we did previously. The new <c>region</c> column will contain the region names,
         and the new column <c>value</c> will be a temporary holding place for the data that we need to
         further separate; that is, the number of Canadians reporting their primary language at home and
@@ -687,22 +596,6 @@ lang_wide = pd.read_csv(&quot;data/region_lang_top5_cities_wide.csv&quot;)
 lang_wide
         </input>
       </program>
-      <pre>
-## # A tibble: 1,070 × 4
-##    category                                language                 region value
-##    &lt;chr&gt;                                   &lt;chr&gt;                    &lt;chr&gt;  &lt;chr&gt;
-##  1 Aboriginal languages                    Aboriginal languages, n… Toron… 50/0 
-##  2 Aboriginal languages                    Aboriginal languages, n… Montr… 15/0 
-##  3 Aboriginal languages                    Aboriginal languages, n… Vanco… 15/0 
-##  4 Aboriginal languages                    Aboriginal languages, n… Calga… 5/0  
-##  5 Aboriginal languages                    Aboriginal languages, n… Edmon… 10/0 
-##  6 Non-Official &amp; Non-Aboriginal languages Afrikaans                Toron… 265/0
-##  7 Non-Official &amp; Non-Aboriginal languages Afrikaans                Montr… 10/0 
-##  8 Non-Official &amp; Non-Aboriginal languages Afrikaans                Vanco… 520/…
-##  9 Non-Official &amp; Non-Aboriginal languages Afrikaans                Calga… 505/…
-## 10 Non-Official &amp; Non-Aboriginal languages Afrikaans                Edmon… 300/0
-## # ℹ 1,060 more rows
-      </pre>
       <p>
         Next we&#x2019;ll use <c>separate</c> to split the <c>value</c> column into two columns. One column will
         contain only the counts of Canadians that speak each language most at home, and the other will
@@ -725,22 +618,6 @@ lang_mother_tidy = lang_wide.melt(
 lang_mother_tidy
         </input>
       </program>
-      <pre>
-## # A tibble: 1,070 × 5
-##    category                            language region most_at_home most_at_work
-##    &lt;chr&gt;                               &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;        &lt;chr&gt;       
-##  1 Aboriginal languages                Aborigi… Toron… 50           0           
-##  2 Aboriginal languages                Aborigi… Montr… 15           0           
-##  3 Aboriginal languages                Aborigi… Vanco… 15           0           
-##  4 Aboriginal languages                Aborigi… Calga… 5            0           
-##  5 Aboriginal languages                Aborigi… Edmon… 10           0           
-##  6 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Toron… 265          0           
-##  7 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Montr… 10           0           
-##  8 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Vanco… 520          10          
-##  9 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Calga… 505          15          
-## 10 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Edmon… 300          0           
-## # ℹ 1,060 more rows
-      </pre>
       <p>Is this data set now tidy? If we recall the three criteria for tidy data:</p>
       <ul>
         <li><p>each row is a single observation,</p></li>
@@ -773,22 +650,6 @@ lang_long = pd.read_csv(&quot;data/region_lang_top5_cities_long.csv&quot;)
 lang_long
         </input>
       </program>
-      <pre>
-## # A tibble: 1,070 × 5
-##    category                            language region most_at_home most_at_work
-##    &lt;chr&gt;                               &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt;        &lt;int&gt;
-##  1 Aboriginal languages                Aborigi… Toron…           50            0
-##  2 Aboriginal languages                Aborigi… Montr…           15            0
-##  3 Aboriginal languages                Aborigi… Vanco…           15            0
-##  4 Aboriginal languages                Aborigi… Calga…            5            0
-##  5 Aboriginal languages                Aborigi… Edmon…           10            0
-##  6 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Toron…          265            0
-##  7 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Montr…           10            0
-##  8 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Vanco…          520           10
-##  9 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Calga…          505           15
-## 10 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Edmon…          300            0
-## # ℹ 1,060 more rows
-      </pre>
       <p>
         Now we see <c>&lt;int&gt;</c> appears under the <c>most_at_home</c> and <c>most_at_work</c>
         columns, indicating they are integer data types (i.e., numbers)!
@@ -800,7 +661,7 @@ lang_long
     <title>Using <c>select</c> to extract a range of columns</title>
     <p>
       Now that the <c>tidy_lang</c> data is indeed <em>tidy</em>, we can start manipulating it using the
-      powerful suite of functions from the <c>tidyverse</c>. For the first example, recall the
+      powerful suite of functions from the <c>pandas</c>. For the first example, recall the
       <c>select</c> function from <xref ref="ch-intro"/>, which lets us create a subset of columns from
       a data frame. Suppose we wanted to select only the columns <c>language</c>, <c>region</c>,
       <c>most_at_home</c> and <c>most_at_work</c> from the <c>tidy_lang</c> data set. Using what we learned in <xref ref="ch-intro"/>, we would pass the tidy_lang data frame as well as all of these column names into the select function:
@@ -824,22 +685,6 @@ lang_home_tidy.columns = [
 lang_home_tidy
       </input>
     </program>
-    <pre>
-## # A tibble: 1,070 × 4
-##    language                     region    most_at_home most_at_work
-##    &lt;chr&gt;                        &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;
-##  1 Aboriginal languages, n.o.s. Toronto             50            0
-##  2 Aboriginal languages, n.o.s. Montréal            15            0
-##  3 Aboriginal languages, n.o.s. Vancouver           15            0
-##  4 Aboriginal languages, n.o.s. Calgary              5            0
-##  5 Aboriginal languages, n.o.s. Edmonton            10            0
-##  6 Afrikaans                    Toronto            265            0
-##  7 Afrikaans                    Montréal            10            0
-##  8 Afrikaans                    Vancouver          520           10
-##  9 Afrikaans                    Calgary            505           15
-## 10 Afrikaans                    Edmonton           300            0
-## # ℹ 1,060 more rows
-    </pre>
     <p>
       Here we wrote out the names of each of the columns. However, this method is time-consuming,
       especially if you have a lot of columns! Another approach is to use a &#x201C;select helper&#x201D;. Select
@@ -856,22 +701,6 @@ lang_home_tidy
 lang_home_tidy.info()
       </input>
     </program>
-    <pre>
-## # A tibble: 1,070 × 4
-##    language                     region    most_at_home most_at_work
-##    &lt;chr&gt;                        &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;
-##  1 Aboriginal languages, n.o.s. Toronto             50            0
-##  2 Aboriginal languages, n.o.s. Montréal            15            0
-##  3 Aboriginal languages, n.o.s. Vancouver           15            0
-##  4 Aboriginal languages, n.o.s. Calgary              5            0
-##  5 Aboriginal languages, n.o.s. Edmonton            10            0
-##  6 Afrikaans                    Toronto            265            0
-##  7 Afrikaans                    Montréal            10            0
-##  8 Afrikaans                    Vancouver          520           10
-##  9 Afrikaans                    Calgary            505           15
-## 10 Afrikaans                    Edmonton           300            0
-## # ℹ 1,060 more rows
-    </pre>
     <p>
       Notice that we get the same output as we did above, but with less (and clearer!) code. This type
       of operator is especially handy for large data sets.
@@ -890,22 +719,6 @@ lang_messy = pd.read_csv(&quot;data/region_lang_top5_cities_messy.csv&quot;)
 lang_messy
       </input>
     </program>
-    <pre>
-## # A tibble: 1,070 × 2
-##    most_at_home most_at_work
-##           &lt;int&gt;        &lt;int&gt;
-##  1           50            0
-##  2           15            0
-##  3           15            0
-##  4            5            0
-##  5           10            0
-##  6          265            0
-##  7           10            0
-##  8          520           10
-##  9          505           15
-## 10          300            0
-## # ℹ 1,060 more rows
-    </pre>
     <p>
       We could also have chosen the columns containing an underscore <c>_</c> by adding
       <c>contains("_")</c> as the second argument in the <c>select</c> function, since we notice the
@@ -923,22 +736,6 @@ lang_messy_longer = lang_messy.melt(
 lang_messy_longer
       </input>
     </program>
-    <pre>
-## # A tibble: 1,070 × 2
-##    most_at_home most_at_work
-##           &lt;int&gt;        &lt;int&gt;
-##  1           50            0
-##  2           15            0
-##  3           15            0
-##  4            5            0
-##  5           10            0
-##  6          265            0
-##  7           10            0
-##  8          520           10
-##  9          505           15
-## 10          300            0
-## # ℹ 1,060 more rows
-    </pre>
     <p>
       There are many different <c>select</c> helpers that select variables based on certain criteria.
       The additional resources section at the end of this chapter provides a comprehensive resource on
@@ -979,21 +776,6 @@ lang_messy_longer
 &quot;50/0&quot;.split(&quot;/&quot;)
         </input>
       </program>
-      <pre>
-# A tibble: 10 × 5
-   category           language region    most_at_home most_at_work
-   &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;
- 1 Official languages English  Toronto        3836770      3218725
- 2 Official languages English  Montréal        620510       412120
- 3 Official languages English  Vancouver      1622735      1330555
- 4 Official languages English  Calgary        1065070       844740
- 5 Official languages English  Edmonton       1050410       792700
- 6 Official languages French   Toronto          29800        11940
- 7 Official languages French   Montréal       2669195      1607550
- 8 Official languages French   Vancouver         8630         3245
- 9 Official languages French   Calgary           8630         2140
-10 Official languages French   Edmonton         10950         2520
-      </pre>
     </subsection>
 
     <subsection xml:id="sec-wrangling-filter-neq">
@@ -1012,22 +794,6 @@ tidy_lang[[&quot;most_at_home&quot;, &quot;most_at_work&quot;]] = lang_messy_lon
 tidy_lang
         </input>
       </program>
-      <pre>
-## # A tibble: 1,060 × 5
-##    category                            language region most_at_home most_at_work
-##    &lt;chr&gt;                               &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt;        &lt;int&gt;
-##  1 Aboriginal languages                Aborigi… Toron…           50            0
-##  2 Aboriginal languages                Aborigi… Montr…           15            0
-##  3 Aboriginal languages                Aborigi… Vanco…           15            0
-##  4 Aboriginal languages                Aborigi… Calga…            5            0
-##  5 Aboriginal languages                Aborigi… Edmon…           10            0
-##  6 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Toron…          265            0
-##  7 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Montr…           10            0
-##  8 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Vanco…          520           10
-##  9 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Calga…          505           15
-## 10 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Edmon…          300            0
-## # ℹ 1,050 more rows
-      </pre>
     </subsection>
 
     <subsection xml:id="sec-wrangling-filter-and">
@@ -1046,12 +812,6 @@ tidy_lang
 tidy_lang.info()
         </input>
       </program>
-      <pre>
-# A tibble: 1 × 5
-  category           language region   most_at_home most_at_work
-  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;           &lt;int&gt;        &lt;int&gt;
-1 Official languages French   Montréal      2669195      1607550
-      </pre>
       <p>
         We can also use the ampersand (<c>&amp;</c>) logical operator, which gives us cases where
         <em>both</em> one condition <em>and</em> another condition are satisfied. You can use either
@@ -1064,12 +824,6 @@ tidy_lang[&quot;most_at_work&quot;] = tidy_lang[&quot;most_at_work&quot;].astype
 tidy_lang
         </input>
       </program>
-      <pre>
-# A tibble: 1 × 5
-  category           language region   most_at_home most_at_work
-  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;           &lt;int&gt;        &lt;int&gt;
-1 Official languages French   Montréal      2669195      1607550
-      </pre>
     </subsection>
 
     <subsection xml:id="sec-wrangling-filter-or">
@@ -1089,15 +843,6 @@ tidy_lang
 tidy_lang.info()
         </input>
       </program>
-      <pre>
-# A tibble: 4 × 5
-  category           language region   most_at_home most_at_work
-  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;           &lt;int&gt;        &lt;int&gt;
-1 Official languages English  Calgary       1065070       844740
-2 Official languages English  Edmonton      1050410       792700
-3 Official languages French   Calgary          8630         2140
-4 Official languages French   Edmonton        10950         2520
-      </pre>
     </subsection>
 
     <subsection xml:id="sec-wrangling-filter-in">
@@ -1112,22 +857,6 @@ tidy_lang.info()
 tidy_lang[[&quot;language&quot;, &quot;region&quot;, &quot;most_at_home&quot;, &quot;most_at_work&quot;]]
         </input>
       </program>
-      <pre>
-## # A tibble: 35 × 5
-##    region         households  area population dwellings
-##    &lt;chr&gt;               &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;
-##  1 Belleville          43002 1355.     103472     45050
-##  2 Lethbridge          45696 3047.     117394     48317
-##  3 Thunder Bay         52545 2618.     121621     57146
-##  4 Peterborough        50533 1637.     121721     55662
-##  5 Saint John          52872 3793.     126202     58398
-##  6 Brantford           52530 1086.     134203     54419
-##  7 Moncton             61769 2625.     144810     66699
-##  8 Guelph              59280  604.     151984     63324
-##  9 Trois-Rivières      72502 1053.     156042     77734
-## 10 Saguenay            72479 3079.     160980     77968
-## # ℹ 25 more rows
-      </pre>
       <p>
         To get the population of the five cities we can filter the data set using the <c>%in%</c>
         operator. The <c>%in%</c> operator is used to see if an element belongs to a vector.
@@ -1140,16 +869,6 @@ tidy_lang[[&quot;language&quot;, &quot;region&quot;, &quot;most_at_home&quot;, &
 tidy_lang[[&quot;language&quot;]]
         </input>
       </program>
-      <pre>
-# A tibble: 5 × 5
-  region    households     area population dwellings
-  &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;
-1 Edmonton      502143   9858.     1321426    537634
-2 Calgary       519693   5242.     1392609    544870
-3 Vancouver     960894   3040.     2463431   10 27613
-4 Montréal     1727310   4638.     4098927   1823281
-5 Toronto      2135909   6270.     5928040   2235145
-      </pre>
       <note>
         <p>
           What&#x2019;s the difference between <c>==</c> and <c>%in%</c>? Suppose we have two vectors,
@@ -1166,9 +885,6 @@ tidy_lang[[&quot;language&quot;]]
 tidy_lang[&quot;language&quot;]
           </input>
         </program>
-        <pre>
-[1] FALSE FALSE
-[1] TRUE TRUE</pre>
       </note>
     </subsection>
 
@@ -1192,12 +908,6 @@ official_langs = tidy_lang[tidy_lang[&quot;category&quot;] == &quot;Official lan
 official_langs
         </input>
       </program>
-      <pre>
-# A tibble: 1 × 5
-  category           language region  most_at_home most_at_work
-  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;          &lt;int&gt;        &lt;int&gt;
-1 Official languages English  Toronto      3836770      3218725
-      </pre>
       <p>
         <c>filter</c> returns a data frame with only one row, indicating that when considering the
         official languages, only English in Toronto is reported by more people as their primary language
@@ -1227,21 +937,6 @@ official_langs
 tidy_lang[tidy_lang[&quot;category&quot;] != &quot;Official languages&quot;]
         </input>
       </program>
-      <pre>
-# A tibble: 10 × 5
-   category           language region    most_at_home most_at_work
-   &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;       
- 1 Official languages English  Toronto   3836770      3218725     
- 2 Official languages English  Montréal  620510       412120      
- 3 Official languages English  Vancouver 1622735      1330555     
- 4 Official languages English  Calgary   1065070      844740      
- 5 Official languages English  Edmonton  1050410      792700      
- 6 Official languages French   Toronto   29800        11940       
- 7 Official languages French   Montréal  2669195      1607550     
- 8 Official languages French   Vancouver 8630         3245        
- 9 Official languages French   Calgary   8630         2140        
-10 Official languages French   Edmonton  10950        2520        
-      </pre>
       <p>
         To use <c>mutate</c>, again we first specify the data set in the first argument, and in the
         following arguments, we specify the name of the column we want to modify or create (here
@@ -1270,21 +965,6 @@ tidy_lang[
 ]
         </input>
       </program>
-      <pre>
-# A tibble: 10 × 5
-   category           language region    most_at_home most_at_work
-   &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;
- 1 Official languages English  Toronto        3836770      3218725
- 2 Official languages English  Montréal        620510       412120
- 3 Official languages English  Vancouver      1622735      1330555
- 4 Official languages English  Calgary        1065070       844740
- 5 Official languages English  Edmonton       1050410       792700
- 6 Official languages French   Toronto          29800        11940
- 7 Official languages French   Montréal       2669195      1607550
- 8 Official languages French   Vancouver         8630         3245
- 9 Official languages French   Calgary           8630         2140
-10 Official languages French   Edmonton         10950         2520
-      </pre>
       <p>
         Now we see <c>&lt;dbl&gt;</c> appears under the <c>most_at_home</c> and <c>most_at_work</c>
         columns, indicating they are double data types (which is a numeric data type)!
@@ -1324,8 +1004,6 @@ official_langs[
 ]
         </input>
       </program>
-      <pre>
-[1] 5928040 4098927 2463431 1392609 1321426</pre>
       <p>
         And next, we will filter the <c>official_langs</c> data frame so that we only keep the rows
         where the language is English. We will name the new data frame we get from this
@@ -1337,16 +1015,6 @@ region_data = pd.read_csv(&quot;data/region_data.csv&quot;)
 region_data
         </input>
       </program>
-      <pre>
-# A tibble: 5 × 5
-  category           language region    most_at_home most_at_work
-  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;
-1 Official languages English  Toronto        3836770      3218725
-2 Official languages English  Montréal        620510       412120
-3 Official languages English  Vancouver      1622735      1330555
-4 Official languages English  Calgary        1065070       844740
-5 Official languages English  Edmonton       1050410       792700
-      </pre>
       <p>
         Finally, we can use <c>mutate</c> to create a new column, named
         <c>most_at_home_proportion</c>, that will have the value that corresponds to the proportion of
@@ -1360,16 +1028,6 @@ five_cities = region_data[region_data[&quot;region&quot;].isin(city_names)]
 five_cities
         </input>
       </program>
-      <pre>
-# A tibble: 5 × 6
-  category           language region    most_at_home most_at_work most_at_home_proportion
-  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;                   &lt;dbl&gt;
-1 Official languages English  Toronto        3836770      3218725                   0.647
-2 Official languages English  Montréal        620510       412120                   0.151
-3 Official languages English  Vancouver      1622735      1330555                   0.659
-4 Official languages English  Calgary        1065070       844740                   0.765
-5 Official languages English  Edmonton       1050410       792700                   0.795
-      </pre>
       <p>
         In the computation above, we had to ensure that we ordered the <c>city_pops</c> vector in the
         same order as the cities were listed in the <c>english_langs</c> data frame. This is because Python
@@ -1452,22 +1110,6 @@ official_langs[official_langs[&quot;most_at_home&quot;] &gt; 2669195]
       </p>
     </note>
 
-    <note>
-      <p>
-        In this textbook, we will be using the base Python pipe operator syntax, <c>|&gt;</c>. This base Python
-        <c>|&gt;</c> pipe operator was inspired by a previous version of the pipe operator, <c>%&gt;%</c>.
-        <idx><h>pipe</h></idx>
-        The <c>%&gt;%</c> pipe operator is not built into Python and is from the <c>magrittr</c> Python package. The
-        <c>tidyverse</c> metapackage imports the <c>%&gt;%</c> pipe operator via <c>dplyr</c> (which in turn
-        imports the <c>magrittr</c> Python package). There are some other differences between <c>%&gt;%</c> and
-        <c>|&gt;</c> related to more advanced Python uses, such as sharing and distributing code as Python packages;
-        however, these are beyond the scope of this textbook. We have this note in the book to make the
-        reader aware that <c>%&gt;%</c> exists as it is still commonly used in data analysis code and in
-        many data science books and other resources. In most cases these two pipes are interchangeable
-        and either can be used.
-      </p>
-    </note>
-
     <subsection xml:id="sec-wrangling-pipe-two">
       <title>Using <c>|&gt;</c> to combine <c>filter</c> and <c>select</c></title>
       <p>
@@ -1480,22 +1122,6 @@ official_langs[official_langs[&quot;most_at_home&quot;] &gt; 2669195]
 official_langs.query(&quot;most_at_home &gt; 2669195&quot;)
         </input>
       </program>
-<pre>
-## # A tibble: 1,070 × 5
-##    category                            language region most_at_home most_at_work
-##    &lt;chr&gt;                               &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt;        &lt;int&gt;
-##  1 Aboriginal languages                Aborigi… Toron…           50            0
-##  2 Aboriginal languages                Aborigi… Montr…           15            0
-##  3 Aboriginal languages                Aborigi… Vanco…           15            0
-##  4 Aboriginal languages                Aborigi… Calga…            5            0
-##  5 Aboriginal languages                Aborigi… Edmon…           10            0
-##  6 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Toron…          265            0
-##  7 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Montr…           10            0
-##  8 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Vanco…          520           10
-##  9 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Calga…          505           15
-## 10 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Edmon…          300            0
-## # ℹ 1,060 more rows
-</pre>
 
 <p>Suppose we want to create a
         subset of the data with only the languages and counts of each language spoken most at home for
@@ -1511,22 +1137,6 @@ tidy_lang.loc[
 ]
         </input>
       </program>
-      <pre>
-## # A tibble: 214 × 5
-##    category                            language region most_at_home most_at_work
-##    &lt;chr&gt;                               &lt;chr&gt;    &lt;chr&gt;         &lt;int&gt;        &lt;int&gt;
-##  1 Aboriginal languages                Aborigi… Vanco…           15            0
-##  2 Non-Official &amp; Non-Aboriginal lang… Afrikaa… Vanco…          520           10
-##  3 Non-Official &amp; Non-Aboriginal lang… Afro-As… Vanco…           10            0
-##  4 Non-Official &amp; Non-Aboriginal lang… Akan (T… Vanco…          125           10
-##  5 Non-Official &amp; Non-Aboriginal lang… Albanian Vanco…          530           10
-##  6 Aboriginal languages                Algonqu… Vanco…            0            0
-##  7 Aboriginal languages                Algonqu… Vanco…            0            0
-##  8 Non-Official &amp; Non-Aboriginal lang… America… Vanco…          300          140
-##  9 Non-Official &amp; Non-Aboriginal lang… Amharic  Vanco…          540           10
-## 10 Non-Official &amp; Non-Aboriginal lang… Arabic   Vanco…         8680          275
-## # ℹ 204 more rows
-      </pre>
       <p>
         We then use <c>select</c> on this data frame to keep only the variables we want:
       </p>
@@ -1538,22 +1148,6 @@ tidy_lang.loc[
 ]
         </input>
       </program>
-      <pre>
-## # A tibble: 214 × 2
-##    language                       most_at_home
-##    &lt;chr&gt;                                 &lt;int&gt;
-##  1 Aboriginal languages, n.o.s.             15
-##  2 Afrikaans                               520
-##  3 Afro-Asiatic languages, n.i.e.           10
-##  4 Akan (Twi)                              125
-##  5 Albanian                                530
-##  6 Algonquian languages, n.i.e.              0
-##  7 Algonquin                                 0
-##  8 American Sign Language                  300
-##  9 Amharic                                 540
-## 10 Arabic                                 8680
-## # ℹ 204 more rows
-      </pre>
       <p>
         Although this is valid code, there is a more readable approach we could take by using the pipe,
         <c>|&gt;</c>. With the pipe, we do not need to create an intermediate object to store the output
@@ -1565,22 +1159,6 @@ tidy_lang.loc[
 tidy_lang.loc[:, &quot;language&quot;:&quot;most_at_work&quot;]
         </input>
       </program>
-      <pre>
-## # A tibble: 214 × 2
-##    language                       most_at_home
-##    &lt;chr&gt;                                 &lt;int&gt;
-##  1 Aboriginal languages, n.o.s.             15
-##  2 Afrikaans                               520
-##  3 Afro-Asiatic languages, n.i.e.           10
-##  4 Akan (Twi)                              125
-##  5 Albanian                                530
-##  6 Algonquian languages, n.i.e.              0
-##  7 Algonquin                                 0
-##  8 American Sign Language                  300
-##  9 Amharic                                 540
-## 10 Arabic                                 8680
-## # ℹ 204 more rows
-      </pre>
       <p>
         But wait&#x2026;Why do the <c>select</c> function calls look different in these two examples?
         Remember: when you use the pipe, the output of the first function is automatically provided as
@@ -1608,7 +1186,7 @@ tidy_lang.loc[:, &quot;language&quot;:&quot;most_at_work&quot;]
           from smallest to largest.</p></li>
       </ul>
       <p>
-        As we saw in <xref ref="ch-intro"/>, we can use the <c>tidyverse</c> <c>arrange</c> function
+        As we saw in <xref ref="ch-intro"/>, we can use the <c>pandas</c> <c>arrange</c> function
         <idx><h>arrange</h></idx>
         to order the rows in the data frame by the values of one or more columns.
 
@@ -1619,22 +1197,6 @@ Here we pass the column name <c>most_at_home</c> to arrange the data frame rows 
 tidy_lang.loc[:, &quot;language&quot;:]
         </input>
       </program>
-      <pre>
-## # A tibble: 67 × 3
-##    region    language most_at_home
-##    &lt;chr&gt;     &lt;chr&gt;           &lt;int&gt;
-##  1 Edmonton  Arabic          10590
-##  2 Montréal  Tamil           10670
-##  3 Vancouver Russian         10795
-##  4 Edmonton  Spanish         10880
-##  5 Edmonton  French          10950
-##  6 Calgary   Arabic          11010
-##  7 Calgary   Urdu            11060
-##  8 Vancouver Hindi           11235
-##  9 Montréal  Armenian        11835
-## 10 Toronto   Romanian        12200
-## # ℹ 57 more rows
-      </pre>
       <p>
         You will notice above that we passed <c>tidy_lang</c> as the first argument of the <c>filter</c>
         function. We can also pipe the data frame into the same sequence of functions rather than using
@@ -1646,22 +1208,6 @@ tidy_lang.loc[:, &quot;language&quot;:]
 tidy_lang.loc[:, :&quot;language&quot;]
         </input>
       </program>
-      <pre>
-## # A tibble: 67 × 3
-##    region    language most_at_home
-##    &lt;chr&gt;     &lt;chr&gt;           &lt;int&gt;
-##  1 Edmonton  Arabic          10590
-##  2 Montréal  Tamil           10670
-##  3 Vancouver Russian         10795
-##  4 Edmonton  Spanish         10880
-##  5 Edmonton  French          10950
-##  6 Calgary   Arabic          11010
-##  7 Calgary   Urdu            11060
-##  8 Vancouver Hindi           11235
-##  9 Montréal  Armenian        11835
-## 10 Toronto   Romanian        12200
-## # ℹ 57 more rows
-      </pre>
       <p>
         Now that we&#x2019;ve shown you the pipe operator as an alternative to storing temporary objects and
         composing code, does this mean you should <em>never</em> store temporary objects or compose code?
@@ -1695,7 +1241,7 @@ tidy_lang.loc[:, :&quot;language&quot;]
       </figure>
 
       <p>
-        A useful <c>dplyr</c> function for calculating summary statistics is <c>summarize</c>, where the
+        A useful <c>pandas</c> function for calculating summary statistics is <c>summarize</c>, where the
         first argument is the data frame and subsequent arguments are the summaries we want to perform.
         Here we show how to use the <c>summarize</c> function to calculate the minimum and maximum number
         of Canadians reporting a particular language as their primary language at home. First a reminder
@@ -1706,22 +1252,6 @@ tidy_lang.loc[:, :&quot;language&quot;]
 tidy_lang.loc[:, tidy_lang.columns.str.startswith(&quot;most&quot;)]
         </input>
       </program>
-      <pre>
-## # A tibble: 7,490 × 7
-##    region   category language mother_tongue most_at_home most_at_work lang_known
-##    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 St. Joh… Aborigi… Aborigi…             5            0            0          0
-##  2 Halifax  Aborigi… Aborigi…             5            0            0          0
-##  3 Moncton  Aborigi… Aborigi…             0            0            0          0
-##  4 Saint J… Aborigi… Aborigi…             0            0            0          0
-##  5 Saguenay Aborigi… Aborigi…             5            5            0          0
-##  6 Québec   Aborigi… Aborigi…             0            5            0         20
-##  7 Sherbro… Aborigi… Aborigi…             0            0            0          0
-##  8 Trois-R… Aborigi… Aborigi…             0            0            0          0
-##  9 Montréal Aborigi… Aborigi…            30           15            0         10
-## 10 Kingston Aborigi… Aborigi…             0            0            0          0
-## # ℹ 7,480 more rows
-      </pre>
       <p>
         We apply <c>summarize</c> to calculate the minimum and maximum number of Canadians reporting a
         particular language as their primary language at home, for any region:
@@ -1731,12 +1261,6 @@ tidy_lang.loc[:, tidy_lang.columns.str.startswith(&quot;most&quot;)]
 tidy_lang.loc[:, tidy_lang.columns.str.contains(&quot;_&quot;)]
         </input>
       </program>
-      <pre>
-# A tibble: 1 × 2
-  min_most_at_home max_most_at_home
-             &lt;dbl&gt;            &lt;dbl&gt;
-1                0          3836770
-      </pre>
       <p>
         From this we see that there are some languages in the data set that no one speaks as their
         primary language at home. We also see that the most commonly spoken primary language at home
@@ -1769,22 +1293,6 @@ tidy_lang.loc[:, tidy_lang.columns.str.contains(&quot;_&quot;)]
 tidy_lang.iloc[:, 1]
         </input>
       </program>
-      <pre>
-## # A tibble: 7,490 × 7
-##    region   category language mother_tongue most_at_home most_at_work lang_known
-##    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 St. Joh… Aborigi… Aborigi…             5           NA            0          0
-##  2 Halifax  Aborigi… Aborigi…             5            0            0          0
-##  3 Moncton  Aborigi… Aborigi…             0            0            0          0
-##  4 Saint J… Aborigi… Aborigi…             0            0            0          0
-##  5 Saguenay Aborigi… Aborigi…             5            5            0          0
-##  6 Québec   Aborigi… Aborigi…             0            5            0         20
-##  7 Sherbro… Aborigi… Aborigi…             0            0            0          0
-##  8 Trois-R… Aborigi… Aborigi…             0            0            0          0
-##  9 Montréal Aborigi… Aborigi…            30           15            0         10
-## 10 Kingston Aborigi… Aborigi…             0            0            0          0
-## # ℹ 7,480 more rows
-      </pre>
       <p>
         Now if we apply the <c>summarize</c> function as above, we see that we no longer get the minimum
         and maximum returned, but just an <c>NA</c> instead:
@@ -1794,12 +1302,6 @@ tidy_lang.iloc[:, 1]
 tidy_lang.iloc[:, 1:]
         </input>
       </program>
-      <pre>
-## # A tibble: 1 × 2
-##   min_most_at_home max_most_at_home
-##              &lt;dbl&gt;            &lt;dbl&gt;
-## 1               NA               NA
-      </pre>
       <p>
         We can fix this by adding the <c>na.rm = TRUE</c> as explained above:
       </p>
@@ -1808,30 +1310,24 @@ tidy_lang.iloc[:, 1:]
 tidy_lang.iloc[:5, 1:]
         </input>
       </program>
-      <pre>
-## # A tibble: 1 × 2
-##   min_most_at_home max_most_at_home
-##              &lt;dbl&gt;            &lt;dbl&gt;
-## 1                0          3836770
-      </pre>
     </subsection>
 
     <subsection xml:id="sec-wrangling-summarize-groups">
       <title>Calculating summary statistics for groups of rows</title>
       <p>
-        A common pairing with <c>summarize</c> is <c>group_by</c>. Pairing these functions together can
+        A common pairing with <c>summarize</c> is <c>groupby</c>. Pairing these functions together can
         let you summarize values for subgroups within a data set, as illustrated in
-        <xref ref="fig-wrangling-summarize-groupby"/>. For example, we can use <c>group_by</c> to group the regions of the <c>region_lang</c> data frame and then calculate the minimum and maximum number of Canadians reporting the language as the primary language at home for each of the regions in the data set.
-        <idx><h>group_by</h></idx>
+        <xref ref="fig-wrangling-summarize-groupby"/>. For example, we can use <c>groupby</c> to group the regions of the <c>region_lang</c> data frame and then calculate the minimum and maximum number of Canadians reporting the language as the primary language at home for each of the regions in the data set.
+        <idx><h>groupby</h></idx>
       </p>
 
       <figure xml:id="fig-wrangling-summarize-groupby">
-        <caption><c>summarize</c> and <c>group_by</c> is useful for calculating summary statistics on one or more column(s) for each group. It creates a new data frame&#x2014;with one row for each group&#x2014;containing the summary statistic(s) for each column being summarized. It also creates a column listing the value of the grouping variable. The darker, top row of each table represents the column headers. The orange, blue, and green colored rows correspond to the rows that belong to each of the three groups being represented in this cartoon example.</caption>
+        <caption><c>summarize</c> and <c>groupby</c> is useful for calculating summary statistics on one or more column(s) for each group. It creates a new data frame&#x2014;with one row for each group&#x2014;containing the summary statistic(s) for each column being summarized. It also creates a column listing the value of the grouping variable. The darker, top row of each table represents the column headers. The orange, blue, and green colored rows correspond to the rows that belong to each of the three groups being represented in this cartoon example.</caption>
         <image source="images/wrangling/summarize.002.png" width="85%"/>
       </figure>
 
       <p>
-        The <c>group_by</c> function takes at least two arguments. The first is the data frame that will
+        The <c>groupby</c> function takes at least two arguments. The first is the data frame that will
         be grouped, and the second and onwards are columns to use in the grouping. Here we use only one
         column for grouping (<c>region</c>), but more than one can also be used. To do this, list additional columns separated by commas.
       </p>
@@ -1841,26 +1337,10 @@ region_lang = pd.read_csv(&quot;data/region_lang.csv&quot;)
 region_lang
         </input>
       </program>
-      <pre>
-## # A tibble: 35 × 3
-##    region               min_most_at_home max_most_at_home
-##    &lt;chr&gt;                           &lt;dbl&gt;            &lt;dbl&gt;
-##  1 Abbotsford - Mission                0           137445
-##  2 Barrie                              0           182390
-##  3 Belleville                          0            97840
-##  4 Brantford                           0           124560
-##  5 Calgary                             0          1065070
-##  6 Edmonton                            0          1050410
-##  7 Greater Sudbury                     0           133960
-##  8 Guelph                              0           130950
-##  9 Halifax                             0           371215
-## 10 Hamilton                            0           630380
-## # ℹ 25 more rows
-      </pre>
       <p>
-        Notice that <c>group_by</c> on its own doesn&#x2019;t change the way the data looks. In the output
+        Notice that <c>groupby</c> on its own doesn&#x2019;t change the way the data looks. In the output
         below, the grouped data set looks the same, and it doesn&#x2019;t <em>appear</em> to be grouped by
-        <c>region</c>. Instead, <c>group_by</c> simply changes how other functions work with the data,
+        <c>region</c>. Instead, <c>groupby</c> simply changes how other functions work with the data,
         as we saw with <c>summarize</c> above.
       </p>
       <program language="python">
@@ -1868,23 +1348,6 @@ region_lang
 region_lang[&quot;most_at_home&quot;].min()
         </input>
       </program>
-      <pre>
-## # A tibble: 7,490 × 7
-## # Groups:   region [35]
-##    region   category language mother_tongue most_at_home most_at_work lang_known
-##    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 St. Joh… Aborigi… Aborigi…             5            0            0          0
-##  2 Halifax  Aborigi… Aborigi…             5            0            0          0
-##  3 Moncton  Aborigi… Aborigi…             0            0            0          0
-##  4 Saint J… Aborigi… Aborigi…             0            0            0          0
-##  5 Saguenay Aborigi… Aborigi…             5            5            0          0
-##  6 Québec   Aborigi… Aborigi…             0            5            0         20
-##  7 Sherbro… Aborigi… Aborigi…             0            0            0          0
-##  8 Trois-R… Aborigi… Aborigi…             0            0            0          0
-##  9 Montréal Aborigi… Aborigi…            30           15            0         10
-## 10 Kingston Aborigi… Aborigi…             0            0            0          0
-## # ℹ 7,480 more rows
-      </pre>
     </subsection>
 
     <subsection xml:id="sec-wrangling-summarize-many">
@@ -1918,12 +1381,6 @@ region_lang[&quot;most_at_home&quot;].min()
 region_lang[&quot;most_at_home&quot;].max()
         </input>
       </program>
-      <pre>
-# A tibble: 1 × 4
-  mother_tongue most_at_home most_at_work lang_known
-          &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-1       3061820      3836770      3218725    5600480
-      </pre>
       <note>
 <p>
   Similar to when we use base Python statistical summary functions (e.g., <c>max</c>, 
@@ -1945,16 +1402,9 @@ region_lang[&quot;most_at_home&quot;].max()
 region_lang[&quot;most_at_home&quot;].sum()
           </input>
         </program>
-        <pre>
-# A tibble: 1 × 4
-  mother_tongue most_at_home most_at_work lang_known
-          &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-1       3061820      3836770      3218725    5600480
-        </pre>
         <p>
           The meaning of this unusual syntax is a bit beyond the scope of this book, but interested
-          readers can look up <em>anonymous functions</em> in the <c>purrr</c> package from
-          <c>tidyverse</c>.
+          readers can look up <em>anonymous functions</em> (lambda functions) in Python.
         </p>
       </note>
       <p>
@@ -1973,37 +1423,15 @@ region_lang[&quot;most_at_home&quot;].sum()
 region_lang[&quot;most_at_home&quot;].agg([&quot;min&quot;, &quot;max&quot;])
         </input>
       </program>
-      <pre>
-$mother_tongue
-[1] 3061820
-
-$most_at_home
-[1] 3836770
-
-$most_at_work
-[1] 3218725
-
-$lang_known
-[1] 5600480
-      </pre>
-      <note>
-        <p>
-          The <c>map</c> function comes from the <c>purrr</c> package. But since <c>purrr</c> is part of
-          the tidyverse, once we call <c>library(tidyverse)</c> we do not need to load the <c>purrr</c>
-          package separately.
-        </p>
-      </note>
       <p>
         The output looks a bit unusual&#x2014;we passed in a data frame, but the output doesn&#x2019;t look like a
-        data frame. As it so happens, it is <em>not</em> a data frame, but rather a plain list:
+        data frame. As it so happens, it is <em>not</em> a data frame, but rather a <c>Series</c>:
       </p>
       <program language="python">
         <input>
 region_lang[&quot;most_at_home&quot;].describe()
         </input>
       </program>
-      <pre>
-[1] "list"</pre>
       <p>
         So what do we do? Should we convert this to a data frame? We could, but a simpler alternative is
         to just use a different <c>map</c> function. There are quite a few to choose from; they all work
@@ -2039,12 +1467,6 @@ region_lang[&quot;most_at_home&quot;].describe()
 region_lang.max()
         </input>
       </program>
-      <pre>
-# A tibble: 1 × 4
-  mother_tongue most_at_home most_at_work lang_known
-          &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-1       3061820      3836770      3218725    5600480
-      </pre>
       <note>
 <p>
   Similar to when we use base Python statistical summary functions (e.g., <c>max</c>, 
@@ -2063,12 +1485,6 @@ region_lang.max()
 region_lang.max(numeric_only=True)
           </input>
         </program>
-        <pre>
-# A tibble: 1 × 4
-  mother_tongue most_at_home most_at_work lang_known
-          &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-1       3061820      3836770      3218725    5600480
-        </pre>
       </note>
       <p>
         The <c>map</c> functions are generally quite useful for solving many problems involving
@@ -2104,23 +1520,6 @@ region_lang.mean(numeric_only=True)
   </input>
 </program>
 
-  <pre>
-    ## # A tibble: 7,490 × 7
-    ##    region   category language mother_tongue most_at_home most_at_work lang_known
-    ##    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-    ##  1 St. Joh… Aborigi… Aborigi…             5            0            0          0
-    ##  2 Halifax  Aborigi… Aborigi…             5            0            0          0
-    ##  3 Moncton  Aborigi… Aborigi…             0            0            0          0
-    ##  4 Saint J… Aborigi… Aborigi…             0            0            0          0
-    ##  5 Saguenay Aborigi… Aborigi…             5            5            0          0
-    ##  6 Québec   Aborigi… Aborigi…             0            5            0         20
-    ##  7 Sherbro… Aborigi… Aborigi…             0            0            0          0
-    ##  8 Trois-R… Aborigi… Aborigi…             0            0            0          0
-    ##  9 Montréal Aborigi… Aborigi…            30           15            0         10
-    ## 10 Kingston Aborigi… Aborigi…             0            0            0          0
-    ## # ℹ 7,480 more rows
-  </pre>
-
 <p>
   To accomplish such a task, we can use <c>mutate</c> paired with <c>across</c>. This 
   works in a similar way for column selection, as we saw when we used 
@@ -2137,23 +1536,6 @@ region_lang.mean(numeric_only=True)
 region_lang.loc[:, &quot;mother_tongue&quot;:&quot;lang_known&quot;].agg([&quot;mean&quot;, &quot;std&quot;])
   </input>
 </program>
-
-  <pre>
-    ## # A tibble: 7,490 × 7
-    ##    region   category language mother_tongue most_at_home most_at_work lang_known
-    ##    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;            &lt;int&gt;        &lt;int&gt;        &lt;int&gt;      &lt;int&gt;
-    ##  1 St. Joh… Aborigi… Aborigi…             5            0            0          0
-    ##  2 Halifax  Aborigi… Aborigi…             5            0            0          0
-    ##  3 Moncton  Aborigi… Aborigi…             0            0            0          0
-    ##  4 Saint J… Aborigi… Aborigi…             0            0            0          0
-    ##  5 Saguenay Aborigi… Aborigi…             5            5            0          0
-    ##  6 Québec   Aborigi… Aborigi…             0            5            0         20
-    ##  7 Sherbro… Aborigi… Aborigi…             0            0            0          0
-    ##  8 Trois-R… Aborigi… Aborigi…             0            0            0          0
-    ##  9 Montréal Aborigi… Aborigi…            30           15            0         10
-    ## 10 Kingston Aborigi… Aborigi…             0            0            0          0
-    ## # ℹ 7,480 more rows
-  </pre>
 </section>
 
   <section xml:id="sec-wrangling-rowwise">
@@ -2187,22 +1569,6 @@ region_lang.loc[:, &quot;mother_tongue&quot;:&quot;lang_known&quot;].agg([&quot;
 region_lang.groupby(&quot;region&quot;)
   </input>
 </program>
-  <pre>
-    ## # A tibble: 7,490 × 4
-    ##    mother_tongue most_at_home most_at_work lang_known
-    ##            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-    ##  1             5            0            0          0
-    ##  2             5            0            0          0
-    ##  3             0            0            0          0
-    ##  4             0            0            0          0
-    ##  5             5            5            0          0
-    ##  6             0            5            0         20
-    ##  7             0            0            0          0
-    ##  8             0            0            0          0
-    ##  9            30           15            0         10
-    ## 10             0            0            0          0
-    ## # ℹ 7,480 more rows
-  </pre>
 
 <p>
   Now we apply <c>rowwise</c> before <c>mutate</c>, to tell Python that we would like the 
@@ -2215,23 +1581,6 @@ region_lang.groupby(&quot;region&quot;)
 region_lang.groupby(&quot;region&quot;)[&quot;most_at_home&quot;].agg([&quot;min&quot;, &quot;max&quot;])
   </input>
 </program>
-  <pre>
-    ## # A tibble: 7,490 × 5
-    ## # Rowwise: 
-    ##    mother_tongue most_at_home most_at_work lang_known maximum
-    ##            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
-    ##  1             5            0            0          0       5
-    ##  2             5            0            0          0       5
-    ##  3             0            0            0          0       0
-    ##  4             0            0            0          0       0
-    ##  5             5            5            0          0       5
-    ##  6             0            5            0         20      20
-    ##  7             0            0            0          0       0
-    ##  8             0            0            0          0       0
-    ##  9            30           15            0         10      30
-    ## 10             0            0            0          0       0
-    ## # ℹ 7,480 more rows
-  </pre>
 
 <p>
   We see that we get an additional column added to the data frame, named 
@@ -2241,7 +1590,7 @@ region_lang.groupby(&quot;region&quot;)[&quot;most_at_home&quot;].agg([&quot;min
 </p>
 
 <p>
-  Similar to <c>group_by</c>, <c>rowwise</c> doesn't appear to do anything when it is 
+  Similar to <c>groupby</c>, <c>rowwise</c> doesn't appear to do anything when it is 
   called by itself. However, we can apply <c>rowwise</c> in combination with other 
   functions to change how these other functions operate on the data. Notice if we used 
   <c>mutate</c> without <c>rowwise</c>, we would have computed the maximum value across 
@@ -2255,22 +1604,6 @@ region_lang.groupby(&quot;region&quot;)[&quot;most_at_home&quot;].agg([&quot;min
 region_lang.groupby(&quot;region&quot;)[&quot;most_at_home&quot;].agg([&quot;min&quot;, &quot;max&quot;]).reset_index()
   </input>
 </program>
-  <pre>
-    ## # A tibble: 7,490 × 5
-    ##    mother_tongue most_at_home most_at_work lang_known maximum
-    ##            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
-    ##  1             5            0            0          0 5600480
-    ##  2             5            0            0          0 5600480
-    ##  3             0            0            0          0 5600480
-    ##  4             0            0            0          0 5600480
-    ##  5             5            5            0          0 5600480
-    ##  6             0            5            0         20 5600480
-    ##  7             0            0            0          0 5600480
-    ##  8             0            0            0          0 5600480
-    ##  9            30           15            0         10 5600480
-    ## 10             0            0            0          0 5600480
-    ## # ℹ 7,480 more rows
-  </pre>
   </section>
 
   <section xml:id="sec-wrangling-summary">
@@ -2291,11 +1624,11 @@ region_lang.groupby(&quot;region&quot;)[&quot;most_at_home&quot;].agg([&quot;min
         </row>
         <row><cell><c>across</c></cell><cell>allows you to apply function(s) to multiple columns</cell></row>
         <row><cell><c>filter</c></cell><cell>subsets rows of a data frame</cell></row>
-        <row><cell><c>group_by</c></cell><cell>allows you to apply function(s) to groups of rows</cell></row>
+        <row><cell><c>groupby</c></cell><cell>allows you to apply function(s) to groups of rows</cell></row>
         <row><cell><c>mutate</c></cell><cell>adds or modifies columns in a data frame</cell></row>
         <row><cell><c>map</c></cell><cell>general iteration function</cell></row>
-        <row><cell><c>pivot_longer</c></cell><cell>generally makes the data frame longer and narrower</cell></row>
-        <row><cell><c>pivot_wider</c></cell><cell>generally makes a data frame wider and decreases the number of rows</cell></row>
+        <row><cell><c>melt</c></cell><cell>generally makes the data frame longer and narrower</cell></row>
+        <row><cell><c>pivot</c></cell><cell>generally makes a data frame wider and decreases the number of rows</cell></row>
         <row><cell><c>rowwise</c></cell><cell>applies functions across columns within one row</cell></row>
         <row><cell><c>separate</c></cell><cell>splits up a character column into multiple columns</cell></row>
         <row><cell><c>select</c></cell><cell>subsets columns of a data frame</cell></row>
@@ -2308,13 +1641,13 @@ region_lang.groupby(&quot;region&quot;)[&quot;most_at_home&quot;].agg([&quot;min
     <title>Exercises</title>
     <p>
       Practice exercises for the material covered in this chapter can be found in the accompanying
-      <url href="https://worksheets.datasciencebook.ca" visual="worksheets.datasciencebook.ca">worksheets
+      <url href="https://worksheets.python.datasciencebook.ca" visual="worksheets.python.datasciencebook.ca">worksheets
       repository</url> in the &#x201C;Cleaning and wrangling data&#x201D; row. You can launch an interactive version
       of the worksheet in your browser by clicking the &#x201C;launch binder&#x201D; button. You can also preview a
       non-interactive version of the worksheet by clicking &#x201C;view worksheet.&#x201D;
       If you instead decide to download the worksheet and run it on your own machine,
       make sure to follow the instructions for computer setup
-      found in <xref ref="ch-setup"/>. This will ensure that the automated feedback
+      found in <xref ref="move-to-your-own-machine"/>. This will ensure that the automated feedback
       and guidance that the worksheets provide will function as intended.
     </p>
   </section>
@@ -2322,37 +1655,21 @@ region_lang.groupby(&quot;region&quot;)[&quot;most_at_home&quot;].agg([&quot;min
   <section xml:id="sec-wrangling-resources">
     <title>Additional resources</title>
     <ul>
-      <li><p>As we mentioned earlier, <c>tidyverse</c> is actually an <em>Python meta package</em>: it
-        installs and loads a collection of Python packages that all follow the tidy data philosophy we
-        discussed above. One of the <c>tidyverse</c> packages is <c>dplyr</c>&#x2014;a data wrangling
-        workhorse. You have already met many of <c>dplyr</c>&#x2019;s functions (<c>select</c>,
-        <c>filter</c>, <c>mutate</c>, <c>arrange</c>, <c>summarize</c>, and <c>group_by</c>). To learn
-        more about these functions and meet a few more useful functions, we recommend you check out
-        Chapters 5&#x2013;9 of the
-        <url href="https://stat545.com/" visual="stat545.com/">STAT545 online notes</url>.</p></li>
-      <li><p>The <url href="https://dplyr.tidyverse.org/" visual="dplyr.tidyverse.org/"><c>dplyr</c> Python
-        package documentation</url> <xref ref="dplyr"/> is another resource to learn more about the
+      <li><p>The <url href="https://pandas.pydata.org/docs/reference/index.html" visual="pandas.pydata.org/docs/reference/index.html"><c>pandas</c>
+        package documentation</url> is another resource to learn more about the
         functions in this chapter, the full set of arguments you can use, and other related functions.
-        The site also provides a very nice cheat sheet that summarizes many of the data wrangling
-        functions from this chapter.</p></li>
-      <li><p>Check out the <url href="https://tidyselect.r-lib.org/index.html" visual="tidyselect.r-lib.org/"><c>tidyselect</c>
-        Python package page</url> <xref ref="tidyselect"/> for a comprehensive list of <c>select</c> helpers.
-        The <url href="https://tidyselect.r-lib.org/reference/select_helpers.html" visual="tidyselect.r-lib.org/reference/select_helpers.html">documentation for <c>select</c> helpers</url>
-        is a useful reference to find the helper you need for your particular problem.</p></li>
-      <li><p><em>Python for Data Science</em> <xref ref="wickham2016r"/> has a few chapters related to data
+      </p></li>
+      <li><p><em>Python for Data Analysis</em> <xref ref="mckinney2012python"/> has a few chapters related to data
         wrangling that go into more depth than this book. For example, the
-        <url href="https://r4ds.had.co.nz/tidy-data.html" visual="r4ds.had.co.nz/tidy-data.html">tidy
-        data chapter</url> covers tidy data, <c>pivot_longer</c>/<c>pivot_wider</c> and
-        <c>separate</c>, but also covers missing values and additional wrangling functions. The
-        <url href="https://r4ds.had.co.nz/transform.html" visual="r4ds.had.co.nz/transform.html">data
-        transformation chapter</url> covers <c>select</c>, <c>filter</c>, <c>arrange</c>,
-        <c>mutate</c>, and <c>summarize</c>. And the
-        <url href="https://r4ds.had.co.nz/iteration.html#the-map-functions" visual="r4ds.had.co.nz/iteration.html#the-map-functions"><c>map</c>
-        functions chapter</url> provides more about the <c>map</c> functions.</p></li>
+        <url href="https://wesmckinney.com/book/data-wrangling.html" visual="wesmckinney.com/book/data-wrangling.html">data
+        wrangling chapter</url> covers tidy data, <c>melt</c> and <c>pivot</c>, but also
+        covers missing values and additional wrangling functions (like <c>stack</c>). The
+        <url href="https://wesmckinney.com/book/data-aggregation.html" visual="wesmckinney.com/book/data-aggregation.html">data
+        aggregation chapter</url> covers <c>groupby</c>, aggregating functions, <c>apply</c>, etc.</p></li>
       <li><p>You will occasionally encounter a case where you need to iterate over items in a data frame,
         but none of the above functions are flexible enough to do what you want. In that case, you may
         consider using
-        <url href="https://r4ds.had.co.nz/iteration.html#iteration" visual="r4ds.had.co.nz/iteration.html#iteration">a for loop</url>.</p></li>
+        <url href="https://wesmckinney.com/book/python-basics.html#control_for" visual="wesmckinney.com/book/python-basics.html#control_for">a for loop</url>.</p></li>
     </ul>
   </section>
 
