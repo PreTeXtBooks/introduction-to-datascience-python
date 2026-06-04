@@ -36,40 +36,37 @@
       <li><p>Read data into Python from various types of path using:
         <ul>
           <li><p><c>read_csv</c></p></li>
-          <li><p><c>read_tsv</c></p></li>
-          <li><p><c>read_csv2</c></p></li>
-          <li><p><c>read_delim</c></p></li>
           <li><p><c>read_excel</c></p></li>
         </ul>
       </p></li>
-      <li><p>Compare and contrast the <c>read_*</c> functions.</p></li>
-      <li><p>Describe when to use the following <c>read_*</c> function arguments:
+      <li><p>Compare and contrast <c>read_csv</c> and <c>read_excel</c>.</p></li>
+      <li><p>Describe when to use the following <c>read_csv</c> function arguments:
         <ul>
-          <li><p><c>skip</c></p></li>
-          <li><p><c>delim</c></p></li>
-          <li><p><c>col_names</c></p></li>
+          <li><p><c>skiprows</c></p></li>
+          <li><p><c>sep</c></p></li>
+          <li><p><c>header</c></p></li>
+          <li><p><c>names</c></p></li>
         </ul>
       </p></li>
-      <li><p>Choose the appropriate <c>tidyverse</c> <c>read_*</c> function and function
-        arguments to load a given plain text tabular data set into Python.</p></li>
+      <li><p>Choose the appropriate <c>read_csv</c> function arguments to load a given plain text tabular data set into Python.</p></li>
       <li><p>Use the <c>rename</c> function to rename columns in a data frame.</p></li>
-      <li><p>Use <c>read_excel</c> function and arguments to load a sheet from an excel
+      <li><p>Use <c>pandas</c> package's <c>read_excel</c> function and arguments to load a sheet from an excel
         file into Python.</p></li>
-      <li><p>Work with databases using functions from <c>dbplyr</c> and <c>DBI</c>:
+      <li><p>Work with databases using functions from the <c>ibis</c> package:
         <ul>
-          <li><p>Connect to a database with <c>dbConnect</c>.</p></li>
-          <li><p>List tables in the database with <c>dbListTables</c>.</p></li>
-          <li><p>Create a reference to a database table with <c>tbl</c>.</p></li>
-          <li><p>Bring data from a database into Python using <c>collect</c>.</p></li>
+          <li><p>Connect to a database with <c>connect</c>.</p></li>
+          <li><p>List tables in the database with <c>list_tables</c>.</p></li>
+          <li><p>Create a reference to a database table with <c>table</c>.</p></li>
+          <li><p>Bring data from a database into Python with <c>execute</c>.</p></li>
         </ul>
       </p></li>
-      <li><p>Use <c>write_csv</c> to save a data frame to a <c>.csv</c> file.</p></li>
+      <li><p>Use <c>to_csv</c> to save a data frame to a <c>.csv</c> file.</p></li>
       <li><p>(<em>Optional</em>) Obtain data from the web using scraping and application
         programming interfaces (APIs):
         <ul>
-          <li><p>Read HTML source code from a URL using the <c>rvest</c> package.</p></li>
+          <li><p>Read HTML source code from a URL using the <c>BeautifulSoup</c> package.</p></li>
           <li><p>Read data from the NASA &#x201C;Astronomy Picture of the Day&#x201D; API
-            using the <c>httr2</c> package.</p></li>
+            using the <c>requests</c> package.</p></li>
           <li><p>Compare downloading tabular data from a plain text file (e.g., <c>.csv</c>),
             accessing data from an API, and scraping the HTML source code from a website.</p></li>
         </ul>
@@ -396,8 +393,8 @@ Reproduced and distributed on an as-is basis with their permission.</pre>
       <p>The column names began at line 4, so we skipped the first three lines.</p>
     </subsection>
 
-    <subsection xml:id="sec-reading-tsv">
-      <title><c>read_tsv</c> to read in tab-separated values files</title>
+    <subsection xml:id="sec-reading-sep">
+      <title>Using the <c>sep</c> argument for different separators</title>
       <p>
         Another common way data is stored is with tabs as the delimiter. Notice the data file,
         <c>can_lang.tsv</c>, has tabs in between the columns instead of commas.
@@ -415,11 +412,11 @@ Non-Official &amp; Non-Aboriginal languages American Sign Language  2685    3020
 Non-Official &amp; Non-Aboriginal languages Amharic 22465   12785   200 33670
     </pre>
       <p>
-        We can use the <c>read_tsv</c> function
+        To read in <c>.tsv</c> (<em>t</em>ab <em>s</em>eparated <em>v</em>alues) files, we can set the
+        <c>sep</c> argument in the <c>read_csv</c> function to the tab character <c>\t</c>.
         <idx><h>tab-separated values</h><see>tsv</see></idx>
         <idx><h>tsv</h></idx>
-        <idx><h>read function</h><h>read_tsv</h></idx>
-        to read in <c>.tsv</c> (<em>t</em>ab <em>s</em>eparated <em>v</em>alues) files.
+        <idx><h>read function</h><h>sep argument</h></idx>
       </p>
       <program language="python">
         <input>
@@ -452,17 +449,13 @@ canlang_data
       </p>
     </subsection>
 
-    <subsection xml:id="sec-reading-delim">
-      <title><c>read_delim</c> as a more flexible method to get tabular data into Python</title>
+    <subsection xml:id="sec-reading-header">
+      <title>Using the <c>header</c> argument to handle missing column names</title>
       <p>
-        The <c>read_csv</c> and <c>read_tsv</c> functions are actually just special cases of the more
-        general <c>read_delim</c> function.
-        <idx><h>read function</h><h>read_delim</h></idx>
-        We can use <c>read_delim</c> to import both comma and tab-separated values files, and more; we
-        just have to specify the delimiter. For example, the <c>can_lang_no_names.tsv</c> file contains
-        a different version of this same data set with no column names and uses tabs as the delimiter
-        <idx><h>reading</h><h>delimiter</h></idx>
-        instead of commas. Here is how the file would look in a plain text editor:
+        The <c>can_lang_no_names.tsv</c> file contains a slightly different version of this data set,
+        except with no column names, and tabs for separators.
+        <idx><h>reading</h><h>separator</h></idx>
+        Here is how the file looks in a text editor:
       </p>
       <pre>
 Aboriginal languages    Aboriginal languages, n.o.s.    590 235 30  665
@@ -477,13 +470,10 @@ Non-Official &amp; Non-Aboriginal languages Amharic 22465   12785   200 33670
 Non-Official &amp; Non-Aboriginal languages Arabic  419890  223535  5585    629055
 </pre>
       <p>
-        To read this into Python using the <c>read_delim</c> function, we specify the path to the file as the
-        first argument, provide the tab character <c>"\t"</c> as the <c>delim</c> argument, and set the
-        <c>col_names</c> argument
-        <idx><h>read function</h><h>col_names argument</h></idx>
-        to <c>FALSE</c> to denote that there are no column names provided in the data. Note that the
-        <c>read_csv</c>, <c>read_tsv</c>, and <c>read_delim</c> functions all have a <c>col_names</c>
-        argument with the default value <c>TRUE</c>.
+        To read this data into Python, we specify the first argument as the path to the file (as done
+        with <c>read_csv</c>), provide a tab as the <c>sep</c> argument, and set
+        <c>header=None</c> to tell <c>pandas</c> that the data file does not contain its own column names.
+        <idx><h>read function</h><h>header argument</h></idx>
       </p>
       <note>
         <p>
@@ -521,18 +511,13 @@ canlang_data
 ## # ℹ 204 more rows
       </pre>
       <p>
-        Data frames in Python need to have column names. Thus if you read in data without column names, Python will
-        assign names automatically. In this example, Python assigns the column names <c>X1, X2, X3, X4, X5, X6</c>.
-        It is best to rename your columns manually in this scenario. The current column names (<c>X1, X2</c>,
-        etc.) are not very descriptive and will make your analysis confusing. To rename your columns, you can
-        use the <c>rename</c> function
+        Data frames in Python need to have column names. Thus if you read in data without column names, Python
+        will assign names automatically. In this example, Python assigns the column names <c>0, 1, 2, 3, 4, 5</c>.
+        It is best to rename your columns manually in this scenario. The current column names (<c>0, 1</c>, etc.)
+        are not very descriptive and will make your analysis confusing. To rename your columns, you can use the
+        <c>rename</c> function from the <c>pandas</c> package.
         <idx><h>rename</h></idx>
-        from <url href="https://dplyr.tidyverse.org/" visual="dplyr.tidyverse.org/">the <c>dplyr</c> Python package</url> <xref ref="dplyr"/>
-        <idx><h>dplyr</h></idx>
-        (one of the packages loaded with <c>tidyverse</c>, so we don&#x2019;t need to load it separately).
-        The first argument is the data set, and in the subsequent arguments you write
-        <c>new_name = old_name</c> for the selected variables to rename. We rename the 
-        <c>X1, X2, ..., X6</c> columns in the <c>canlang_data</c> data frame to more descriptive names below.
+        We rename the <c>0, 1, ..., 5</c> columns in the <c>canlang_data</c> data frame to more descriptive names below.
       </p>
       <program language="python">
         <input>
@@ -569,7 +554,7 @@ canlang_data_renamed
     <subsection xml:id="sec-reading-url">
       <title>Reading tabular data directly from a URL</title>
       <p>
-        We can also use <c>read_csv</c>, <c>read_tsv</c>, or <c>read_delim</c> (and related functions)
+        We can also use <c>read_csv</c>
         to read in data directly from a <em>Uniform Resource Locator (URL)</em> that contains tabular data.
         <idx><h>URL</h><h>reading from</h></idx>
         Here, we provide the URL of a remote file to <c>read_*</c>, instead of a path to a local file on
@@ -739,14 +724,12 @@ canlang_data
       preview the file. Examples include Google Sheets and Libre Office.
     </p>
     <p>
-      In <xref ref="tab-reading-read-table"/> we summarize the <c>read_*</c> functions we covered in
-      this chapter. We also include the <c>read_csv2</c> function for data separated by semicolons
-      <c>;</c>, which you may run into with data sets where the decimal is represented by a comma instead
-      of a period (as with some data sets from European countries).
+      In <xref ref="tab-reading-read-table"/> we summarize the data-reading functions we covered in
+      this chapter.
     </p>
 
     <table xml:id="tab-reading-read-table">
-      <title>Summary of <c>read_*</c> functions</title>
+      <title>Summary of data-reading functions</title>
       <tabular top="major" bottom="minor" left="minor" right="minor">
         <row header="yes" bottom="major">
           <cell>Data File Type</cell>
@@ -756,37 +739,20 @@ canlang_data
         <row>
           <cell>Comma (<c>,</c>) separated files</cell>
           <cell><c>read_csv</c></cell>
-          <cell><c>readr</c></cell>
+          <cell><c>pandas</c></cell>
         </row>
         <row>
           <cell>Tab (<c>\t</c>) separated files</cell>
-          <cell><c>read_tsv</c></cell>
-          <cell><c>readr</c></cell>
-        </row>
-        <row>
-          <cell>Semicolon (<c>;</c>) separated files</cell>
-          <cell><c>read_csv2</c></cell>
-          <cell><c>readr</c></cell>
-        </row>
-        <row>
-          <cell>Various formats (<c>.csv</c>, <c>.tsv</c>)</cell>
-          <cell><c>read_delim</c></cell>
-          <cell><c>readr</c></cell>
+          <cell><c>read_csv(..., sep="\t")</c></cell>
+          <cell><c>pandas</c></cell>
         </row>
         <row bottom="major">
           <cell>Excel files (<c>.xlsx</c>)</cell>
           <cell><c>read_excel</c></cell>
-          <cell><c>readxl</c></cell>
+          <cell><c>pandas</c></cell>
         </row>
       </tabular>
     </table>
-
-    <note>
-      <p>
-        <c>readr</c> is a part of the <c>tidyverse</c> package so we did not need to load this package
-        separately since we loaded <c>tidyverse</c>.
-      </p>
-    </note>
   </section>
 
   <section xml:id="sec-reading-databases">
@@ -816,7 +782,7 @@ canlang_data
       </p>
       <p>
         The first thing you need to do to read data into Python from a database is to connect to the database.
-        We do that using the <c>dbConnect</c> function from the <c>DBI</c> (database interface) package.
+        We do that using the <c>connect</c> function from the <c>DBI</c> (database interface) package.
         <idx><h>database</h><h>connect</h></idx>
         This does not read in the data, but simply tells Python where the database is and opens up a
         communication channel that Python can use to send SQL commands to the database.
@@ -831,7 +797,7 @@ conn = ibis.sqlite.connect(&quot;data/can_lang.db&quot;)
       <p>
         Often relational databases have many tables; thus, in order to retrieve data from a database,
         you need to know the name of the table in which the data is stored. You can get the names of all
-        the tables in the database using the <c>dbListTables</c>
+        the tables in the database using the <c>list_tables</c>
         <idx><h>database</h><h>tables</h></idx>
         function:
       </p>
@@ -844,15 +810,15 @@ tables
       <pre>
 [1] "lang"</pre>
       <p>
-        The <c>dbListTables</c> function returned only one name, which tells us that there is only one
+        The <c>list_tables</c> function returned only one name, which tells us that there is only one
         table in this database. To reference a table in the database (so that we can perform operations
         like selecting columns and filtering rows), we use the <c>tbl</c> function
         <idx><h>database</h><h>tbl</h></idx>
-        from the <c>dbplyr</c> package.
+        from the <c>ibis</c> package.
         <idx><h>dbplyr</h><see>database</see></idx>
         <idx><h>database</h><h>dbplyr</h></idx>
         The object returned by the <c>tbl</c> function allows us to work with data stored in databases as
-        if they were just regular data frames; but secretly, behind the scenes, <c>dbplyr</c> is turning
+        if they were just regular data frames; but secretly, behind the scenes, <c>ibis</c> is turning
         your function calls (e.g., <c>select</c> and <c>filter</c>) into SQL queries!
       </p>
       <program language="python">
@@ -880,12 +846,12 @@ canlang_table
       </pre>
       <p>
         Although it looks like we just got a data frame from the database, we didn&#x2019;t! It&#x2019;s a
-        <em>reference</em>; the data is still stored only in the SQLite database. The <c>dbplyr</c> package
+        <em>reference</em>; the data is still stored only in the SQLite database. The <c>ibis</c> package
         works this way because databases are often more efficient at selecting, filtering and joining large
         data sets than Python.
         And typically the database will not even be stored on your computer, but rather a more powerful
         machine somewhere on the web. So Python is lazy and waits to bring this data into memory until you
-        explicitly tell it to using the <c>collect</c>
+        explicitly tell it to using the <c>execute</c>
         <idx><h>database</h><h>collect</h></idx>
         function.
         <xref ref="fig-reading-ref-vs-tibble"/> highlights the difference between a <c>tibble</c>
@@ -902,7 +868,7 @@ canlang_table
 
       <p>
         We can look at the SQL commands that are sent to the database when we write
-        <c>tbl(canlang_conn, "lang")</c> in Python with the <c>show_query</c> function from the <c>dbplyr</c>
+        <c>tbl(canlang_conn, "lang")</c> in Python with the <c>show_query</c> function from the <c>ibis</c>
         package.
         <idx><h>database</h><h>show_query</h></idx>
       </p>
@@ -919,7 +885,7 @@ FROM `lang`</pre>
         The output above shows the SQL code that is sent to the database. When we write
         <c>tbl(canlang_conn, "lang")</c> in Python, in the background, the function is translating the Python code
         into SQL, sending that SQL to the database, and then translating the response for us. So
-        <c>dbplyr</c> does all the hard work of translating from Python to SQL and back for us; we can just
+        <c>ibis</c> does all the hard work of translating from Python to SQL and back for us; we can just
         stick with Python!
       </p>
       <p>
@@ -955,7 +921,7 @@ canlang_table.count().execute()
         Above you can again see the hints that this data is not actually stored in Python yet: the source is
         <c>SQL [?? x 6]</c> and the output says <c>... more rows</c> at the end (both indicating that Python
         does not know how many rows there are in total!), and a database type <c>sqlite</c> is listed.
-        We didn&#x2019;t use the <c>collect</c> function because we are not ready to bring the data into Python yet.
+        We didn&#x2019;t use the <c>execute</c> function because we are not ready to bring the data into Python yet.
         <idx><h>collect</h></idx>
         We can still use the database to do some work to obtain <em>only</em> the small amount of data we
         want to work with locally in Python. Let&#x2019;s add the second part of our database query: selecting only
@@ -986,9 +952,9 @@ str(canlang_table.count().compile())
       <p>
         Now you can see that the database will return only the two columns we asked for with the
         <c>select</c> function. In order to actually retrieve this data in Python as a data frame, we use the
-        <c>collect</c> function.
+        <c>execute</c> function.
         <idx><h>filter</h></idx>
-        Below you will see that after running <c>collect</c>, Python knows that the retrieved data has 67
+        Below you will see that after running <c>execute</c>, Python knows that the retrieved data has 67
         rows, and there is no database listed any more.
       </p>
       <program language="python">
@@ -1014,10 +980,10 @@ canlang_table.head(10).execute()
       </pre>
       <p>
         Aside from knowing the number of rows, the data looks pretty similar in both outputs shown above.
-        And <c>dbplyr</c> provides many more functions (not just <c>filter</c>) that you can use to
+        And <c>ibis</c> provides many more functions (not just <c>filter</c>) that you can use to
         directly feed the database reference (<c>lang_db</c>) into downstream analysis functions
-        (e.g., <c>ggplot2</c> for data visualization). But <c>dbplyr</c> does not provide <em>every</em>
-        function that we need for analysis; we do eventually need to call <c>collect</c>.
+        (e.g., <c>ggplot2</c> for data visualization). But <c>ibis</c> does not provide <em>every</em>
+        function that we need for analysis; we do eventually need to call <c>execute</c>.
         For example, look what happens when we try to use <c>nrow</c> to count rows in a data frame:
         <idx><h>nrow</h></idx>
       </p>
@@ -1045,10 +1011,10 @@ Error: tail() is not supported by sql sources</pre>
         Additionally, some operations will not work to extract columns or single values from the reference
         given by the <c>tbl</c> function. Thus, once you have finished your data wrangling of the
         <c>tbl</c> database reference object, it is advisable to bring it into Python as a data frame using
-        <c>collect</c>. But be very careful using <c>collect</c>: databases are often <em>very</em> big,
+        <c>execute</c>. But be very careful using <c>execute</c>: databases are often <em>very</em> big,
         and reading an entire table into Python might take a long time to run or even possibly crash your
         machine. So make sure you use <c>filter</c> and <c>select</c> on the database table to reduce the
-        data to a reasonable size before using <c>collect</c> to read it into Python!
+        data to a reasonable size before using <c>execute</c> to read it into Python!
       </p>
     </subsection>
 
@@ -1060,7 +1026,7 @@ Error: tail() is not supported by sql sources</pre>
         is a very popular and open-source option for relational database software. Unlike SQLite,
         PostgreSQL uses a client&#x2013;server database engine, as it was designed to be used and accessed
         on a network. This means that you have to provide more information to Python when connecting to Postgres
-        databases. The additional information that you need to include when you call the <c>dbConnect</c>
+        databases. The additional information that you need to include when you call the <c>connect</c>
         function is listed below:
       </p>
       <ul>
@@ -1074,7 +1040,7 @@ Error: tail() is not supported by sql sources</pre>
       </ul>
       <p>
         Additionally, we must use the <c>RPostgres</c> package instead of <c>RSQLite</c> in the
-        <c>dbConnect</c> function call. Below we demonstrate how to connect to a version of the
+        <c>connect</c> function call. Below we demonstrate how to connect to a version of the
         <c>can_mov_db</c> database, which contains information about Canadian movies. Note that the
         <c>host</c>, <c>user</c>, and <c>password</c> below are <em>not real</em>; you will not actually
         be able to connect to a database using this information.
@@ -1087,7 +1053,7 @@ aboriginal_lang_data
       </program>
       <p>
         After opening the connection, everything looks and behaves almost identically to when we were
-        using an SQLite database in Python. For example, we can again use <c>dbListTables</c> to find out what
+        using an SQLite database in Python. For example, we can again use <c>list_tables</c> to find out what
         tables are in the <c>can_mov_db</c> database:
       </p>
       <program language="python">
@@ -1171,7 +1137,7 @@ conn.list_tables()
 Error in min(avg_rating_db) : invalid 'type' (list) of argument</pre>
       <p>
         Instead of the minimum, we get an error! This is another example of when we need to use the
-        <c>collect</c> function to bring the data into Python for further computation:
+        <c>execute</c> function to bring the data into Python for further computation:
       </p>
       <program language="python">
         <input>
@@ -1189,9 +1155,9 @@ print('[&quot;themes&quot;, &quot;medium&quot;, &quot;titles&quot;, &quot;title_
         Opening a database
         <idx><h>database</h><h>reasons to use</h></idx>
         involved a lot more effort than just opening a <c>.csv</c>, <c>.tsv</c>, or any of the other
-        plain text or Excel formats. We had to open a connection to the database, then use <c>dbplyr</c>
+        plain text or Excel formats. We had to open a connection to the database, then use <c>ibis</c>
         to translate <c>tidyverse</c>-like commands (<c>filter</c>, <c>select</c> etc.) into SQL commands
-        that the database understands, and then finally <c>collect</c> the results. And not all
+        that the database understands, and then finally <c>execute</c> the results. And not all
         <c>tidyverse</c> commands can currently be translated to work with databases. For example, we
         can compute a mean with a database but can&#x2019;t easily compute a median. So you might be wondering:
         why should we use databases at all?
@@ -1215,10 +1181,10 @@ print('[&quot;themes&quot;, &quot;medium&quot;, &quot;titles&quot;, &quot;title_
       At the middle and end of a data analysis, we often want to write a data frame that has changed
       (either through filtering, selecting, mutating or summarizing) to a file to share it with others
       or use it for another step in the analysis. The most straightforward way to do this is to use the
-      <c>write_csv</c> function
-      <idx><h>write function</h><h>write_csv</h></idx>
-      from the <c>tidyverse</c> package. The default arguments for this file are to use a comma
-      (<c>,</c>) as the delimiter and include column names. Below we demonstrate creating a new version
+      <c>to_csv</c> method
+      <idx><h>write function</h><h>to_csv</h></idx>
+      from <c>pandas</c>. The default arguments for this file are to use a comma
+      (<c>,</c>) as the separator and include column names. Below we demonstrate creating a new version
       of the Canadian languages data set without the official languages category according to the
       Canadian 2016 Census, and then writing this to a <c>.csv</c> file:
     </p>
@@ -1242,8 +1208,7 @@ ratings_table
     <p>
       Data doesn&#x2019;t just magically appear on your computer; you need to get it from somewhere. Earlier
       in the chapter we showed you how to access data stored in a plain text, spreadsheet-like format
-      (e.g., comma- or tab-separated) from a web URL using one of the <c>read_*</c> functions from the
-      <c>tidyverse</c>. But as time goes on, it is increasingly uncommon to find data (especially large
+      (e.g., comma- or tab-separated) from a web URL using <c>read_csv</c>. But as time goes on, it is increasingly uncommon to find data (especially large
       amounts of data) in this format available for download from a URL. Instead, websites now often offer
       something known as an <em>application programming interface (API)</em>,
       <idx><h>application programming interface</h><see>API</see></idx>
@@ -1258,11 +1223,8 @@ ratings_table
      Another interesting thought: websites themselves are data! When you type a URL into your browser window, your browser asks the web server (another computer on the internet whose job it is to respond to requests for the website) to give it the website’s data, and then your browser translates that data into something you can see. If the website shows you some information that you’re interested in, you could create a data set for yourself by copying and pasting that information into a file. This process of taking information directly from what a website displays is called web scraping (or sometimes screen scraping). Now, of course, copying and pasting information manually is a painstaking and error-prone process, especially when there is a lot of information to gather. So instead of asking your browser to translate the information that the web server provides into something you can see, you can collect that data programmatically—in the form of hypertext markup language (HTML) and cascading style sheet (CSS) code—and process it to extract useful information. HTML provides the basic structure of a site and tells the webpage how to display the content (e.g., titles, paragraphs, bullet lists etc.), whereas CSS helps style the content and tells the webpage how the HTML elements should be presented (e.g., colors, layouts, fonts etc.).
     </p>
     <p>
-      This subsection will show you the basics of both web scraping with the
-      <url href="https://rvest.tidyverse.org/" visual="rvest.tidyverse.org/"><c>rvest</c> Python package</url>
-      <xref ref="rvest"/> and accessing the NASA &#x201C;Astronomy Picture of the Day&#x201D; API
-      using the <url href="https://httr2.r-lib.org/" visual="httr2.r-lib.org/"><c>httr2</c> Python package</url>
-      <xref ref="httr2"/>.
+      This subsection will show you the basics of both web scraping with <c>BeautifulSoup</c>
+      and accessing the NASA &#x201C;Astronomy Picture of the Day&#x201D; API using <c>requests</c>.
     </p>
 
     <subsection xml:id="sec-reading-scraping">
@@ -1452,11 +1414,11 @@ td:nth-child(4) ,
       </subsubsection>
 
       <subsubsection xml:id="sec-reading-rvest">
-        <title>Using <c>rvest</c></title>
+        <title>Using <c>BeautifulSoup</c></title>
         <p>
-          We will use the <c>rvest</c> Python package
+          We will use the <c>BeautifulSoup</c> Python package
           <idx><h>rvest</h></idx>
-          to scrape data from the Wikipedia page. We start by loading the <c>rvest</c> package:
+          to scrape data from the Wikipedia page. We start by loading the <c>BeautifulSoup</c> package:
         </p>
         <program language="python">
           <input>
@@ -1578,7 +1540,7 @@ lowest.execute()
         its own API designed especially for its own use case. Therefore we will just provide one example of
         accessing data through an API in this book, with the hope that it gives you enough of a basic idea
         that you can learn how to use another API if needed. In particular, in this book we will show you
-        the basics of how to use the <c>httr2</c> package in Python
+        the basics of how to use the <c>requests</c> package in Python
         <idx><h>API</h><h>httr2</h></idx>
         <idx><h>httr2</h></idx>
         <idx><h>NASA</h></idx>
@@ -1694,7 +1656,7 @@ Rho Ophiuchi","url":"https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph1024.p
           corresponding to July 13, 2023.
         </p>
         <p>
-          So now our job is to do all of this programmatically in Python. We will load the <c>httr2</c> package,
+          So now our job is to do all of this programmatically in Python. We will load the <c>requests</c> package,
           and construct the query using the <c>request</c> function, which takes a single URL argument;
           you will recognize the same query URL that we pasted into the browser earlier. We will then send
           the query using the <c>req_perform</c> function, and finally obtain a JSON representation of the
@@ -1787,7 +1749,7 @@ page = bs4.BeautifulSoup(wiki.content, &quot;html.parser&quot;)
           from what we obtained from web scraping; the extracted information is readily available in a JSON
           format, as opposed to raw HTML code (although not <em>every</em> API will provide data in such a
           nice format). From this point onward, the <c>nasa_df</c> data frame is stored on your machine, and
-          you can play with it to your heart&#x2019;s content. For example, you can use <c>write_csv</c> to
+          you can play with it to your heart&#x2019;s content. For example, you can use <c>to_csv</c> to
           save it to a file and <c>read_csv</c> to read it into Python again later; and after reading the next
           few chapters you will have the skills to do even more interesting things! If you decide that you
           want to ask any of the various NASA APIs for more data (see <url href="https://api.nasa.gov/"
