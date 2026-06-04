@@ -2,6 +2,12 @@
 <chapter xml:id="ch-intro" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Python and Pandas</title>
 
+  <program language="python">
+    <input>
+from chapter_preamble import *
+    </input>
+  </program>
+
   <section xml:id="sec-intro-overview">
     <title>Overview</title>
     <p>
@@ -494,6 +500,12 @@ my-number = 1
       </input>
     </program>
 
+    <program language="python">
+      <input>
+print("SyntaxError: cannot assign to expression here. Maybe you meant '==' instead of '='?")
+      </input>
+    </program>
+
     <pre>
 SyntaxError: cannot assign to expression here. Maybe you meant '==' instead of '='?
     </pre>
@@ -609,7 +621,7 @@ can_lang
 
       <program language="python">
         <input>
-can_lang
+can_lang[can_lang["category"] == "Aboriginal languages"]
         </input>
       </program>
 
@@ -659,27 +671,65 @@ can_lang
 
       <program language="python">
         <input>
-can_lang[can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;]
+can_lang[["language", "mother_tongue"]]
         </input>
       </program>
 
       <pre>
-# A tibble: 67 x 2
-   language                   mother_tongue
-   &lt;chr&gt;                              &lt;dbl&gt;
- 1 Aboriginal languages, n.o.s.         590
- 2 Algonquian languages, n.i.e.          45
- 3 Algonquin                           1260
- 4 Athabaskan languages, n.i.e.          50
- 5 Atikamekw                           6150
- 6 Babine (Wetsuwet'en)                 110
- 7 Beaver                               190
- 8 Blackfoot                           2815
- 9 Carrier                             1025
-10 Cayuga                                45
-# … with 57 more rows
+# A tibble: 214 x 2
+   language                              mother_tongue
+   &lt;chr&gt;                                         &lt;dbl&gt;
+ 1 Aboriginal languages, n.o.s.                    590
+ 2 Afrikaans                                     10260
+ 3 Afro-Asiatic languages, n.i.e.                 1150
+ 4 Akan (Twi)                                    13460
+ 5 Albanian                                      26895
+ 6 Algonquian languages, n.i.e.                     45
+ 7 Algonquin                                      1260
+ 8 American Sign Language                         2685
+ 9 Amharic                                       22465
+10 Arabic                                       419890
+# … with 204 more rows
       </pre>
 
+    </subsection>
+
+    <subsection xml:id="subsec-intro-loc">
+      <title>Using <c>loc[]</c> to filter rows and select columns</title>
+      <p>
+        The <c>[]</c> operation is only used when you want to filter rows <em>or</em> select
+        columns; it cannot be used to do both operations at the same time. But in order to
+        answer our original data analysis question in this chapter, we need to <em>both</em>
+        filter the rows for Aboriginal languages, <em>and</em> select the
+        <c>language</c> and <c>mother_tongue</c> columns. Fortunately, <c>pandas</c> provides
+        the <c>loc[]</c> operation, which lets us do just that.
+      </p>
+      <p>
+        The syntax is very similar to the <c>[]</c> operation we have already covered: we first
+        write the name of the data frame, then follow that with <c>.loc[]</c>. Inside the
+        square brackets, we write our row filtering logical statement, then a comma, then our
+        list of columns to select.
+      </p>
+      <figure xml:id="fig-img-loc">
+        <caption>Syntax for using the <c>loc[]</c> operation to filter rows and select columns.</caption>
+        <image source="images/intro/filter_rows_and_columns.png" width="100%"/>
+      </figure>
+      <program language="python">
+        <input>
+aboriginal_lang = can_lang.loc[can_lang["category"] == "Aboriginal languages", ["language", "mother_tongue"]]
+        </input>
+      </program>
+      <program language="python">
+        <input>
+aboriginal_lang
+        </input>
+      </program>
+      <p>
+        At this point, if we have done everything correctly, <c>aboriginal_lang</c> should be
+        a data frame containing only rows where <c>category</c> is
+        <c>"Aboriginal languages"</c>, and containing only the
+        <c>language</c> and <c>mother_tongue</c> columns.
+      </p>
     </subsection>
   </section>
 
@@ -710,7 +760,8 @@ can_lang[can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;]
 
     <program language="python">
       <input>
-can_lang[[&quot;language&quot;, &quot;mother_tongue&quot;]]
+arranged_lang = aboriginal_lang.sort_values(by="mother_tongue", ascending=False)
+arranged_lang
       </input>
     </program>
 
@@ -739,7 +790,8 @@ can_lang[[&quot;language&quot;, &quot;mother_tongue&quot;]]
 
     <program language="python">
       <input>
-aboriginal_lang = can_lang.loc[can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;, [&quot;language&quot;, &quot;mother_tongue&quot;]]
+ten_lang = arranged_lang.head(10)
+ten_lang
       </input>
     </program>
 
@@ -779,10 +831,28 @@ aboriginal_lang = can_lang.loc[can_lang[&quot;category&quot;] == &quot;Aborigina
       <c>=</c>, and then the computation to store in that column. In this case, we will opt to
       create a new column called <c>mother_tongue_percent</c>.
     </p>
+    <note>
+      <p>
+        You will see below that we write the Canadian population in Python as
+        <c>35_151_728</c>. The underscores are just there for readability, and do not affect
+        how Python interprets the number.
+      </p>
+    </note>
 
     <program language="python">
       <input>
-aboriginal_lang
+# disable setting with copy warning
+# it's not important for this chapter and just distracting
+# only occurs here because we did a much earlier .loc operation that is being picked up below by the coln assignment
+pd.options.mode.chained_assignment = None
+      </input>
+    </program>
+
+    <program language="python">
+      <input>
+canadian_population = 35_151_728
+ten_lang["mother_tongue_percent"] = 100 * ten_lang["mother_tongue"] / canadian_population
+ten_lang
       </input>
     </program>
 
@@ -807,6 +877,56 @@ aboriginal_lang
       <c>ten_lang</c> data frame were spoken as a mother tongue by between 0.008% and 0.18%
       of the Canadian population.
     </p>
+  </section>
+
+  <section xml:id="sec-intro-chaining">
+    <title>Combining steps with chaining and multiline expressions</title>
+    <p>
+      It took us three steps to find the ten Aboriginal languages most often reported in 2016
+      as mother tongues in Canada. One way of performing these steps is to write multiple lines
+      of code, storing temporary intermediate objects as you go:
+    </p>
+    <program language="python">
+      <input>
+aboriginal_lang = can_lang.loc[can_lang["category"] == "Aboriginal languages", ["language", "mother_tongue"]]
+arranged_lang_sorted = aboriginal_lang.sort_values(by="mother_tongue", ascending=False)
+ten_lang = arranged_lang_sorted.head(10)
+      </input>
+    </program>
+    <p>
+      We can split long expressions across multiple lines to improve readability:
+    </p>
+    <program language="python">
+      <input>
+aboriginal_lang = can_lang.loc[
+    can_lang["category"] == "Aboriginal languages",
+    ["language", "mother_tongue"]
+]
+arranged_lang_sorted = aboriginal_lang.sort_values(
+    by="mother_tongue",
+    ascending=False
+)
+ten_lang = arranged_lang_sorted.head(10)
+      </input>
+    </program>
+    <p>
+      We can also <em>chain</em> operations together to avoid creating unnecessary intermediate
+      objects:
+    </p>
+    <program language="python">
+      <input>
+# obtain the 10 most common Aboriginal languages
+ten_lang = (
+    can_lang.loc[
+       can_lang["category"] == "Aboriginal languages",
+       ["language", "mother_tongue"]
+    ]
+    .sort_values(by="mother_tongue", ascending=False)
+    .head(10)
+)
+ten_lang
+      </input>
+    </program>
   </section>
 
   <section xml:id="sec-intro-visualizations">
@@ -857,8 +977,15 @@ aboriginal_lang
 
       <program language="python">
         <input>
-arranged_lang = aboriginal_lang.sort_values(by=&quot;mother_tongue&quot;, ascending=False)
-arranged_lang
+import altair as alt
+        </input>
+      </program>
+
+      <program language="python">
+        <input>
+barplot_mother_tongue = (
+  alt.Chart(ten_lang).mark_bar().encode(x="language", y="mother_tongue")
+)
         </input>
       </program>
 
@@ -912,8 +1039,10 @@ arranged_lang
 
       <program language="python">
         <input>
-ten_lang = arranged_lang.head(10)
-ten_lang
+barplot_mother_tongue = alt.Chart(ten_lang).mark_bar().encode(
+    x=alt.X("language").title("Language"),
+    y=alt.Y("mother_tongue").title("Mother Tongue (Number of Canadian Residents)")
+)
         </input>
       </program>
 
@@ -935,9 +1064,10 @@ ten_lang
 
       <program language="python">
         <input>
-canadian_population = 35_151_728
-ten_lang[&quot;mother_tongue_percent&quot;] = 100 * ten_lang[&quot;mother_tongue&quot;] / canadian_population
-ten_lang
+barplot_mother_tongue_axis = alt.Chart(ten_lang).mark_bar().encode(
+    x=alt.X("mother_tongue").title("Mother Tongue (Number of Canadian Residents)"),
+    y=alt.Y("language").title("Language")
+)
         </input>
       </program>
 
@@ -962,9 +1092,10 @@ ten_lang
 
       <program language="python">
         <input>
-aboriginal_lang = can_lang.loc[can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;, [&quot;language&quot;, &quot;mother_tongue&quot;]]
-arranged_lang_sorted = aboriginal_lang.sort_values(by=&quot;mother_tongue&quot;, ascending=False)
-ten_lang = arranged_lang_sorted.head(10)
+ordered_barplot_mother_tongue = alt.Chart(ten_lang).mark_bar().encode(
+    x=alt.X("mother_tongue").title("Mother Tongue (Number of Canadian Residents)"),
+    y=alt.Y("language").sort("x").title("Language")
+)
         </input>
       </program>
 
@@ -1020,15 +1151,21 @@ ten_lang = arranged_lang_sorted.head(10)
 
       <program language="python">
         <input>
-aboriginal_lang = can_lang.loc[
-    can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;,
-    [&quot;language&quot;, &quot;mother_tongue&quot;]
-]
-arranged_lang_sorted = aboriginal_lang.sort_values(
-    by=&quot;mother_tongue&quot;,
-    ascending=False
+# load the data set
+can_lang = pd.read_csv("data/can_lang.csv")
+
+# obtain the 10 most common Aboriginal languages
+ten_lang = (
+    can_lang.loc[can_lang["category"] == "Aboriginal languages", ["language", "mother_tongue"]]
+    .sort_values(by="mother_tongue", ascending=False)
+    .head(10)
 )
-ten_lang = arranged_lang_sorted.head(10)
+
+# create the visualization
+ten_lang_plot = alt.Chart(ten_lang).mark_bar().encode(
+    x=alt.X("mother_tongue").title("Mother Tongue (Number of Canadian Residents)"),
+    y=alt.Y("language").sort("x").title("Language")
+)
         </input>
       </program>
 
@@ -1057,16 +1194,7 @@ ten_lang = arranged_lang_sorted.head(10)
 
     <program language="python">
       <input>
-# obtain the 10 most common Aboriginal languages
-ten_lang = (
-    can_lang.loc[
-       can_lang[&quot;category&quot;] == &quot;Aboriginal languages&quot;,
-       [&quot;language&quot;, &quot;mother_tongue&quot;]
-    ]
-    .sort_values(by=&quot;mother_tongue&quot;, ascending=False)
-    .head(10)
-)
-ten_lang
+help(pd.read_csv)
       </input>
     </program>
 
@@ -1084,8 +1212,38 @@ ten_lang
     </p>
 
     <figure xml:id="fig-01-help">
-      <caption>The help dialog for the <c>pd.read_csv</c> function, including a high-level
+      <caption>The documentation for the <c>read_csv</c> function including a high-level
         description, a list of arguments and their meanings, and more.</caption>
+      <image source="images/intro/help_read_csv.png" width="80%"/>
+    </figure>
+
+    <p>
+      If you are working in a Jupyter Lab environment, there are some conveniences that will
+      help you look up function names and access documentation. First, rather than
+      <c>help</c>, you can use the more concise <c>?</c> character. For example:
+    </p>
+    <program language="python">
+      <input>
+?pd.read_csv
+      </input>
+    </program>
+    <p>
+      You can also type the first characters of the function you want to use, and then press
+      Tab to bring up a menu that shows all available functions that start with those
+      characters.
+    </p>
+    <figure xml:id="fig-completion-menu">
+      <caption>The suggestions shown after typing <c>pd.read</c> and pressing Tab.</caption>
+      <image source="images/intro/completion_menu.png" width="80%"/>
+    </figure>
+    <p>
+      To get more info on the function you want to use, you can type out the full name and then
+      press Shift+Tab to bring up a help dialog including the same information as when using
+      <c>help()</c>.
+    </p>
+    <figure xml:id="fig-help-dialog">
+      <caption>The help dialog shown after typing <c>pd.read_csv</c> and then pressing
+        Shift+Tab.</caption>
       <image source="images/intro/help_dialog.png" width="80%"/>
     </figure>
   </section>
@@ -1095,8 +1253,8 @@ ten_lang
     <p>
       Practice exercises for the material covered in this chapter can be found in the
       accompanying
-      <url href="https://worksheets.datasciencebook.ca"
-           visual="worksheets.datasciencebook.ca">worksheets repository</url>
+      <url href="https://worksheets.python.datasciencebook.ca"
+           visual="worksheets.python.datasciencebook.ca">worksheets repository</url>
       in the &#x201C;Python and pandas&#x201D; row. You can launch an interactive version
       of the worksheet in your browser by clicking the &#x201C;launch binder&#x201D; button.
       You can also preview a non-interactive version of the worksheet by clicking &#x201C;view
@@ -1105,6 +1263,11 @@ ten_lang
       <xref ref="ch-setup"/>. This will ensure that the automated feedback and guidance that
       the worksheets provide will function as intended.
     </p>
+  </section>
+
+  <section xml:id="sec-intro-references">
+    <title>References</title>
+    <p>References for this chapter are listed in <xref ref="references"/>.</p>
   </section>
 
 </chapter>
