@@ -254,21 +254,6 @@ canlang_data
         </input>
       </program>
       <pre>
-# A tibble: 214 × 6
-## # A tibble: 214 × 6
-##    category          language mother_tongue most_at_home most_at_work lang_known
-##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 Aboriginal langu… Aborigi…           590          235           30        665
-##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
-##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
-##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
-##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
-##  6 Aboriginal langu… Algonqu…            45           10            0        120
-##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
-##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
-##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
-## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
-## # ℹ 204 more rows
      </pre>
     </subsection>
 
@@ -321,16 +306,16 @@ canlang_data        </input>
 <pre>
 	category	                              language	                     mother_tongue	most_at_home	most_at_work	lang_known
 0	Aboriginal languages	                  Aboriginal languages, n.o.s.  	590	                   235	          30	       665
-1	Non-Official & Non-Aboriginal languages	Afrikaans	                     10260	                4785		        85	     23415
-2	Non-Official & Non-Aboriginal languages	Afro-Asiatic languages, n.i.e.  1150		               445		        10	      2775
-3	Non-Official & Non-Aboriginal languages	Akan (Twi)	                   13460		              5985		        25	     22150
-4	Non-Official & Non-Aboriginal languages	Albanian	                     26895		             13135		        345	     31930
+1	Non-Official &amp; Non-Aboriginal languages	Afrikaans	                     10260	                4785		        85	     23415
+2	Non-Official &amp; Non-Aboriginal languages	Afro-Asiatic languages, n.i.e.  1150		               445		        10	      2775
+3	Non-Official &amp; Non-Aboriginal languages	Akan (Twi)	                   13460		              5985		        25	     22150
+4	Non-Official &amp; Non-Aboriginal languages	Albanian	                     26895		             13135		        345	     31930
 ...	...	...	...	...	...	...
-209	Non-Official & Non-Aboriginal languages	Wolof		                      3990		              1385		        10	      8240
+209	Non-Official &amp; Non-Aboriginal languages	Wolof		                      3990		              1385		        10	      8240
 210	Aboriginal languages	                  Woods Cree		                1840		               800		        75	      2665
-211	Non-Official & Non-Aboriginal languages	Wu (Shanghainese)	           12915	               	7650		        105	     16530
-212	Non-Official & Non-Aboriginal languages	Yiddish		                   13555		              7085		        895	     20985
-213	Non-Official & Non-Aboriginal languages	Yoruba	                      9080		              2615		         15	     22415
+211	Non-Official &amp; Non-Aboriginal languages	Wu (Shanghainese)	           12915	               	7650		        105	     16530
+212	Non-Official &amp; Non-Aboriginal languages	Yiddish		                   13555		              7085		        895	     20985
+213	Non-Official &amp; Non-Aboriginal languages	Yoruba	                      9080		              2615		         15	     22415
 214 rows × 6 columns
      </pre>
       <p>
@@ -376,20 +361,6 @@ canlang_data
         </input>
       </program>
       <pre>
-## # A tibble: 214 × 6
-##    category          language mother_tongue most_at_home most_at_work lang_known
-##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 Aboriginal langu… Aborigi…           590          235           30        665
-##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
-##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
-##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
-##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
-##  6 Aboriginal langu… Algonqu…            45           10            0        120
-##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
-##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
-##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
-## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
-## # ℹ 204 more rows
       </pre>
       <p>
         If you compare the data frame here to the data frame we obtained in
@@ -446,20 +417,6 @@ canlang_data
         </input>
       </program>
       <pre>
-## # A tibble: 214 × 6
-##    X1                                      X2             X3     X4    X5     X6
-##    &lt;chr&gt;                                   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
-##  1 Aboriginal languages                    Aborigina…    590    235    30    665
-##  2 Non-Official &amp; Non-Aboriginal languages Afrikaans   10260   4785    85  23415
-##  3 Non-Official &amp; Non-Aboriginal languages Afro-Asia…   1150    445    10   2775
-##  4 Non-Official &amp; Non-Aboriginal languages Akan (Twi)  13460   5985    25  22150
-##  5 Non-Official &amp; Non-Aboriginal languages Albanian    26895  13135   345  31930
-##  6 Aboriginal languages                    Algonquia…     45     10     0    120
-##  7 Aboriginal languages                    Algonquin    1260    370    40   2480
-##  8 Non-Official &amp; Non-Aboriginal languages American …   2685   3020  1145  21930
-##  9 Non-Official &amp; Non-Aboriginal languages Amharic     22465  12785   200  33670
-## 10 Non-Official &amp; Non-Aboriginal languages Arabic     419890 223535  5585 629055
-## # ℹ 204 more rows
       </pre>
       <p>
         Data frames in Python need to have column names. Thus if you read in data without column names, Python
@@ -485,20 +442,6 @@ canlang_data_renamed
         </input>
       </program>
       <pre>
-## # A tibble: 214 × 6
-##    category          language mother_tongue most_at_home most_at_work lang_known
-##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 Aboriginal langu… Aborigi…           590          235           30        665
-##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
-##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
-##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
-##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
-##  6 Aboriginal langu… Algonqu…            45           10            0        120
-##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
-##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
-##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
-## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
-## # ℹ 204 more rows
       </pre>
     </subsection>
 
@@ -535,20 +478,6 @@ canlang_data
         </input>
       </program>
       <pre>
-## # A tibble: 214 × 6
-##    category          language mother_tongue most_at_home most_at_work lang_known
-##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 Aboriginal langu… Aborigi…           590          235           30        665
-##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
-##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
-##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
-##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
-##  6 Aboriginal langu… Algonqu…            45           10            0        120
-##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
-##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
-##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
-## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
-## # ℹ 204 more rows
       </pre>
     </subsection>
 
@@ -571,20 +500,6 @@ canlang_data
         </input>
       </program>
       <pre>
-## # A tibble: 214 × 6
-##    category          language mother_tongue most_at_home most_at_work lang_known
-##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 Aboriginal langu… Aborigi…           590          235           30        665
-##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
-##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
-##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
-##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
-##  6 Aboriginal langu… Algonqu…            45           10            0        120
-##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
-##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
-##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
-## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
-## # ℹ 204 more rows
       </pre>
     </subsection>
 
@@ -647,20 +562,6 @@ canlang_data
       </input>
     </program>
     <pre>
-## # A tibble: 214 × 6
-##    category          language mother_tongue most_at_home most_at_work lang_known
-##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 Aboriginal langu… Aborigi…           590          235           30        665
-##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
-##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
-##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
-##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
-##  6 Aboriginal langu… Algonqu…            45           10            0        120
-##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
-##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
-##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
-## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
-## # ℹ 204 more rows
     </pre>
     <p>
       If the <c>.xlsx</c> file has multiple sheets, you have to use the <c>sheet</c> argument to specify
@@ -779,21 +680,6 @@ canlang_table
         </input>
       </program>
       <pre>
-## # Source:   table&lt;lang&gt; [?? x 6]
-## # Database: sqlite 3.41.2 [/home/rstudio/introduction-to-datascience/data/can_lang.db]
-##    category          language mother_tongue most_at_home most_at_work lang_known
-##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 Aboriginal langu… Aborigi…           590          235           30        665
-##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
-##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
-##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
-##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
-##  6 Aboriginal langu… Algonqu…            45           10            0        120
-##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
-##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
-##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
-## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
-## # ℹ more rows
       </pre>
       <p>
         Although it looks like we just got a data frame from the database, we didn&#x2019;t! It&#x2019;s a
@@ -805,15 +691,15 @@ canlang_table
         explicitly tell it to using the <c>execute</c>
         <idx><h>database</h><h>collect</h></idx>
         function.
-        <xref ref="fig-reading-ref-vs-tibble"/> highlights the difference between a <c>tibble</c>
+        <xref ref="fig-reading-ref-vs-tibble"/> highlights the difference between a <c>data frame</c>
         object in Python and the output we just created. Notice in the table on the right, the first two lines
         of the output indicate the source is SQL. The last line doesn&#x2019;t show how many rows there are
         (Python is trying to avoid performing expensive query operations), whereas the output for the
-        <c>tibble</c> object does.
+        <c>data frame</c> object does.
       </p>
 
       <figure xml:id="fig-reading-ref-vs-tibble">
-        <caption>Comparison of a reference to data in a database and a tibble in Python.</caption>
+        <caption>Comparison of a reference to data in a database and a data frame in Python.</caption>
         <image source="images/reading/ref_vs_tibble.001.jpeg" width="80%"/>
       </figure>
 
@@ -852,21 +738,6 @@ canlang_table.count().execute()
         </input>
       </program>
       <pre>
-## # Source:   SQL [?? x 6]
-## # Database: sqlite 3.41.2 [/home/rstudio/introduction-to-datascience/data/can_lang.db]
-##    category          language mother_tongue most_at_home most_at_work lang_known
-##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 Aboriginal langu… Aborigi…           590          235           30        665
-##  2 Aboriginal langu… Algonqu…            45           10            0        120
-##  3 Aboriginal langu… Algonqu…          1260          370           40       2480
-##  4 Aboriginal langu… Athabas…            50           10            0         85
-##  5 Aboriginal langu… Atikame…          6150         5465         1100       6645
-##  6 Aboriginal langu… Babine …           110           20           10        210
-##  7 Aboriginal langu… Beaver             190           50            0        340
-##  8 Aboriginal langu… Blackfo…          2815         1110           85       5645
-##  9 Aboriginal langu… Carrier           1025          250           15       2100
-## 10 Aboriginal langu… Cayuga              45           10           10        125
-## # ℹ more rows
       </pre>
       <p>
         Above you can again see the hints that this data is not actually stored in Python yet: the source is
@@ -884,21 +755,6 @@ str(canlang_table.count().compile())
         </input>
       </program>
       <pre>
-## # Source:   SQL [?? x 2]
-## # Database: sqlite 3.41.2 [/home/rstudio/introduction-to-datascience/data/can_lang.db]
-##    language                     mother_tongue
-##    &lt;chr&gt;                                &lt;dbl&gt;
-##  1 Aboriginal languages, n.o.s.           590
-##  2 Algonquian languages, n.i.e.            45
-##  3 Algonquin                             1260
-##  4 Athabaskan languages, n.i.e.            50
-##  5 Atikamekw                             6150
-##  6 Babine (Wetsuwet'en)                   110
-##  7 Beaver                                 190
-##  8 Blackfoot                             2815
-##  9 Carrier                               1025
-## 10 Cayuga                                  45
-## # ℹ more rows
       </pre>
       <p>
         Now you can see that the database will return only the two columns we asked for with the
@@ -914,20 +770,6 @@ canlang_table.head(10).execute()
         </input>
       </program>
       <pre>
-## # A tibble: 67 × 2
-##    language                     mother_tongue
-##    &lt;chr&gt;                                &lt;dbl&gt;
-##  1 Aboriginal languages, n.o.s.           590
-##  2 Algonquian languages, n.i.e.            45
-##  3 Algonquin                             1260
-##  4 Athabaskan languages, n.i.e.            50
-##  5 Atikamekw                             6150
-##  6 Babine (Wetsuwet'en)                   110
-##  7 Beaver                                 190
-##  8 Blackfoot                             2815
-##  9 Carrier                               1025
-## 10 Cayuga                                  45
-## # ℹ 57 more rows
       </pre>
       <p>
         Aside from knowing the number of rows, the data looks pretty similar in both outputs shown above.
@@ -1421,20 +1263,13 @@ Selection[r0]
           </input>
         </program>
         <pre>
-## {xml_nodeset (6)}
-## [1] &lt;a href="/wiki/Greater_Toronto_Area" title="Greater Toronto Area"&gt;Toronto ...
-## [2] &lt;td style="text-align:right;"&gt;6,202,225&lt;/td&gt;
-## [3] &lt;a href="/wiki/London,_Ontario" title="London, Ontario">London&lt;/a&gt;
-## [4] &lt;td style="text-align:right;"&gt;543,551\n&lt;/td&gt;
-## [5] &lt;a href="/wiki/Greater_Montreal" title="Greater Montreal">Montreal&lt;/a&gt;
-## [6] &lt;td style="text-align:right;"&gt;4,291,732&lt;/td&gt;
         </pre>
         <note>
           <p>
             <c>head</c> is a function that is often useful for viewing only a short summary of a Python
             object, rather than the whole thing (which may be quite a lot to look at). For example, here
             <c>head</c> shows us only the first 6 items in the <c>population_nodes</c> object. Note that
-            some Python objects by default print only a small summary. For example, <c>tibble</c> data frames
+            some Python objects by default print only a small summary. For example, <c>data frame</c> data frames
             only show you the first 10 rows. But not <em>all</em> Python objects do this, and that&#x2019;s where
             the <c>head</c> function helps summarize things for you.
           </p>
@@ -1464,7 +1299,6 @@ lowest.execute()
           </input>
         </program>
         <pre>
-## [1] "Toronto"   "6,202,225" "London"    "543,551\n" "Montreal"  "4,291,732"
         </pre>
         <p>
           Fantastic! We seem to have extracted the data of interest from the raw HTML source code. But we
@@ -1622,26 +1456,6 @@ lowest
           </input>
         </program>
         <pre>
-## $date
-## [1] "2023-07-13"
-## 
-## $explanation
-## [1] "A mere 390 light-years away, Sun-like stars and future planetary systems are forming in the Rho Ophiuchi molecular cloud complex, the closest star-forming region to our fair planet. The James Webb Space Telescope's NIRCam peered into the nearby natal chaos to capture this infrared image at an inspiring scale. The spectacular cosmic snapshot was released to celebrate the successful first year of Webb's exploration of the Universe. The frame spans less than a light-year across the Rho Ophiuchi region and contains about 50 young stars. Brighter stars clearly sport Webb's characteristic pattern of diffraction spikes. Huge jets of shocked molecular hydrogen blasting from newborn stars are red in the image, with the large, yellowish dusty cavity carved out by the energetic young star near its center. Near some stars in the stunning image are shadows cast by their protoplanetary disks."
-## 
-## $hdurl
-## [1] "https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph.png"
-## 
-## $media_type
-## [1] "image"
-## 
-## $service_version
-## [1] "v1"
-## 
-## $title
-## [1] "Webb's Rho Ophiuchi"
-## 
-## $url
-## [1] "https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph1024.png"
         </pre>
         <p>
           We can obtain more records at once by using the <c>start_date</c> and <c>end_date</c> parameters, as shown in the table of parameters in <xref ref = "fig-reading-nasa-parameters"/>.
@@ -1680,20 +1494,6 @@ page = bs4.BeautifulSoup(wiki.content, &quot;html.parser&quot;)
           </input>
         </program>
         <pre>
-## # A tibble: 74 × 4
-##    date       title                                        copyright       url                    
-##    &lt;chr&gt;      &lt;chr&gt;                                        &lt;chr&gt;           &lt;chr&gt;                  
-##  1 2023-05-01 Carina Nebula North                          "\nCarlos Tayl… http…
-##  2 2023-05-02 Flat Rock Hills on Mars                      "\nNASA, \nJPL… http…
-##  3 2023-05-03 Centaurus A: A Peculiar Island of Stars      "\nMarco Loren… http…
-##  4 2023-05-04 The Galaxy, the Jet, and a Famous Black Hole  &lt;NA&gt;           http…
-##  5 2023-05-05 Shackleton from ShadowCam                     &lt;NA&gt;           http…
-##  6 2023-05-06 Twilight in a Flower                         "Dario Giannob… http…
-##  7 2023-05-07 The Helix Nebula from CFHT                    &lt;NA&gt;           http…
-##  8 2023-05-08 The Spanish Dancer Spiral Galaxy              &lt;NA&gt;           http…
-##  9 2023-05-09 Shadows of Earth                             "\nMarcella Gi… http…
-## 10 2023-05-10 Milky Way over Egyptian Desert               "\nAmr Abdulwa… http…
-## # ℹ 64 more rows
         </pre>
         <p>
           Success&#x2014;we have created a small data set using the NASA API! This data is also quite different

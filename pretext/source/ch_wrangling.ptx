@@ -658,7 +658,7 @@ lang_long
   </section>
 
   <section xml:id="sec-wrangling-select">
-    <title>Using <c>select</c> to extract a range of columns</title>
+    <title>Using <c>[]</c> to extract rows or columns</title>
     <p>
       Now that the <c>tidy_lang</c> data is indeed <em>tidy</em>, we can start manipulating it using the
       powerful suite of functions from the <c>pandas</c>. For the first example, recall the
@@ -744,7 +744,7 @@ lang_messy_longer
   </section>
 
   <section xml:id="sec-wrangling-filter">
-    <title>Using <c>filter</c> to extract rows</title>
+    <title>Using <c>loc[]</c> to filter rows and select columns</title>
     <p>
       Next, we revisit the <c>filter</c> function from <xref ref="ch-intro"/>, which lets us create a
       subset of rows from a data frame. Recall the two main arguments to the <c>filter</c> function:
@@ -846,7 +846,7 @@ tidy_lang.info()
     </subsection>
 
     <subsection xml:id="sec-wrangling-filter-in">
-      <title>Extracting rows with values in a vector using <c>%in%</c></title>
+      <title>Extracting rows with values in a list using <c>isin</c></title>
       <p>
         Next, suppose we want to see the populations of our five cities. Let&#x2019;s read in the
         <c>region_data.csv</c> file that comes from the 2016 Canadian census, as it contains statistics
@@ -858,8 +858,8 @@ tidy_lang[[&quot;language&quot;, &quot;region&quot;, &quot;most_at_home&quot;, &
         </input>
       </program>
       <p>
-        To get the population of the five cities we can filter the data set using the <c>%in%</c>
-        operator. The <c>%in%</c> operator is used to see if an element belongs to a vector.
+        To get the population of the five cities we can filter the data set using <c>isin</c>.
+        The <c>isin</c> operation is used to see if an element belongs to a list.
         <idx><h>logical operator</h><h>containment</h></idx>
         Here we are filtering for rows where the value in the <c>region</c> column matches any of the
         five cities we are interested in: Toronto, Montr&#xe9;al, Vancouver, Calgary, and Edmonton.
@@ -871,14 +871,14 @@ tidy_lang[[&quot;language&quot;]]
       </program>
       <note>
         <p>
-          What&#x2019;s the difference between <c>==</c> and <c>%in%</c>? Suppose we have two vectors,
+          What&#x2019;s the difference between <c>==</c> and <c>isin</c>? Suppose we have two vectors,
           <c>vectorA</c> and <c>vectorB</c>. If you type <c>vectorA == vectorB</c> into Python it will compare
           the vectors element by element. Python checks if the first element of <c>vectorA</c> equals the
           first element of <c>vectorB</c>, the second element of <c>vectorA</c> equals the second element
-          of <c>vectorB</c>, and so on. On the other hand, <c>vectorA %in% vectorB</c> compares the first
+          of <c>vectorB</c>, and so on. On the other hand, <c>vectorA.isin(vectorB)</c> compares the first
           element of <c>vectorA</c> to all the elements in <c>vectorB</c>. Then the second element of
           <c>vectorA</c> is compared to all the elements in <c>vectorB</c>, and so on. Notice the
-          difference between <c>==</c> and <c>%in%</c> in the example below.
+          difference between <c>==</c> and <c>isin</c> in the example below.
         </p>
         <program language="python">
           <input>
@@ -1221,10 +1221,10 @@ tidy_lang.loc[:, :&quot;language&quot;]
   </section>
 
   <section xml:id="sec-wrangling-summarize">
-    <title>Aggregating data with <c>summarize</c> and <c>map</c></title>
+    <title>Aggregating data</title>
 
     <subsection xml:id="sec-wrangling-summarize-whole">
-      <title>Calculating summary statistics on whole columns</title>
+      <title>Calculating summary statistics on individual columns</title>
       <p>
         As a part of many data analyses, we need to calculate a summary value for the data (a <em>summary
         statistic</em>).
@@ -1497,7 +1497,7 @@ region_lang.max(numeric_only=True)
   </section>
 
   <section xml:id="sec-wrangling-mutate-across">
-    <title>Apply functions across many columns with <c>mutate</c> and <c>across</c></title>
+    <title>Apply functions across multiple columns</title>
     <p>
      Sometimes we need to apply a function to many columns in a data frame. For example, we would need to do this when converting units of measurements across many columns. We illustrate such a data transformation in <xref ref="fig-wrangling-mutate-across"/>.
     </p>
