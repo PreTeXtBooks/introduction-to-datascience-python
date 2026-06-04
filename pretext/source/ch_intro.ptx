@@ -754,6 +754,8 @@ aboriginal_lang
 
   <section xml:id="sec-arrange-slice-intro">
     <title>Using <c>sort_values</c> and <c>head</c> to select rows by ordered values</title>
+    <idx><h>DataFrame</h><h>sort_values</h></idx>
+    <idx><h>DataFrame</h><h>head</h></idx>
     <p>
       We have used <c>[]</c> and <c>loc[]</c> to obtain a table with only the Aboriginal
       languages in the data set and their associated counts. However, we want to know the
@@ -764,7 +766,9 @@ aboriginal_lang
     </p>
     <p>
       The <c>sort_values</c> function allows us to order the rows of a data frame by the values
-      of a particular column. Since we want to choose the ten Aboriginal languages most often
+      of a particular column. We need to specify the column name by which we want to sort the
+      data frame by passing it to the argument <c>by</c>.
+      Since we want to choose the ten Aboriginal languages most often
       reported as a mother tongue language, we will use the <c>sort_values</c> function to order
       the rows in our <c>selected_lang</c> data frame by the <c>mother_tongue</c> column. We
       want to arrange the rows in descending order (from largest to smallest), so we specify the
@@ -784,27 +788,10 @@ arranged_lang
       </input>
     </program>
 
-    <pre>
-# A tibble: 67 x 2
-   language          mother_tongue
-   &lt;chr&gt;                     &lt;dbl&gt;
- 1 Cree, n.o.s.              64050
- 2 Inuktitut                 35210
- 3 Ojibway                   17885
- 4 Oji-Cree                  12855
- 5 Dene                      10700
- 6 Montagnais (Innu)         10235
- 7 Mi'kmaq                    6690
- 8 Atikamekw                  6150
- 9 Plains Cree                3065
-10 Stoney                     3025
-# … with 57 more rows
-    </pre>
-
     <p>
       Next we will obtain the ten most common Aboriginal languages by selecting only the first
-      ten rows of the arranged data frame. We do this using the <c>head</c> function, and
-      specifying the argument <c>10</c>.
+      ten rows of the <c>arranged_lang</c> data frame. We do this using the <c>head</c>
+      function, and specifying the argument <c>10</c>.
     </p>
 
     <program language="python">
@@ -814,26 +801,12 @@ ten_lang
       </input>
     </program>
 
-    <pre>
-# A tibble: 10 x 2
-   language          mother_tongue
-   &lt;chr&gt;                     &lt;dbl&gt;
- 1 Cree, n.o.s.              64050
- 2 Inuktitut                 35210
- 3 Ojibway                   17885
- 4 Oji-Cree                  12855
- 5 Dene                      10700
- 6 Montagnais (Innu)         10235
- 7 Mi'kmaq                    6690
- 8 Atikamekw                  6150
- 9 Plains Cree                3065
-10 Stoney                     3025
-    </pre>
-
   </section>
 
   <section xml:id="sec-intro-mutate">
     <title>Adding and modifying columns</title>
+    <idx><h>adding columns</h></idx>
+    <idx><h>modifying columns</h></idx>
     <p>
       Recall that our data analysis question referred to the <em>count</em> of Canadians that
       speak each of the top ten most commonly reported Aboriginal languages as their mother
@@ -853,8 +826,10 @@ ten_lang
     <note>
       <p>
         You will see below that we write the Canadian population in Python as
-        <c>35_151_728</c>. The underscores are just there for readability, and do not affect
-        how Python interprets the number.
+        <c>35_151_728</c>. The underscores (<c>_</c>) are just there for readability, and do
+        not affect how Python interprets the number. In other words, <c>35151728</c> and
+        <c>35_151_728</c> are treated identically in Python, although the latter is much
+        clearer!
       </p>
     </note>
 
@@ -875,22 +850,6 @@ ten_lang
       </input>
     </program>
 
-    <pre>
-# A tibble: 10 x 3
-   language          mother_tongue mother_tongue_percent
-   &lt;chr&gt;                     &lt;dbl&gt;                 &lt;dbl&gt;
- 1 Cree, n.o.s.              64050               0.182  
- 2 Inuktitut                 35210               0.100  
- 3 Ojibway                   17885               0.0509 
- 4 Oji-Cree                  12855               0.0366 
- 5 Dene                      10700               0.0304 
- 6 Montagnais (Innu)         10235               0.0291 
- 7 Mi'kmaq                    6690               0.0190 
- 8 Atikamekw                  6150               0.0175 
- 9 Plains Cree                3065               0.00872
-10 Stoney                     3025               0.00861
-    </pre>
-
     <p>
       The <c>ten_lang_percent</c> data frame shows that the ten Aboriginal languages in the
       <c>ten_lang</c> data frame were spoken as a mother tongue by between 0.008% and 0.18%
@@ -901,9 +860,17 @@ ten_lang
   <section xml:id="sec-intro-chaining">
     <title>Combining steps with chaining and multiline expressions</title>
     <p>
-      It took us three steps to find the ten Aboriginal languages most often reported in 2016
-      as mother tongues in Canada. One way of performing these steps is to write multiple lines
-      of code, storing temporary intermediate objects as you go:
+      It took us 3 steps to find the ten Aboriginal languages most often reported in
+      2016 as mother tongues in Canada. Starting from the <c>can_lang</c> data frame, we:
+    </p>
+    <ol>
+      <li>used <c>loc</c> to filter the rows so that only the <c>Aboriginal languages</c> category remained, and selected the <c>language</c> and <c>mother_tongue</c> columns,</li>
+      <li>used <c>sort_values</c> to sort the rows by <c>mother_tongue</c> in descending order, and</li>
+      <li>obtained only the top 10 values using <c>head</c>.</li>
+    </ol>
+    <p>
+      One way of performing these steps is to just write multiple lines of code, storing
+      temporary, intermediate objects as you go.
     </p>
     <program language="python">
       <input>
@@ -912,9 +879,21 @@ arranged_lang_sorted = aboriginal_lang.sort_values(by="mother_tongue", ascending
 ten_lang = arranged_lang_sorted.head(10)
       </input>
     </program>
+    <idx><h>multi-line expression</h></idx>
     <p>
-      We can split long expressions across multiple lines to improve readability:
+      You might find that code hard to read. You&#x2019;re not wrong; it is! There are two main
+      issues with readability here. First, each line of code is quite long. It is hard to keep
+      track of what methods are being called, and what arguments were used. Second, each line
+      introduces a new temporary object. In this case, both <c>aboriginal_lang</c> and
+      <c>arranged_lang_sorted</c> are just temporary results on the way to producing the
+      <c>ten_lang</c> data frame.
     </p>
+    <p>
+      To solve the first problem, we can actually split the long expressions above across
+      multiple lines. Let&#x2019;s rewrite this code in a more readable format using multiline
+      expressions.
+    </p>
+
     <program language="python">
       <input>
 aboriginal_lang = can_lang.loc[
@@ -928,9 +907,11 @@ arranged_lang_sorted = aboriginal_lang.sort_values(
 ten_lang = arranged_lang_sorted.head(10)
       </input>
     </program>
+    <idx><h>chaining</h></idx>
     <p>
-      We can also <em>chain</em> operations together to avoid creating unnecessary intermediate
-      objects:
+      We still have to handle the issue that each line of code introduces a new temporary object.
+      To address this issue, we can <em>chain</em> multiple operations together without assigning
+      intermediate objects.
     </p>
     <program language="python">
       <input>
@@ -950,6 +931,7 @@ ten_lang
 
   <section xml:id="sec-intro-visualizations">
     <title>Exploring data with visualizations</title>
+    <idx><h>visualization</h></idx>
     <p>
       The <c>ten_lang</c> table we generated in <xref ref="sec-arrange-slice-intro"/> answers
       our initial data analysis question. Are we done? Well, not quite; tables are almost
@@ -960,27 +942,30 @@ ten_lang
       only gets worse. In contrast, a <em>visualization</em> would convey this information in
       a much more easily understood format. Visualizations are a great tool for summarizing
       information to help you effectively communicate with your audience, and creating
-      effective data visualizations<idx><h>visualization</h></idx> is an essential component
-      of any data analysis. In this section we will develop a visualization of the ten
-      Aboriginal languages that were most often reported in 2016 as mother tongues in Canada,
-      as well as the number of people that speak each of them.
+      effective data visualizations is an essential component of any data analysis. In this
+      section we will develop a visualization of the ten Aboriginal languages that were most
+      often reported in 2016 as mother tongues in Canada, as well as the number of people that
+      speak each of them.
     </p>
 
     <subsection xml:id="subsec-intro-ggplot-bar">
       <title>Using <c>altair</c> to create a bar plot</title>
+      <idx><h>altair</h></idx>
+      <idx><h>visualization</h><h>bar</h></idx>
+      <idx><h>plot</h><see>visualization</see></idx>
+      <idx><h>visualization</h><see>altair</see></idx>
       <p>
         In our data set, we can see that <c>language</c> and <c>mother_tongue</c> are in
         separate columns (or variables). In addition, there is a single row (or observation)
         for each language. The data are, therefore, in what we call a <em>tidy data</em>
         format. Tidy data is a fundamental concept and will be a significant focus in the
         remainder of this book: many of the functions from <c>pandas</c> require tidy data, as
-        does the <c>altair</c><idx><h>altair</h></idx> package that we will use shortly for our
-        visualization. We will formally introduce tidy data in
-        <xref ref="ch-wrangling"/>.
+        does the <c>altair</c> package that we will use shortly for our
+        visualization. We will formally introduce tidy data in <xref ref="ch-wrangling"/>.
       </p>
       <p>
         We will make a bar plot to visualize our data. A bar
-        plot<idx><h>visualization</h><h>bar</h></idx> is a chart where the lengths of the
+        plot is a chart where the lengths of the
         bars represent certain values, like counts or proportions. We will make a bar plot
         using the <c>mother_tongue</c> and <c>language</c> columns from our <c>ten_lang</c>
         data frame. To create a bar plot of these two variables using the <c>altair</c>
@@ -1014,19 +999,7 @@ barplot_mother_tongue = (
           there are still improvements to be made.</caption>
         <image source="images/intro/barplot-mother-tongue.png" width="75%"/>
       </figure>
-
-      <note>
-        <p>
-          The vast majority of the time, a single expression in Python must be contained in a
-          single line of code. However, there <em>are</em> a small number of situations in
-          which you can have a single Python expression span multiple lines. Above is one such
-          case: here, Python knows that a line cannot end with a <c>+</c> symbol, and so it keeps
-          reading the next line to figure out what the right-hand side of the <c>+</c> symbol
-          should be. We could, of course, put all of the added layers on one line of code,
-          but splitting them across multiple lines helps a lot with code readability.
-          <idx><h>multi-line expression</h></idx>
-        </p>
-      </note>
+      <idx><h>.</h><see>chaining</see></idx>
     </subsection>
 
     <subsection xml:id="subsec-intro-ggplot-format">
@@ -1042,7 +1015,8 @@ barplot_mother_tongue = (
         that is. And even if they did, they will not know how we measured this variable, or
         the group of people on which the measurements were taken. An axis label that reads
         &#x201C;Mother Tongue (Number of Canadian Residents)&#x201D; would be much more
-        informative.
+        informative. To make the code easier to read, we&#x2019;re spreading it out over multiple
+        lines just as we did in the previous section with pandas.
       </p>
       <p>
         Adding additional labels<idx><h>plot</h><h>axis labels</h></idx> to our visualizations
@@ -1075,8 +1049,8 @@ barplot_mother_tongue = alt.Chart(ten_lang).mark_bar().encode(
       <p>
         The result is shown in <xref ref="fig-barplot-mother-tongue-labs"/>. This is already
         quite an improvement! Let&#x2019;s tackle the next major issue with the visualization
-        in <xref ref="fig-barplot-mother-tongue-labs"/>: the overlapping x axis labels, which
-        are currently making it difficult to read the different language names. One solution
+        in <xref ref="fig-barplot-mother-tongue-labs"/>: the vertical x axis labels, which are
+        currently making it difficult to read the different language names. One solution
         is to rotate the plot such that the bars are horizontal rather than vertical. To
         accomplish this, we will swap the x and y coordinate axes:
       </p>
@@ -1146,13 +1120,15 @@ ordered_barplot_mother_tongue = alt.Chart(ten_lang).mark_bar().encode(
 
     <subsection xml:id="subsec-intro-all-together">
       <title>Putting it all together</title>
+      <idx><h>comment</h></idx>
+      <idx><h>#</h><see>comment</see></idx>
       <p>
         In the block of code below, we put everything from this chapter together, with a few
         modifications. In particular, we have combined all of our steps into one expression split
         across multiple lines using the left and right parenthesis symbols <c>(</c> and
         <c>)</c>. We have also provided <em>comments</em> next to many of the lines of
         code below using the hash symbol <c>#</c>. When Python sees a <c>#</c>
-        sign,<idx><h>comment</h></idx> it will ignore all of the text that comes after the
+        sign, it will ignore all of the text that comes after the
         symbol on that line. So you can use comments to explain lines of code for others, and
         perhaps more importantly, your future self! It&#x2019;s good practice to get in the
         habit of commenting your code to improve its readability.
@@ -1161,9 +1137,9 @@ ordered_barplot_mother_tongue = alt.Chart(ten_lang).mark_bar().encode(
         This exercise demonstrates the power of Python. In relatively few lines of code, we
         performed an entire data science workflow with a highly effective data visualization! We
         asked a question, loaded the data into Python, wrangled the data (using
-        <c>loc[]</c>, <c>sort_values</c>, and <c>head</c>) and created a data visualization to
-        help answer our question. In this chapter, you got a quick taste of the data science
-        workflow;
+        <c>[]</c>, <c>loc[]</c>, <c>sort_values</c>, and <c>head</c>) and created a data
+        visualization to help answer our question. In this chapter, you got a quick taste of the
+        data science workflow;
         continue on with the next few chapters to learn each of these steps in much more
         detail!
       </p>
@@ -1199,16 +1175,18 @@ ten_lang_plot = alt.Chart(ten_lang).mark_bar().encode(
 
   <section xml:id="sec-intro-documentation">
     <title>Accessing documentation</title>
+    <idx><h>documentation</h></idx>
+    <idx><h>help</h><see>documentation</see></idx>
+    <idx><h>__doc__</h><see>documentation</see></idx>
     <p>
-      There are many Python functions in <c>pandas</c> and beyond, and nobody can be expected to
-      remember what every one of them does or all of the arguments we have to give them.
-      Fortunately, Python provides the <c>help()</c> function and the <c>?</c> symbol,
-      <idx><h>documentation</h></idx>
-      which provides an easy way to pull up the documentation for most functions quickly. To
-      use them to access documentation, you just put the name of the function you are curious
-      about after <c>help</c> or the <c>?</c> symbol. For example, if you had forgotten what
-      the <c>pd.read_csv</c> function did or exactly what arguments to pass in, you could look
-      up its help dialog.
+      There are many Python functions in the <c>pandas</c> package (and beyond!), and nobody can
+      be expected to remember what every one of them does or all of the arguments we have to give
+      them. Fortunately, Python provides the <c>help</c> function, which provides an easy way to
+      pull up the documentation for most functions quickly. To use the <c>help</c> function to
+      access the documentation, you just put the name of the function you are curious about as an
+      argument inside the <c>help</c> function. For example, if you had forgotten what the
+      <c>pd.read_csv</c> function did or exactly what arguments to pass in, you could run the
+      following code:
     </p>
 
     <program language="python">
@@ -1224,10 +1202,9 @@ help(pd.read_csv)
       now. Fear not: as you work through this book, many of these terms will be introduced to
       you, and slowly but surely you will become more adept at understanding and navigating
       documentation like that shown in <xref ref="fig-01-help"/>. But do keep in mind that the
-      documentation is
-      not written to <em>teach</em> you about a function; it is just there as a reference to
-      <em>remind</em> you about the different arguments and usage of functions that you have
-      already learned about elsewhere.
+      documentation is not written to <em>teach</em> you about a function; it is just there as a
+      reference to <em>remind</em> you about the different arguments and usage of functions that
+      you have already learned about elsewhere.
     </p>
 
     <figure xml:id="fig-01-help">
@@ -1265,6 +1242,12 @@ help(pd.read_csv)
         Shift+Tab.</caption>
       <image source="images/intro/help_dialog.png" width="80%"/>
     </figure>
+    <p>
+      Finally, it can be helpful to have this help dialog open at all times, especially when
+      you start out learning about programming and data science. You can achieve this by
+      clicking on the <c>Help</c> text in the menu bar at the top and then selecting
+      <c>Show Contextual Help</c>.
+    </p>
   </section>
 
   <section xml:id="sec-intro-exercises">
