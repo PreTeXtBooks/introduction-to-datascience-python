@@ -1647,7 +1647,7 @@ region_lang.groupby(&quot;region&quot;)[&quot;most_at_home&quot;].agg([&quot;min
       non-interactive version of the worksheet by clicking &#x201C;view worksheet.&#x201D;
       If you instead decide to download the worksheet and run it on your own machine,
       make sure to follow the instructions for computer setup
-      found in <xref ref="move-to-your-own-machine"/>. This will ensure that the automated feedback
+      found in <xref ref="ch-setup"/>. This will ensure that the automated feedback
       and guidance that the worksheets provide will function as intended.
     </p>
   </section>
@@ -1659,7 +1659,7 @@ region_lang.groupby(&quot;region&quot;)[&quot;most_at_home&quot;].agg([&quot;min
         package documentation</url> is another resource to learn more about the
         functions in this chapter, the full set of arguments you can use, and other related functions.
       </p></li>
-      <li><p><em>Python for Data Analysis</em> <xref ref="mckinney2012python"/> has a few chapters related to data
+      <li><p><em>Python for Data Analysis</em> <xref ref="mckinney-proc-scipy-2010"/> has a few chapters related to data
         wrangling that go into more depth than this book. For example, the
         <url href="https://wesmckinney.com/book/data-wrangling.html" visual="wesmckinney.com/book/data-wrangling.html">data
         wrangling chapter</url> covers tidy data, <c>melt</c> and <c>pivot</c>, but also
