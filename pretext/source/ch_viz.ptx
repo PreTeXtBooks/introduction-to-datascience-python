@@ -268,22 +268,6 @@ co2_df = pd.read_csv(
 co2_df
         </input>
       </program>
-      <pre>
-## # A tibble: 484 × 2
-##    date_measured   ppm
-##    &lt;date&gt;        &lt;dbl&gt;
-##  1 1980-02-01     338.
-##  2 1980-03-01     340.
-##  3 1980-04-01     341.
-##  4 1980-05-01     341.
-##  5 1980-06-01     341.
-##  6 1980-07-01     339.
-##  7 1980-08-01     338.
-##  8 1980-09-01     336.
-##  9 1980-10-01     336.
-## 10 1980-11-01     337.
-## # ℹ 474 more rows
-      </pre>
 <p>
   We see that there are two columns in the <c>co2_df</c> data frame: 
   <c>date_measured</c> and <c>ppm</c>. The <c>date_measured</c> column holds the date 
@@ -512,22 +496,6 @@ co2_line_scale = alt.Chart(co2_df).mark_line(clip=True).encode(
 ).configure_axis(titleFontSize=12)
         </input>
       </program>
-      <pre>
-## # A tibble: 272 × 2
-##    eruptions waiting
-##        &lt;dbl&gt;   &lt;dbl&gt;
-##  1      3.6       79
-##  2      1.8       54
-##  3      3.33      74
-##  4      2.28      62
-##  5      4.53      85
-##  6      2.88      55
-##  7      4.7       88
-##  8      3.6       85
-##  9      1.95      51
-## 10      4.35      85
-## # ℹ 262 more rows
-      </pre>
       <p>
         Here again, we investigate the relationship between two quantitative variables
         (waiting time and eruption time). But if you look at the output of the data
@@ -599,22 +567,6 @@ faithful_scatter_labels = alt.Chart(faithful).mark_point().encode(
 )
         </input>
       </program>
-      <pre>
-## # A tibble: 214 × 6
-##    category          language mother_tongue most_at_home most_at_work lang_known
-##    &lt;chr&gt;             &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-##  1 Aboriginal langu… Aborigi…           590          235           30        665
-##  2 Non-Official &amp; N… Afrikaa…         10260         4785           85      23415
-##  3 Non-Official &amp; N… Afro-As…          1150          445           10       2775
-##  4 Non-Official &amp; N… Akan (T…         13460         5985           25      22150
-##  5 Non-Official &amp; N… Albanian         26895        13135          345      31930
-##  6 Aboriginal langu… Algonqu…            45           10            0        120
-##  7 Aboriginal langu… Algonqu…          1260          370           40       2480
-##  8 Non-Official &amp; N… America…          2685         3020         1145      21930
-##  9 Non-Official &amp; N… Amharic          22465        12785          200      33670
-## 10 Non-Official &amp; N… Arabic          419890       223535         5585     629055
-## # ℹ 204 more rows
-      </pre>
       <p>
         We begin with a scatter plot of the <c>mother_tongue</c> and
         <c>most_at_home</c> columns:
@@ -674,13 +626,6 @@ can_lang_plot = alt.Chart(can_lang).mark_circle().encode(
 )
         </input>
       </program>
-      <pre>
-## # A tibble: 2 × 6
-##   category           language mother_tongue most_at_home most_at_work lang_known
-##   &lt;chr&gt;              &lt;chr&gt;            &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-## 1 Official languages English       19460850     22162865     15265335   29748265
-## 2 Official languages French         7166700      6943800      3825215
-      </pre>
       <p>
         Recall that our question about this data pertains to <em>all</em> languages;
         so to properly answer our question, we will need to adjust the scale of the
@@ -745,22 +690,6 @@ can_lang.loc[
 ]
         </input>
       </program>
-      <pre>
-## # A tibble: 214 × 2
-##    mother_tongue_percent most_at_home_percent
-##                    &lt;dbl&gt;                &lt;dbl&gt;
-##  1              0.00168             0.000669 
-##  2              0.0292              0.0136   
-##  3              0.00327             0.00127  
-##  4              0.0383              0.0170   
-##  5              0.0765              0.0374   
-##  6              0.000128            0.0000284
-##  7              0.00358             0.00105  
-##  8              0.00764             0.00859  
-##  9              0.0639              0.0364   
-## 10              1.19                0.636    
-## # ℹ 204 more rows
-      </pre>
       <p>
         Finally, we will edit the visualization to use the percentages we just
         computed (and change our axis labels to reflect this change in units).
@@ -1005,22 +934,6 @@ can_lang_plot_legend = alt.Chart(can_lang).mark_circle().encode(
 ).configure_axis(titleFontSize=12)
         </input>
       </program>
-      <pre>
-## # A tibble: 48 × 3
-##    landmass      size landmass_type
-##    &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;        
-##  1 Africa       11506 Continent    
-##  2 Antarctica    5500 Continent    
-##  3 Asia         16988 Continent    
-##  4 Australia     2968 Continent    
-##  5 Axel Heiberg    16 Other        
-##  6 Baffin         184 Other        
-##  7 Banks           23 Other        
-##  8 Borneo         280 Other        
-##  9 Britain         84 Other        
-## 10 Celebes         73 Other        
-## # ℹ 38 more rows
-      </pre>
       <p>
         Here, we have a data frame of Earth&#x2019;s landmasses, and are trying to compare
         their sizes. The right type of visualization to answer this question is a bar
@@ -1203,22 +1116,6 @@ islands_bar = alt.Chart(islands_df).mark_bar().encode(
 )
         </input>
       </program>
-      <pre>
-## # A tibble: 100 × 3
-##     Expt   Run Speed
-##    &lt;int&gt; &lt;int&gt; &lt;int&gt;
-##  1     1     1   850
-##  2     1     2   740
-##  3     1     3   900
-##  4     1     4  1070
-##  5     1     5   930
-##  6     1     6   850
-##  7     1     7   950
-##  8     1     8   980
-##  9     1     9   980
-## 10     1    10   880
-## # ℹ 90 more rows
-      </pre>
       <p>
         In this experimental data, Michelson was trying to measure just a single
         quantitative number (the speed of light). The data set contains many

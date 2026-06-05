@@ -406,22 +406,6 @@ pd.read_csv(&quot;data/can_lang.csv&quot;)
       </input>
     </program>
 
-    <pre>
-# A tibble: 214 x 6
-   category                               language      mother_tongue most_at_home
-   &lt;chr&gt;                                  &lt;chr&gt;                 &lt;dbl&gt;        &lt;dbl&gt;
- 1 Aboriginal languages                   Aboriginal …            590          235
- 2 Non-Official &amp; Non-Aboriginal languag… Afrikaans            10260         4785
- 3 Non-Official &amp; Non-Aboriginal languag… Afro-Asiati…          1150          445
- 4 Non-Official &amp; Non-Aboriginal languag… Akan (Twi)           13460         5985
- 5 Non-Official &amp; Non-Aboriginal languag… Albanian             26895        13135
- 6 Aboriginal languages                   Algonquian …            45           10
- 7 Aboriginal languages                   Algonquin             1260          370
- 8 Non-Official &amp; Non-Aboriginal languag… American Si…          2685         3020
- 9 Non-Official &amp; Non-Aboriginal languag… Amharic              22465        12785
-10 Non-Official &amp; Non-Aboriginal languag… Arabic              419890       223535
-# … with 204 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
-    </pre>
 
     <note>
       <p>
@@ -548,22 +532,6 @@ can_lang
       </input>
     </program>
 
-    <pre>
-# A tibble: 214 x 6
-   category                               language      mother_tongue most_at_home
-   &lt;chr&gt;                                  &lt;chr&gt;                 &lt;dbl&gt;        &lt;dbl&gt;
- 1 Aboriginal languages                   Aboriginal …            590          235
- 2 Non-Official &amp; Non-Aboriginal languag… Afrikaans            10260         4785
- 3 Non-Official &amp; Non-Aboriginal languag… Afro-Asiati…          1150          445
- 4 Non-Official &amp; Non-Aboriginal languag… Akan (Twi)           13460         5985
- 5 Non-Official &amp; Non-Aboriginal languag… Albanian             26895        13135
- 6 Aboriginal languages                   Algonquian …            45           10
- 7 Aboriginal languages                   Algonquin             1260          370
- 8 Non-Official &amp; Non-Aboriginal languag… American Si…          2685         3020
- 9 Non-Official &amp; Non-Aboriginal languag… Amharic              22465        12785
-10 Non-Official &amp; Non-Aboriginal languag… Arabic              419890       223535
-# … with 204 more rows, and 2 more variables: most_at_work &lt;dbl&gt;, lang_known &lt;dbl&gt;
-    </pre>
 
   </section>
 

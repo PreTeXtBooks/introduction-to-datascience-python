@@ -159,29 +159,6 @@ penguins = pd.read_csv(&quot;data/penguins.csv&quot;)
 penguins
       </input>
     </program>
-    <pre>
-## # A tibble: 18 × 2
-##    bill_length_mm flipper_length_mm
-##             &lt;dbl&gt;             &lt;dbl&gt;
-##  1           39.2               196
-##  2           36.5               182
-##  3           34.5               187
-##  4           36.7               187
-##  5           38.1               181
-##  6           39.2               190
-##  7           36                 195
-##  8           37.8               193
-##  9           46.5               213
-## 10           46.1               215
-## 11           47.8               215
-## 12           45                 220
-## 13           49.1               212
-## 14           43.3               208
-## 15           46                 195
-## 16           46.7               195
-## 17           52.2               197
-## 18           46.8               189
-    </pre>
 
     <p>
       We will begin by using a version of the data that we have standardized,
@@ -197,29 +174,6 @@ penguins
 penguins_standardized
       </input>
     </program>
-    <pre>
-## # A tibble: 18 × 2
-##    bill_length_standardized flipper_length_standardized
-##                       &lt;dbl&gt;                       &lt;dbl&gt;
-##  1                   -0.641                      -0.190
-##  2                   -1.14                       -1.33 
-##  3                   -1.52                       -0.922
-##  4                   -1.11                       -0.922
-##  5                   -0.847                      -1.41 
-##  6                   -0.641                      -0.678
-##  7                   -1.24                       -0.271
-##  8                   -0.902                      -0.434
-##  9                    0.720                       1.19 
-## 10                    0.646                       1.36 
-## 11                    0.963                       1.36 
-## 12                    0.440                       1.76 
-## 13                    1.21                        1.11 
-## 14                    0.123                       0.786
-## 15                    0.627                      -0.271
-## 16                    0.757                      -0.271
-## 17                    1.78                       -0.108
-## 18                    0.776                      -0.759
-    </pre>
 
     <p>
       Next, we can create a scatter plot using this data set to see if we can
@@ -718,29 +672,6 @@ cluster_plot=alt.Chart(penguins).mark_circle().encode(
 )
       </input>
     </program>
-    <pre>
-## # A tibble: 18 × 3
-##    bill_length_mm flipper_length_mm .pred_cluster
-##             &lt;dbl&gt;             &lt;dbl&gt; &lt;fct&gt;        
-##  1           39.2               196 Cluster_1    
-##  2           36.5               182 Cluster_1    
-##  3           34.5               187 Cluster_1    
-##  4           36.7               187 Cluster_1    
-##  5           38.1               181 Cluster_1    
-##  6           39.2               190 Cluster_1    
-##  7           36                 195 Cluster_1    
-##  8           37.8               193 Cluster_1    
-##  9           46.5               213 Cluster_2    
-## 10           46.1               215 Cluster_2    
-## 11           47.8               215 Cluster_2    
-## 12           45                 220 Cluster_2    
-## 13           49.1               212 Cluster_2    
-## 14           43.3               208 Cluster_2    
-## 15           46                 195 Cluster_3    
-## 16           46.7               195 Cluster_3    
-## 17           52.2               197 Cluster_3    
-## 18           46.8               189 Cluster_3
-    </pre>
 
     <p>
       Now that we have the cluster assignments included in the
@@ -775,12 +706,6 @@ penguin_clust[1].inertia_
 [n for n in range(3)]
       </input>
     </program>
-    <pre>
-## # A tibble: 1 × 4
-##   totss tot.withinss betweenss  iter
-##   &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
-## 1    34         4.47      29.5     2
-    </pre>
 
     <p>
       To calculate the total WSSD for a variety of Ks, we will create a data
@@ -793,20 +718,6 @@ penguin_clust[1].inertia_
 [number**2 for number in range(1, 5)]
       </input>
     </program>
-    <pre>
-## # A tibble: 9 × 1
-##   num_clusters
-##          &lt;int&gt;
-## 1            1
-## 2            2
-## 3            3
-## 4            4
-## 5            5
-## 6            6
-## 7            7
-## 8            8
-## 9            9
-    </pre>
 
     <p>
       Then we construct our model specification again, this time specifying
@@ -865,29 +776,6 @@ elbow_plot = alt.Chart(penguin_clust_ks).mark_line(point=True).encode(
 )
       </input>
     </program>
-    <pre>
-## # A tibble: 18 × 7
-##    num_clusters .metric          .estimator   mean     n std_err .config        
-##           &lt;int&gt; &lt;chr&gt;            &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;          
-##  1            1 sse_total        standard   34         1      NA Preprocessor1_…
-##  2            1 sse_within_total standard   34         1      NA Preprocessor1_…
-##  3            2 sse_total        standard   34         1      NA Preprocessor1_…
-##  4            2 sse_within_total standard   10.9       1      NA Preprocessor1_…
-##  5            3 sse_total        standard   34         1      NA Preprocessor1_…
-##  6            3 sse_within_total standard    4.47      1      NA Preprocessor1_…
-##  7            4 sse_total        standard   34         1      NA Preprocessor1_…
-##  8            4 sse_within_total standard    3.54      1      NA Preprocessor1_…
-##  9            5 sse_total        standard   34         1      NA Preprocessor1_…
-## 10            5 sse_within_total standard    2.23      1      NA Preprocessor1_…
-## 11            6 sse_total        standard   34         1      NA Preprocessor1_…
-## 12            6 sse_within_total standard    1.75      1      NA Preprocessor1_…
-## 13            7 sse_total        standard   34         1      NA Preprocessor1_…
-## 14            7 sse_within_total standard    2.06      1      NA Preprocessor1_…
-## 15            8 sse_total        standard   34         1      NA Preprocessor1_…
-## 16            8 sse_within_total standard    2.46      1      NA Preprocessor1_…
-## 17            9 sse_total        standard   34         1      NA Preprocessor1_…
-## 18            9 sse_within_total standard    0.906     1      NA Preprocessor1_…
-    </pre>
 
     <p>
       The total WSSD results correspond to the <c>mean</c> column when the
@@ -907,20 +795,6 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 from chapter_preamble import *
       </input>
     </program>
-    <pre>
-## # A tibble: 9 × 2
-##   num_clusters total_WSSD
-##          &lt;int&gt;      &lt;dbl&gt;
-## 1            1     34    
-## 2            2     10.9  
-## 3            3      4.47 
-## 4            4      3.54 
-## 5            5      2.23 
-## 6            6      1.75 
-## 7            7      2.06 
-## 8            8      2.46 
-## 9            9      0.906
-    </pre>
 
     <p>
       Now that we have <c>total_WSSD</c> and <c>num_clusters</c> as columns in

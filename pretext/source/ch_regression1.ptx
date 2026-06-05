@@ -151,22 +151,6 @@ sacramento = pd.read_csv(&quot;data/sacramento.csv&quot;)
 sacramento
       </input>
     </program>
-    <pre>
-## # A tibble: 932 × 9
-##    city           zip     beds baths  sqft type        price latitude longitude
-##    &lt;chr&gt;          &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-##  1 SACRAMENTO     z95838     2     1   836 Residential 59222     38.6     -121.
-##  2 SACRAMENTO     z95823     3     1  1167 Residential 68212     38.5     -121.
-##  3 SACRAMENTO     z95815     2     1   796 Residential 68880     38.6     -121.
-##  4 SACRAMENTO     z95815     2     1   852 Residential 69307     38.6     -121.
-##  5 SACRAMENTO     z95824     2     1   797 Residential 81900     38.5     -121.
-##  6 SACRAMENTO     z95841     3     1  1122 Condo       89921     38.7     -121.
-##  7 SACRAMENTO     z95842     3     2  1104 Residential 90895     38.7     -121.
-##  8 SACRAMENTO     z95820     3     1  1177 Residential 91002     38.5     -121.
-##  9 RANCHO_CORDOVA z95670     2     2   941 Condo       94905     38.6     -121.
-## 10 RIO_LINDA      z95673     3     2  1146 Residential 98937     38.7     -121.
-## # ℹ 922 more rows
-    </pre>
     <p>
       The scientific question guides our initial exploration: the columns in the
       data that we are interested in are <c>sqft</c> (house size, in livable
@@ -289,16 +273,6 @@ nearest_neighbors = small_sacramento.nsmallest(5, &quot;dist&quot;)
 nearest_neighbors
       </input>
     </program>
-    <pre>
-## # A tibble: 5 × 10
-##   city       zip     beds baths  sqft type        price latitude longitude  diff
-##   &lt;chr&gt;      &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
-## 1 ROSEVILLE  z95661     3   2    2049 Residenti… 395500     38.7     -121.    49
-## 2 ANTELOPE   z95843     4   3    2085 Residenti… 408431     38.7     -121.    85
-## 3 SACRAMENTO z95823     4   2    1876 Residenti… 299940     38.5     -121.   124
-## 4 ROSEVILLE  z95747     3   2.5  1829 Residenti… 306500     38.8     -121.   171
-## 5 SACRAMENTO z95825     4   2    1776 Multi_Fam… 221250     38.6     -121.   224
-    </pre>
     <figure xml:id="fig-sacr-knn-example">
       <caption>Scatter plot of price (USD) versus house size (square feet) with lines to 5 nearest neighbors (highlighted in orange).</caption>
       <image source="images/regression1/sacr-knn-example.png" width="60%"/>
@@ -318,12 +292,6 @@ prediction = nearest_neighbors[&quot;price&quot;].mean()
 prediction
       </input>
     </program>
-    <pre>
-# A tibble: 1 x 1
-  predicted
-      &lt;dbl&gt;
-1   326324
-    </pre>
     <figure xml:id="fig-sacr-predicted-viz">
       <caption>Scatter plot of price (USD) versus house size (square feet) with predicted price for a 2,000 square-foot house based on 5 nearest neighbors represented as a red dot.</caption>
       <image source="images/regression1/sacr-predicted-viz.png" width="60%"/>
@@ -521,22 +489,6 @@ sacr_results = (
 sacr_results
       </input>
     </program>
-    <pre>
-## # A tibble: 67 × 7
-##    neighbors .metric .estimator    mean     n std_err .config              
-##        &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
-##  1         1 rmse    standard   107206.     5   4102. Preprocessor1_Model01
-##  2         4 rmse    standard    90469.     5   3312. Preprocessor1_Model02
-##  3         7 rmse    standard    86580.     5   3062. Preprocessor1_Model03
-##  4        10 rmse    standard    85321.     5   3395. Preprocessor1_Model04
-##  5        13 rmse    standard    85045.     5   3641. Preprocessor1_Model05
-##  6        16 rmse    standard    84675.     5   3679. Preprocessor1_Model06
-##  7        19 rmse    standard    84776.     5   3984. Preprocessor1_Model07
-##  8        22 rmse    standard    84617.     5   3952. Preprocessor1_Model08
-##  9        25 rmse    standard    84953.     5   3929. Preprocessor1_Model09
-## 10        28 rmse    standard    84612.     5   3917. Preprocessor1_Model10
-## # ℹ 57 more rows
-    </pre>
     <figure xml:id="fig-sacr-tunek-plot">
       <caption>Effect of the number of neighbors on the RMSPE.</caption>
       <image source="images/regression1/sacr-tunek-plot.png" width="60%"/>
@@ -552,12 +504,6 @@ sacr_results[&quot;mean_test_score&quot;] = -sacr_results[&quot;mean_test_score&
 sacr_results
       </input>
     </program>
-    <pre>
-## # A tibble: 1 × 7
-##   neighbors .metric .estimator   mean     n std_err .config              
-##       &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
-## 1        52 rmse    standard   84561.     5   4470. Preprocessor1_Model18
-    </pre>
     <p>
       The smallest RMSPE occurs when <m>K = 52</m>.
     </p>
@@ -652,12 +598,6 @@ sacr_results
 sacr_gridsearch.best_params_
       </input>
     </program>
-    <pre>
-## # A tibble: 1 × 3
-##   .metric .estimator .estimate
-##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rmse    standard      90529.
-    </pre>
 <p>
   Our final model's test error as assessed by RMSPE is $90,529. Note that RMSPE is 
   measured in the same units as the response variable. In other words, on new 
@@ -807,12 +747,6 @@ sacr_preprocessor = make_column_transformer((StandardScaler(), [&quot;sqft&quot;
 sacr_pipeline = make_pipeline(sacr_preprocessor, KNeighborsRegressor())
       </input>
     </program>
-    <pre>
-## # A tibble: 1 × 7
-##   neighbors .metric .estimator   mean     n std_err .config               
-##       &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                 
-## 1        11 rmse    standard   81839.     5   3108. Preprocessor1_Model011
-    </pre>
 <p>
   Here we see that the smallest estimated RMSPE from cross-validation occurs when 
   <m>K = 11</m>. If we want to compare this multivariable K-NN regression model to the 
@@ -867,12 +801,6 @@ sacr_results = (
 sacr_results.nsmallest(1, &quot;mean_test_score&quot;)
       </input>
     </program>
-    <pre>
-# A tibble: 1 x 3
-  .metric .estimator .estimate
-  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard      90862.
-    </pre>
     <p>
       This time, when we performed K-NN regression on the same data set, but
       also included number of bedrooms as a predictor, we obtained a RMSPE test
