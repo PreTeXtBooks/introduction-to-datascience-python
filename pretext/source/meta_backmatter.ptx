@@ -21,7 +21,8 @@
     <biblio type="raw" xml:id="children2012">
       Truth and Reconciliation Commission of Canada. (2012).
       <em>They Came for the Children: Canada, Aboriginal Peoples, and the Residential
-      Schools</em>. Public Works &amp; Government Services Canada.
+      Schools</em>.
+      Public Works &amp; Government Services Canada.
     </biblio>
 
     <biblio type="raw" xml:id="language2016">
@@ -95,8 +96,6 @@
            visual="opentextbc.ca/indigenizationfoundations/"/>
     </biblio>
 
-    <!-- References added for Chapter 2: Reading in data -->
-
     <biblio type="raw" xml:id="dplyr">
       Wickham, H., Fran&#xe7;ois, R., Henry, L., and M&#xfc;ller, K. (2021).
       <em>dplyr R package</em>.
@@ -154,8 +153,6 @@
       <url href="https://r4ds.had.co.nz/" visual="r4ds.had.co.nz/"/>
     </biblio>
 
-    <!-- References added for Chapter 3: Cleaning and wrangling data -->
-
     <biblio type="raw" xml:id="tidyselect">
       Henry, L. and Wickham, H. (2021).
       <em>tidyselect R package</em>.
@@ -174,8 +171,6 @@
       CRC Press.
       <url href="https://adv-r.hadley.nz/" visual="adv-r.hadley.nz/"/>
     </biblio>
-
-    <!-- References added for Chapter 4: Effective data visualization -->
 
     <biblio type="raw" xml:id="deebblind">
       Deeb, S. S. (2005).
@@ -245,8 +240,6 @@
       <url href="https://clauswilke.com/dataviz/" visual="clauswilke.com/dataviz/"/>
     </biblio>
 
-    <!-- References added for Chapter 5: Classification I -->
-
     <biblio type="raw" xml:id="knnfix">
       Fix, E. and Hodges, J. L. (1951).
       Discriminatory analysis&#x2014;nonparametric discrimination: consistency
@@ -291,7 +284,8 @@
       Niculae, V., Prettenhofer, P., Gramfort, A., Grobler, J., Layton, R.,
       VanderPlas, J., Joly, A., Holt, B., and Varoquaux, G. (2013).
       API design for machine learning software: experiences from the scikit-learn
-      project. In <em>ECML PKDD Workshop: Languages for Data Mining and Machine
+      project.
+      In <em>ECML PKDD Workshop: Languages for Data Mining and Machine
       Learning</em>, pages 108&#x2013;122.
     </biblio>
 
@@ -354,10 +348,9 @@
       <em>PLoS ONE</em>, 9(3).
     </biblio>
 
-    <!-- References added for Chapter 10: Statistical inference -->
-
     <biblio type="raw" xml:id="insideairbnb">
-      Inside Airbnb. <em>Inside Airbnb: Adding data to the debate</em>.
+      Inside Airbnb.
+      <em>Inside Airbnb: Adding data to the debate</em>.
       <url href="http://insideairbnb.com" visual="insideairbnb.com"/>, 2020.
     </biblio>
 
@@ -374,8 +367,6 @@
       Journal of Open Source Software, 6(65):3661, 2021.
     </biblio>
 
-    <!-- References added for Chapter 11: Combining code and text with Jupyter -->
-
     <biblio type="raw" xml:id="kluyver2016jupyter">
       T. Kluyver, B. Ragan-Kelley, F. P&#xe9;rez, B. Granger, M. Bussonnier, J. Frederic,
       K. Kelley, J. Hamrick, J. Grout, S. Corlay, P. Ivanov, D. Avila, S. Abdalla,
@@ -385,8 +376,6 @@
       volume 87. IOS Press, Amsterdam, 2016.
     </biblio>
 
-    <!-- References added for Chapter 12: Collaboration with version control -->
-
     <biblio type="raw" xml:id="wilson2014best">
       G. Wilson, J. Bryan, K. Cranston, J. Kitzes, L. Nederbragt, and T. Teal.
       Good enough practices in scientific computing.
@@ -394,8 +383,6 @@
       <url href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510"
            visual="journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510"/>
     </biblio>
-
-    <!-- Additional references from source/references.bib used in preface and chapters -->
 
     <biblio type="raw" xml:id="Rlanguage">
       R Core Team.
@@ -424,6 +411,24 @@
       <em>Proceedings of the 9th Python in Science Conference</em>,
       pages 56&#x2013;61, 2010.
       <url href="https://doi.org/10.25080/Majora-92bf1922-00a" visual="doi.org/10.25080/Majora-92bf1922-00a"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="mckinney2012python">
+      McKinney, W. (2012).
+      <em>Python for data analysis: Data wrangling with Pandas, NumPy, and IPython</em>.
+      O'Reilly Media, Inc.
+    </biblio>
+
+    <biblio type="raw" xml:id="beautifulsoup">
+      Richardson, L. (2007).
+      Beautiful soup documentation.
+      <em>April</em>.
+    </biblio>
+
+    <biblio type="raw" xml:id="requests">
+      Reitz, K. and The Python Software Foundation. (2023).
+      Requests: HTTP for Humans.
+      <em>URL: https://requests.readthedocs.io/en/latest/</em>.
     </biblio>
 
   </references>
