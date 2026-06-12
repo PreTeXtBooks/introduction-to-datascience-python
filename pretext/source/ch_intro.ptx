@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter xml:id="ch-intro" xmlns:xi="http://www.w3.org/2001/XInclude">
-  <title>Python and Pandas</title>
-
-  <program language="python">
-    <input>
-from chapter_preamble import *
-    </input>
-  </program>
+  <title>Python and pandas</title>
 
   <section xml:id="sec-intro-overview">
     <title>Overview</title>
     <p>
       This chapter provides an introduction to data science and the Python programming language.
-      The goal here is to get your hands dirty right from the start! We will walk through an
-      entire data analysis, and along the way introduce different types of data analysis
-      question, some fundamental programming concepts in Python, and the basics of loading,
-      cleaning, and visualizing data. In the following chapters, we will dig into each of
-      these steps in much more detail; but for now, let&#x2019;s jump in to see how much we
-      can do with data science!
+      The goal here is to get your hands dirty right from the start! We will walk through an entire data analysis,
+      and along the way introduce different types of data analysis question, some fundamental programming
+      concepts in Python, and the basics of loading, cleaning, and visualizing data. In the following chapters, we will
+      dig into each of these steps in much more detail; but for now, let's jump in to see how much we can do
+      with data science!
     </p>
   </section>
 
@@ -25,91 +18,82 @@ from chapter_preamble import *
     <title>Chapter learning objectives</title>
     <p>By the end of the chapter, readers will be able to do the following:</p>
     <ul>
-      <li><p>Identify the different types of data analysis question and categorize a question
-        into the correct type.</p></li>
+      <li><p>Identify the different types of data analysis question and categorize a question into the correct type.</p></li>
       <li><p>Load the <c>pandas</c> package into Python.</p></li>
       <li><p>Read tabular data with <c>read_csv</c>.</p></li>
       <li><p>Create new variables and objects in Python using the assignment symbol.</p></li>
-      <li><p>Create and organize subsets of tabular data using <c>[]</c>,
-        <c>loc[]</c>, <c>sort_values</c>, and <c>head</c>.</p></li>
+      <li><p>Create and organize subsets of tabular data using <c>[]</c>, <c>loc[]</c>, <c>sort_values</c>, and <c>head</c>.</p></li>
       <li><p>Add and modify columns in tabular data using column assignment.</p></li>
       <li><p>Chain multiple operations in sequence.</p></li>
       <li><p>Visualize data with an <c>altair</c> bar plot.</p></li>
-      <li><p>Use <c>help()</c> and <c>?</c> to access help and documentation tools in
-        Python.</p></li>
+      <li><p>Use <c>help()</c> and <c>?</c> to access help and documentation tools in Python.</p></li>
     </ul>
   </section>
 
   <section xml:id="sec-intro-canadian-languages">
     <title>Canadian languages data set</title>
     <p>
-      In this chapter, <idx><h>Canadian languages</h></idx> we will walk through a full
-      analysis of a data set relating to languages spoken at home by Canadian residents
-      (<xref ref="fig-canada-map"/>). Many Indigenous peoples exist in Canada with their own
-      cultures and languages; these languages are often unique to Canada and not spoken
-      anywhere else in the world <xref ref="statcan2018mothertongue"/>. Sadly,
-      colonization has led to the loss of many of these languages. For instance, generations
-      of children were not allowed to speak their mother tongue (the first language an
-      individual learns in childhood) in Canadian residential schools. Colonizers also renamed
-      places they had &#x201C;discovered&#x201D; <xref ref="wilson2018"/>. Acts such
-      as these have significantly harmed the continuity of Indigenous languages in Canada, and
-      some languages are considered &#x201C;endangered&#x201D; as few people report speaking
-      them. To learn more, please see <em>Canadian Geographic</em>&#x2019;s article,
-      &#x201C;Mapping Indigenous Languages in Canada&#x201D;
-      <xref ref="walker2017"/>, <em>They Came for the Children: Canada, Aboriginal
-      peoples, and Residential Schools</em> <xref ref="children2012"/> and the
-      <em>Truth and Reconciliation Commission of Canada&#x2019;s Calls to Action</em>
-      <xref ref="calls2015"/>.
+      <idx><h>Canadian languages</h></idx>
+      In this chapter, we will walk through a full analysis of a data set relating to
+      languages spoken at home by Canadian residents (<xref ref="canadamap"/>). Many Indigenous peoples exist in Canada
+      with their own cultures and languages; these languages are often unique to Canada and not spoken
+      anywhere else in the world <xref ref="statcan2018mothertongue"/>. Sadly, colonization has
+      led to the loss of many of these languages. For instance, generations of
+      children were not allowed to speak their mother tongue (the first language an
+      individual learns in childhood) in Canadian residential schools. Colonizers
+      also renamed places they had "discovered" <xref ref="wilson2018"/>. Acts such as these
+      have significantly harmed the continuity of Indigenous languages in Canada, and
+      some languages are considered "endangered" as few people report speaking them.
+      To learn more, please see <em>Canadian Geographic</em>'s article, "Mapping Indigenous Languages in
+      Canada" <xref ref="walker2017"/>,
+      <em>They Came for the Children: Canada, Aboriginal
+      peoples, and Residential Schools</em> <xref ref="children2012"/>
+      and the <em>Truth and Reconciliation Commission of Canada's</em>
+      <em>Calls to Action</em> <xref ref="calls2015"/>.
     </p>
 
-    <figure xml:id="fig-canada-map">
-      <caption>Map of Canada.</caption>
+    <figure xml:id="canadamap">
+      <caption>Map of Canada</caption>
       <image source="images/intro/canada_map.png" width="100%"/>
     </figure>
 
     <p>
       The data set we will study in this chapter is taken from
-      <url href="https://ttimbers.github.io/canlang/" visual="ttimbers.github.io/canlang/">the
-      <c>canlang</c> R data package</url> <xref ref="timbers2020canlang"/>, which has
-      population language data collected during the 2016 Canadian census
-      <xref ref="cancensus2016"/>. In this data, there are 214 languages recorded,
-      each having six different properties:
+      <url href="https://ttimbers.github.io/canlang/">the <c>canlang</c> R data package</url>
+      <xref ref="timbers2020canlang"/>, which has
+      population language data collected during the 2016 Canadian census <xref ref="cancensus2016"/>.
+      In this data, there are 214 languages recorded, each having six different properties:
     </p>
     <ol>
-      <li><p><c>category</c>: Higher-level language category, describing whether the language
-        is an Official Canadian language, an Aboriginal (i.e., Indigenous) language, or a
-        Non-Official and Non-Aboriginal language.</p></li>
+      <li><p><c>category</c>: Higher-level language category, describing whether the language is an Official Canadian language, an Aboriginal (i.e., Indigenous) language, or a Non-Official and Non-Aboriginal language.</p></li>
       <li><p><c>language</c>: The name of the language.</p></li>
-      <li><p><c>mother_tongue</c>: Number of Canadian residents who reported the language as
-        their mother tongue. Mother tongue is generally defined as the language someone was
-        exposed to since birth.</p></li>
-      <li><p><c>most_at_home</c>: Number of Canadian residents who reported the language as
-        being spoken most often at home.</p></li>
-      <li><p><c>most_at_work</c>: Number of Canadian residents who reported the language as
-        being used most often at work.</p></li>
-      <li><p><c>lang_known</c>: Number of Canadian residents who reported knowledge of the
-        language.</p></li>
+      <li><p><c>mother_tongue</c>: Number of Canadian residents who reported the language as their mother tongue. Mother tongue is generally defined as the language someone was exposed to since birth.</p></li>
+      <li><p><c>most_at_home</c>: Number of Canadian residents who reported the language as being spoken most often at home.</p></li>
+      <li><p><c>most_at_work</c>: Number of Canadian residents who reported the language as being used most often at work.</p></li>
+      <li><p><c>lang_known</c>: Number of Canadian residents who reported knowledge of the language.</p></li>
     </ol>
     <p>
-      According to the census, more than 60 Aboriginal languages were reported as being
-      spoken in Canada. Suppose we want to know which are the most common; then we might ask
-      the following question, which we wish to answer using our data:
+      According to the census, more than 60 Aboriginal languages were reported
+      as being spoken in Canada. Suppose we want to know which are the most common;
+      then we might ask the following question, which we wish to answer using our data:
     </p>
     <p>
-      <em>Which ten Aboriginal languages were most often reported in 2016 as mother tongues in
-      Canada, and how many people speak each of them?</em>
+      <em>Which ten Aboriginal languages were most often reported in 2016 as mother
+      tongues in Canada, and how many people speak each of them?</em>
     </p>
+
     <note>
       <p>
         <idx><h>data science</h><h>good practices</h></idx>
-        Data science cannot be done without a deep understanding of the data and problem
-        domain. In this book, we have simplified the data sets used in our examples to
-        concentrate on methods and fundamental concepts. But in real life, you cannot and
-        should not do data science without a domain expert. Alternatively, it is common to
-        practice data science in your own domain of expertise! Remember that when you work
-        with data, it is essential to think about <em>how</em> the data were collected, which
-        affects the conclusions you can draw. If your data are biased, then your results will
-        be biased!
+        Data science cannot be done without
+        a deep understanding of the data and
+        problem domain. In this book, we have simplified the data sets used in our
+        examples to concentrate on methods and fundamental concepts. But in real
+        life, you cannot and should not do data science without a domain expert.
+        Alternatively, it is common to practice data science in your own domain of
+        expertise! Remember that when you work with data, it is essential to think
+        about <em>how</em> the data were collected, which affects the conclusions you can
+        draw. If your data are biased, then your results will be biased!
       </p>
     </note>
   </section>
@@ -118,13 +102,16 @@ from chapter_preamble import *
     <title>Asking a question</title>
     <p>
       Every good data analysis begins with a <em>question</em>&#x2014;like the
-      above&#x2014;that you aim to answer using data. As it turns out, there are actually a
-      number of different <em>types</em> of question regarding data: descriptive, exploratory,
-      predictive, inferential, causal, and mechanistic, all of which are defined in
-      <xref ref="tab-questions-table"/>. Carefully formulating a question as early as possible
-      in your analysis&#x2014;and correctly identifying which type of question it
-      is&#x2014;will guide your overall approach to the analysis as well as the selection of
-      appropriate tools.
+      above&#x2014;that you aim to answer using data. As it turns out, there
+      are actually a number of different <em>types</em> of question regarding data:
+      descriptive, exploratory, predictive, inferential, causal, and mechanistic,
+      all of which are defined in <xref ref="questions-table"/>. <xref ref="leek2015question"/> <xref ref="peng2015art"/>
+      Carefully formulating a question as early as possible in your analysis&#x2014;and
+      correctly identifying which type of question it is&#x2014;will guide your overall approach to
+      the analysis as well as the selection of appropriate tools.
+    </p>
+
+    <p>
       <idx><h>question</h><h>data analysis</h></idx>
       <idx><h>descriptive question</h><h>definition</h></idx>
       <idx><h>exploratory question</h><h>definition</h></idx>
@@ -134,238 +121,172 @@ from chapter_preamble import *
       <idx><h>mechanistic question</h><h>definition</h></idx>
     </p>
 
-    <table xml:id="tab-questions-table">
+    <table xml:id="questions-table">
       <title>Types of data analysis question.</title>
-      <tabular halign="left" top="minor" bottom="minor" left="minor" right="minor">
-        <col width="20%"/>
-        <col width="45%"/>
-        <col width="35%"/>
-        <row header="yes" bottom="medium">
+      <tabular top="major" bottom="minor" left="minor" right="minor">
+        <row header="yes" bottom="major">
           <cell>Question type</cell>
           <cell>Description</cell>
           <cell>Example</cell>
         </row>
         <row>
           <cell>Descriptive</cell>
-          <cell>A question that asks about summarized characteristics of a data set without
-            interpretation (i.e., report a fact).</cell>
+          <cell>A question that asks about summarized characteristics of a data set without interpretation (i.e., report a fact).</cell>
           <cell>How many people live in each province and territory in Canada?</cell>
         </row>
         <row>
           <cell>Exploratory</cell>
-          <cell>A question that asks if there are patterns, trends, or relationships within a
-            single data set. Often used to propose hypotheses for future study.</cell>
-          <cell>Does political party voting change with indicators of wealth in a set of data
-            collected on 2,000 people living in Canada?</cell>
+          <cell>A question that asks if there are patterns, trends, or relationships within a single data set. Often used to propose hypotheses for future study.</cell>
+          <cell>Does political party voting change with indicators of wealth in a set of data collected on 2,000 people living in Canada?</cell>
         </row>
         <row>
           <cell>Predictive</cell>
-          <cell>A question that asks about predicting measurements or labels for individuals
-            (people or things). The focus is on what things predict some outcome, but not what
-            causes the outcome.</cell>
+          <cell>A question that asks about predicting measurements or labels for individuals (people or things). The focus is on what things predict some outcome, but not what causes the outcome.</cell>
           <cell>What political party will someone vote for in the next Canadian election?</cell>
         </row>
         <row>
           <cell>Inferential</cell>
-          <cell>A question that looks for patterns, trends, or relationships in a single data
-            set <alert>and</alert> also asks for quantification of how applicable these
-            findings are to the wider population.</cell>
-          <cell>Does political party voting change with indicators of wealth for all people
-            living in Canada?</cell>
+          <cell>A question that looks for patterns, trends, or relationships in a single data set <strong>and</strong> also asks for quantification of how applicable these findings are to the wider population.</cell>
+          <cell>Does political party voting change with indicators of wealth for all people living in Canada?</cell>
         </row>
         <row>
           <cell>Causal</cell>
-          <cell>A question that asks about whether changing one factor will lead to a change
-            in another factor, on average, in the wider population.</cell>
-          <cell>Does wealth lead to voting for a certain political party in Canadian
-            elections?</cell>
+          <cell>A question that asks about whether changing one factor will lead to a change in another factor, on average, in the wider population.</cell>
+          <cell>Does wealth lead to voting for a certain political party in Canadian elections?</cell>
         </row>
-        <row>
+        <row bottom="major">
           <cell>Mechanistic</cell>
-          <cell>A question that asks about the underlying mechanism of the observed patterns,
-            trends, or relationships (i.e., how does it happen?)</cell>
-          <cell>How does wealth lead to voting for a certain political party in Canadian
-            elections?</cell>
+          <cell>A question that asks about the underlying mechanism of the observed patterns, trends, or relationships (i.e., how does it happen?)</cell>
+          <cell>How does wealth lead to voting for a certain political party in Canadian elections?</cell>
         </row>
       </tabular>
     </table>
-    <p>Source: <xref ref="leek2015question"/> <xref ref="peng2015art"/>.</p>
 
     <p>
-      In this book, you will learn techniques to answer the first four types of question:
-      descriptive, exploratory, predictive, and inferential; causal and mechanistic questions
-      are beyond the scope of this book. In particular, you will learn how to apply the
-      following analysis tools:
+      In this book, you will learn techniques to answer the
+      first four types of question: descriptive, exploratory, predictive, and inferential;
+      causal and mechanistic questions are beyond the scope of this book.
+      In particular, you will learn how to apply the following analysis tools:
     </p>
-    <ol>
-      <li>
-        <p>
-          <alert>Summarization:</alert>
-          <idx><h>summarization</h><h>overview</h></idx>
-          computing and reporting aggregated values pertaining to a data set.
-          Summarization is most often used to answer descriptive questions, and can
-          occasionally help with answering exploratory questions. For example, you might use
-          summarization to answer the following question: <em>What is the average race time
-          for runners in this data set?</em> Tools for summarization are covered in detail in
-          <xref ref="ch-reading"/> and <xref ref="ch-wrangling"/>, but appear regularly
-          throughout the text.
-        </p>
-      </li>
-      <li>
-        <p>
-          <alert>Visualization:</alert>
-          <idx><h>visualization</h><h>overview</h></idx>
-          plotting data graphically. Visualization is typically used to answer descriptive
-          and exploratory questions, but plays a critical supporting role in answering all of
-          the types of question in <xref ref="tab-questions-table"/>. For example, you might
-          use visualization to answer the following question: <em>Is there any relationship
-          between race time and age for runners in this data set?</em> This is covered in
-          detail in <xref ref="ch-viz"/>, but again appears regularly throughout the book.
-        </p>
-      </li>
-      <li>
-        <p>
-          <alert>Classification:</alert>
-          <idx><h>classification</h><h>overview</h></idx>
-          predicting a class or category for a new observation. Classification is used to
-          answer predictive questions. For example, you might use classification to answer
-          the following question: <em>Given measurements of a tumor&#x2019;s average cell
-          area and perimeter, is the tumor benign or malignant?</em> Classification is covered
-          in <xref ref="ch-classification1"/> and <xref ref="ch-classification2"/>.
-        </p>
-      </li>
-      <li>
-        <p>
-          <alert>Regression:</alert>
-          <idx><h>regression</h><h>overview</h></idx>
-          predicting a quantitative value for a new observation. Regression is also used to
-          answer predictive questions. For example, you might use regression to answer the
-          following question: <em>What will be the race time for a 20-year-old runner who
-          weighs 50kg?</em> Regression is covered in <xref ref="ch-regression1"/> and
-          <xref ref="ch-regression2"/>.
-        </p>
-      </li>
-      <li>
-        <p>
-          <alert>Clustering:</alert>
-          <idx><h>clustering</h><h>overview</h></idx>
-          finding previously unknown/unlabeled subgroups in a data set. Clustering is often
-          used to answer exploratory questions. For example, you might use clustering to
-          answer the following question: <em>What products are commonly bought together on
-          Amazon?</em> Clustering is covered in <xref ref="ch-clustering"/>.
-        </p>
-      </li>
-      <li>
-        <p>
-          <alert>Estimation:</alert>
-          <idx><h>estimation</h><h>overview</h></idx>
-          taking measurements for a small number of items from a large group and making a
-          good guess for the average or proportion for the large group. Estimation is used to
-          answer inferential questions. For example, you might use estimation to answer the
-          following question: <em>Given a survey of cellphone ownership of 100 Canadians,
-          what proportion of the entire Canadian population own Android phones?</em>
-          Estimation is covered in <xref ref="ch-inference"/>.
-        </p>
-      </li>
-    </ol>
+
     <p>
-      Referring to <xref ref="tab-questions-table"/>, our question about Aboriginal languages
-      is an example of a <em>descriptive question</em>: we are summarizing the
-      characteristics of a data set without further interpretation. And referring to the list
-      above, it looks like we should use visualization and perhaps some summarization to
-      answer the question. So in the remainder of this chapter, we will work towards making a
-      visualization that shows us the ten most common Aboriginal languages in Canada and their
-      associated counts, according to the 2016 census.
+      <idx><h>summarization</h><h>overview</h></idx>
+      <idx><h>visualization</h><h>overview</h></idx>
+      <idx><h>classification</h><h>overview</h></idx>
+      <idx><h>regression</h><h>overview</h></idx>
+      <idx><h>clustering</h><h>overview</h></idx>
+      <idx><h>estimation</h><h>overview</h></idx>
+    </p>
+
+    <ol>
+      <li><p><strong>Summarization:</strong> computing and reporting aggregated values pertaining to a data set. Summarization is most often used to answer descriptive questions, and can occasionally help with answering exploratory questions. For example, you might use summarization to answer the following question: <em>What is the average race time for runners in this data set?</em> Tools for summarization are covered in detail in <xref ref="ch-reading"/> and <xref ref="ch-wrangling"/>, but appear regularly throughout the text.</p></li>
+      <li><p><strong>Visualization:</strong> plotting data graphically. Visualization is typically used to answer descriptive and exploratory questions, but plays a critical supporting role in answering all of the types of question in <xref ref="questions-table"/>. For example, you might use visualization to answer the following question: <em>Is there any relationship between race time and age for runners in this data set?</em> This is covered in detail in <xref ref="ch-viz"/>, but again appears regularly throughout the book.</p></li>
+      <li><p><strong>Classification:</strong> predicting a class or category for a new observation. Classification is used to answer predictive questions. For example, you might use classification to answer the following question: <em>Given measurements of a tumor's average cell area and perimeter, is the tumor benign or malignant?</em> Classification is covered in <xref ref="ch-classification1"/> and <xref ref="ch-classification2"/>.</p></li>
+      <li><p><strong>Regression:</strong> predicting a quantitative value for a new observation. Regression is also used to answer predictive questions. For example, you might use regression to answer the following question: <em>What will be the race time for a 20-year-old runner who weighs 50kg?</em> Regression is covered in <xref ref="ch-regression1"/> and <xref ref="ch-regression2"/>.</p></li>
+      <li><p><strong>Clustering:</strong> finding previously unknown/unlabeled subgroups in a data set. Clustering is often used to answer exploratory questions. For example, you might use clustering to answer the following question: <em>What products are commonly bought together on Amazon?</em> Clustering is covered in <xref ref="ch-clustering"/>.</p></li>
+      <li><p><strong>Estimation:</strong> taking measurements for a small number of items from a large group and making a good guess for the average or proportion for the large group. Estimation is used to answer inferential questions. For example, you might use estimation to answer the following question: <em>Given a survey of cellphone ownership of 100 Canadians, what proportion of the entire Canadian population own Android phones?</em> Estimation is covered in <xref ref="ch-inference"/>.</p></li>
+    </ol>
+
+    <p>
+      Referring to <xref ref="questions-table"/>, our question about
+      Aboriginal languages is an example of a <em>descriptive question</em>: we are
+      summarizing the characteristics of a data set without further interpretation.
+      And referring to the list above, it looks like we should use visualization
+      and perhaps some summarization to answer the question. So in the remainder
+      of this chapter, we will work towards making a visualization that shows
+      us the ten most common Aboriginal languages in Canada and their associated counts,
+      according to the 2016 census.
     </p>
   </section>
 
-  <section xml:id="sec-intro-loading">
+  <section xml:id="sec-intro-loading-data">
     <title>Loading a tabular data set</title>
     <p>
+      <idx><h>tabular data</h></idx>
       A data set is, at its core essence, a structured collection of numbers and characters.
-      Aside from that, there are really no strict rules; data sets can come in many different
-      forms! Perhaps the most common form of data set that you will find in the wild, however,
-      is <em>tabular data</em>.<idx><h>tabular data</h></idx> Think spreadsheets in Microsoft
-      Excel: tabular data are rectangular-shaped and spreadsheet-like, as shown in
-      <xref ref="fig-spreadsheet-vs-dataframe"/>. In this book, we will focus primarily on
-      tabular data.
-    </p>
-    <p>
-      Since we are using Python for data analysis in this book, the first step for us is to load
-      the data into Python. When we load tabular data into Python, it is represented as a <em>data
-      frame</em> object.<idx><h>data frame</h><h>overview</h></idx>
-      <xref ref="fig-spreadsheet-vs-dataframe"/> shows that an Python data frame is very similar
-      to a spreadsheet. We refer to the rows as
-      <idx><h>observation</h></idx> <alert>observations</alert>; these are the individual
-      objects for which we collect data. In
-      <xref ref="fig-spreadsheet-vs-dataframe"/>, the observations are languages. We refer to
-      the columns as <alert>variables</alert>; these are the characteristics of each
-      observation. In <xref ref="fig-spreadsheet-vs-dataframe"/>, the variables are the
-      language&#x2019;s category, its name, the number of mother tongue speakers, etc.
+      Aside from that, there are really no strict rules; data sets can come in
+      many different forms! Perhaps the most common form of data set that you will
+      find in the wild, however, is <em>tabular data</em>. Think spreadsheets in Microsoft Excel: tabular data are
+      rectangular-shaped and spreadsheet-like, as shown in <xref ref="img-spreadsheet-vs-dataframe"/>. In this book, we will focus primarily on tabular data.
     </p>
 
-    <figure xml:id="fig-spreadsheet-vs-dataframe">
-      <caption>A spreadsheet versus a data frame in Python.</caption>
-      <image source="images/intro/spreadsheet_vs_dataframe.png" width="100%"/>
+    <p>
+      <idx><h>data frame</h><h>overview</h></idx>
+      <idx><h>observation</h></idx>
+      <idx><h>variable</h></idx>
+      Since we are using Python for data analysis in this book, the first step for us is to
+      load the data into Python. When we load tabular data into
+      Python, it is represented as a <em>data frame</em> object. <xref ref="img-spreadsheet-vs-dataframe"/> shows that a Python data frame is very similar
+      to a spreadsheet. We refer to the rows as <strong>observations</strong>; these are the individual objects
+      for which we collect data. In <xref ref="img-spreadsheet-vs-dataframe"/>, the observations are
+      languages. We refer to the columns as <strong>variables</strong>; these are the characteristics of each
+      observation. In <xref ref="img-spreadsheet-vs-dataframe"/>, the variables are the the language's category, its name, the number of mother tongue speakers, etc.
+    </p>
+
+    <figure xml:id="img-spreadsheet-vs-dataframe">
+      <caption>A spreadsheet versus a data frame in Python</caption>
+      <image source="images/intro/spreadsheet_vs_df.png" width="100%"/>
     </figure>
 
     <p>
-      The first kind of data file that we will learn how to load into Python as a data frame is
-      the <em>comma-separated values</em> format (<c>.csv</c> for
-      short).<idx><h>comma-separated values</h><see>csv</see></idx><idx><h>csv</h></idx>
-      These files have names ending in <c>.csv</c>, and can be opened and saved using common
-      spreadsheet programs like Microsoft Excel and Google Sheets. For example, the <c>.csv</c>
-      file named <c>can_lang.csv</c> is included with
-      <url href="https://github.com/UBC-DSCI/introduction-to-datascience/tree/master/data"
-           visual="github.com/UBC-DSCI/introduction-to-datascience/tree/master/data">the code
-      for this book</url>. If we were to open this data in a plain text editor (a program
-      like Notepad that just shows text with no formatting), we would see each row on its own
-      line, and each entry in the table separated by a comma:
+      <idx><h>comma-separated values</h><see>csv</see></idx>
+      <idx><h>csv</h></idx>
+      The first kind of data file that we will learn how to load into Python as a data
+      frame is the <em>comma-separated values</em> format (<c>.csv</c> for short).  These files
+      have names ending in <c>.csv</c>, and can be opened and saved using common
+      spreadsheet programs like Microsoft Excel and Google Sheets.  For example, the
+      <c>.csv</c> file named <c>can_lang.csv</c>
+      is included with <url href="https://github.com/UBC-DSCI/introduction-to-datascience-python/tree/main/source/data">the code for this book</url>.
+      If we were to open this data in a plain text editor (a program like Notepad that just shows
+      text with no formatting), we would see each row on its own line, and each entry in the table separated by a comma:
     </p>
 
-    <pre>
+<pre>
 category,language,mother_tongue,most_at_home,most_at_work,lang_known
 Aboriginal languages,"Aboriginal languages, n.o.s.",590,235,30,665
 Non-Official &amp; Non-Aboriginal languages,Afrikaans,10260,4785,85,23415
-Non-Official &amp; Non-Aboriginal languages,"Afro-Asiatic languages, n.i.e.",1150,445,10,2775
+Non-Official &amp; Non-Aboriginal languages,"Afro-Asiatic languages, n.i.e.",1150,44
 Non-Official &amp; Non-Aboriginal languages,Akan (Twi),13460,5985,25,22150
 Non-Official &amp; Non-Aboriginal languages,Albanian,26895,13135,345,31930
 Aboriginal languages,"Algonquian languages, n.i.e.",45,10,0,120
 Aboriginal languages,Algonquin,1260,370,40,2480
-Non-Official &amp; Non-Aboriginal languages,American Sign Language,2685,3020,1145,21930
+Non-Official &amp; Non-Aboriginal languages,American Sign Language,2685,3020,1145,21
 Non-Official &amp; Non-Aboriginal languages,Amharic,22465,12785,200,33670
-    </pre>
+</pre>
 
     <p>
-      To load this data into Python so that we can do things with it (e.g., perform analyses or
-      create data visualizations), we will need to use a <em>function</em>.
       <idx><h>function</h></idx>
-      A function is a special word in Python that takes instructions (we call these
-      <em>arguments</em>)<idx><h>argument</h></idx> and does something. The function we will
-      use to load a <c>.csv</c> file into Python is called <c>read_csv</c>.
+      <idx><h>argument</h></idx>
       <idx><h>read function</h><h>read_csv</h></idx>
-      In its most basic use-case, <c>read_csv</c> expects that the data file:
+      To load this data into Python so that we can do things with it (e.g., perform
+      analyses or create data visualizations), we will need to use a <em>function.</em> A
+      function is a special word in Python that takes instructions (we call these
+      <em>arguments</em>) and does something. The function we will use to load a <c>.csv</c> file
+      into Python is called <c>read_csv</c>. In its most basic
+      use-case, <c>read_csv</c> expects that the data file:
     </p>
     <ul>
       <li><p>has column names (or <em>headers</em>),</p></li>
       <li><p>uses a comma (<c>,</c>) to separate the columns, and</p></li>
       <li><p>does not have row names.</p></li>
     </ul>
+
     <p>
-      Below you&#x2019;ll see the code used to load the data into Python using the
-      <c>read_csv</c> function. Note that the <c>read_csv</c> function is not included in the
-      base installation of Python, meaning that it is not one of the primary functions ready to
-      use when you install Python. Therefore, you need to load it from somewhere else before you
-      can use it. The place from which we will load it is called a Python <em>package</em>. A
-      Python package<idx><h>package</h></idx> is a collection of functions that can be used in
-      addition to the built-in Python package functions once loaded. The <c>read_csv</c>
-      function, in particular, can be made accessible by loading
-      <url href="https://pypi.org/project/pandas/" visual="pypi.org/project/pandas/">the
-      <c>pandas</c> Python package</url>
-      <xref ref="mckinney-proc-scipy-2010"/>
-      using the <c>import</c> command. The <c>pandas</c><idx><h>pandas</h></idx> package
-      contains many functions that we will use throughout this book to load, clean, wrangle, and
-      visualize data.
+      <idx><h>package</h></idx>
+      <idx><h>import</h></idx>
+      <idx><h>pandas</h></idx>
+      Below you'll see the code used to load the data into Python using the <c>read_csv</c>
+      function. Note that the <c>read_csv</c> function is not included in the base
+      installation of Python, meaning that it is not one of the primary functions ready to
+      use when you install Python. Therefore, you need to load it from somewhere else
+      before you can use it. The place from which we will load it is called a Python <em>package</em>.
+      A Python package is a collection of functions that can be used in addition to the
+      built-in Python package functions once loaded. The <c>read_csv</c> function, in
+      particular, can be made accessible by loading
+      <url href="https://pypi.org/project/pandas/">the <c>pandas</c> Python package</url> <xref ref="reback2020pandas"/> <xref ref="mckinney-proc-scipy-2010"/>
+      using the <c>import</c> command. The <c>pandas</c> package contains many
+      functions that we will use throughout this book to load, clean, wrangle,
+      and visualize data.
     </p>
 
     <program language="python">
@@ -375,242 +296,220 @@ import pandas as pd
     </program>
 
     <p>
-      This command has two parts. The first is <c>import pandas</c>, which loads the
-      <c>pandas</c> package. The second is <c>as pd</c>, which gives the <c>pandas</c> package
-      the much shorter <em>alias</em> (another name) <c>pd</c>. We can now use the
-      <c>read_csv</c> function by writing <c>pd.read_csv</c>, i.e., the package name, then a
-      dot, then the function name. You can see why we gave <c>pandas</c> a shorter alias;
-      if we had to type <c>pandas.</c> before every function we wanted to use, our code would
-      become much longer and harder to read!
+      This command has two parts. The first is <c>import pandas</c>, which loads the <c>pandas</c> package.
+      The second is <c>as pd</c>, which give the <c>pandas</c> package the much shorter <em>alias</em> (another name) <c>pd</c>.
+      We can now use the <c>read_csv</c> function by writing <c>pd.read_csv</c>, i.e., the package name, then a dot, then the function name.
+      You can see why we gave <c>pandas</c> a shorter alias; if we had to type <c>pandas.</c> before every function we wanted to use,
+      our code would become much longer and harder to read!
     </p>
 
     <p>
-      Now that the <c>pandas</c> package is loaded, we can use the <c>read_csv</c> function by
-      passing it a single argument: the name of the file, <c>"can_lang.csv"</c>. We have to put
-      quotes around file names and other letters and words that we use in our code to distinguish
-      it from the special words (like functions!) that make up the Python programming language.
-      The file&#x2019;s name is the only argument we need to provide because our file satisfies
-      everything else that the <c>read_csv</c> function expects in the default use-case.
-      <xref ref="fig-img-read-csv"/> describes how we use the <c>read_csv</c> to read data into
-      Python.
+      Now that the <c>pandas</c> package is loaded, we can use the <c>read_csv</c> function by passing
+      it a single argument: the name of the file, <c>"can_lang.csv"</c>. We have to
+      put quotes around file names and other letters and words that we use in our
+      code to distinguish it from the special words (like functions!) that make up the Python programming
+      language.  The file's name is the only argument we need to provide because our
+      file satisfies everything else that the <c>read_csv</c> function expects in the default
+      use-case. <xref ref="img-read-csv"/> describes how we use the <c>read_csv</c>
+      to read data into Python.
     </p>
 
-    <figure xml:id="fig-img-read-csv">
-      <caption>Syntax for the <c>read_csv</c> function.</caption>
+    <figure xml:id="img-read-csv">
+      <caption>Syntax for the <c>read_csv</c> function</caption>
       <image source="images/intro/read_csv_function.png" width="100%"/>
     </figure>
 
     <program language="python">
       <input>
-pd.read_csv(&quot;data/can_lang.csv&quot;)
+pd.read_csv("data/can_lang.csv")
       </input>
     </program>
-
-
-    <note>
-      <p>
-        There is another function that also loads csv files named <c>read.csv</c>. We will
-        <em>always</em> use <c>read_csv</c> in this book. Be careful not to accidentally use
-        <c>read.csv</c>, as it can cause some tricky errors to occur in your code that are hard
-        to track down!
-      </p>
-    </note>
   </section>
 
   <section xml:id="sec-intro-naming">
     <title>Naming things in Python</title>
     <p>
-      When we loaded the 2016 Canadian census language data using <c>read_csv</c>, we did not
-      give this data frame a name. Therefore the data was just printed on the screen, and we
-      cannot do anything else with it. That isn&#x2019;t very useful. What would be more
-      useful would be to give a name to the data frame that <c>read_csv</c> outputs, so that
-      we can refer to it later for analysis and visualization.
+      When we loaded the 2016 Canadian census language data
+      using <c>read_csv</c>, we did not give this data frame a name.
+      Therefore the data was just printed on the screen,
+      and we cannot do anything else with it. That isn't very useful.
+      What would be more useful would be to give a name
+      to the data frame that <c>read_csv</c> outputs,
+      so that we can refer to it later for analysis and visualization.
     </p>
     <p>
-      The way to assign a name to a value in Python is via the <em>assignment symbol</em>
-      <c>=</c>.
+      <idx><h>=</h><see>assignment symbol</see></idx>
       <idx><h>assignment symbol</h></idx>
-      On the left side of the assignment symbol you put the name that you want to use, and on
-      the right side of the assignment symbol you put the value that you want the name to
-      refer to. Names can be used to refer to almost anything in Python, such as numbers, words
-      (also known as <em>strings</em> of characters), and data frames! Below, we set
-      <c>my_number</c> to <c>3</c> (the result of <c>1+2</c>) and we set <c>name</c> to the
-      string <c>"Alice"</c>.<idx><h>string</h></idx>
+      <idx><h>string</h></idx>
+      The way to assign a name to a value in Python is via the <em>assignment symbol</em> <c>=</c>.
+      On the left side of the assignment symbol you put the name that you want
+      to use, and on the right side of the assignment symbol
+      you put the value that you want the name to refer to.
+      Names can be used to refer to almost anything in Python, such as numbers,
+      words (also known as <em>strings</em> of characters), and data frames!
+      Below, we set <c>my_number</c> to <c>3</c> (the result of <c>1+2</c>)
+      and we set <c>name</c> to the string <c>"Alice"</c>.
     </p>
-
     <program language="python">
       <input>
 my_number = 1 + 2
-name = &quot;Alice&quot;
+name = "Alice"
       </input>
     </program>
-
     <p>
-      Note that when we name something in Python using the assignment symbol, <c>=</c>, we do
-      not need to surround the name we are creating with quotes. This is because we are
-      formally telling Python that this special word denotes the value of whatever is on the
-      right-hand side. Only characters and words that act as <em>values</em> on the
-      right-hand side of the assignment symbol&#x2014;e.g., the file name
-      <c>"data/can_lang.csv"</c> that we specified before, or <c>"Alice"</c>
-      above&#x2014;need to be surrounded by quotes.
+      Note that when
+      we name something in Python using the assignment symbol, <c>=</c>,
+      we do not need to surround the name we are creating with quotes. This is
+      because we are formally telling Python that this special word denotes
+      the value of whatever is on the right-hand side.
+      Only characters and words that act as <em>values</em> on the right-hand side of the assignment
+      symbol&#x2014;e.g., the file name <c>"data/can_lang.csv"</c> that we specified before, or <c>"Alice"</c> above&#x2014;need
+      to be surrounded by quotes.
     </p>
     <p>
-      After making the assignment, we can use the special name words we have created in place
-      of their values. For example, if we want to do something with the value <c>3</c> later
-      on, we can just use <c>my_number</c> instead. Let&#x2019;s try adding 2 to
-      <c>my_number</c>; you will see that Python just interprets this as adding 3 and 2:
+      After making the assignment, we can use the special name words we have created in
+      place of their values. For example, if we want to do something with the value <c>3</c> later on,
+      we can just use <c>my_number</c> instead. Let's try adding 2 to <c>my_number</c>; you will see that
+      Python just interprets this as adding 2 and 3:
     </p>
-
     <program language="python">
       <input>
 my_number + 2
       </input>
     </program>
-
-    <pre>
-[1] 5
-    </pre>
-
     <p>
-      Object names<idx><h>object</h></idx> can consist of letters, numbers, and underscores
-      <c>_</c>. Other symbols won&#x2019;t work since they have
-      their own meanings in Python. For example, <c>-</c> is the subtraction symbol; if we try to
-      assign a name with the <c>-</c> symbol, Python will complain and we will get an error!
+      <idx><h>object</h></idx>
+      Object names can consist of letters, numbers, and underscores (<c>_</c>).
+      Other symbols won't work since they have their own meanings in Python. For example,
+      <c>-</c> is the subtraction symbol; if we try to assign a name with
+      the <c>-</c> symbol, Python will complain and we will get an error!
     </p>
-
     <program language="python">
       <input>
 my-number = 1
       </input>
     </program>
-
-    <program language="python">
-      <input>
-print("SyntaxError: cannot assign to expression here. Maybe you meant '==' instead of '='?")
-      </input>
-    </program>
-
     <pre>
 SyntaxError: cannot assign to expression here. Maybe you meant '==' instead of '='?
     </pre>
-
     <p>
-      There are certain conventions for naming objects in Python. When naming
       <idx><h>object</h><h>naming convention</h></idx>
-      an object we suggest using only lowercase letters, numbers and underscores <c>_</c> to
-      separate the words in a name. Python is case sensitive, which means that <c>Letter</c> and
-      <c>letter</c> would be two different objects in Python. You should also try to give your
-      objects meaningful names. For instance, you <em>can</em> name a data frame <c>x</c>.
+      There are certain conventions for naming objects in Python.
+      When naming an object we
+      suggest using only lowercase letters, numbers and underscores <c>_</c> to separate
+      the words in a name.  Python is case sensitive, which means that <c>Letter</c> and
+      <c>letter</c> would be two different objects in Python.  You should also try to give your
+      objects meaningful names.  For instance, you <em>can</em> name a data frame <c>x</c>.
       However, using more meaningful terms, such as <c>language_data</c>, will help you
-      remember what each name in your code represents. We recommend following the
-      <em>PEP 8</em> naming conventions outlined in
-      <url href="https://peps.python.org/pep-0008/" visual="peps.python.org/pep-0008/">PEP 8</url>.
-      Let&#x2019;s now use the assignment symbol
-      to give the name <c>can_lang</c> to the 2016 Canadian census language data frame that
-      we get from <c>read_csv</c>.
+      remember what each name in your code represents.  We recommend following the
+      <strong>PEP 8</strong> naming conventions outlined in the <em><url href="https://peps.python.org/pep-0008/">PEP 8</url></em> <xref ref="pep8-style-guide"/>.  Let's
+      now use the assignment symbol to give the name
+      <c>can_lang</c> to the 2016 Canadian census language data frame that we get from
+      <c>read_csv</c>.
     </p>
-
     <program language="python">
       <input>
-can_lang = pd.read_csv(&quot;data/can_lang.csv&quot;)
+can_lang = pd.read_csv("data/can_lang.csv")
       </input>
     </program>
-
     <p>
-      Wait a minute, nothing happened this time! Where&#x2019;s our data? Actually, something
-      did happen: the data was loaded in and now has the name <c>can_lang</c> associated with
-      it. And we can use that name to access the data frame and do things with it. For
-      example, we can type the name of the data frame to print the first few rows on the
-      screen. You will also see at the top that the number of observations (i.e., rows) and
-      variables (i.e., columns) are printed. Printing the first few rows of a data frame like
-      this is a handy way to get a quick sense for what is contained in a data frame.
+      Wait a minute, nothing happened this time! Where's our data?
+      Actually, something did happen: the data was loaded in
+      and now has the name <c>can_lang</c> associated with it.
+      And we can use that name to access the data frame and do things with it.
+      For example, we can type the name of the data frame to print both the first few rows
+      and the last few rows. The three dots (<c>...</c>) indicate that there are additional rows that are not printed.
+      You will also see that the number of observations (i.e., rows) and
+      variables (i.e., columns) are printed just underneath the data frame (214 rows and 6 columns in this case).
+      Printing a few rows from data frame like this is a handy way to get a quick sense for what is contained in it.
     </p>
-
     <program language="python">
       <input>
 can_lang
       </input>
     </program>
-
-
   </section>
 
-  <section xml:id="sec-intro-filter-select">
-    <title>Creating subsets of data frames with <c>[]</c> and <c>loc[]</c></title>
-    <idx><h>[]</h><see>DataFrame</see></idx>
-    <idx><h>loc[]</h><see>DataFrame</see></idx>
-    <idx><h>DataFrame</h><h>[]</h></idx>
-    <idx><h>DataFrame</h><h>loc[]</h><h>selecting columns</h></idx>
+  <section xml:id="sec-intro-subsets">
+    <title>Creating subsets of data frames with <c>[]</c> &amp; <c>loc[]</c></title>
     <p>
-      Now that we&#x2019;ve loaded our data into Python, we can start wrangling the data to find
-      the ten Aboriginal languages that were most often reported in 2016 as mother tongues in
-      Canada. In particular, we want to construct a table with the ten Aboriginal languages that
-      have the largest counts in the <c>mother_tongue</c> column. The first step is to extract
-      from our <c>can_lang</c> data only those rows that correspond to Aboriginal languages, and
-      then the second step is to keep only the <c>language</c> and <c>mother_tongue</c> columns.
+      <idx><h>[]</h><see>DataFrame</see></idx>
+      <idx><h>loc[]</h><see>DataFrame</see></idx>
+      <idx><h>DataFrame</h><h>[]</h></idx>
+      <idx><h>DataFrame</h><h>loc[]</h></idx>
+      <idx><h>selecting columns</h></idx>
+      Now that we've loaded our data into Python, we can start wrangling the data to
+      find the ten Aboriginal languages that were most often reported
+      in 2016 as mother tongues in Canada. In particular, we want to construct
+      a table with the ten Aboriginal languages that have the largest
+      counts in the <c>mother_tongue</c> column. The first step is to extract
+      from our <c>can_lang</c> data only those rows that correspond to Aboriginal languages,
+      and then the second step is to keep only the <c>language</c> and <c>mother_tongue</c> columns.
       The <c>[]</c> and <c>loc[]</c> operations on the <c>pandas</c> data frame will help us
-      here. The <c>[]</c> allows you to obtain a subset of (i.e., <em>filter</em>) the rows of a
-      data frame, or to obtain a subset of (i.e., <em>select</em>) the columns of a data frame.
-      The <c>loc[]</c> operation allows you to both filter rows and select columns at the same
-      time. We will first investigate filtering rows and selecting columns with the <c>[]</c>
-      operation, and then use <c>loc[]</c> to do both in our analysis of the Aboriginal
-      languages data.
+      here. The <c>[]</c> allows you to obtain a subset of (i.e., <em>filter</em>) the rows of a data frame,
+      or to obtain a subset of (i.e., <em>select</em>) the columns of a data frame.
+      The <c>loc[]</c> operation allows you to both filter rows <em>and</em> select columns
+      at the same time. We will first investigate filtering rows and selecting
+      columns with the <c>[]</c> operation,
+      and then use <c>loc[]</c> to do both in our analysis of the Aboriginal languages data.
     </p>
     <note>
-      The <c>[]</c> and <c>loc[]</c> operations, and related operations, in <c>pandas</c> are
-      much more powerful than we describe in this chapter. You will learn more sophisticated ways
-      to index data frames later on in <xref ref="ch-wrangling"/>.
+      <p>
+        The <c>[]</c> and <c>loc[]</c> operations, and related operations, in <c>pandas</c>
+        are much more powerful than we describe in this chapter.
+        You will learn more sophisticated ways to index data frames later on
+        in <xref ref="ch-wrangling"/>.
+      </p>
     </note>
 
-    <subsection xml:id="subsec-intro-filter">
+    <subsection xml:id="subsec-intro-filter-rows">
       <title>Using <c>[]</c> to filter rows</title>
       <p>
-        Looking at the <c>can_lang</c> data above, we see the column <c>category</c> contains
-        different high-level categories of languages, which include
-        <c>"Aboriginal languages"</c>, <c>"Non-Official &amp; Non-Aboriginal languages"</c> and
-        <c>"Official languages"</c>. To answer our question we want to filter our data set so we
-        restrict our attention to only those languages in the <c>"Aboriginal languages"</c>
-        category.
+        Looking at the <c>can_lang</c> data above, we see the column <c>category</c> contains different
+        high-level categories of languages, which include "Aboriginal languages",
+        "Non-Official &amp; Non-Aboriginal languages" and "Official languages".  To answer
+        our question we want to filter our data set so we restrict our attention
+        to only those languages in the "Aboriginal languages" category.
       </p>
       <p>
-        We can use the <c>[]</c> operation to obtain the subset of rows with desired values from
-        a data frame. <xref ref="fig-img-filter"/> shows the syntax we need to use to filter rows
-        with the <c>[]</c> operation. First, we type the name of the data frame&#x2014;here,
-        <c>can_lang</c>&#x2014;followed by square brackets. Inside the square brackets, we write
-        a <em>logical statement</em> <idx><h>logical statement</h></idx> to use when filtering
-        the rows. A logical statement evaluates to either <c>True</c> or <c>False</c> for each
-        row in the data frame; the <c>[]</c> operation keeps only those rows for which the
-        logical statement evaluates to <c>True</c>. For example, in our analysis, we are
-        interested in keeping only languages in the <c>"Aboriginal languages"</c>
-        higher-level category. We can use the <em>equivalency operator</em> <c>==</c>
-        <idx><h>logical operator</h><h>equivalency</h></idx> to compare the values of the
-        <c>category</c> column&#x2014;denoted by <c>can_lang["category"]</c>&#x2014;with the
-        value <c>"Aboriginal languages"</c>. You will learn about many other kinds of logical
-        statement in <xref ref="ch-wrangling"/>. Similar to when we loaded the data file and put
-        quotes around the file name, here we need to put quotes around both
-        <c>"Aboriginal languages"</c> and <c>"category"</c>. Using quotes tells Python that this
-        is a <em>string value</em> (e.g., a column name, or word data) and not one of the special
-        words that make up the Python programming language, or one of the names we have given to
-        objects in the code we have already written.
+        <idx><h>DataFrame</h><h>[]</h></idx>
+        <idx><h>filtering rows</h></idx>
+        <idx><h>logical statement</h></idx>
+        <idx><h>logical operator</h><h>equivalency (==)</h></idx>
+        <idx><h>string</h></idx>
+        We can use the <c>[]</c> operation to obtain the subset of rows with desired values
+        from a data frame. <xref ref="img-filter"/> shows the syntax we need to use to filter
+        rows with the <c>[]</c> operation. First, we type the name of the data frame&#x2014;here, <c>can_lang</c>&#x2014;followed
+        by square brackets. Inside the square brackets, we write a <em>logical statement</em> to
+        use when filtering the rows. A logical statement evaluates to either <c>True</c> or <c>False</c>
+        for each row in the data frame; the <c>[]</c> operation keeps only those rows
+        for which the logical statement evaluates to <c>True</c>. For example, in our analysis,
+        we are interested in keeping only languages in the <c>"Aboriginal languages"</c> higher-level
+        category. We can use the <em>equivalency operator</em> <c>==</c> to compare the values of the <c>category</c>
+        column&#x2014;denoted by <c>can_lang["category"]</c>&#x2014;with the value <c>"Aboriginal languages"</c>.
+        You will learn about many other kinds of logical
+        statement in <xref ref="ch-wrangling"/>. Similar to when we loaded the data file and put quotes
+        around the file name, here we need to put quotes around both <c>"Aboriginal languages"</c> and <c>"category"</c>. Using
+        quotes tells Python that this is a <em>string value</em> (e.g., a column name, or word data)
+        and not one of the special words that make up the Python programming language,
+        or one of the names we have given to objects in the code we have already written.
       </p>
       <note>
-        In Python, single quotes (<c>'</c>) and double quotes (<c>"</c>) are generally treated
-        the same. So we could have written <c>'Aboriginal languages'</c> instead of
-        <c>"Aboriginal languages"</c> above, or <c>'category'</c> instead of <c>"category"</c>.
-        Try both out for yourself!
+        <p>
+          In Python, single quotes (<c>'</c>) and double quotes (<c>"</c>) are generally
+          treated the same. So we could have written <c>'Aboriginal languages'</c> instead
+          of <c>"Aboriginal languages"</c> above, or <c>'category'</c> instead of <c>"category"</c>.
+          Try both out for yourself!
+        </p>
       </note>
-
-      <figure xml:id="fig-img-filter">
+      <figure xml:id="img-filter">
         <caption>Syntax for using the <c>[]</c> operation to filter rows.</caption>
         <image source="images/intro/filter_rows.png" width="100%"/>
       </figure>
-
       <p>
         This operation returns a data frame that has all the columns of the input data frame,
-        but only those rows corresponding to Aboriginal languages that we asked for in the
-        logical statement.
+        but only those rows corresponding to Aboriginal languages that we asked for in the logical statement.
       </p>
-
       <program language="python">
         <input>
 can_lang[can_lang["category"] == "Aboriginal languages"]
@@ -618,53 +517,54 @@ can_lang[can_lang["category"] == "Aboriginal languages"]
       </program>
     </subsection>
 
-    <subsection xml:id="subsec-intro-select">
+    <subsection xml:id="subsec-intro-select-cols">
       <title>Using <c>[]</c> to select columns</title>
       <p>
+        <idx><h>DataFrame</h><h>[]</h></idx>
+        <idx><h>selecting columns</h></idx>
         We can also use the <c>[]</c> operation to select columns from a data frame.
-        <xref ref="fig-img-select"/> displays the syntax needed to select columns. We again
-        first type the name of the data frame&#x2014;here, <c>can_lang</c>&#x2014;followed by
-        square brackets. Inside the square brackets, we provide a <em>list</em> of column names.
-        In Python, we denote a <em>list</em> using square brackets, where each item is separated
-        by a comma (<c>,</c>).
-        If we are interested in selecting only the <c>language</c> and <c>mother_tongue</c>
-        columns from our original <c>can_lang</c> data frame, we put the list
-        <c>[&quot;language&quot;, &quot;mother_tongue&quot;]</c> containing those two column
-        names inside the square brackets of the <c>[]</c> operation.
+        <xref ref="img-select"/> displays the syntax needed to select columns.
+        We again first type the name of the data frame&#x2014;here, <c>can_lang</c>&#x2014;followed
+        by square brackets. Inside the square brackets, we provide a <em>list</em> of
+        column names. In Python, we denote a <em>list</em> using square brackets, where
+        each item is separated by a comma (<c>,</c>). So if we are interested in
+        selecting only the <c>language</c> and <c>mother_tongue</c> columns from our original
+        <c>can_lang</c> data frame, we put the list <c>["language", "mother_tongue"]</c>
+        containing those two column names inside the square brackets of the <c>[]</c> operation.
       </p>
-
-      <figure xml:id="fig-img-select">
+      <figure xml:id="img-select">
         <caption>Syntax for using the <c>[]</c> operation to select columns.</caption>
         <image source="images/intro/select_columns.png" width="100%"/>
       </figure>
-
+      <p>
+        This operation returns a data frame that has all the rows of the input data frame,
+        but only those columns that we named in the selection list.
+      </p>
       <program language="python">
         <input>
 can_lang[["language", "mother_tongue"]]
         </input>
       </program>
-
     </subsection>
 
     <subsection xml:id="subsec-intro-loc">
       <title>Using <c>loc[]</c> to filter rows and select columns</title>
       <p>
-        The <c>[]</c> operation is only used when you want to filter rows <em>or</em> select
-        columns; it cannot be used to do both operations at the same time. But in order to
-        answer our original data analysis question in this chapter, we need to <em>both</em>
-        filter the rows for Aboriginal languages, <em>and</em> select the
-        <c>language</c> and <c>mother_tongue</c> columns. Fortunately, <c>pandas</c> provides
-        the <c>loc[]</c> operation, which lets us do just that.
-      </p>
-      <p>
+        <idx><h>DataFrame</h><h>loc[]</h></idx>
+        <idx><h>selecting columns</h></idx>
+        The <c>[]</c> operation is only used when you want to filter rows <em>or</em> select columns;
+        it cannot be used to do both operations at the same time. But in order to answer
+        our original data analysis question in this chapter, we need to <em>both</em> filter the rows
+        for Aboriginal languages, <em>and</em> select the <c>language</c> and <c>mother_tongue</c> columns.
+        Fortunately, <c>pandas</c> provides the <c>loc[]</c> operation, which lets us do just that.
         The syntax is very similar to the <c>[]</c> operation we have already covered: we will
-        essentially combine both our row filtering and column selection steps from before. In
-        particular, we first write the name of the data frame&#x2014;<c>can_lang</c>
-        again&#x2014;then follow that with the <c>.loc[]</c> operation. Inside the square
-        brackets, we write our row filtering logical statement, then a comma, then our list of
-        columns to select.
+        essentially combine both our row filtering and column selection steps from before.
+        In particular, we first write the name of the data frame&#x2014;<c>can_lang</c> again&#x2014;then follow
+        that with the <c>.loc[]</c> operation. Inside the square brackets,
+        we write our row filtering logical statement,
+        then a comma, then our list of columns to select.
       </p>
-      <figure xml:id="fig-img-loc">
+      <figure xml:id="img-loc">
         <caption>Syntax for using the <c>loc[]</c> operation to filter rows and select columns.</caption>
         <image source="images/intro/filter_rows_and_columns.png" width="100%"/>
       </figure>
@@ -674,78 +574,73 @@ aboriginal_lang = can_lang.loc[can_lang["category"] == "Aboriginal languages", [
         </input>
       </program>
       <p>
-        There is one very important thing to notice in this code example. The first is that we
-        used the <c>loc[]</c> operation on the <c>can_lang</c> data frame by writing
-        <c>can_lang.loc[]</c>&#x2014;first the data frame name, then a dot, then <c>loc[]</c>.
-        There&#x2019;s that dot again! If you recall, earlier in this chapter we used the
-        <c>read_csv</c> function from <c>pandas</c> (aliased as <c>pd</c>), and wrote
-        <c>pd.read_csv</c>. The dot means that the thing on the left (<c>pd</c>, i.e., the
-        <c>pandas</c> package) <em>provides</em> the thing on the right (the <c>read_csv</c>
-        function). In the case of <c>can_lang.loc[]</c>, the thing on the left (the
-        <c>can_lang</c> data frame) <em>provides</em> the thing on the right (the <c>loc[]</c>
-        operation). In Python, both packages (like <c>pandas</c>) <em>and</em> objects (like our
-        <c>can_lang</c> data frame) can provide functions and other objects that we access using
-        the dot syntax.
+        There is one very important thing to notice in this code example.
+        The first is that we used the <c>loc[]</c> operation on the <c>can_lang</c> data frame by
+        writing <c>can_lang.loc[]</c>&#x2014;first the data frame name, then a dot, then <c>loc[]</c>.
+        There's that dot again! If you recall, earlier in this chapter we used the <c>read_csv</c> function from <c>pandas</c> (aliased as <c>pd</c>),
+        and wrote <c>pd.read_csv</c>. The dot means that the thing on the left (<c>pd</c>, i.e., the <c>pandas</c> package) <em>provides</em> the
+        thing on the right (the <c>read_csv</c> function). In the case of <c>can_lang.loc[]</c>, the thing on the left (the <c>can_lang</c> data frame)
+        <em>provides</em> the thing on the right (the <c>loc[]</c> operation). In Python,
+        both packages (like <c>pandas</c>) <em>and</em> objects (like our <c>can_lang</c> data frame) can provide functions
+        and other objects that we access using the dot syntax.
       </p>
       <note>
-        A note on terminology: when an object <c>obj</c> provides a function <c>f</c> with the
-        dot syntax (as in <c>obj.f()</c>), sometimes we call that function <c>f</c> a
-        <em>method</em> of <c>obj</c> or an <em>operation</em> on <c>obj</c>. Similarly, when an
-        object <c>obj</c> provides another object <c>x</c> with the dot syntax (as in
-        <c>obj.x</c>), sometimes we call the object <c>x</c> an <em>attribute</em> of
-        <c>obj</c>. We will use all of these terms throughout the book, as you will see them
-        used commonly in the community. And just because we programmers like to be confusing for
-        no apparent reason: we <em>don&#x2019;t</em> use the &#x201C;method&#x201D;,
-        &#x201C;operation&#x201D;, or &#x201C;attribute&#x201D; terminology when referring to
-        functions and objects from packages, like <c>pandas</c>. So for example,
-        <c>pd.read_csv</c> would typically just be referred to as a function, but not as a method
-        or operation, even though it uses the dot syntax.
+        <p>
+          A note on terminology: when an object <c>obj</c> provides a function <c>f</c> with the
+          dot syntax (as in <c>obj.f()</c>), sometimes we call that function <c>f</c> a <em>method</em> of <c>obj</c> or an <em>operation</em> on <c>obj</c>.
+          Similarly, when an object <c>obj</c> provides another object <c>x</c> with the dot syntax (as in <c>obj.x</c>), sometimes we call the object <c>x</c> an <em>attribute</em> of <c>obj</c>.
+          We will use all of these terms throughout the book, as you will see them used commonly in the community.
+          And just because we programmers like to be confusing for no apparent reason: we <em>don't</em> use the "method", "operation", or "attribute" terminology
+          when referring to functions and objects from packages, like <c>pandas</c>. So for example, <c>pd.read_csv</c>
+          would typically just be referred to as a function, but not as a method or operation, even though it uses the dot syntax.
+        </p>
       </note>
+      <p>
+        At this point, if we have done everything correctly, <c>aboriginal_lang</c> should be a data frame
+        containing <em>only</em> rows where the <c>category</c> is <c>"Aboriginal languages"</c>,
+        and containing <em>only</em> the <c>language</c> and <c>mother_tongue</c> columns.
+        Any time you take a step in a data analysis, it's good practice to check the output
+        by printing the result.
+      </p>
       <program language="python">
         <input>
 aboriginal_lang
         </input>
       </program>
       <p>
-        At this point, if we have done everything correctly, <c>aboriginal_lang</c> should be
-        a data frame containing <em>only</em> rows where the <c>category</c> is
-        <c>"Aboriginal languages"</c>, and containing <em>only</em> the <c>language</c> and
-        <c>mother_tongue</c> columns. Any time you take a step in a data analysis, it&#x2019;s
-        good practice to check the output by printing the result. We can see the original
-        <c>can_lang</c> data set contained 214 rows with multiple kinds of <c>category</c>. The
-        data frame <c>aboriginal_lang</c> contains only 67 rows, and looks like it only contains
-        Aboriginal languages. So it looks like the <c>loc[]</c> operation gave us the result we
-        wanted!
+        We can see the original <c>can_lang</c> data set contained 214 rows
+        with multiple kinds of <c>category</c>. The data frame
+        <c>aboriginal_lang</c> contains only 67 rows, and looks like it only contains Aboriginal languages.
+        So it looks like the <c>loc[]</c> operation gave us the result we wanted!
       </p>
     </subsection>
   </section>
 
-  <section xml:id="sec-arrange-slice-intro">
+  <section xml:id="sec-intro-sort-head">
     <title>Using <c>sort_values</c> and <c>head</c> to select rows by ordered values</title>
-    <idx><h>DataFrame</h><h>sort_values</h></idx>
-    <idx><h>DataFrame</h><h>head</h></idx>
     <p>
-      We have used <c>[]</c> and <c>loc[]</c> to obtain a table with only the Aboriginal
-      languages in the data set and their associated counts. However, we want to know the
-      <alert>ten</alert> languages that are spoken most often. As a next step, we will order
-      the <c>mother_tongue</c> column from largest to smallest value and then extract only the
-      top ten rows. This is where the <c>sort_values</c><idx><h>sort_values</h></idx> and
-      <c>head</c><idx><h>head</h></idx> functions come to the rescue!
+      <idx><h>DataFrame</h><h>sort_values</h></idx>
+      <idx><h>DataFrame</h><h>head</h></idx>
+      We have used the <c>[]</c> and <c>loc[]</c> operations on a data frame to obtain a table
+      with only the Aboriginal languages in the data set and their associated counts.
+      However, we want to know the <strong>ten</strong> languages that are spoken most often. As a
+      next step, we will order the <c>mother_tongue</c> column from largest to smallest
+      value and then extract only the top ten rows. This is where the <c>sort_values</c>
+      and <c>head</c> functions come to the rescue!
     </p>
     <p>
-      The <c>sort_values</c> function allows us to order the rows of a data frame by the values
-      of a particular column. We need to specify the column name by which we want to sort the
-      data frame by passing it to the argument <c>by</c>.
-      Since we want to choose the ten Aboriginal languages most often
-      reported as a mother tongue language, we will use the <c>sort_values</c> function to order
-      the rows in our <c>selected_lang</c> data frame by the <c>mother_tongue</c> column. We
-      want to arrange the rows in descending order (from largest to smallest), so we specify the
-      argument <c>ascending</c> as <c>False</c>.
+      The <c>sort_values</c> function allows us to order the rows of a data frame by the
+      values of a particular column.  We need to specify the column name
+      by which we want to sort the data frame by passing it to the argument <c>by</c>.
+      Since we want to choose the ten Aboriginal languages most often reported as a mother tongue
+      language, we will use the <c>sort_values</c> function to order the rows in our
+      <c>selected_lang</c> data frame by the <c>mother_tongue</c> column. We want to
+      arrange the rows in descending order (from largest to smallest),
+      so we specify the argument <c>ascending</c> as <c>False</c>.
     </p>
 
-    <figure xml:id="fig-img-arrange">
-      <caption>Syntax for using <c>sort_values</c> to arrange rows in descending
-        order.</caption>
+    <figure xml:id="img-sort-values">
+      <caption>Syntax for using <c>sort_values</c> to arrange rows in decending order.</caption>
       <image source="images/intro/sort_values.png" width="100%"/>
     </figure>
 
@@ -757,9 +652,10 @@ arranged_lang
     </program>
 
     <p>
-      Next we will obtain the ten most common Aboriginal languages by selecting only the first
-      ten rows of the <c>arranged_lang</c> data frame. We do this using the <c>head</c>
-      function, and specifying the argument <c>10</c>.
+      Next, we will obtain the ten most common Aboriginal languages by selecting only
+      the first ten rows of the <c>arranged_lang</c> data frame.
+      We do this using the <c>head</c> function, and specifying the argument
+      <c>10</c>.
     </p>
 
     <program language="python">
@@ -768,47 +664,40 @@ ten_lang = arranged_lang.head(10)
 ten_lang
       </input>
     </program>
-
   </section>
 
-  <section xml:id="sec-intro-mutate">
+  <section xml:id="ch1-adding-modifying">
     <title>Adding and modifying columns</title>
-    <idx><h>adding columns</h></idx>
-    <idx><h>modifying columns</h></idx>
     <p>
-      Recall that our data analysis question referred to the <em>count</em> of Canadians that
-      speak each of the top ten most commonly reported Aboriginal languages as their mother
-      tongue, and the <c>ten_lang</c> data frame indeed contains those counts&#x2026; But
-      perhaps, seeing these numbers, we became curious about the <em>percentage</em> of the
-      population of Canada associated with each count. It is common to come up with new data
-      analysis questions in the process of answering a first one&#x2014;so fear not and
-      explore! To answer this small question along the way, we need to divide each count in
-      the <c>mother_tongue</c> column by the total Canadian population according to the 2016
-      census&#x2014;i.e., 35,151,728&#x2014;and multiply it by 100. We can perform this
-      computation using the code <c>100 * ten_lang["mother_tongue"] / canadian_population</c>.
-      Then to store the result in a new column (or overwrite an existing column), we specify the
-      name of the new column to create (or old column to modify), then the assignment symbol
-      <c>=</c>, and then the computation to store in that column. In this case, we will opt to
+      <idx><h>adding columns</h></idx>
+      <idx><h>modifying columns</h></idx>
+      Recall that our data analysis question referred to the <em>count</em> of Canadians
+      that speak each of the top ten most commonly reported Aboriginal languages as
+      their mother tongue, and the <c>ten_lang</c> data frame indeed contains those
+      counts... But perhaps, seeing these numbers, we became curious about the
+      <em>percentage</em> of the population of Canada associated with each count. It is
+      common to come up with new data analysis questions in the process of answering
+      a first one&#x2014;so fear not and explore! To answer this small
+      question along the way, we need to divide each count in the <c>mother_tongue</c>
+      column by the total Canadian population according to the 2016
+      census&#x2014;i.e., 35,151,728&#x2014;and multiply it by 100. We can perform
+      this computation using the code <c>100 * ten_lang["mother_tongue"] / canadian_population</c>.
+      Then to store the result in a new column (or
+      overwrite an existing column), we specify the name of the new
+      column to create (or old column to modify), then the assignment symbol <c>=</c>,
+      and then the computation to store in that column. In this case, we will opt to
       create a new column called <c>mother_tongue_percent</c>.
     </p>
+
     <note>
       <p>
-        You will see below that we write the Canadian population in Python as
-        <c>35_151_728</c>. The underscores (<c>_</c>) are just there for readability, and do
-        not affect how Python interprets the number. In other words, <c>35151728</c> and
-        <c>35_151_728</c> are treated identically in Python, although the latter is much
-        clearer!
+        You will see below that we write the Canadian population in
+        Python as <c>35_151_728</c>. The underscores (<c>_</c>) are just there for readability,
+        and do not affect how Python interprets the number. In other words,
+        <c>35151728</c> and <c>35_151_728</c> are treated identically in Python,
+        although the latter is much clearer!
       </p>
     </note>
-
-    <program language="python">
-      <input>
-# disable setting with copy warning
-# it's not important for this chapter and just distracting
-# only occurs here because we did a much earlier .loc operation that is being picked up below by the coln assignment
-pd.options.mode.chained_assignment = None
-      </input>
-    </program>
 
     <program language="python">
       <input>
@@ -819,9 +708,9 @@ ten_lang
     </program>
 
     <p>
-      The <c>ten_lang_percent</c> data frame shows that the ten Aboriginal languages in the
-      <c>ten_lang</c> data frame were spoken as a mother tongue by between 0.008% and 0.18%
-      of the Canadian population.
+      The <c>ten_lang_percent</c> data frame shows that
+      the ten Aboriginal languages in the <c>ten_lang</c> data frame were spoken
+      as a mother tongue by between 0.008% and 0.18% of the Canadian population.
     </p>
   </section>
 
@@ -832,13 +721,13 @@ ten_lang
       2016 as mother tongues in Canada. Starting from the <c>can_lang</c> data frame, we:
     </p>
     <ol>
-      <li>used <c>loc</c> to filter the rows so that only the <c>Aboriginal languages</c> category remained, and selected the <c>language</c> and <c>mother_tongue</c> columns,</li>
-      <li>used <c>sort_values</c> to sort the rows by <c>mother_tongue</c> in descending order, and</li>
-      <li>obtained only the top 10 values using <c>head</c>.</li>
+      <li><p>used <c>loc</c> to filter the rows so that only the <c>Aboriginal languages</c> category remained, and selected the <c>language</c> and <c>mother_tongue</c> columns,</p></li>
+      <li><p>used <c>sort_values</c> to sort the rows by <c>mother_tongue</c> in descending order, and</p></li>
+      <li><p>obtained only the top 10 values using <c>head</c>.</p></li>
     </ol>
     <p>
-      One way of performing these steps is to just write multiple lines of code, storing
-      temporary, intermediate objects as you go.
+      One way of performing these steps is to just write
+      multiple lines of code, storing temporary, intermediate objects as you go.
     </p>
     <program language="python">
       <input>
@@ -847,21 +736,26 @@ arranged_lang_sorted = aboriginal_lang.sort_values(by="mother_tongue", ascending
 ten_lang = arranged_lang_sorted.head(10)
       </input>
     </program>
-    <idx><h>multi-line expression</h></idx>
+
     <p>
-      You might find that code hard to read. You&#x2019;re not wrong; it is! There are two main
-      issues with readability here. First, each line of code is quite long. It is hard to keep
-      track of what methods are being called, and what arguments were used. Second, each line
-      introduces a new temporary object. In this case, both <c>aboriginal_lang</c> and
-      <c>arranged_lang_sorted</c> are just temporary results on the way to producing the
-      <c>ten_lang</c> data frame.
+      <idx><h>multi-line expression</h></idx>
+      You might find that code hard to read. You're not wrong; it is!
+      There are two main issues with readability here. First, each line of code is quite long.
+      It is hard to keep track of what methods are being called, and what arguments were used.
+      Second, each line introduces a new temporary object. In this case, both <c>aboriginal_lang</c> and <c>arranged_lang_sorted</c>
+      are just temporary results on the way to producing the <c>ten_lang</c> data frame.
+      This makes the code hard to read, as one has to trace where each temporary object
+      goes, and hard to understand, since introducing many named objects also suggests that they
+      are of some importance, when really they are just intermediates.
+      The need to call multiple methods in a sequence to process a data frame is
+      quite common, so this is an important issue to address!
     </p>
     <p>
       To solve the first problem, we can actually split the long expressions above across
-      multiple lines. Let&#x2019;s rewrite this code in a more readable format using multiline
-      expressions.
+      multiple lines. Although in most cases, a single expression in Python must be contained
+      in a single line of code, there are a small number of situations where lets us do this.
+      Let's rewrite this code in a more readable format using multiline expressions.
     </p>
-
     <program language="python">
       <input>
 aboriginal_lang = can_lang.loc[
@@ -875,11 +769,38 @@ arranged_lang_sorted = aboriginal_lang.sort_values(
 ten_lang = arranged_lang_sorted.head(10)
       </input>
     </program>
-    <idx><h>chaining</h></idx>
     <p>
-      We still have to handle the issue that each line of code introduces a new temporary object.
-      To address this issue, we can <em>chain</em> multiple operations together without assigning
-      intermediate objects.
+      This code is the same as the code we showed earlier; you can see the same
+      sequence of methods and arguments is used. But long expressions are split
+      across multiple lines when they would otherwise get long and unwieldy,
+      improving the readability of the code.
+      How does Python know when to keep
+      reading on the next line for a single expression?
+      For the line starting with <c>aboriginal_lang = ...</c>, Python sees that the line ends with a left
+      bracket symbol <c>[</c>, and knows that our
+      expression cannot end until we close it with an appropriate corresponding right bracket symbol <c>]</c>.
+      We put the same two arguments as we did before, and then
+      the corresponding right bracket appears after <c>["language", "mother_tongue"]</c>).
+      For the line starting with <c>arranged_lang_sorted = ...</c>, Python sees that the line ends with a left parenthesis symbol <c>(</c>,
+      and knows the expression cannot end until we close it with the corresponding right parenthesis symbol <c>)</c>.
+      Again we use the same two arguments as before, and then the
+      corresponding right parenthesis appears right after <c>ascending=False</c>.
+      In both cases, Python keeps reading the next line to figure out
+      what the rest of the expression is. We could, of course,
+      put all of the code on one line of code, but splitting it across
+      multiple lines helps a lot with code readability.
+    </p>
+
+    <p>
+      <idx><h>chaining</h></idx>
+      We still have to handle the issue that each line of code&#x2014;i.e., each step in the analysis&#x2014;introduces
+      a new temporary object. To address this issue, we can <em>chain</em> multiple operations together without
+      assigning intermediate objects. The key idea of chaining is that the <em>output</em> of
+      each step in the analysis is a data frame, which means that you can just directly keep calling methods
+      that operate on the output of each step in a sequence! This simplifies the code and makes it
+      easier to read. The code below demonstrates the use of both multiline expressions and chaining together.
+      The code is now much cleaner, and the <c>ten_lang</c> data frame that we get is equivalent to the one
+      from the messy code above!
     </p>
     <program language="python">
       <input>
@@ -895,63 +816,103 @@ ten_lang = (
 ten_lang
       </input>
     </program>
+    <p>
+      Let's parse this new block of code piece by piece.
+      The code above starts with a left parenthesis, <c>(</c>, and so Python
+      knows to keep reading to subsequent lines until it finds the corresponding
+      right parenthesis symbol <c>)</c>. The <c>loc</c> method performs the filtering and selecting steps as before. The line after this
+      starts with a period (<c>.</c>) that "chains" the output of the <c>loc</c> step with the next operation,
+      <c>sort_values</c>. Since the output of <c>loc</c> is a data frame, we can use the <c>sort_values</c> method on it
+      without first giving it a name! That is what the <c>.sort_values</c> does on the next line.
+      Finally, we once again "chain" together the output of <c>sort_values</c> with <c>head</c> to ask for the 10
+      most common languages. Finally, the right parenthesis <c>)</c> corresponding to the very first left parenthesis
+      appears on the second last line, completing the multiline expression.
+      Instead of creating intermediate objects, with chaining, we take the output of
+      one operation and use that to perform the next operation. In doing so, we remove the need to create and
+      store intermediates. This can help with readability by simplifying the code.
+    </p>
+    <p>
+      Now that we've shown you chaining as an alternative to storing
+      temporary objects and composing code, does this mean you should <em>never</em> store
+      temporary objects or compose code? Not necessarily!
+      There are times when temporary objects are handy to keep around.
+      For example, you might store a temporary object before feeding it into a plot function
+      so you can iteratively change the plot without having to
+      redo all of your data transformations.
+      Chaining many functions can be overwhelming and difficult to debug;
+      you may want to store a temporary object midway through to inspect your result
+      before moving on with further steps.
+    </p>
   </section>
 
-  <section xml:id="sec-intro-visualizations">
+  <section xml:id="sec-intro-viz">
     <title>Exploring data with visualizations</title>
-    <idx><h>visualization</h></idx>
     <p>
-      The <c>ten_lang</c> table we generated in <xref ref="sec-arrange-slice-intro"/> answers
-      our initial data analysis question. Are we done? Well, not quite; tables are almost
-      never the best way to present the result of your analysis to your audience. Even the
-      <c>ten_lang</c> table with only two columns presents some difficulty: for example, you
-      have to scrutinize the table quite closely to get a sense for the relative numbers of
-      speakers of each language. When you move on to more complicated analyses, this issue
-      only gets worse. In contrast, a <em>visualization</em> would convey this information in
-      a much more easily understood format. Visualizations are a great tool for summarizing
-      information to help you effectively communicate with your audience, and creating
-      effective data visualizations is an essential component of any data analysis. In this
-      section we will develop a visualization of the ten Aboriginal languages that were most
-      often reported in 2016 as mother tongues in Canada, as well as the number of people that
-      speak each of them.
+      <idx><h>visualization</h></idx>
+      The <c>ten_lang</c> table answers our initial data analysis question.
+      Are we done? Well, not quite; tables are almost never the best way to present
+      the result of your analysis to your audience. Even the <c>ten_lang</c> table with
+      only two columns presents some difficulty: for example, you have to scrutinize
+      the table quite closely to get a sense for the relative numbers of speakers of
+      each language. When you move on to more complicated analyses, this issue only
+      gets worse. In contrast, a <em>visualization</em> would convey this information in a much
+      more easily understood format.
+      Visualizations are a great tool for summarizing information to help you
+      effectively communicate with your audience, and creating effective data visualizations
+      is an essential component of any data
+      analysis. In this section we will develop a visualization of the
+      ten Aboriginal languages that were most often reported in 2016 as mother tongues in
+      Canada, as well as the number of people that speak each of them.
     </p>
 
-    <subsection xml:id="subsec-intro-ggplot-bar">
+    <subsection xml:id="subsec-intro-altair">
       <title>Using <c>altair</c> to create a bar plot</title>
-      <idx><h>altair</h></idx>
-      <idx><h>visualization</h><h>bar</h></idx>
-      <idx><h>plot</h><see>visualization</see></idx>
-      <idx><h>visualization</h><see>altair</see></idx>
       <p>
-        In our data set, we can see that <c>language</c> and <c>mother_tongue</c> are in
-        separate columns (or variables). In addition, there is a single row (or observation)
-        for each language. The data are, therefore, in what we call a <em>tidy data</em>
-        format. Tidy data is a fundamental concept and will be a significant focus in the
-        remainder of this book: many of the functions from <c>pandas</c> require tidy data, as
-        does the <c>altair</c> package that we will use shortly for our
-        visualization. We will formally introduce tidy data in <xref ref="ch-wrangling"/>.
+        <idx><h>altair</h></idx>
+        <idx><h>visualization</h><h>bar</h></idx>
+        In our data set, we can see that <c>language</c> and <c>mother_tongue</c> are in separate
+        columns (or variables). In addition, there is a single row (or observation) for each language.
+        The data are, therefore, in what we call a <em>tidy data</em> format. Tidy data is a
+        fundamental concept and will be a significant focus in the remainder of this
+        book: many of the functions from <c>pandas</c> require tidy data, as does the
+        <c>altair</c> package that we will use shortly for our visualization. We will
+        formally introduce tidy data in <xref ref="ch-wrangling"/>.
       </p>
       <p>
-        We will make a bar plot to visualize our data. A bar
-        plot is a chart where the lengths of the
-        bars represent certain values, like counts or proportions. We will make a bar plot
-        using the <c>mother_tongue</c> and <c>language</c> columns from our <c>ten_lang</c>
-        data frame. To create a bar plot of these two variables using the <c>altair</c>
-        package, we must specify the data frame, which variables to put on the x and y axes,
-        and what kind of plot to create. <xref ref="fig-img-ggplot"/> shows the basic syntax.
-        <xref ref="fig-barplot-mother-tongue"/> shows the resulting bar plot.
+        <idx><h>plot</h><see>visualization</see></idx>
+        <idx><h>visualization</h><h>altair</h></idx>
+        We will make a bar plot to visualize our data. A bar plot is a chart where the
+        lengths of the bars represent certain values, like counts or proportions. We
+        will make a bar plot using the <c>mother_tongue</c> and <c>language</c> columns from our
+        <c>ten_lang</c> data frame. To create a bar plot of these two variables using the
+        <c>altair</c> package, we must specify the data frame, which variables
+        to put on the x and y axes, and what kind of plot to create.
+        First, we need to import the <c>altair</c> package.
       </p>
-
-      <figure xml:id="fig-img-ggplot">
-        <caption>Syntax for using <c>altair</c> to make a bar chart.</caption>
-        <image source="images/intro/altair_syntax.png" width="100%"/>
-      </figure>
 
       <program language="python">
         <input>
 import altair as alt
         </input>
       </program>
+
+      <p>
+        <idx><h>altair</h><h>mark_bar</h></idx>
+        <idx><h>altair</h><h>encoding channel</h></idx>
+        The fundamental object in <c>altair</c> is the <c>Chart</c>, which takes a data frame as an argument: <c>alt.Chart(ten_lang)</c>.
+        With a chart object in hand, we can now specify how we would like the data to be visualized.
+        We first indicate what kind of graphical <em>mark</em> we want to use to represent the data. Here we set the mark attribute
+        of the chart object using the <c>Chart.mark_bar</c> function, because we want to create a bar chart.
+        Next, we need to <em>encode</em> the variables of the data frame using
+        the <c>x</c> and <c>y</c> <em>channels</em> (which represent the x-axis and y-axis position of the points). We use the <c>encode()</c>
+        function to handle this: we specify that the <c>language</c> column should correspond to the x-axis,
+        and that the <c>mother_tongue</c> column should correspond to the y-axis.
+      </p>
+
+      <figure xml:id="img-altair">
+        <caption>Syntax for using <c>altair</c> to make a bar chart.</caption>
+        <image source="images/intro/altair_syntax.png" width="100%"/>
+      </figure>
 
       <program language="python">
         <input>
@@ -961,41 +922,45 @@ barplot_mother_tongue = (
         </input>
       </program>
 
-      <figure xml:id="fig-barplot-mother-tongue">
-        <caption>Bar plot of the ten Aboriginal languages most often reported by Canadian
-          residents as their mother tongue. Note that this visualization is not done yet;
-          there are still improvements to be made.</caption>
-        <image source="images/intro/barplot-mother-tongue.png" width="75%"/>
+      <figure xml:id="barplot-mother-tongue">
+        <caption>Bar plot of the ten Aboriginal languages most often reported by Canadian residents as their mother tongue</caption>
+        <image source="images/intro/barplot_mother_tongue.png" width="100%"/>
       </figure>
-      <idx><h>.</h><see>chaining</see></idx>
     </subsection>
 
-    <subsection xml:id="subsec-intro-ggplot-format">
+    <subsection xml:id="subsec-intro-formatting">
       <title>Formatting <c>altair</c> charts</title>
       <p>
-        It is exciting that we can already visualize our data to help answer our question, but
-        we are not done yet! We can (and should) do more to improve the interpretability of
-        the data visualization that we created. For example, by default, Python uses the column
-        names as the axis labels. Usually these column names do not have enough information
-        about the variable in the column. We really should replace this default with a more
-        informative label. For the example above, Python uses the column name
-        <c>mother_tongue</c> as the label for the y axis, but most people will not know what
-        that is. And even if they did, they will not know how we measured this variable, or
-        the group of people on which the measurements were taken. An axis label that reads
-        &#x201C;Mother Tongue (Number of Canadian Residents)&#x201D; would be much more
-        informative. To make the code easier to read, we&#x2019;re spreading it out over multiple
-        lines just as we did in the previous section with pandas.
+        <idx><h>.</h><see>chaining</see></idx>
+        It is exciting that we can already visualize our data to help answer our
+        question, but we are not done yet! We can (and should) do more to improve the
+        interpretability of the data visualization that we created. For example, by
+        default, Python uses the column names as the axis labels. Usually these
+        column names do not have enough information about the variable in the column.
+        We really should replace this default with a more informative label. For the
+        example above, Python uses the column name <c>mother_tongue</c> as the label for the
+        y axis, but most people will not know what that is. And even if they did, they
+        will not know how we measured this variable, or the group of people on which the
+        measurements were taken. An axis label that reads "Mother Tongue (Number of
+        Canadian Residents)" would be much more informative. To make the code easier to
+        read, we're spreading it out over multiple lines just as we did in the previous
+        section with pandas.
       </p>
+
       <p>
-        Adding additional labels<idx><h>plot</h><h>axis labels</h></idx> to our visualizations
-        that we create in <c>altair</c> is one common and easy way to improve and refine our data
-        visualizations. We can add titles for the axes in the <c>altair</c> objects using
-        <c>alt.X</c> and <c>alt.Y</c> with the <c>title</c> method to make the axes titles more
-        informative. Again, since we are specifying words (e.g.
-        <c>"Mother Tongue (Number of Canadian Residents)"</c>) as arguments to the
-        <c>title</c> method, we surround them with quotation marks. We can do many other
-        modifications to format the plot further, and we will explore these in
-        <xref ref="ch-viz"/>.
+        <idx><h>plot</h><h>labels</h></idx>
+        <idx><h>plot</h><h>axis labels</h></idx>
+        <idx><h>altair</h><h>alt.X</h></idx>
+        <idx><h>altair</h><h>alt.Y</h></idx>
+        <idx><h>altair</h><h>title</h></idx>
+        Adding additional labels to our visualizations that we create in <c>altair</c> is
+        one common and easy way to improve and refine our data visualizations. We can add titles for the axes
+        in the <c>altair</c> objects using <c>alt.X</c> and <c>alt.Y</c> with the <c>title</c> method to make
+        the axes titles more informative (you will learn more about <c>alt.X</c> and <c>alt.Y</c> in <xref ref="ch-viz"/>).
+        Again, since we are specifying
+        words (e.g. <c>"Mother Tongue (Number of Canadian Residents)"</c>) as arguments to
+        the <c>title</c> method, we surround them with quotation marks. We can do many other modifications
+        to format the plot further, and we will explore these in <xref ref="ch-viz"/>.
       </p>
 
       <program language="python">
@@ -1007,20 +972,18 @@ barplot_mother_tongue = alt.Chart(ten_lang).mark_bar().encode(
         </input>
       </program>
 
-      <figure xml:id="fig-barplot-mother-tongue-labs">
-        <caption>Bar plot of the ten Aboriginal languages most often reported by Canadian
-          residents as their mother tongue with x and y labels. Note that this visualization
-          is not done yet; there are still improvements to be made.</caption>
-        <image source="images/intro/barplot-mother-tongue-labs.png" width="75%"/>
+      <figure xml:id="barplot-mother-tongue-labs">
+        <caption>Bar plot of the ten Aboriginal languages most often reported by Canadian residents as their mother tongue with x and y labels. Note that this visualization is not done yet; there are still improvements to be made.</caption>
+        <image source="images/intro/barplot_mother_tongue_labs.png" width="100%"/>
       </figure>
 
       <p>
-        The result is shown in <xref ref="fig-barplot-mother-tongue-labs"/>. This is already
-        quite an improvement! Let&#x2019;s tackle the next major issue with the visualization
-        in <xref ref="fig-barplot-mother-tongue-labs"/>: the vertical x axis labels, which are
-        currently making it difficult to read the different language names. One solution
-        is to rotate the plot such that the bars are horizontal rather than vertical. To
-        accomplish this, we will swap the x and y coordinate axes:
+        The result is shown in <xref ref="barplot-mother-tongue-labs"/>.
+        This is already quite an improvement! Let's tackle the next major issue with the visualization
+        in <xref ref="barplot-mother-tongue-labs"/>: the vertical x axis labels, which are
+        currently making it difficult to read the different language names.
+        One solution is to rotate the plot such that the bars are horizontal rather than vertical.
+        To accomplish this, we will swap the x and y coordinate axes:
       </p>
 
       <program language="python">
@@ -1032,23 +995,21 @@ barplot_mother_tongue_axis = alt.Chart(ten_lang).mark_bar().encode(
         </input>
       </program>
 
-      <figure xml:id="fig-barplot-mother-tongue-flipped">
-        <caption>Horizontal bar plot of the ten Aboriginal languages most often reported by
-          Canadian residents as their mother tongue. There are no more serious issues with
-          this visualization, but it could be refined further.</caption>
-        <image source="images/intro/barplot-mother-tongue-flipped.png" width="75%"/>
+      <figure xml:id="barplot-mother-tongue-labs-axis">
+        <caption>Horizontal bar plot of the ten Aboriginal languages most often reported by Canadian residents as their mother tongue. There are no more serious issues with this visualization, but it could be refined further.</caption>
+        <image source="images/intro/barplot_mother_tongue_labs_axis.png" width="100%"/>
       </figure>
 
       <p>
-        Another big step forward, as shown in
-        <xref ref="fig-barplot-mother-tongue-flipped"/>! There are no more serious issues with
-        the visualization. Now comes time to refine the visualization to make it even more
-        well-suited to answering the question we asked earlier in this chapter. For example,
-        the visualization could be made more transparent by organizing the bars according to the
-        number of Canadian residents reporting each language, rather than in alphabetical order.
-        We can reorder the bars using the <c>sort</c><idx><h>sort</h></idx> method, which orders
-        a variable (here <c>language</c>) based on the values of the variable
-        (<c>mother_tongue</c>) on the x-axis.
+        <idx><h>altair</h><h>sort</h></idx>
+        Another big step forward, as shown in <xref ref="barplot-mother-tongue-labs-axis"/>! There
+        are no more serious issues with the visualization. Now comes time to refine
+        the visualization to make it even more well-suited to answering the question
+        we asked earlier in this chapter. For example, the visualization could be made more transparent by
+        organizing the bars according to the number of Canadian residents reporting
+        each language, rather than in alphabetical order. We can reorder the bars using
+        the <c>sort</c> method, which orders a variable (here <c>language</c>) based on the
+        values of the variable(<c>mother_tongue</c>) on the <c>x-axis</c>.
       </p>
 
       <program language="python">
@@ -1060,58 +1021,57 @@ ordered_barplot_mother_tongue = alt.Chart(ten_lang).mark_bar().encode(
         </input>
       </program>
 
-      <figure xml:id="fig-barplot-mother-tongue-reorder">
-        <caption>Bar plot of the ten Aboriginal languages most often reported by Canadian
-          residents as their mother tongue with bars reordered.</caption>
-        <image source="images/intro/barplot-mother-tongue-reorder.png" width="75%"/>
+      <figure xml:id="barplot-mother-tongue-reorder">
+        <caption>Bar plot of the ten Aboriginal languages most often reported by Canadian residents as their mother tongue with bars reordered.</caption>
+        <image source="images/intro/barplot_mother_tongue_reorder.png" width="100%"/>
       </figure>
 
       <p>
-        <xref ref="fig-barplot-mother-tongue-reorder"/> provides a very clear and
-        well-organized answer to our original question; we can see what the ten most often
-        reported Aboriginal languages were, according to the 2016 Canadian census, and how
-        many people speak each of them. For instance, we can see that the Aboriginal language
-        most often reported was Cree n.o.s. with over 60,000 Canadian residents reporting it
-        as their mother tongue.
+        <xref ref="barplot-mother-tongue-reorder"/> provides a very clear and well-organized
+        answer to our original question; we can see what the ten most often reported Aboriginal languages
+        were, according to the 2016 Canadian census, and how many people speak each of them. For
+        instance, we can see that the Aboriginal language most often reported was Cree
+        n.o.s. with over 60,000 Canadian residents reporting it as their mother tongue.
       </p>
+
       <note>
         <p>
-          &#x201C;n.o.s.&#x201D; means &#x201C;not otherwise specified&#x201D;, so Cree
-          n.o.s. refers to individuals who reported Cree as their mother tongue. In this data
-          set, the Cree languages include the following categories: Cree n.o.s., Swampy Cree,
-          Plains Cree, Woods Cree, and a &#x2018;Cree not included elsewhere&#x2019; category
-          (which includes Moose Cree, Northern East Cree and Southern East Cree)
+          "n.o.s." means "not otherwise specified", so Cree n.o.s. refers to
+          individuals who reported Cree as their mother tongue. In this data set, the
+          Cree languages include the following categories: Cree n.o.s., Swampy Cree,
+          Plains Cree, Woods Cree, and a 'Cree not included elsewhere' category (which
+          includes Moose Cree, Northern East Cree and Southern East Cree)
           <xref ref="language2016"/>.
         </p>
       </note>
     </subsection>
 
-    <subsection xml:id="subsec-intro-all-together">
+    <subsection xml:id="subsec-intro-putting-together">
       <title>Putting it all together</title>
-      <idx><h>comment</h></idx>
-      <idx><h>#</h><see>comment</see></idx>
       <p>
+        <idx><h>comment</h></idx>
+        <idx><h>#</h><see>comment</see></idx>
         In the block of code below, we put everything from this chapter together, with a few
-        modifications. In particular, we have combined all of our steps into one expression split
-        across multiple lines using the left and right parenthesis symbols <c>(</c> and
-        <c>)</c>. We have also provided <em>comments</em> next to many of the lines of
-        code below using the hash symbol <c>#</c>. When Python sees a <c>#</c>
-        sign, it will ignore all of the text that comes after the
-        symbol on that line. So you can use comments to explain lines of code for others, and
-        perhaps more importantly, your future self! It&#x2019;s good practice to get in the
-        habit of commenting your code to improve its readability.
+        modifications. In particular, we have combined all of our steps into one expression
+        split across multiple lines using the left and right parenthesis symbols <c>(</c> and <c>)</c>.
+        We have also provided <em>comments</em> next to
+        many of the lines of code below using the
+        hash symbol <c>#</c>. When Python sees a <c>#</c> sign, it
+        will ignore all of the text that
+        comes after the symbol on that line. So you can use comments to explain lines
+        of code for others, and perhaps more importantly, your future self!
+        It's good practice to get in the habit of
+        commenting your code to improve its readability.
       </p>
       <p>
         This exercise demonstrates the power of Python. In relatively few lines of code, we
-        performed an entire data science workflow with a highly effective data visualization! We
-        asked a question, loaded the data into Python, wrangled the data (using
-        <c>[]</c>, <c>loc[]</c>, <c>sort_values</c>, and <c>head</c>) and created a data
-        visualization to help answer our question. In this chapter, you got a quick taste of the
-        data science workflow;
-        continue on with the next few chapters to learn each of these steps in much more
-        detail!
+        performed an entire data science workflow with a highly effective data
+        visualization! We asked a question, loaded the data into Python, wrangled the data
+        (using <c>[]</c>, <c>loc[]</c>, <c>sort_values</c>, and <c>head</c>) and created a data visualization to
+        help answer our question. In this chapter, you got a quick taste of the data
+        science workflow; continue on with the next few chapters to learn each of
+        these steps in much more detail!
       </p>
-
       <program language="python">
         <input>
 # load the data set
@@ -1132,29 +1092,29 @@ ten_lang_plot = alt.Chart(ten_lang).mark_bar().encode(
         </input>
       </program>
 
-      <figure xml:id="fig-nachos-to-cheesecake">
-        <caption>Putting it all together: bar plot of the ten Aboriginal languages most often
-          reported by Canadian residents as their mother tongue.</caption>
-        <image source="images/intro/nachos-to-cheesecake.png" width="75%"/>
+      <figure xml:id="final_plot">
+        <caption>Bar plot of the ten Aboriginal languages most often reported by Canadian residents as their mother tongue</caption>
+        <image source="images/intro/final_plot.png" width="100%"/>
       </figure>
-
     </subsection>
   </section>
 
-  <section xml:id="sec-intro-documentation">
+  <section xml:id="sec-intro-docs">
     <title>Accessing documentation</title>
-    <idx><h>documentation</h></idx>
-    <idx><h>help</h><see>documentation</see></idx>
-    <idx><h>__doc__</h><see>documentation</see></idx>
     <p>
-      There are many Python functions in the <c>pandas</c> package (and beyond!), and nobody can
-      be expected to remember what every one of them does or all of the arguments we have to give
-      them. Fortunately, Python provides the <c>help</c> function, which provides an easy way to
-      pull up the documentation for most functions quickly. To use the <c>help</c> function to
-      access the documentation, you just put the name of the function you are curious about as an
-      argument inside the <c>help</c> function. For example, if you had forgotten what the
-      <c>pd.read_csv</c> function did or exactly what arguments to pass in, you could run the
-      following code:
+      <idx><h>documentation</h></idx>
+      <idx><h>help</h><see>documentation</see></idx>
+      <idx><h>__doc__</h><see>documentation</see></idx>
+      There are many Python functions in the <c>pandas</c> package (and beyond!), and
+      nobody can be expected to remember what every one of them does
+      or all of the arguments we have to give them. Fortunately, Python provides
+      the <c>help</c> function, which
+      provides an easy way to pull up the documentation for
+      most functions quickly. To use the <c>help</c> function to access the documentation, you
+      just put the name of the function you are curious about as an argument inside the <c>help</c> function.
+      For example, if you had forgotten what the <c>pd.read_csv</c> function
+      did or exactly what arguments to pass in, you could run the following
+      code:
     </p>
 
     <program language="python">
@@ -1164,74 +1124,83 @@ help(pd.read_csv)
     </program>
 
     <p>
-      <xref ref="fig-01-help"/> shows the documentation that will pop up, including a
-      high-level description of the function, its arguments, a description of each, and more.
-      Note that you may find some of the text in the documentation a bit too technical right
-      now. Fear not: as you work through this book, many of these terms will be introduced to
-      you, and slowly but surely you will become more adept at understanding and navigating
-      documentation like that shown in <xref ref="fig-01-help"/>. But do keep in mind that the
-      documentation is not written to <em>teach</em> you about a function; it is just there as a
-      reference to <em>remind</em> you about the different arguments and usage of functions that
-      you have already learned about elsewhere.
+      <xref ref="help_read_csv"/> shows the documentation that will pop up,
+      including a high-level description of the function, its arguments,
+      a description of each, and more. Note that you may find some of the
+      text in the documentation a bit too technical right now.
+      Fear not: as you work through this book, many of these terms will be introduced
+      to you, and slowly but surely you will become more adept at understanding and navigating
+      documentation like that shown in <xref ref="help_read_csv"/>. But do keep in mind that the documentation
+      is not written to <em>teach</em> you about a function; it is just there as a reference to <em>remind</em>
+      you about the different arguments and usage of functions that you have already learned about elsewhere.
     </p>
 
-    <figure xml:id="fig-01-help">
-      <caption>The documentation for the <c>read_csv</c> function including a high-level
-        description, a list of arguments and their meanings, and more.</caption>
-      <image source="images/intro/help_read_csv.png" width="80%"/>
+    <figure xml:id="help_read_csv">
+      <caption>The documentation for the read_csv function including a high-level description, a list of arguments and their meanings, and more.</caption>
+      <image source="images/intro/help_read_csv.png" width="100%"/>
     </figure>
 
     <p>
-      If you are working in a Jupyter Lab environment, there are some conveniences that will
-      help you look up function names and access documentation. First, rather than
-      <c>help</c>, you can use the more concise <c>?</c> character. For example:
+      If you are working in a Jupyter Lab environment, there are some conveniences that will help you lookup function names
+      and access the documentation. First, rather than <c>help</c>, you can use the more concise <c>?</c> character. So for example,
+      to read the documentation for the <c>pd.read_csv</c> function, you can run the following code:
     </p>
+
     <program language="python">
       <input>
 ?pd.read_csv
       </input>
     </program>
+
     <p>
-      You can also type the first characters of the function you want to use, and then press
-      Tab to bring up a menu that shows all available functions that start with those
-      characters.
+      You can also type the first characters of the function you want to use,
+      and then press &lt;kbd&gt;Tab&lt;/kbd&gt; to bring up small menu
+      that shows you all the available functions
+      that starts with those characters.
+      This is helpful both for remembering function names
+      and to prevent typos.
     </p>
-    <figure xml:id="fig-completion-menu">
-      <caption>The suggestions shown after typing <c>pd.read</c> and pressing Tab.</caption>
-      <image source="images/intro/completion_menu.png" width="80%"/>
+
+    <figure xml:id="completion_menu">
+      <caption>The suggestions that are shown after typing <c>pd.read</c> and pressing &lt;kbd&gt;Tab&lt;/kbd&gt;.</caption>
+      <image source="images/intro/completion_menu.png" width="100%"/>
     </figure>
+
     <p>
-      To get more info on the function you want to use, you can type out the full name and then
-      press Shift+Tab to bring up a help dialog including the same information as when using
-      <c>help()</c>.
+      To get more info on the function you want to use,
+      you can type out the full name
+      and then hold &lt;kbd&gt;Shift&lt;/kbd&gt; while pressing &lt;kbd&gt;Tab&lt;/kbd&gt;
+      to bring up a help dialog including the same information as when using <c>help()</c>.
     </p>
-    <figure xml:id="fig-help-dialog">
-      <caption>The help dialog shown after typing <c>pd.read_csv</c> and then pressing
-        Shift+Tab.</caption>
-      <image source="images/intro/help_dialog.png" width="80%"/>
+
+    <figure xml:id="help_dialog">
+      <caption>The help dialog that is shown after typing <c>pd.read_csv</c> and then pressing &lt;kbd&gt;Shift&lt;/kbd&gt; + &lt;kbd&gt;Tab&lt;/kbd&gt;.</caption>
+      <image source="images/intro/help_dialog.png" width="100%"/>
     </figure>
+
     <p>
-      Finally, it can be helpful to have this help dialog open at all times, especially when
-      you start out learning about programming and data science. You can achieve this by
-      clicking on the <c>Help</c> text in the menu bar at the top and then selecting
-      <c>Show Contextual Help</c>.
+      Finally,
+      it can be helpful to have this help dialog open at all times,
+      especially when you start out learning about programming and data science.
+      You can achieve this by clicking on the <c>Help</c> text
+      in the menu bar at the top
+      and then selecting <c>Show Contextual Help</c>.
     </p>
   </section>
 
   <section xml:id="sec-intro-exercises">
     <title>Exercises</title>
     <p>
-      Practice exercises for the material covered in this chapter can be found in the
-      accompanying
-      <url href="https://worksheets.python.datasciencebook.ca"
-           visual="worksheets.python.datasciencebook.ca">worksheets repository</url>
-      in the &#x201C;Python and pandas&#x201D; row. You can launch an interactive version
-      of the worksheet in your browser by clicking the &#x201C;launch binder&#x201D; button.
-      You can also preview a non-interactive version of the worksheet by clicking &#x201C;view
-      worksheet.&#x201D; If you instead decide to download the worksheet and run it on your
-      own machine, make sure to follow the instructions for computer setup found in
-      <xref ref="ch-setup"/>. This will ensure that the automated feedback and guidance that
-      the worksheets provide will function as intended.
+      Practice exercises for the material covered in this chapter
+      can be found in the accompanying
+      <url href="https://worksheets.python.datasciencebook.ca">worksheets repository</url>
+      in the "Python and Pandas" row.
+      You can launch an interactive version of the worksheet in your browser by clicking the "launch binder" button.
+      You can also preview a non-interactive version of the worksheet by clicking "view worksheet."
+      If you instead decide to download the worksheet and run it on your own machine,
+      make sure to follow the instructions for computer setup
+      found in <xref ref="ch-setup"/>. This will ensure that the automated feedback
+      and guidance that the worksheets provide will function as intended.
     </p>
   </section>
 
