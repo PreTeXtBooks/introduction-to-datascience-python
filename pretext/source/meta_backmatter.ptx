@@ -419,6 +419,12 @@
       O'Reilly Media, Inc.
     </biblio>
 
+<biblio type="raw" xml:id="pep8-style-guide">
+      van Rossum, G., Warsaw, B., and Coghlan, N. (2001).
+      <em>PEP 8 – Style Guide for Python Code</em>.
+      <url href="https://peps.python.org/pep-0008/" visual="peps.python.org/pep-0008/"/>
+    </biblio>
+
     <biblio type="raw" xml:id="beautifulsoup">
       Richardson, L. (2007).
       Beautiful soup documentation.
