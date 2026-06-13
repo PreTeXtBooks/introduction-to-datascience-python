@@ -6,12 +6,16 @@
     <title>Overview</title>
     <p>
       In previous chapters, we focused solely on descriptive and exploratory data
-      analysis questions. This chapter and the next together serve as our first foray
-      into answering <em>predictive</em> questions about data. In particular, we will
+      analysis questions.
+      This chapter and the next together serve as our first foray
+      into answering <em>predictive</em> questions about data.
+      In particular, we will
       focus on <em>classification</em>, i.e., using one or more variables to predict
-      the value of a categorical variable of interest. This chapter will cover the
+      the value of a categorical variable of interest.
+      This chapter will cover the
       basics of classification, how to preprocess data to make it suitable for use in
-      a classifier, and how to use our observed data to make predictions. The next
+      a classifier, and how to use our observed data to make predictions.
+      The next
       chapter will focus on how to evaluate how accurate the predictions from our
       classifier are, as well as how to improve our classifier (where possible) to
       maximize its accuracy.
@@ -44,13 +48,18 @@
     <p>
       In many situations, we want to make predictions
       <idx><h>predictive question</h></idx>
-      based on the current situation as well as past experiences. For instance, a
+      based on the current situation as well as past experiences.
+      For instance, a
       doctor may want to diagnose a patient as either diseased or healthy based on
-      their symptoms and the doctor's past experience with patients; an email provider
-      might want to tag a given email as &#x201C;spam&#x201D; or &#x201C;not
-      spam&#x201D; based on the email's text and past email text data; or a credit card
+      their symptoms and the doctor's past experience with patients;
+      an email provider
+      might want to tag a given email as &#x201C;spam&#x201D;
+      or &#x201C;not
+      spam&#x201D; based on the email's text and past email text data;
+      or a credit card
       company may want to predict whether a purchase is fraudulent based on the
-      current purchase item, amount, and location as well as past purchases. These
+      current purchase item, amount, and location as well as past purchases.
+      These
       tasks are all examples of
       <idx><h>classification</h></idx>
       <term>classification</term>, i.e., predicting a categorical class (sometimes
@@ -65,25 +74,32 @@
       Generally, a classifier assigns an observation without a known class (e.g., a
       new patient) to a class (e.g., diseased or healthy) on the basis of how similar
       it is to other observations for which we do know the class (e.g., previous
-      patients with known diseases and symptoms). These observations with known
+      patients with known diseases and symptoms).
+      These observations with known
       classes that we use as a basis for prediction are called a <term>training
       set</term>;
       <idx><h>training set</h></idx>
       this name comes from the fact that we use these data to train, or teach, our
-      classifier. Once taught, we can use the classifier to make predictions on new
+      classifier.
+      Once taught, we can use the classifier to make predictions on new
       data for which we do not know the class.
     </p>
     <p>
       There are many possible methods that we could use to predict a categorical
-      class/label for an observation. In this book, we will focus on the widely used
+      class/label for an observation.
+      In this book, we will focus on the widely used
       <term>K-nearest neighbors</term>
       <idx><h>K-nearest neighbors</h></idx>
-      algorithm <xref ref="knnfix"/> <xref ref="knncover"/>. In your future studies,
+      algorithm <xref ref="knnfix"/> <xref ref="knncover"/>.
+      In your future studies,
       you might encounter decision trees, support vector machines (SVMs), logistic
-      regression, neural networks, and more; see the additional resources section at
+      regression, neural networks, and more;
+      see the additional resources section at
       the end of the next chapter for where to begin learning more about these other
-      methods. It is also worth mentioning that there are many variations on the basic
-      classification problem. For example, we focus on the setting of <term>binary
+      methods.
+      It is also worth mentioning that there are many variations on the basic
+      classification problem.
+      For example, we focus on the setting of <term>binary
       classification</term>
       <idx><h>classification</h><h>binary</h></idx>
       where only two classes are involved (e.g., a diagnosis of either healthy or
@@ -104,22 +120,28 @@
       <idx><h>breast cancer</h></idx>
       Each row in the data set represents an image of a tumor sample, including the
       diagnosis (benign or malignant) and several other measurements (nucleus texture,
-      perimeter, area, and more). Diagnosis for each image was conducted by
+      perimeter, area, and more).
+      Diagnosis for each image was conducted by
       physicians.
     </p>
     <p>
       As with all data analyses, we first need to formulate a precise question that we
-      want to answer. Here, the question is <em>predictive</em>:
+      want to answer.
+      Here, the question is <em>predictive</em>:
       <idx><h>question</h><h>classification</h></idx>
       can we use the tumor image measurements available to us to predict whether a
       future tumor image (with unknown diagnosis) shows a benign or malignant tumor?
       Answering this question is important because traditional, non-data-driven methods
       for tumor diagnosis are quite subjective and dependent upon how skilled and
-      experienced the diagnosing physician is. Furthermore, benign tumors are not
-      normally dangerous; the cells stay in the same place, and the tumor stops
-      growing before it gets very large. By contrast, in malignant tumors, the cells
+      experienced the diagnosing physician is.
+      Furthermore, benign tumors are not
+      normally dangerous;
+      the cells stay in the same place, and the tumor stops
+      growing before it gets very large.
+      By contrast, in malignant tumors, the cells
       invade the surrounding tissue and spread into nearby organs, where they can
-      cause serious damage <xref ref="stanfordhealthcare"/>. Thus, it is important to
+      cause serious damage <xref ref="stanfordhealthcare"/>.
+      Thus, it is important to
       quickly and accurately diagnose the tumor type to guide patient treatment.
     </p>
 
@@ -127,7 +149,8 @@
       <title>Loading the cancer data</title>
       <p>
         Our first step is to load, wrangle, and explore the data using visualizations
-        in order to better understand the data we are working with. We start by
+        in order to better understand the data we are working with.
+        We start by
         loading the <c>pandas</c> and <c>altair</c> packages needed for our analysis.
       </p>
       <program language="python">
@@ -138,18 +161,19 @@ import altair as alt
       </program>
       <p>
         In this case, the file containing the breast cancer data set is a
-        <c>.csv</c> file with headers. We'll use the <c>read_csv</c> function
+        <c>.csv</c> file with headers.
+        We'll use the <c>read_csv</c> function
         <idx><h>read function</h><h>read_csv</h></idx>
         with no additional arguments, and then inspect its contents:
       </p>
       <program language="python">
         <input>
-cancer = pd.read_csv(&quot;data/wdbc.csv&quot;)
+cancer = pd.read_csv("data/wdbc.csv")
 cancer
         </input>
       </program>
       <pre>
-           ID Class    Radius   Texture  Perimeter      Area  Smoothness  \
+           ID Class    Radius   Texture  Perimeter      Area   Smoothness  \
 0      842302     M  1.096100 -2.071512   1.268817  0.983510    1.567087   
 1      842517     M  1.828212 -0.353322   1.684473  1.907030   -0.826235   
 2    84300903     M  1.578499  0.455786   1.565126  1.557513    0.941382   
@@ -184,16 +208,22 @@ cancer
       <p>
         Breast tumors can be diagnosed by performing a <em>biopsy</em>, a process
         where tissue is removed from the body and examined for the presence of
-        disease. Traditionally these procedures were quite invasive; modern methods
+        disease.
+        Traditionally these procedures were quite invasive; modern methods
         such as fine needle aspiration, used to collect the present data set, extract
-        only a small amount of tissue and are less invasive. Based on a digital image
+        only a small amount of tissue and are less invasive.
+        Based on a digital image
         of each breast tissue sample collected for this data set, ten different
         variables were measured for each cell nucleus in the image (items 3&#x2013;12
         of the list of variables below), and then the mean for each variable across
-        the nuclei was recorded. As part of the data preparation, these values have
-        been <em>standardized (centered and scaled)</em>; we will discuss what this
-        means and why we do it later in this chapter. Each image additionally was
-        given a unique ID and a diagnosis by a physician. Therefore, the total set of
+        the nuclei was recorded.
+        As part of the data preparation, these values have
+        been <em>standardized (centered and scaled)</em>;
+        we will discuss what this
+        means and why we do it later in this chapter.
+        Each image additionally was
+        given a unique ID and a diagnosis by a physician.
+        Therefore, the total set of
         variables per image in this data set is:
       </p>
       <ol>
@@ -210,13 +240,15 @@ cancer
         <li><p>Concave Points: the number of concave portions of the
           contour</p></li>
         <li><p>Symmetry: how similar the nucleus is when mirrored</p></li>
-        <li><p>Fractal Dimension: a measurement of how &#x201C;rough&#x201D; the
+        <li><p>Fractal Dimension: a measurement of how &#x201C;rough&#x201D;
+          the
           perimeter is</p></li>
       </ol>
       <p>
         Below we use the <c>info</c>
         <idx><h>DataFrame</h><h>info</h></idx>
-        method to preview the data frame. This method can make it easier to inspect
+        method to preview the data frame.
+        This method can make it easier to inspect
         the data when we have a lot of columns: it prints only the column names down
         the page (instead of across), as well as their data types and the number of
         non-missing entries.
@@ -249,15 +281,17 @@ memory usage: 53.5+ KB
       </pre>
       <p>
         From the summary of the data above, we can see that <c>Class</c> is of type
-        <c>object</c>. We can use the <c>unique</c>
+        <c>object</c>.
+        We can use the <c>unique</c>
         <idx><h>Series</h><h>unique</h></idx>
         method on the <c>Class</c> column to see all unique values present in that
-        column. We see that there are two diagnoses: benign, represented by
+        column.
+        We see that there are two diagnoses: benign, represented by
         <c>"B"</c>, and malignant, represented by <c>"M"</c>.
       </p>
       <program language="python">
         <input>
-cancer[&quot;Class&quot;].unique()
+cancer["Class"].unique()
         </input>
       </program>
       <pre>
@@ -267,18 +301,20 @@ array(['M', 'B'], dtype=object)
         We will improve the readability of our analysis by renaming <c>"M"</c> to
         <c>"Malignant"</c> and <c>"B"</c> to <c>"Benign"</c> using the <c>replace</c>
         <idx><h>Series</h><h>replace</h></idx>
-        method. The <c>replace</c> method takes one argument: a dictionary that maps
-        previous values to desired new values. We will verify the result using the
+        method.
+        The <c>replace</c> method takes one argument: a dictionary that maps
+        previous values to desired new values.
+        We will verify the result using the
         <c>unique</c> method.
       </p>
       <program language="python">
         <input>
-cancer[&quot;Class&quot;] = cancer[&quot;Class&quot;].replace({
-    &quot;M&quot; : &quot;Malignant&quot;,
-    &quot;B&quot; : &quot;Benign&quot;
+cancer["Class"] = cancer["Class"].replace({
+    "M" : "Malignant",
+    "B" : "Benign"
 })
 
-cancer[&quot;Class&quot;].unique()
+cancer["Class"].unique()
         </input>
       </program>
       <pre>
@@ -289,23 +325,26 @@ array(['Malignant', 'Benign'], dtype=object)
     <subsection xml:id="subsec-classif1-exploring-data">
       <title>Exploring the cancer data</title>
       <p>
-        Before we start doing any modeling, let's explore our data set. Below we use
+        Before we start doing any modeling, let's explore our data set.
+        Below we use
         the <c>groupby</c> and <c>size</c>
         <idx><h>DataFrame</h><h>groupby</h></idx>
         <idx><h>Series</h><h>size</h></idx>
         methods to find the number and percentage of benign and malignant tumor
-        observations in our data set. When paired with <c>groupby</c>, <c>size</c>
+        observations in our data set.
+        When paired with <c>groupby</c>, <c>size</c>
         counts the number of observations for each value of the <c>Class</c> variable.
         Then we calculate the percentage in each group by dividing by the total number
         of observations and multiplying by 100. The total number of observations
         equals the number of rows in the data frame, which we can access via the
         <c>shape</c> attribute of the data frame (<c>shape[0]</c> is the number of
-        rows and <c>shape[1]</c> is the number of columns). We have 357 (63%) benign
+        rows and <c>shape[1]</c> is the number of columns).
+        We have 357 (63%) benign
         and 212 (37%) malignant tumor observations.
       </p>
       <program language="python">
         <input>
-100 * cancer.groupby(&quot;Class&quot;).size() / cancer.shape[0]
+100 * cancer.groupby("Class").size() / cancer.shape[0]
         </input>
       </program>
       <pre>
@@ -318,15 +357,17 @@ dtype: float64
         The <c>pandas</c> package also has a more convenient specialized
         <c>value_counts</c> method for
         <idx><h>Series</h><h>value_counts</h></idx>
-        counting the number of occurrences of each value in a column. If we pass no
+        counting the number of occurrences of each value in a column.
+        If we pass no
         arguments to the method, it outputs a series containing the number of
-        occurrences of each value. If we instead pass the argument
+        occurrences of each value.
+        If we instead pass the argument
         <c>normalize=True</c>, it instead prints the fraction of occurrences of each
         value.
       </p>
       <program language="python">
         <input>
-cancer[&quot;Class&quot;].value_counts()
+cancer["Class"].value_counts()
         </input>
       </program>
       <pre>
@@ -337,7 +378,7 @@ Name: count, dtype: int64
       </pre>
       <program language="python">
         <input>
-cancer[&quot;Class&quot;].value_counts(normalize=True)
+cancer["Class"].value_counts(normalize=True)
         </input>
       </program>
       <pre>
@@ -356,9 +397,9 @@ Name: proportion, dtype: float64
       <program language="python">
         <input>
 perim_concav = alt.Chart(cancer).mark_circle().encode(
-    x=alt.X(&quot;Perimeter&quot;).title(&quot;Perimeter (standardized)&quot;),
-    y=alt.Y(&quot;Concavity&quot;).title(&quot;Concavity (standardized)&quot;),
-    color=alt.Color(&quot;Class&quot;).title(&quot;Diagnosis&quot;)
+    x=alt.X("Perimeter").title("Perimeter (standardized)"),
+    y=alt.Y("Concavity").title("Concavity (standardized)"),
+    color=alt.Color("Class").title("Diagnosis")
 )
 perim_concav
         </input>
@@ -372,17 +413,22 @@ perim_concav
         In <xref ref="fig-classif1-cancer-scatter"/>, we can see that malignant
         observations typically fall in the upper right-hand corner of the plot area.
         By contrast, benign observations typically fall in the lower left-hand corner
-        of the plot. In other words, benign observations tend to have lower concavity
-        and perimeter values, and malignant ones tend to have larger values. Suppose
+        of the plot.
+        In other words, benign observations tend to have lower concavity
+        and perimeter values, and malignant ones tend to have larger values.
+        Suppose
         we obtain a new observation not in the current data set that has all the
         variables measured <em>except</em> the label (i.e., an image without the
-        physician's diagnosis for the tumor class). We could compute the standardized
+        physician's diagnosis for the tumor class).
+        We could compute the standardized
         perimeter and concavity values, resulting in values of, say, 1 and 1. Could
         we use this information to classify that observation as benign or malignant?
-        Based on the scatter plot, how might you classify that new observation? If the
+        Based on the scatter plot, how might you classify that new observation?
+        If the
         standardized concavity and perimeter values are 1 and 1 respectively, the
         point would lie in the middle of the orange cloud of malignant points and thus
-        we could probably classify it as malignant. Based on our visualization, it
+        we could probably classify it as malignant.
+        Based on our visualization, it
         seems like it may be possible to make accurate predictions of the <c>Class</c>
         variable (i.e., a diagnosis) for tumor images with unknown diagnoses.
       </p>
@@ -393,23 +439,31 @@ perim_concav
     <title>Classification with K-nearest neighbors</title>
     <p>
       In order to actually make predictions for new observations in practice, we will
-      need a classification algorithm. In this book, we will use the K-nearest
+      need a classification algorithm.
+      In this book, we will use the K-nearest
       neighbors
       <idx><h>K-nearest neighbors</h><h>classification</h></idx>
-      classification algorithm. To predict the label of a new observation (here,
+      classification algorithm.
+      To predict the label of a new observation (here,
       classify it as either benign or malignant), the K-nearest neighbors classifier
-      generally finds the <m>K</m> &#x201C;nearest&#x201D; or &#x201C;most
+      generally finds the <m>K</m> &#x201C;nearest&#x201D;
+      or &#x201C;most
       similar&#x201D; observations in our training set, and then uses their diagnoses
-      to make a prediction for the new observation's diagnosis. <m>K</m> is a number
-      that we must choose in advance; for now, we will assume that someone has chosen
-      <m>K</m> for us. We will cover how to choose <m>K</m> ourselves in the next
+      to make a prediction for the new observation's diagnosis.
+      <m>K</m> is a number
+      that we must choose in advance;
+      for now, we will assume that someone has chosen
+      <m>K</m> for us.
+      We will cover how to choose <m>K</m> ourselves in the next
       chapter.
     </p>
     <p>
       To illustrate the concept of K-nearest neighbors classification, we will walk
-      through an example. Suppose we have a new observation, with standardized
-      perimeter of 2 and standardized concavity of 4, whose diagnosis
-      &#x201C;Class&#x201D; is unknown. This new observation is depicted by the red,
+      through an example.
+      Suppose we have a new observation, with standardized
+      perimeter of 2.0 and standardized concavity of 4.0, whose diagnosis
+      &#x201C;Class&#x201D;
+      is unknown. This new observation is depicted by the red,
       diamond point in <xref ref="fig-classif1-knn-new-obs"/>.
     </p>
     <figure xml:id="fig-classif1-knn-new-obs">
@@ -425,22 +479,28 @@ perim_concav
       would have the same diagnosis.
     </p>
     <figure xml:id="fig-classif1-knn-1nn">
-      <caption>Scatter plot of concavity versus perimeter. The new observation is
+      <caption>Scatter plot of concavity versus perimeter.
+        The new observation is
         represented as a red diamond with a line to the one nearest neighbor, which
         has a malignant label.</caption>
       <image source="images/classification1/cancer-knn-1nn.png" width="70%"/>
     </figure>
     <p>
       Suppose we have another new observation with standardized perimeter 0.2 and
-      concavity of 3.3. Looking at the scatter plot in
+      concavity of 3.3.
+      Looking at the scatter plot in
       <xref ref="fig-classif1-knn-1nn-benign"/>, how would you classify this red,
-      diamond observation? The nearest neighbor to this new point is a
-      <term>benign</term> observation at (0.2, 2.7). Does this seem like the right
-      prediction to make for this observation? Probably not, if you consider the other
+      diamond observation?
+      The nearest neighbor to this new point is a
+      <term>benign</term> observation at (0.2, 2.7).
+      Does this seem like the right
+      prediction to make for this observation?
+      Probably not, if you consider the other
       nearby points.
     </p>
     <figure xml:id="fig-classif1-knn-1nn-benign">
-      <caption>Scatter plot of concavity versus perimeter. The new observation is
+      <caption>Scatter plot of concavity versus perimeter.
+        The new observation is
         represented as a red diamond with a line to the one nearest neighbor, which
         has a benign label.</caption>
       <image source="images/classification1/cancer-knn-1nn-benign.png" width="70%"/>
@@ -448,10 +508,13 @@ perim_concav
     <p>
       To improve the prediction we can consider several neighboring points, say
       <m>K = 3</m>, that are closest to the new observation to predict its diagnosis
-      class. Among those 3 closest points, we use the <em>majority class</em> as our
-      prediction for the new observation. As shown in
+      class.
+      Among those 3 closest points, we use the <em>majority class</em> as our
+      prediction for the new observation.
+      As shown in
       <xref ref="fig-classif1-knn-3nn"/>, we see that the diagnoses of 2 of the 3
-      nearest neighbors to our new observation are malignant. Therefore we take
+      nearest neighbors to our new observation are malignant.
+      Therefore we take
       majority vote and classify our new red, diamond observation as malignant.
     </p>
     <figure xml:id="fig-classif1-knn-3nn">
@@ -461,24 +524,30 @@ perim_concav
     </figure>
     <p>
       Here we chose the <m>K=3</m> nearest observations, but there is nothing special
-      about <m>K=3</m>. We could have used <m>K=4, 5</m> or more (though we may want
-      to choose an odd number to avoid ties). We will discuss more about choosing
+      about <m>K=3</m>.
+      We could have used <m>K=4, 5</m> or more (though we may want
+      to choose an odd number to avoid ties).
+      We will discuss more about choosing
       <m>K</m> in the next chapter.
     </p>
 
     <subsection xml:id="subsec-classif1-distance">
       <title>Distance between points</title>
       <p>
-        We decide which points are the <m>K</m> &#x201C;nearest&#x201D; to our new
+        We decide which points are the <m>K</m> &#x201C;nearest&#x201D;
+        to our new
         observation using the <em>straight-line distance</em> (we will often just
         refer to this as <em>distance</em>).
         <idx><h>distance</h><h>K-nearest neighbors</h></idx>
         <idx><h>straight line</h><h>distance</h></idx>
         Suppose we have two observations <m>a</m> and <m>b</m>, each having two
-        predictor variables, <m>x</m> and <m>y</m>. Denote <m>a_x</m> and
+        predictor variables, <m>x</m> and <m>y</m>.
+        Denote <m>a_x</m> and
         <m>a_y</m> to be the values of variables <m>x</m> and <m>y</m> for
-        observation <m>a</m>; <m>b_x</m> and <m>b_y</m> have similar definitions for
-        observation <m>b</m>. Then the straight-line distance between observation
+        observation <m>a</m>;
+        <m>b_x</m> and <m>b_y</m> have similar definitions for
+        observation <m>b</m>.
+        Then the straight-line distance between observation
         <m>a</m> and <m>b</m> on the x-y plane can be computed using the following
         formula:
       </p>
@@ -487,16 +556,20 @@ perim_concav
         To find the <m>K</m> nearest neighbors to our new observation, we compute the
         distance from that new observation to each observation in our training data,
         and select the <m>K</m> observations corresponding to the <m>K</m>
-        <em>smallest</em> distance values. For example, suppose we want to use
-        <m>K=5</m> neighbors to classify a new observation with perimeter of 0 and
+        <em>smallest</em> distance values.
+        For example, suppose we want to use
+        <m>K=5</m> neighbors to classify a new observation with perimeter of 0.0 and
         concavity of 3.5, shown as a red diamond in
-        <xref ref="fig-classif1-knn-new-obs2"/>. Let's calculate the distances
+        <xref ref="fig-classif1-knn-new-obs2"/>.
+        Let's calculate the distances
         between our new point and each of the observations in the training set to find
-        the <m>K=5</m> neighbors that are nearest to our new point. You will see in
+        the <m>K=5</m> neighbors that are nearest to our new point.
+        You will see in
         the code below, we compute the straight-line distance using the formula above:
         we square the differences between the two observations' perimeter and
         concavity coordinates, add the squared differences, and then take the square
-        root. In order to find the <m>K=5</m> nearest neighbors, we will use the
+        root.
+        In order to find the <m>K=5</m> nearest neighbors, we will use the
         <c>nsmallest</c> function from <c>pandas</c>.
         <idx><h>nsmallest</h></idx>
       </p>
@@ -509,15 +582,15 @@ perim_concav
         <input>
 new_obs_Perimeter = 0
 new_obs_Concavity = 3.5
-cancer[&quot;dist_from_new&quot;] = (
-       (cancer[&quot;Perimeter&quot;] - new_obs_Perimeter) ** 2
-     + (cancer[&quot;Concavity&quot;] - new_obs_Concavity) ** 2
+cancer["dist_from_new"] = (
+       (cancer["Perimeter"] - new_obs_Perimeter) ** 2
+     + (cancer["Concavity"] - new_obs_Concavity) ** 2
 )**(1/2)
-cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
-    &quot;Perimeter&quot;,
-    &quot;Concavity&quot;,
-    &quot;Class&quot;,
-    &quot;dist_from_new&quot;
+cancer.nsmallest(5, "dist_from_new")[[
+    "Perimeter",
+    "Concavity",
+    "Class",
+    "dist_from_new"
 ]]
         </input>
       </program>
@@ -582,8 +655,10 @@ cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
       </table>
       <p>
         The result of this computation shows that 3 of the 5 nearest neighbors to our
-        new observation are malignant; since this is the majority, we classify our new
-        observation as malignant. These 5 neighbors are circled in
+        new observation are malignant;
+        since this is the majority, we classify our new
+        observation as malignant.
+        These 5 neighbors are circled in
         <xref ref="fig-classif1-knn-5nn"/>.
       </p>
       <figure xml:id="fig-classif1-knn-5nn">
@@ -598,9 +673,12 @@ cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
       <p>
         Although the above description is directed toward two predictor variables,
         exactly the same K-nearest neighbors algorithm applies when you have a higher
-        number of predictor variables. Each predictor variable may give us new
-        information to help create our classifier. The only difference is the formula
-        for the distance between points. Suppose we have <m>m</m> predictor variables
+        number of predictor variables.
+        Each predictor variable may give us new
+        information to help create our classifier.
+        The only difference is the formula
+        for the distance between points.
+        Suppose we have <m>m</m> predictor variables
         for two observations <m>a</m> and <m>b</m>, i.e.,
         <m>a = (a_{1}, a_{2}, \dots, a_{m})</m> and
         <m>b = (b_{1}, b_{2}, \dots, b_{m})</m>.
@@ -612,14 +690,19 @@ cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
       <md>\mathrm{Distance} = \sqrt{(a_{1}-b_{1})^2 + (a_{2}-b_{2})^2 + \cdots + (a_{m}-b_{m})^2}.</md>
       <p>
         This formula still corresponds to a straight-line distance, just in a space
-        with more dimensions. Suppose we want to calculate the distance between a new
+        with more dimensions.
+        Suppose we want to calculate the distance between a new
         observation with a perimeter of 0, concavity of 3.5, and symmetry of 1, and
         another observation with a perimeter, concavity, and symmetry of 0.417, 2.31,
-        and 0.837 respectively. We have two observations with three predictor
-        variables: perimeter, concavity, and symmetry. Previously, when we had two
+        and 0.837 respectively.
+        We have two observations with three predictor
+        variables: perimeter, concavity, and symmetry.
+        Previously, when we had two
         variables, we added up the squared difference between each of our (two)
-        variables, and then took the square root. Now we will do the same, except for
-        our three variables. We calculate the distance as follows
+        variables, and then took the square root.
+        Now we will do the same, except for
+        our three variables.
+        We calculate the distance as follows
       </p>
       <md>\mathrm{Distance} =\sqrt{(0 - 0.417)^2 + (3.5 - 2.31)^2 + (1 - 0.837)^2} = 1.27.</md>
       <p>
@@ -632,17 +715,17 @@ cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
 new_obs_Perimeter = 0
 new_obs_Concavity = 3.5
 new_obs_Symmetry = 1
-cancer[&quot;dist_from_new&quot;] = (
-      (cancer[&quot;Perimeter&quot;] - new_obs_Perimeter) ** 2
-    + (cancer[&quot;Concavity&quot;] - new_obs_Concavity) ** 2
-    + (cancer[&quot;Symmetry&quot;] - new_obs_Symmetry) ** 2
+cancer["dist_from_new"] = (
+      (cancer["Perimeter"] - new_obs_Perimeter) ** 2
+    + (cancer["Concavity"] - new_obs_Concavity) ** 2
+    + (cancer["Symmetry"] - new_obs_Symmetry) ** 2
 )**(1/2)
-cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
-    &quot;Perimeter&quot;,
-    &quot;Concavity&quot;,
-    &quot;Symmetry&quot;,
-    &quot;Class&quot;,
-    &quot;dist_from_new&quot;
+cancer.nsmallest(5, "dist_from_new")[[
+    "Perimeter",
+    "Concavity",
+    "Symmetry",
+    "Class",
+    "dist_from_new"
 ]]
         </input>
       </program>
@@ -664,8 +747,10 @@ cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
       </p>
       <figure xml:id="fig-classif1-3d">
         <caption>3D scatter plot of the standardized symmetry, concavity, and
-          perimeter variables. Note that in general we recommend against using 3D
-          visualizations; here we show the data in 3D only to illustrate what higher
+          perimeter variables.
+          Note that in general we recommend against using 3D
+          visualizations;
+          here we show the data in 3D only to illustrate what higher
           dimensions and nearest neighbors look like, for learning
           purposes.</caption>
         <image source="images/classification1/plot3d-knn-classification.png"
@@ -695,7 +780,8 @@ cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
     <p>
       Coding the K-nearest neighbors algorithm in Python ourselves can get complicated,
       especially if we want to handle multiple classes, more than two variables,
-      or predict the class for multiple new observations. Thankfully, in Python,
+      or predict the class for multiple new observations.
+      Thankfully, in Python,
       the K-nearest neighbors algorithm is
       <idx><h>K-nearest neighbors</h><h>scikit-learn</h></idx>
       <idx><h>scikit-learn</h></idx>
@@ -704,8 +790,10 @@ cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
       many <url href="https://scikit-learn.org/stable/user_guide.html">other
       models</url> that you will encounter in this and future chapters of the book.
       Using the functions in the <c>scikit-learn</c> package (named <c>sklearn</c> in
-      Python) will help keep our code simple, readable and accurate; the less we have
-      to code ourselves, the fewer mistakes we will likely make. Before getting
+      Python) will help keep our code simple, readable and accurate;
+      the less we have
+      to code ourselves, the fewer mistakes we will likely make.
+      Before getting
       started with K-nearest neighbors, we need to tell the <c>sklearn</c> package
       that we prefer using <c>pandas</c> data frames over regular arrays via the
       <c>set_config</c> function.
@@ -713,7 +801,8 @@ cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
     <note>
       <p>
         You will notice a new way of importing functions in the code below:
-        <c>from ... import ...</c>. This lets us import <em>just</em> <c>set_config</c>
+        <c>from ... import ...</c>.
+        This lets us import <em>just</em> <c>set_config</c>
         from <c>sklearn</c>, and then call <c>set_config</c> without any package prefix.
         We will import functions using <c>from</c> extensively throughout this and
         subsequent chapters to avoid very long names from <c>scikit-learn</c> that
@@ -726,11 +815,12 @@ cancer.nsmallest(5, &quot;dist_from_new&quot;)[[
 from sklearn import set_config
 
 # Output dataframes instead of arrays
-set_config(transform_output=&quot;pandas&quot;)
+set_config(transform_output="pandas")
         </input>
       </program>
     <p>
-      We can now get started with K-nearest neighbors. The first step is to import the
+      We can now get started with K-nearest neighbors.
+      The first step is to import the
       <c>KNeighborsClassifier</c> from the <c>sklearn.neighbors</c> module.
     </p>
       <program language="python">
@@ -740,16 +830,18 @@ from sklearn.neighbors import KNeighborsClassifier
       </program>
     <p>
       Let's walk through how to use <c>KNeighborsClassifier</c> to perform K-nearest
-      neighbors classification. We will use the <c>cancer</c> data set from above, with
+      neighbors classification.
+      We will use the <c>cancer</c> data set from above, with
       perimeter and concavity as predictors and <m>K = 5</m> neighbors to build our
-      classifier. Then we will use the classifier to predict the diagnosis label for a
+      classifier.
+      Then we will use the classifier to predict the diagnosis label for a
       new observation with perimeter 0, concavity 3.5, and an unknown diagnosis label.
       Let's pick out our two desired predictor variables and class label and store them
       with the name <c>cancer_train</c>:
     </p>
       <program language="python">
         <input>
-cancer_train = cancer[[&quot;Class&quot;, &quot;Perimeter&quot;, &quot;Concavity&quot;]]
+cancer_train = cancer[["Class", "Perimeter", "Concavity"]]
 cancer_train
         </input>
       </program>
@@ -774,13 +866,15 @@ cancer_train
       <idx><h>scikit-learn</h><h>model object</h></idx>
       <idx><h>scikit-learn</h><h>KNeighborsClassifier</h></idx>
       by creating a <c>KNeighborsClassifier</c> instance, specifying that we want to
-      use <m>K = 5</m> neighbors; we will discuss how to choose <m>K</m> in the next
+      use <m>K = 5</m> neighbors;
+      we will discuss how to choose <m>K</m> in the next
       chapter.
     </p>
     <note>
       <p>
         You can specify the <c>weights</c> argument in order to control how neighbors
-        vote when classifying a new observation. The default is <c>"uniform"</c>, where
+        vote when classifying a new observation.
+        The default is <c>"uniform"</c>, where
         each of the <m>K</m> nearest neighbors gets exactly 1 vote as described above.
         Other choices, which weigh each neighbor's vote differently, can be found on
         <url href="https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html">the
@@ -798,37 +892,43 @@ KNeighborsClassifier()
       </pre>
     <p>
       In order to fit the model on the breast cancer data, we need to call <c>fit</c>
-      on the model object. The <c>X</c> argument is used to specify the data for the
+      on the model object.
+      The <c>X</c> argument is used to specify the data for the
       <idx><h>scikit-learn</h><h>fit</h></idx>
       predictor variables, while the <c>y</c> argument is used to specify the data for
-      the response variable. So below, we set
+      the response variable.
+      So below, we set
       <c>X=cancer_train[["Perimeter", "Concavity"]]</c> and
       <c>y=cancer_train["Class"]</c> to specify that <c>Class</c> is the response
       variable (the one we want to predict), and both <c>Perimeter</c> and
-      <c>Concavity</c> are to be used as the predictors. Note that the <c>fit</c>
+      <c>Concavity</c> are to be used as the predictors.
+      Note that the <c>fit</c>
       function might look like it does not do much from the outside, but it is actually
       doing all the heavy lifting to train the K-nearest neighbors model, and modifies
       the <c>knn</c> model object.
     </p>
       <program language="python">
         <input>
-knn.fit(X=cancer_train[[&quot;Perimeter&quot;, &quot;Concavity&quot;]], y=cancer_train[&quot;Class&quot;]);
+knn.fit(X=cancer_train[["Perimeter", "Concavity"]], y=cancer_train["Class"]);
         </input>
       </program>
     <p>
       After using the <c>fit</c> function, we can make a prediction on a new
       <idx><h>scikit-learn</h><h>predict</h></idx>
       observation by calling <c>predict</c> on the classifier object, passing the new
-      observation itself. As above, when we ran the K-nearest neighbors classification
+      observation itself.
+      As above, when we ran the K-nearest neighbors classification
       algorithm manually, the <c>knn</c> model object classifies the new observation as
-      &#x201C;Malignant&#x201D;. Note that the <c>predict</c> function outputs an
-      <c>array</c> with the model's prediction; you can actually make multiple
+      &#x201C;Malignant&#x201D;.
+      Note that the <c>predict</c> function outputs an
+      <c>array</c> with the model's prediction;
+      you can actually make multiple
       predictions at the same time using the <c>predict</c> function, which is why the
       output is stored as an <c>array</c>.
     </p>
       <program language="python">
         <input>
-new_obs = pd.DataFrame({&quot;Perimeter&quot;: [0], &quot;Concavity&quot;: [3.5]})
+new_obs = pd.DataFrame({"Perimeter": [0], "Concavity": [3.5]})
 knn.predict(new_obs)
         </input>
       </program>
@@ -836,9 +936,12 @@ knn.predict(new_obs)
 array(['Malignant'], dtype=object)
       </pre>
     <p>
-      Is this predicted malignant label the actual class for this observation? Well, we
-      don't know because we do not have this observation's diagnosis&#x2014; that is
-      what we were trying to predict! The classifier's prediction is not necessarily
+      Is this predicted malignant label the actual class for this observation?
+      Well, we
+      don't know because we do not have this observation's diagnosis&#x2014;
+      that is
+      what we were trying to predict!
+      The classifier's prediction is not necessarily
       correct, but in the next chapter, we will learn ways to quantify how accurate we
       think our predictions are.
     </p>
@@ -852,16 +955,22 @@ array(['Malignant'], dtype=object)
         When using K-nearest neighbors classification, the <em>scale</em> of each
         variable
         <idx><h>scaling</h></idx>
-        (i.e., its size and range of values) matters. Since the classifier predicts
+        (i.e., its size and range of values) matters.
+        Since the classifier predicts
         classes by identifying observations nearest to it, any variables with a large
-        scale will have a much larger effect than variables with a small scale. But
+        scale will have a much larger effect than variables with a small scale.
+        But
         just because a variable has a large scale <em>doesn't mean</em> that it is more
-        important for making accurate predictions. For example, suppose you have a data
+        important for making accurate predictions.
+        For example, suppose you have a data
         set with two features, salary (in dollars) and years of education, and you want
-        to predict the corresponding type of job. When we compute the neighbor
+        to predict the corresponding type of job.
+        When we compute the neighbor
         distances, a difference of $1000 is huge compared to a difference of 10 years
-        of education. But for our conceptual understanding and answering of the
-        problem, it's the opposite; 10 years of education is huge compared to a
+        of education.
+        But for our conceptual understanding and answering of the
+        problem, it's the opposite;
+        10 years of education is huge compared to a
         difference of $1000 in yearly salary!
       </p>
       <p>
@@ -871,10 +980,12 @@ array(['Malignant'], dtype=object)
         For example, if we had a data set with a temperature variable measured in
         degrees Kelvin, and the same data set with temperature measured in degrees
         Celsius, the two variables would differ by a constant shift of 273 (even though
-        they contain exactly the same information). Likewise, in our hypothetical job
+        they contain exactly the same information).
+        Likewise, in our hypothetical job
         classification example, we would likely see that the center of the salary
         variable is in the tens of thousands, while the center of the years of
-        education variable is in the single digits. Although this doesn't affect the
+        education variable is in the single digits.
+        Although this doesn't affect the
         K-nearest neighbors classification algorithm, this large shift can change the
         outcome of using many other predictive models.
       </p>
@@ -883,29 +994,33 @@ array(['Malignant'], dtype=object)
         <idx><h>standardization</h><h>K-nearest neighbors</h></idx>
         average, which quantifies the &#x201C;central&#x201D; value of a set of
         numbers) and <em>standard deviation</em> (a number quantifying how spread out
-        values are). For each observed value of the variable, we subtract the mean
+        values are).
+        For each observed value of the variable, we subtract the mean
         (i.e., center the variable) and divide by the standard deviation (i.e., scale
-        the variable). When we do this, the data is said to be <em>standardized</em>,
+        the variable).
+        When we do this, the data is said to be <em>standardized</em>,
         and all variables in a data set will have a mean of 0 and a standard deviation
         of 1. To illustrate the effect that standardization can have on the K-nearest
         neighbors algorithm, we will read in the original, unstandardized Wisconsin
-        breast cancer data set; we have been using a standardized version of the data
-        set up until now. We will apply the same initial wrangling steps as we did
+        breast cancer data set;
+        we have been using a standardized version of the data
+        set up until now.
+        We will apply the same initial wrangling steps as we did
         earlier, and to keep things simple we will just use the <c>Area</c>,
         <c>Smoothness</c>, and <c>Class</c> variables:
       </p>
       <program language="python">
         <input>
-unscaled_cancer = pd.read_csv(&quot;data/wdbc_unscaled.csv&quot;)[[&quot;Class&quot;, &quot;Area&quot;, &quot;Smoothness&quot;]]
-unscaled_cancer[&quot;Class&quot;] = unscaled_cancer[&quot;Class&quot;].replace({
-   &quot;M&quot; : &quot;Malignant&quot;,
-   &quot;B&quot; : &quot;Benign&quot;
+unscaled_cancer = pd.read_csv("data/wdbc_unscaled.csv")[["Class", "Area", "Smoothness"]]
+unscaled_cancer["Class"] = unscaled_cancer["Class"].replace({
+   "M" : "Malignant",
+   "B" : "Benign"
 })
 unscaled_cancer
         </input>
       </program>
       <pre>
-         Class    Area  Smoothness
+           Class    Area  Smoothness
 0    Malignant  1001.0     0.11840
 1    Malignant  1326.0     0.08474
 2    Malignant  1203.0     0.10960
@@ -923,10 +1038,12 @@ unscaled_cancer
       <p>
         Looking at the unscaled and uncentered data above, you can see that the
         differences between the values for area measurements are much larger than those
-        for smoothness. Will this affect predictions? In order to find out, we will
+        for smoothness. Will this affect predictions?
+        In order to find out, we will
         create a scatter plot of these two predictors (colored by diagnosis) for both
         the unstandardized data we just loaded, and the standardized version of that
-        same data. But first, we need to standardize the <c>unscaled_cancer</c> data
+        same data.
+        But first, we need to standardize the <c>unscaled_cancer</c> data
         set with <c>scikit-learn</c>.
       </p>
       <p>
@@ -935,19 +1052,24 @@ unscaled_cancer
         <idx><h>scikit-learn</h><h>make_column_transformer</h></idx>
         <em>preprocessors</em> used to manipulate data in the
         <url href="https://scikit-learn.org/stable/modules/preprocessing.html"><c>preprocessing</c>
-        module</url>. Here we will use the <c>StandardScaler</c> transformer to
-        standardize the predictor variables in the <c>unscaled_cancer</c> data. In
+        module</url>.
+        Here we will use the <c>StandardScaler</c> transformer to
+        standardize the predictor variables in the <c>unscaled_cancer</c> data.
+        In
         order to tell the <c>StandardScaler</c> which variables to standardize, we wrap
         it in a
         <url href="https://scikit-learn.org/stable/modules/generated/sklearn.compose.ColumnTransformer.html"><c>ColumnTransformer</c></url>
         object using the
         <url href="https://scikit-learn.org/stable/modules/generated/sklearn.compose.make_column_transformer.html"><c>make_column_transformer</c></url>
-        function. <c>ColumnTransformer</c> objects also enable the use of multiple
+        function.
+        <c>ColumnTransformer</c> objects also enable the use of multiple
         preprocessors at once, which is especially handy when you want to apply
-        different preprocessing to each of the predictor variables. The primary
+        different preprocessing to each of the predictor variables.
+        The primary
         argument of the <c>make_column_transformer</c> function is a sequence of pairs
         of (1) a preprocessor, and (2) the columns to which you want to apply that
-        preprocessor. In the present case, we just have the one <c>StandardScaler</c>
+        preprocessor.
+        In the present case, we just have the one <c>StandardScaler</c>
         preprocessor to apply to the <c>Area</c> and <c>Smoothness</c> columns.
       </p>
       <program language="python">
@@ -956,7 +1078,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.compose import make_column_transformer
 
 preprocessor = make_column_transformer(
-    (StandardScaler(), [&quot;Area&quot;, &quot;Smoothness&quot;]),
+    (StandardScaler(), ["Area", "Smoothness"]),
 )
 preprocessor
         </input>
@@ -968,15 +1090,19 @@ ColumnTransformer(transformers=[('standardscaler', StandardScaler(),
       <p>
         You can see that the preprocessor includes a single standardization step that
         <idx><h>scikit-learn</h><h>make_column_selector</h></idx>
-        is applied to the <c>Area</c> and <c>Smoothness</c> columns. Note that here we
+        is applied to the <c>Area</c> and <c>Smoothness</c> columns.
+        Note that here we
         specified which columns to apply the preprocessing step to by individual names;
         this approach can become quite difficult, e.g., when we have many predictor
-        variables. Rather than writing out the column names individually, we can
+        variables.
+        Rather than writing out the column names individually, we can
         instead use the
         <url href="https://scikit-learn.org/stable/modules/generated/sklearn.compose.make_column_selector.html"><c>make_column_selector</c></url>
-        function. For example, if we wanted to standardize all <em>numerical</em>
+        function.
+        For example, if we wanted to standardize all <em>numerical</em>
         predictors, we would use <c>make_column_selector</c> and specify the
-        <c>dtype_include</c> argument to be <c>"number"</c>. This creates a preprocessor
+        <c>dtype_include</c> argument to be <c>"number"</c>.
+        This creates a preprocessor
         equivalent to the one we created previously.
       </p>
       <program language="python">
@@ -984,7 +1110,7 @@ ColumnTransformer(transformers=[('standardscaler', StandardScaler(),
 from sklearn.compose import make_column_selector
 
 preprocessor = make_column_transformer(
-    (StandardScaler(), make_column_selector(dtype_include=&quot;number&quot;)),
+    (StandardScaler(), make_column_selector(dtype_include="number")),
 )
 preprocessor
         </input>
@@ -996,14 +1122,19 @@ ColumnTransformer(transformers=[('standardscaler', StandardScaler(),
       <p>
         We are now ready to standardize the numerical predictor columns in the
         <idx><h>scikit-learn</h><h>transform</h></idx>
-        <c>unscaled_cancer</c> data frame. This happens in two steps. We first use the
+        <c>unscaled_cancer</c> data frame.
+        This happens in two steps. We first use the
         <c>fit</c> function to compute the values necessary to apply the standardization
         (the mean and standard deviation of each variable), passing the
-        <c>unscaled_cancer</c> data as an argument. Then we use the <c>transform</c>
-        function to actually apply the standardization. It may seem a bit unnecessary to
+        <c>unscaled_cancer</c> data as an argument.
+        Then we use the <c>transform</c>
+        function to actually apply the standardization.
+        It may seem a bit unnecessary to
         use two steps&#x2014;<c>fit</c> <em>and</em> <c>transform</c>&#x2014;to
-        standardize the data. However, we do this in two steps so that we can specify a
-        different data set in the <c>transform</c> step if we want. This enables us to
+        standardize the data.
+        However, we do this in two steps so that we can specify a
+        different data set in the <c>transform</c> step if we want.
+        This enables us to
         compute the quantities needed to standardize using one data set, and then apply
         that standardization to another data set.
       </p>
@@ -1032,37 +1163,47 @@ scaled_cancer
       </pre>
       <p>
         It looks like our <c>Smoothness</c> and <c>Area</c> variables have been
-        standardized. Woohoo! But there are two important things to notice about the new
-        <c>scaled_cancer</c> data frame. First, it only keeps the columns from the input
+        standardized.
+        Woohoo! But there are two important things to notice about the new
+        <c>scaled_cancer</c> data frame.
+        First, it only keeps the columns from the input
         to <c>transform</c> (here, <c>unscaled_cancer</c>) that had a preprocessing step
-        applied to them. The default behavior of the <c>ColumnTransformer</c> that we
+        applied to them.
+        The default behavior of the <c>ColumnTransformer</c> that we
         build using <c>make_column_transformer</c> is to <em>drop</em> the remaining
-        columns. This default behavior works well with the rest of <c>sklearn</c> (as we
+        columns.
+        This default behavior works well with the rest of <c>sklearn</c> (as we
         will see below in <xref ref="sec-classif1-workflow"/>), but for visualizing the
         result of preprocessing it can be useful to keep the other columns in our
-        original data frame, such as the <c>Class</c> variable here. To keep other
+        original data frame, such as the <c>Class</c> variable here.
+        To keep other
         columns, we need to set the <c>remainder</c> argument to <c>"passthrough"</c> in
-        the <c>make_column_transformer</c> function. Furthermore, you can see that the
+        the <c>make_column_transformer</c> function.
+        Furthermore, you can see that the
         new column names&#x2014;<c>standardscaler__Area</c> and
         <c>standardscaler__Smoothness</c>&#x2014;include the name of the preprocessing
-        step separated by underscores. This default behavior is useful in <c>sklearn</c>
+        step separated by underscores.
+        This default behavior is useful in <c>sklearn</c>
         because we sometimes want to apply multiple different preprocessing steps to the
-        same columns; but again, for visualization it can be useful to preserve the
-        original column names. To keep original column names, we need to set the
+        same columns;
+        but again, for visualization it can be useful to preserve the
+        original column names.
+        To keep original column names, we need to set the
         <c>verbose_feature_names_out</c> argument to <c>False</c>.
       </p>
       <note>
         <p>
           Only specify the <c>remainder</c> and <c>verbose_feature_names_out</c>
-          arguments when you want to examine the result of your preprocessing step. In
+          arguments when you want to examine the result of your preprocessing step.
+          In
           most cases, you should leave these arguments at their default values.
         </p>
       </note>
       <program language="python">
         <input>
 preprocessor_keep_all = make_column_transformer(
-    (StandardScaler(), make_column_selector(dtype_include=&quot;number&quot;)),
-    remainder=&quot;passthrough&quot;,
+    (StandardScaler(), make_column_selector(dtype_include="number")),
+    remainder="passthrough",
     verbose_feature_names_out=False
 )
 preprocessor_keep_all.fit(unscaled_cancer)
@@ -1088,15 +1229,20 @@ scaled_cancer_all
       </pre>
       <p>
         You may wonder why we are doing so much work just to center and scale our
-        variables. Can't we just manually scale and center the <c>Area</c> and
+        variables.
+        Can't we just manually scale and center the <c>Area</c> and
         <c>Smoothness</c> variables ourselves before building our K-nearest neighbors
-        model? Well, technically <em>yes</em>; but doing so is error-prone. In
+        model?
+        Well, technically <em>yes</em>; but doing so is error-prone. In
         particular, we might accidentally forget to apply the same centering / scaling
         when making predictions, or accidentally apply a <em>different</em> centering /
-        scaling than what we used while training. Proper use of a <c>ColumnTransformer</c>
-        helps keep our code simple, readable, and error-free. Furthermore, note that
+        scaling than what we used while training.
+        Proper use of a <c>ColumnTransformer</c>
+        helps keep our code simple, readable, and error-free.
+        Furthermore, note that
         using <c>fit</c> and <c>transform</c> on the preprocessor is required only when
-        you want to inspect the result of the preprocessing steps yourself. You will see
+        you want to inspect the result of the preprocessing steps yourself.
+        You will see
         further on in <xref ref="sec-classif1-workflow"/> that <c>scikit-learn</c>
         provides tools to automatically streamline the preprocessor and the model so
         that you can call <c>fit</c> and <c>predict</c> on the <c>Pipeline</c> as we
@@ -1105,19 +1251,28 @@ scaled_cancer_all
       <p>
         <xref ref="fig-classif1-scaling"/> shows the two scatter plots
         side-by-side&#x2014;one for <c>unscaled_cancer</c> and one for
-        <c>scaled_cancer</c>. Each has the same new observation annotated with its
-        <m>K=3</m> nearest neighbors. In the original unstandardized data plot, you can
-        see some odd choices for the three nearest neighbors. In particular, the
-        &#x201C;neighbors&#x201D; are visually well within the cloud of benign
+        <c>scaled_cancer</c>.
+        Each has the same new observation annotated with its
+        <m>K=3</m> nearest neighbors.
+        In the original unstandardized data plot, you can
+        see some odd choices for the three nearest neighbors.
+        In particular, the
+        &#x201C;neighbors&#x201D;
+        are visually well within the cloud of benign
         observations, and the neighbors are all nearly vertically aligned with the new
         observation (which is why it looks like there is only one black line on this
-        plot). <xref ref="fig-classif1-scaling-zoomed"/> shows a close-up of that
-        region on the unstandardized plot. Here the computation of nearest neighbors is
-        dominated by the much larger-scale area variable. The plot for standardized
+        plot).
+        <xref ref="fig-classif1-scaling-zoomed"/> shows a close-up of that
+        region on the unstandardized plot.
+        Here the computation of nearest neighbors is
+        dominated by the much larger-scale area variable.
+        The plot for standardized
         data on the right in <xref ref="fig-classif1-scaling"/> shows a much more
-        intuitively reasonable selection of nearest neighbors. Thus, standardizing the
+        intuitively reasonable selection of nearest neighbors.
+        Thus, standardizing the
         data can change things in an important way when we are using predictive
-        algorithms. Standardizing your data should be a part of the preprocessing you
+        algorithms.
+        Standardizing your data should be a part of the preprocessing you
         do before predictive modeling and you should always think carefully about your
         problem domain and whether you need to standardize your data.
       </p>
@@ -1142,50 +1297,45 @@ scaled_cancer_all
         imbalance</em>,
         <idx><h>balance</h></idx>
         <idx><h>imbalance</h></idx>
-        i.e., when one label is much more common than another. Since classifiers like
+        i.e., when one label is much more common than another.
+        Since classifiers like
         the K-nearest neighbors algorithm use the labels of nearby points to predict
         the label of a new point, if there are many more data points with one label
         overall, the algorithm is more likely to pick that label in general (even if the
-        &#x201C;pattern&#x201D; of data suggests otherwise). Class imbalance is actually
+        &#x201C;pattern&#x201D; of data suggests otherwise).
+        Class imbalance is actually
         quite a common and important problem: from rare disease diagnosis to malicious
         email detection, there are many cases in which the &#x201C;important&#x201D;
         class to identify (presence of disease, malicious email) is much rarer than the
-        &#x201C;unimportant&#x201D; class (no disease, normal email).
+        &#x201C;unimportant&#x201D;
+        class (no disease, normal email).
       </p>
       <p>
         To better illustrate the problem, let's revisit the scaled breast cancer data,
         <idx><h>concat</h></idx>
-        <c>cancer</c>; except now we will remove many of the observations of malignant
-        tumors, simulating what the data would look like if the cancer was rare. We will
+        <c>cancer</c>;
+        except now we will remove many of the observations of malignant tumors, simulating
+        what the data would look like if the cancer was rare.
+        We will
         do this by picking only 3 observations from the malignant group, and keeping all
-        of the benign observations. We choose these 3 observations using the
-        <c>.head()</c> method, which takes the number of rows to select from the top. We
+        of the benign observations.
+        We choose these 3 observations using the
+        <c>.head()</c> method, which takes the number of rows to select from the top.
+        We
         will then use the
         <url href="https://pandas.pydata.org/docs/reference/api/pandas.concat.html"><c>concat</c></url>
         function from <c>pandas</c> to glue the two resulting filtered data frames back
-        together. The <c>concat</c> function <em>concatenates</em> data frames along an
-        axis. By default, it concatenates the data frames vertically along <c>axis=0</c>
+        together.
+        The <c>concat</c> function <em>concatenates</em> data frames along an
+        axis.
+        By default, it concatenates the data frames vertically along <c>axis=0</c>
         yielding a single <em>taller</em> data frame, which is what we want to do here.
         If we instead wanted to concatenate horizontally to produce a <em>wider</em>
-        data frame, we would specify <c>axis=1</c>. The new imbalanced data is shown in
+        data frame, we would specify <c>axis=1</c>.
+        The new imbalanced data is shown in
         <xref ref="fig-classif1-imbalanced"/>, and we print the counts of the classes
         using the <c>value_counts</c> function.
       </p>
-      <program language="python">
-        <input>
-rare_cancer = pd.concat((
-    cancer[cancer[&quot;Class&quot;] == &quot;Benign&quot;],
-    cancer[cancer[&quot;Class&quot;] == &quot;Malignant&quot;].head(3)
-))
-
-rare_plot = alt.Chart(rare_cancer).mark_circle().encode(
-    x=alt.X(&quot;Perimeter&quot;).title(&quot;Perimeter (standardized)&quot;),
-    y=alt.Y(&quot;Concavity&quot;).title(&quot;Concavity (standardized)&quot;),
-    color=alt.Color(&quot;Class&quot;).title(&quot;Diagnosis&quot;)
-)
-rare_plot
-        </input>
-      </program>
       <figure xml:id="fig-classif1-imbalanced">
         <caption>Imbalanced data.</caption>
         <image source="images/classification1/cancer-imbalanced.png" width="70%"/>
@@ -1203,11 +1353,13 @@ Name: count, dtype: int64
       </pre>
       <p>
         Suppose we now decided to use <m>K = 7</m> in K-nearest neighbors
-        classification. With only 3 observations of malignant tumors, the classifier
+        classification.
+        With only 3 observations of malignant tumors, the classifier
         will <em>always predict that the tumor is benign, no matter what its concavity
         and perimeter are!</em> This is because in a majority vote of 7 observations, at
         most 3 will be malignant (we only have 3 total malignant observations), so at
-        least 4 must be benign, and the benign vote will always win. For example,
+        least 4 must be benign, and the benign vote will always win.
+        For example,
         <xref ref="fig-classif1-imbalanced-7nn"/> shows what happens for a new tumor
         observation that is quite close to three observations in the training data that
         were tagged as malignant.
@@ -1220,8 +1372,10 @@ Name: count, dtype: int64
       <p>
         <xref ref="fig-classif1-imbalanced-boundary"/> shows what happens if we set the
         background color of each area of the plot to the prediction the K-nearest
-        neighbors classifier would make for a new observation at that location. We can
-        see that the decision is always &#x201C;benign,&#x201D; corresponding to the
+        neighbors classifier would make for a new observation at that location.
+        We can
+        see that the decision is always &#x201C;benign,&#x201D;
+        corresponding to the
         blue color.
       </p>
       <figure xml:id="fig-classif1-imbalanced-boundary">
@@ -1236,18 +1390,26 @@ Name: count, dtype: int64
         <idx><h>oversampling</h></idx>
         <idx><h>DataFrame</h><h>sample</h></idx>
         fairly nuanced, and a careful treatment would require a lot more detail and
-        mathematics than we will cover in this textbook. For the present purposes, it
-        will suffice to rebalance the data by <em>oversampling</em> the rare class. In
+        mathematics than we will cover in this textbook.
+        For the present purposes, it
+        will suffice to rebalance the data by <em>oversampling</em> the rare class.
+        In
         other words, we will replicate rare observations multiple times in our data set
-        to give them more voting power in the K-nearest neighbors algorithm. In order to
+        to give them more voting power in the K-nearest neighbors algorithm.
+        In order to
         do this, we will first separate the classes out into their own data frames by
-        filtering. Then, we will use the <c>sample</c> method on the rare class data
+        filtering.
+        Then, we will use the <c>sample</c> method on the rare class data
         frame to increase the number of <c>Malignant</c> observations to be the same as
-        the number of <c>Benign</c> observations. We set the <c>n</c> argument to be the
+        the number of <c>Benign</c> observations.
+        We set the <c>n</c> argument to be the
         number of <c>Malignant</c> observations we want, and set <c>replace=True</c> to
-        indicate that we are sampling with replacement. Finally, we use the
-        <c>value_counts</c> method to see that our classes are now balanced. Note that
-        <c>sample</c> picks which data to replicate <em>randomly</em>; we will learn
+        indicate that we are sampling with replacement.
+        Finally, we use the
+        <c>value_counts</c> method to see that our classes are now balanced.
+        Note that
+        <c>sample</c> picks which data to replicate <em>randomly</em>;
+        we will learn
         more about properly handling randomness in data analysis in the next chapter.
       </p>
       <program language="python">
@@ -1271,8 +1433,10 @@ Name: count, dtype: int64
         Now suppose we train our K-nearest neighbors classifier with <m>K=7</m> on this
         <em>balanced</em> data. <xref ref="fig-classif1-upsampled"/> shows what happens
         now when we set the background color of each area of our scatter plot to the
-        decision the K-nearest neighbors classifier would make. We can see that the
-        decision is more reasonable; when the points are close to those labeled
+        decision the K-nearest neighbors classifier would make.
+        We can see that the
+        decision is more reasonable;
+        when the points are close to those labeled
         malignant, the classifier predicts a malignant tumor, and vice versa when they
         are closer to the benign tumor observations.
       </p>
@@ -1294,16 +1458,21 @@ Name: count, dtype: int64
         i.e., observations where the values of some of the variables were not recorded.
         Unfortunately, as common as it is, handling missing data properly is very
         challenging and generally relies on expert knowledge about the data, setting,
-        and how the data were collected. One typical challenge with missing data is that
+        and how the data were collected.
+        One typical challenge with missing data is that
         missing entries can be <em>informative</em>: the very fact that an entries were
-        missing is related to the values of other variables. For example, survey
+        missing is related to the values of other variables.
+        For example, survey
         participants from a marginalized group of people may be less likely to respond
         to certain kinds of questions if they fear that answering honestly will come
-        with negative consequences. In that case, if we were to simply throw away data
+        with negative consequences.
+        In that case, if we were to simply throw away data
         with missing entries, we would bias the conclusions of the survey by
-        inadvertently removing many members of that group of respondents. So ignoring
+        inadvertently removing many members of that group of respondents.
+        So ignoring
         this issue in real problems can easily lead to misleading analyses, with
-        detrimental impacts. In this book, we will cover only those techniques for
+        detrimental impacts.
+        In this book, we will cover only those techniques for
         dealing with missing entries in situations where missing entries are just
         &#x201C;randomly missing&#x201D;, i.e., where the fact that certain entries are
         missing <em>isn't related to anything else</em> about the observation.
@@ -1314,10 +1483,10 @@ Name: count, dtype: int64
       </p>
       <program language="python">
         <input>
-missing_cancer = pd.read_csv(&quot;data/wdbc_missing.csv&quot;)[[&quot;Class&quot;, &quot;Radius&quot;, &quot;Texture&quot;, &quot;Perimeter&quot;]]
-missing_cancer[&quot;Class&quot;] = missing_cancer[&quot;Class&quot;].replace({
-   &quot;M&quot; : &quot;Malignant&quot;,
-   &quot;B&quot; : &quot;Benign&quot;
+missing_cancer = pd.read_csv("data/wdbc_missing.csv")[["Class", "Radius", "Texture", "Perimeter"]]
+missing_cancer["Class"] = missing_cancer["Class"].replace({
+   "M" : "Malignant",
+   "B" : "Benign"
 })
 missing_cancer
         </input>
@@ -1336,10 +1505,13 @@ missing_cancer
         Recall that K-nearest neighbors classification makes predictions by computing
         the straight-line distance to nearby training observations, and hence requires
         access to the values of <em>all</em> variables for <em>all</em> observations in
-        the training data. So how can we perform K-nearest neighbors classification in
-        the presence of missing data? Well, since there are not too many observations
+        the training data.
+        So how can we perform K-nearest neighbors classification in
+        the presence of missing data?
+        Well, since there are not too many observations
         with missing entries, one option is to simply remove those observations prior to
-        building the K-nearest neighbors classifier. We can accomplish this by using the
+        building the K-nearest neighbors classifier.
+        We can accomplish this by using the
         <c>dropna</c> method prior to working with the data.
         <idx><h>missing data</h><h>dropna</h></idx>
       </p>
@@ -1359,11 +1531,14 @@ no_missing_cancer
       </pre>
       <p>
         However, this strategy will not work when many of the rows have missing entries,
-        as we may end up throwing away too much data. In this case, another possible
+        as we may end up throwing away too much data.
+        In this case, another possible
         approach is to <em>impute</em> the missing entries, i.e., fill in synthetic
-        values based on the other observations in the data set. One reasonable choice is
+        values based on the other observations in the data set.
+        One reasonable choice is
         to perform <em>mean imputation</em>, where missing entries are filled in using
-        the mean of the present entries in each variable. To perform mean imputation, we
+        the mean of the present entries in each variable.
+        To perform mean imputation, we
         use a <c>SimpleImputer</c> transformer with the default arguments, and use
         <idx><h>scikit-learn</h><h>SimpleImputer</h></idx>
         <idx><h>missing data</h><h>mean imputation</h></idx>
@@ -1374,7 +1549,7 @@ no_missing_cancer
 from sklearn.impute import SimpleImputer
 
 preprocessor = make_column_transformer(
-    (SimpleImputer(), [&quot;Radius&quot;, &quot;Texture&quot;, &quot;Perimeter&quot;]),
+    (SimpleImputer(), ["Radius", "Texture", "Perimeter"]),
     verbose_feature_names_out=False
 )
 preprocessor
@@ -1388,7 +1563,8 @@ ColumnTransformer(transformers=[('simpleimputer', SimpleImputer(),
       <p>
         To visualize what mean imputation does, let's just apply the transformer
         directly to the <c>missing_cancer</c> data frame using the <c>fit</c> and
-        <c>transform</c> functions. The imputation step fills in the missing entries
+        <c>transform</c> functions.
+        The imputation step fills in the missing entries
         with the mean values of their corresponding variables.
       </p>
       <program language="python">
@@ -1411,7 +1587,8 @@ imputed_cancer
       <p>
         Many other options for missing data imputation can be found in
         <url href="https://scikit-learn.org/stable/modules/impute.html">the
-        <c>scikit-learn</c> documentation</url>. However you decide to handle missing
+        <c>scikit-learn</c> documentation</url>.
+        However you decide to handle missing
         data in your data analysis, it is always crucial to think critically about the
         setting, how the data were collected, and the question you are answering.
       </p>
@@ -1425,17 +1602,19 @@ imputed_cancer
       <idx><h>scikit-learn</h><h>Pipeline</h></idx>
       <url href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html"><c>Pipeline</c></url>,
       a way to chain together multiple data analysis steps without a lot of otherwise
-      necessary code for intermediate steps. To illustrate the whole workflow, let's
-      start from scratch with the <c>wdbc_unscaled.csv</c> data. First we will load the
+      necessary code for intermediate steps.
+      To illustrate the whole workflow, let's
+      start from scratch with the <c>wdbc_unscaled.csv</c> data.
+      First we will load the
       data, create a model, and specify a preprocessor for the data.
     </p>
       <program language="python">
         <input>
 # load the unscaled cancer data, make Class readable
-unscaled_cancer = pd.read_csv(&quot;data/wdbc_unscaled.csv&quot;)
-unscaled_cancer[&quot;Class&quot;] = unscaled_cancer[&quot;Class&quot;].replace({
-   &quot;M&quot; : &quot;Malignant&quot;,
-   &quot;B&quot; : &quot;Benign&quot;
+unscaled_cancer = pd.read_csv("data/wdbc_unscaled.csv")
+unscaled_cancer["Class"] = unscaled_cancer["Class"].replace({
+   "M" : "Malignant",
+   "B" : "Benign"
 })
 unscaled_cancer
 
@@ -1444,7 +1623,7 @@ knn = KNeighborsClassifier(n_neighbors=7)
 
 # create the centering / scaling preprocessor
 preprocessor = make_column_transformer(
-    (StandardScaler(), [&quot;Area&quot;, &quot;Smoothness&quot;]),
+    (StandardScaler(), ["Area", "Smoothness"]),
 )
         </input>
       </program>
@@ -1453,14 +1632,20 @@ preprocessor = make_column_transformer(
       <idx><h>scikit-learn</h><h>make_pipeline</h></idx>
       <idx><h>scikit-learn</h><h>fit</h></idx>
       <url href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.make_pipeline.html"><c>make_pipeline</c></url>
-      function. The <c>make_pipeline</c> function takes a list of steps to apply in your
-      data analysis; in this case, we just have the <c>preprocessor</c> and <c>knn</c>
-      steps. Finally, we call <c>fit</c> on the pipeline. Notice that we do not need to
-      separately call <c>fit</c> and <c>transform</c> on the <c>preprocessor</c>; the
-      pipeline handles doing this properly for us. Also notice that when we call
+      function.
+      The <c>make_pipeline</c> function takes a list of steps to apply in your
+      data analysis;
+      in this case, we just have the <c>preprocessor</c> and <c>knn</c>
+      steps.
+      Finally, we call <c>fit</c> on the pipeline. Notice that we do not need to
+      separately call <c>fit</c> and <c>transform</c> on the <c>preprocessor</c>;
+      the
+      pipeline handles doing this properly for us.
+      Also notice that when we call
       <c>fit</c> on the pipeline, we can pass the whole <c>unscaled_cancer</c> data
       frame to the <c>X</c> argument, since the preprocessing step drops all the
-      variables except the two we listed: <c>Area</c> and <c>Smoothness</c>. For the
+      variables except the two we listed: <c>Area</c> and <c>Smoothness</c>.
+      For the
       <c>y</c> response variable argument, we pass the <c>unscaled_cancer["Class"]</c>
       series as before.
     </p>
@@ -1484,12 +1669,15 @@ Pipeline(steps=[('columntransformer',
                 ('kneighborsclassifier', KNeighborsClassifier(n_neighbors=7))])
       </pre>
     <p>
-      As before, the fit object lists the function that trains the model. But now the
+      As before, the fit object lists the function that trains the model.
+      But now the
       fit object also includes information about the overall workflow, including the
-      standardization preprocessing step. In other words, when we use the <c>predict</c>
+      standardization preprocessing step.
+      In other words, when we use the <c>predict</c>
       function with the <c>knn_pipeline</c> object to make a prediction for a new
       observation, it will first apply the same preprocessing steps to the new
-      observation. As an example, we will predict the class label of two new
+      observation.
+      As an example, we will predict the class label of two new
       observations: one with <c>Area = 500</c> and <c>Smoothness = 0.075</c>, and one
       with <c>Area = 1500</c> and <c>Smoothness = 0.1</c>.
     </p>
@@ -1505,20 +1693,26 @@ array(['Benign', 'Malignant'], dtype=object)
       </pre>
     <p>
       The classifier predicts that the first observation is benign, while the second is
-      malignant. <xref ref="fig-classif1-workflow"/> visualizes the predictions that
+      malignant.
+      <xref ref="fig-classif1-workflow"/> visualizes the predictions that
       this trained K-nearest neighbors model will make on a large range of new
-      observations. Although you have seen colored prediction map visualizations like
+      observations.
+      Although you have seen colored prediction map visualizations like
       this a few times now, we have not included the code to generate them, as it is a
-      little bit complicated. For the interested reader who wants a learning challenge,
-      we now include it below. The basic idea is to create a grid of synthetic new
+      little bit complicated.
+      For the interested reader who wants a learning challenge,
+      we now include it below.
+      The basic idea is to create a grid of synthetic new
       observations using the <c>meshgrid</c> function from <c>numpy</c>, predict the
       label of each, and visualize the predictions with a colored scatter having a very
-      high transparency (low <c>opacity</c> value) and large point radius. See if you
+      high transparency (low <c>opacity</c> value) and large point radius.
+      See if you
       can figure out what each line is doing!
     </p>
     <note>
       <p>
-        Understanding this code is not required for the remainder of the textbook. It is
+        Understanding this code is not required for the remainder of the textbook.
+        It is
         included for those readers who would like to use similar visualizations in their
         own data analyses.
       </p>
@@ -1597,10 +1791,13 @@ unscaled_plot + prediction_plot
       accompanying
       <url href="https://worksheets.python.datasciencebook.ca"
            visual="worksheets.python.datasciencebook.ca">worksheets repository</url>
-      in the &#x201C;Classification I: training and predicting&#x201D; row. You can
+      in the &#x201C;Classification I: training and predicting&#x201D;
+      row. You can
       launch an interactive version of the worksheet in your browser by clicking the
-      &#x201C;launch binder&#x201D; button. You can also preview a non-interactive
-      version of the worksheet by clicking &#x201C;view worksheet.&#x201D; If you
+      &#x201C;launch binder&#x201D;
+      button. You can also preview a non-interactive
+      version of the worksheet by clicking &#x201C;view worksheet.&#x201D;
+      If you
       instead decide to download the worksheet and run it on your own machine, make sure
       to follow the instructions for computer setup found in <xref ref="ch-setup"/>.
       This will ensure that the automated feedback and guidance that the worksheets

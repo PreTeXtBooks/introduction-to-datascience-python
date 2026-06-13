@@ -2,7 +2,6 @@
 <chapter xml:id="ch-inference" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Statistical inference</title>
 
-  <!-- ============================================================ -->
   <section xml:id="sec-inference-overview">
     <title>Overview</title>
     <p>
@@ -17,7 +16,6 @@
     </p>
   </section>
 
-  <!-- ============================================================ -->
   <section xml:id="sec-inference-objectives">
     <title>Chapter learning objectives</title>
     <p>By the end of the chapter, readers will be able to do the following:</p>
@@ -35,7 +33,6 @@
     </ul>
   </section>
 
-  <!-- ============================================================ -->
   <section xml:id="sec-inference-why-sampling">
     <title>Why do we need sampling?</title>
     <p>
@@ -78,7 +75,7 @@
       proportion of those students who own an iPhone (the sample estimate). In that
       case, we might suspect that proportion is a reasonable estimate of the
       proportion of students who own an iPhone in the entire population.
-      xref ref="fig-inference-population-vs-sample"/> illustrates this process.
+      <xref ref="fig-inference-population-vs-sample"/> illustrates this process.
       In general, the process of using a sample to make a conclusion about the
       broader population from which it is taken is referred to as
       <term>statistical inference</term>.
@@ -98,16 +95,16 @@
       Note that proportions are not the <em>only</em> kind of population parameter we might
       be interested in. For example, suppose an undergraduate student studying at the University
       of British Columbia in Canada is looking for an apartment
-      to rent. They need to create a budget, so they want to know about
-      studio apartment rental prices in Vancouver. This student might
-      formulate the question:
+      to rent. They need to create a budget, so they want to know something about
+      studio apartment rental prices in Vancouver, BC. This student might
+      formulate the following question:
     </p>
     <p>
-      <em>What is the average price per month of studio apartment rentals in Vancouver?</em>
+      <em>What is the average price-per-month of studio apartment rentals in Vancouver, Canada?</em>
     </p>
     <p>
       In this case, the population consists of all studio apartment rentals in Vancouver, and the
-      population parameter is the <em>average price per month</em>. Here we used the average
+      population parameter is the <em>average price-per-month</em>. Here we used the average
       as a measure of the center to describe the &#x201C;typical value&#x201D; of studio apartment
       rental prices. But even within this one example, we could also be interested in
       many other population parameters. For instance, we know that not every studio
@@ -129,7 +126,6 @@
     </ol>
   </section>
 
-  <!-- ============================================================ -->
   <section xml:id="sec-inference-sampling-distributions">
     <title>Sampling distributions</title>
 
@@ -138,8 +134,7 @@
       <p>
         We will look at an example using data from
         <url href="http://insideairbnb.com/">Inside Airbnb</url>
-        <xref ref="insideairbnb"/>.
-        Airbnb
+        <xref ref="insideairbnb"/>. Airbnb
         <idx><h>Airbnb</h></idx>
         is an online marketplace for arranging vacation rentals and places to stay.
         The data set contains listings for Vancouver, Canada, in September 2020. Our data
@@ -147,12 +142,11 @@
         rental accommodates, number of bathrooms, bedrooms, beds, and the price per
         night.
       </p>
-      <idx><h>seed</h><h>set.seed</h></idx>
       <program language="python">
         <input>
 import pandas as pd
 
-airbnb = pd.read_csv(&quot;data/listings.csv&quot;)
+airbnb = pd.read_csv("data/listings.csv")
 airbnb
         </input>
       </program>
@@ -161,18 +155,18 @@ airbnb
         plan city bylaws, and they want to know how many Airbnb places are listed as
         entire homes and apartments (rather than as private or shared rooms). Therefore
         they may want to estimate the true proportion of all Airbnb listings where the
-        &#x201C;type of place&#x201D; is listed as &#x201C;entire home or apartment.&#x201D; Of course, we usually
+        room type is listed as &#x201C;entire home or apartment.&#x201D; Of course, we usually
         do not have access to the true population, but here let&#x2019;s imagine (for learning
         purposes) that our data set represents the population of all Airbnb rental
-        listings in Vancouver, Canada. We can find the proportion of listings where
-        <c>room_type == "Entire home/apt"</c>.
-        <idx><h>pull</h></idx>
-        <idx><h>sum</h></idx>
-        <idx><h>nrow</h></idx>
+        listings in Vancouver, Canada. We can find the proportion of listings for each room type
+        by using the <c>value_counts</c> function with the <c>normalize</c> parameter
+        as we did in previous chapters.
+        <idx><h>DataFrame</h><h>[]</h></idx>
+        <idx><h>DataFrame</h><h>value_counts</h></idx>
       </p>
       <program language="python">
         <input>
-airbnb[&quot;room_type&quot;].value_counts(normalize=True)
+airbnb["room_type"].value_counts(normalize=True)
         </input>
       </program>
       <p>
@@ -183,14 +177,14 @@ airbnb[&quot;room_type&quot;].value_counts(normalize=True)
       </p>
       <p>
         Instead, perhaps we can approximate it with a small subset of data!
-        To investigate this idea, let&#x2019;s try randomly selecting 40 listings (i.e., taking a random sample of
+        To investigate this idea, let&#x2019;s try randomly selecting 40 listings (<em>i.e.,</em> taking a random sample of
         size 40 from our population), and computing the proportion for that sample.
-        We will use the <c>rep_sample_n</c>
-        <idx><h>rep_sample_n</h></idx>
-        function from the <c>infer</c>
-        <idx><h>infer</h></idx>
-        package to take the sample. The arguments of <c>rep_sample_n</c> are (1) the data frame to
-        sample from, and (2) the size of the sample to take.
+        We will use the <c>sample</c> method of the <c>DataFrame</c>
+        object to take the sample. The argument <c>n</c> of <c>sample</c> is the size of the sample to take
+        and since we are starting to use randomness here,
+        we are also setting the random seed via numpy to make the results reproducible.
+        <idx><h>DataFrame</h><h>sample</h></idx>
+        <idx><h>seed</h><h>numpy.random.seed</h></idx>
       </p>
       <program language="python">
         <input>
@@ -199,12 +193,12 @@ import numpy as np
 
 np.random.seed(155)
 
-airbnb.sample(n=40)[&quot;room_type&quot;].value_counts(normalize=True)
+airbnb.sample(n=40)["room_type"].value_counts(normalize=True)
         </input>
       </program>
       <p>
         Here we see that the proportion of entire home/apartment listings in this
-        random sample is 0.7. Wow&#x2014;that&#x2019;s close to our
+        random sample is 0.650. Wow&#x2014;that&#x2019;s close to our
         true population value! But remember, we computed the proportion using a random sample of size 40.
         This has two consequences. First, this value is only an <em>estimate</em>, i.e., our best guess
         of our population parameter using this sample.
@@ -215,7 +209,7 @@ airbnb.sample(n=40)[&quot;room_type&quot;].value_counts(normalize=True)
       </p>
       <program language="python">
         <input>
-airbnb.sample(n=40)[&quot;room_type&quot;].value_counts(normalize=True)
+airbnb.sample(n=40)["room_type"].value_counts(normalize=True)
         </input>
       </program>
       <p>
@@ -238,11 +232,15 @@ airbnb.sample(n=40)[&quot;room_type&quot;].value_counts(normalize=True)
         expect our sample proportions from this population to vary for samples of size 40.
       </p>
       <p>
-        We again use the <c>rep_sample_n</c> to take samples of size 40 from our
-        population of Airbnb listings. But this time we set the <c>reps</c> argument to 20,000 to specify
-        that we want to take 20,000 samples of size 40.
-        <idx><h>rep_sample_n</h><h>reps argument</h></idx>
-        <idx><h>rep_sample_n</h><h>size argument</h></idx>
+        We again use the <c>sample</c> to take samples of size 40 from our
+        population of Airbnb listings. But this time we use a list comprehension
+        to repeat the operation multiple times (as we did previously in <xref ref="ch-clustering"/>).
+        In this case we repeat the operation 20,000 times to obtain 20,000 samples of size 40.
+        To make it clear which rows in the data frame come
+        which of the 20,000 samples, we also add a column called <c>replicate</c> with this information using the <c>assign</c> function,
+        introduced previously in <xref ref="ch-wrangling"/>.
+        The call to <c>concat</c> concatenates all the 20,000 data frames
+        returned from the list comprehension into a single big data frame.
       </p>
       <program language="python">
         <input>
@@ -254,44 +252,79 @@ samples
         </input>
       </program>
       <p>
-        Notice that the column <c>replicate</c> indicates the replicate, or sample, to which
-        each listing belongs. Above, since by default Python only prints the first few rows,
-        it looks like all of the listings have <c>replicate</c> set to 1. But you can
-        check the last few entries using the <c>tail()</c> function to verify that
-        we indeed created 20,000 samples (or replicates).
+        Since the column <c>replicate</c> indicates the replicate/sample number,
+        we can verify that we indeed seem to have 20,0000 samples
+        starting at sample 0 and ending at sample 19,999.
+      </p>
+      <p>
+        Now that we have obtained the samples, we need to compute the
+        proportion of entire home/apartment listings in each sample.
+        We first group the data by the <c>replicate</c> variable&#x2014;to group the
+        set of listings in each sample together&#x2014;and then use <c>value_counts</c>
+        with <c>normalize=True</c> to compute the proportion in each sample.
+        Both the first and last few entries of the resulting data frame are printed
+        below to show that we end up with 20,000 point estimates, one for each of the 20,000 samples.
+        <idx><h>DataFrame</h><h>groupby</h></idx>
+        <idx><h>DataFrame</h><h>reset_index</h></idx>
       </p>
       <program language="python">
         <input>
 (
     samples
-    .groupby(&quot;replicate&quot;)
-    [&quot;room_type&quot;]
+    .groupby("replicate")
+    ["room_type"]
     .value_counts(normalize=True)
 )
         </input>
       </program>
       <p>
-        Now that we have obtained the samples, we need to compute the
-        proportion of entire home/apartment listings in each sample.
-        We first group the data by the <c>replicate</c> variable&#x2014;to group the
-        set of listings in each sample together&#x2014;and then use <c>summarize</c>
-        to compute the proportion in each sample.
-        We print both the first and last few entries of the resulting data frame
-        below to show that we end up with 20,000 point estimates, one for each of the 20,000 samples.
-        <idx><h>group_by</h></idx>
-        <idx><h>summarize</h></idx>
+        The returned object is a series,
+        and as we have previously learned
+        we can use <c>reset_index</c> to change it to a data frame.
+        However,
+        there is one caveat here:
+        when we use the <c>value_counts</c> function
+        on a grouped series and try to <c>reset_index</c>
+        we will end up with two columns with the same name
+        and therefore get an error
+        (in this case, <c>room_type</c> will occur twice).
+        Fortunately,
+        there is a simple solution:
+        when we call <c>reset_index</c>,
+        we can specify the name of the new column
+        with the <c>name</c> parameter:
       </p>
       <program language="python">
         <input>
 (
     samples
-    .groupby(&quot;replicate&quot;)
-    [&quot;room_type&quot;]
+    .groupby("replicate")
+    ["room_type"]
     .value_counts(normalize=True)
-    .reset_index(name=&quot;sample_proportion&quot;)
+    .reset_index(name="sample_proportion")
 )
         </input>
       </program>
+      <p>
+        Below we put everything together
+        and also filter the data frame to keep only the room types
+        that we are interested in.
+      </p>
+      <program language="python">
+        <input>
+sample_estimates = (
+    samples
+    .groupby("replicate")
+    ["room_type"]
+    .value_counts(normalize=True)
+    .reset_index(name="sample_proportion")
+)
+
+sample_estimates = sample_estimates[sample_estimates["room_type"] == "Entire home/apt"]
+sample_estimates
+        </input>
+      </program>
+
       <p>
         We can now visualize the sampling distribution of sample proportions
         for samples of size 40 using a histogram in <xref ref="fig-inference-proportions-sampling-dist"/>.
@@ -302,18 +335,17 @@ samples
         such that we <em>do</em> have access to the full population, which lets us visualize the
         sampling distribution directly for learning purposes.
       </p>
+
       <program language="python">
         <input>
-sample_estimates = (
-    samples
-    .groupby(&quot;replicate&quot;)
-    [&quot;room_type&quot;]
-    .value_counts(normalize=True)
-    .reset_index(name=&quot;sample_proportion&quot;)
+sampling_distribution = alt.Chart(sample_estimates).mark_bar().encode(
+    x=alt.X("sample_proportion")
+        .bin(maxbins=20)
+        .title("Sample proportions"),
+    y=alt.Y("count()").title("Count"),
 )
 
-sample_estimates = sample_estimates[sample_estimates[&quot;room_type&quot;] == &quot;Entire home/apt&quot;]
-sample_estimates
+sampling_distribution
         </input>
       </program>
 
@@ -324,19 +356,15 @@ sample_estimates
 
       <p>
         The sampling distribution in <xref ref="fig-inference-proportions-sampling-dist"/> appears
-        to be bell-shaped, is roughly symmetric, and has one peak. It is centered around 0.7 and the sample proportions range from about 0.4 to about 1. In fact, we can calculate the mean of the sample proportions.
+        to be bell-shaped, is roughly symmetric, and has one peak. It is centered
+        around 0.75 and the sample proportions
+        range from about 0.45 to about 0.98. In fact, we can
+        calculate the mean of the sample proportions.
         <idx><h>sampling distribution</h><h>shape</h></idx>
       </p>
       <program language="python">
         <input>
-sampling_distribution = alt.Chart(sample_estimates).mark_bar().encode(
-    x=alt.X(&quot;sample_proportion&quot;)
-        .bin(maxbins=20)
-        .title(&quot;Sample proportions&quot;),
-    y=alt.Y(&quot;count()&quot;).title(&quot;Count&quot;),
-)
-
-sampling_distribution
+sample_estimates["sample_proportion"].mean()
         </input>
       </program>
       <p>
@@ -368,7 +396,14 @@ sampling_distribution
       </p>
       <program language="python">
         <input>
-sample_estimates[&quot;sample_proportion&quot;].mean()
+population_distribution = alt.Chart(airbnb).mark_bar().encode(
+    x=alt.X("price")
+        .bin(maxbins=30)
+        .title("Price per night (dollars)"),
+    y=alt.Y("count()", title="Count"),
+)
+
+population_distribution
         </input>
       </program>
 
@@ -388,14 +423,7 @@ sample_estimates[&quot;sample_proportion&quot;].mean()
       </p>
       <program language="python">
         <input>
-population_distribution = alt.Chart(airbnb).mark_bar().encode(
-    x=alt.X(&quot;price&quot;)
-        .bin(maxbins=30)
-        .title(&quot;Price per night (dollars)&quot;),
-    y=alt.Y(&quot;count()&quot;, title=&quot;Count&quot;),
-)
-
-population_distribution
+airbnb["price"].mean()
         </input>
       </program>
       <p>
@@ -411,23 +439,29 @@ population_distribution
         and resources allow. Let&#x2019;s say we could do this for 40 listings. What would
         such a sample look like? Let&#x2019;s take advantage of the fact that we do have
         access to the population data and simulate taking one random sample of 40
-        listings in Python, again using <c>rep_sample_n</c>.
-        <idx><h>rep_sample_n</h></idx>
+        listings in Python, again using <c>sample</c>.
       </p>
       <program language="python">
         <input>
-airbnb[&quot;price&quot;].mean()
+one_sample = airbnb.sample(n=40)
         </input>
       </program>
       <p>
         We can create a histogram to visualize the distribution of observations in the
         sample (<xref ref="fig-inference-sample-price"/>), and calculate the mean
         of our sample.
-        <idx><h>ggplot</h><h>geom_histogram</h></idx>
+        <idx><h>altair</h><h>mark_bar</h></idx>
       </p>
       <program language="python">
         <input>
-one_sample = airbnb.sample(n=40)
+sample_distribution = alt.Chart(one_sample).mark_bar().encode(
+    x=alt.X("price")
+        .bin(maxbins=30)
+        .title("Price per night (dollars)"),
+    y=alt.Y("count()").title("Count"),
+)
+
+sample_distribution
         </input>
       </program>
 
@@ -436,6 +470,12 @@ one_sample = airbnb.sample(n=40)
         <image source="images/inference/inference-sample-price.png" width="65%"/>
       </figure>
 
+      <program language="python">
+        <input>
+one_sample["price"].mean()
+        </input>
+      </program>
+
       <p>
         The average value of the sample of size 40
         is $155.80. This
@@ -443,41 +483,48 @@ one_sample = airbnb.sample(n=40)
         Recall that the population mean was
         $154.51. So our estimate was fairly close to
         the population parameter: the mean was about
-        1.5% off. Note that we usually cannot compute the estimate&#x2019;s accuracy in practice
+        0.8% off. Note that we usually cannot compute the estimate&#x2019;s accuracy in practice
         since we do not have access to the population parameter; if we did, we wouldn&#x2019;t
         need to estimate it!
       </p>
       <p>
         Also, recall from the previous section that the point estimate can vary; if we
         took another random sample from the population, our estimate&#x2019;s value might
-        change. So then, did we just get lucky with our point estimate above? How much
+        change. So then, did we just get lucky with our point estimate above?
+        How much
         does our estimate vary across different samples of size 40 in this example?
         Again, since we have access to the population, we can take many samples and
-        plot the sampling distribution of
+        plot the sampling distribution of sample means to
         <idx><h>sampling distribution</h></idx>
-        sample means for samples of size 40 to
-        get a sense for this variation. In this case, we&#x2019;ll use 20,000 samples of size
-        40.
+        get a sense for this variation.
+        In this case, we&#x2019;ll use the 20,000 samples of size
+        40 that we already stored in the <c>samples</c> variable.
+        First we will calculate the sample mean for each replicate
+        and then plot the sampling distribution of sample means for samples of size 40.
       </p>
       <program language="python">
         <input>
-sample_distribution = alt.Chart(one_sample).mark_bar().encode(
-    x=alt.X(&quot;price&quot;)
-        .bin(maxbins=30)
-        .title(&quot;Price per night (dollars)&quot;),
-    y=alt.Y(&quot;count()&quot;).title(&quot;Count&quot;),
+sample_estimates = (
+    samples
+    .groupby("replicate")
+    ["price"]
+    .mean()
+    .reset_index()
+    .rename(columns={"price": "mean_price"})
 )
-
-sample_distribution
+sample_estimates
         </input>
       </program>
-      <p>
-        Now we can calculate the sample mean for each replicate and plot the sampling
-        distribution of sample means for samples of size 40.
-      </p>
       <program language="python">
         <input>
-one_sample[&quot;price&quot;].mean()
+sampling_distribution = alt.Chart(sample_estimates).mark_bar().encode(
+    x=alt.X("mean_price")
+        .bin(maxbins=30)
+        .title("Sample mean price per night (dollars)"),
+    y=alt.Y("count()").title("Count")
+)
+
+sampling_distribution
         </input>
       </program>
 
@@ -488,9 +535,9 @@ one_sample[&quot;price&quot;].mean()
 
       <p>
         In <xref ref="fig-inference-means-sampling-dist"/>, the sampling distribution of the mean
-        has one peak and is
+        has one peak and is bell-shaped.
         <idx><h>sampling distribution</h><h>shape</h></idx>
-        bell-shaped. Most of the estimates are between
+        Most of the estimates are between
         about $140 and $170; but there is
         a good fraction of cases outside this range (i.e., where the point estimate was
         not close to the population parameter). So it does indeed look like we were
@@ -523,23 +570,24 @@ one_sample[&quot;price&quot;].mean()
         point estimate is to take a <em>larger</em> sample. To illustrate what effect this
         has, we will take many samples of size 20, 50, 100, and 500, and plot the
         sampling distribution of the sample mean. We indicate the mean of the sampling
-        distribution with a vertical dashed line.
+        distribution with a vertical line.
       </p>
 
       <figure xml:id="fig-inference-means-four-n">
-        <caption>Comparison of sampling distributions, with mean highlighted as a vertical dashed line.</caption>
+        <caption>Comparison of sampling distributions, with mean highlighted as a vertical line.</caption>
         <image source="images/inference/inference-means-four-n.png" width="90%"/>
       </figure>
 
       <p>
         Based on the visualization in <xref ref="fig-inference-means-four-n"/>, three points
-        about the sample mean become clear. First, the mean of the sample mean (across
-        samples) is equal to the population mean. In other words, the sampling
-        distribution is centered at the population mean. Second, increasing the size of
-        the sample decreases the spread (i.e., the variability) of the sampling
-        distribution. Therefore, a larger sample size results in a more reliable point
-        estimate of the population parameter. And third, the distribution of the sample
-        mean is roughly bell-shaped.
+        about the sample mean become clear:
+      </p>
+      <ol>
+        <li><p>The mean of the sample mean (across samples) is equal to the population mean. In other words, the sampling distribution is centered at the population mean.</p></li>
+        <li><p>Increasing the size of the sample decreases the spread (i.e., the variability) of the sampling distribution. Therefore, a larger sample size results in a more reliable point estimate of the population parameter.</p></li>
+        <li><p>The distribution of the sample mean is roughly bell-shaped.</p></li>
+      </ol>
+      <p>
         <idx><h>sampling distribution</h><h>effect of sample size</h></idx>
       </p>
       <note>
@@ -566,7 +614,6 @@ one_sample[&quot;price&quot;].mean()
     </subsection>
   </section>
 
-  <!-- ============================================================ -->
   <section xml:id="sec-inference-bootstrapping">
     <title>Bootstrapping</title>
 
@@ -657,7 +704,7 @@ one_sample[&quot;price&quot;].mean()
       </figure>
     </subsection>
 
-    <subsection xml:id="sec-inference-bootstrap-r">
+    <subsection xml:id="sec-inference-bootstrap-python">
       <title>Bootstrapping in Python</title>
       <p>
         Let&#x2019;s continue working with our Airbnb example to illustrate how we might create
@@ -670,15 +717,19 @@ one_sample[&quot;price&quot;].mean()
       </p>
       <program language="python">
         <input>
-sample_estimates = (
-    samples
-    .groupby(&quot;replicate&quot;)
-    [&quot;price&quot;]
-    .mean()
-    .reset_index()
-    .rename(columns={&quot;price&quot;: &quot;mean_price&quot;})
+one_sample
+        </input>
+      </program>
+      <program language="python">
+        <input>
+one_sample_dist = alt.Chart(one_sample).mark_bar().encode(
+    x=alt.X("price")
+        .bin(maxbins=30)
+        .title("Price per night (dollars)"),
+    y=alt.Y("count()").title("Count"),
 )
-sample_estimates
+
+one_sample_dist
         </input>
       </program>
 
@@ -696,24 +747,25 @@ sample_estimates
       <p>
         We now perform steps 1&#x2013;5 listed above to generate a single bootstrap
         sample in Python and calculate a point estimate from that bootstrap sample. We will
-        use the <c>rep_sample_n</c> function as we did when we were
-        creating our sampling distribution. But critically, note that we now
-        pass <c>one_sample</c>&#x2014;our single sample of size 40&#x2014;as the first argument.
-        And since we need to sample with replacement,
-        we change the argument for <c>replace</c> from its default value of <c>FALSE</c> to <c>TRUE</c>.
+        continue using the <c>sample</c> function of our dataframe,
+        Critically, note that we now set <c>frac=1</c> ("fraction") to indicate that we want to draw as many samples as there are rows in the dataframe
+        (we could also have set <c>n=40</c> but then we would need to manually keep track of how many rows there are).
+        Since we need to sample with replacement when bootstrapping,
+        we change the <c>replace</c> parameter to <c>True</c>.
         <idx><h>bootstrap</h><h>in Python</h></idx>
-        <idx><h>rep_sample_n</h><h>bootstrap</h></idx>
+        <idx><h>DataFrame</h><h>sample (bootstrap)</h></idx>
       </p>
       <program language="python">
         <input>
-sampling_distribution = alt.Chart(sample_estimates).mark_bar().encode(
-    x=alt.X(&quot;mean_price&quot;)
+boot1 = one_sample.sample(frac=1, replace=True)
+boot1_dist = alt.Chart(boot1).mark_bar().encode(
+    x=alt.X("price")
         .bin(maxbins=30)
-        .title(&quot;Sample mean price per night (dollars)&quot;),
-    y=alt.Y(&quot;count()&quot;).title(&quot;Count&quot;)
+        .title("Price per night (dollars)"),
+    y=alt.Y("count()", title="Count"),
 )
 
-sampling_distribution
+boot1_dist
         </input>
       </program>
 
@@ -721,6 +773,12 @@ sampling_distribution
         <caption>Bootstrap distribution.</caption>
         <image source="images/inference/inference-one-bootstrap-sample.png" width="65%"/>
       </figure>
+
+      <program language="python">
+        <input>
+boot1["price"].mean()
+        </input>
+      </program>
 
       <p>
         Notice in <xref ref="fig-inference-one-bootstrap-sample"/> that the histogram of our bootstrap sample
@@ -735,14 +793,20 @@ sampling_distribution
       </p>
       <p>
         Let&#x2019;s now take 20,000 bootstrap samples from the original sample (<c>one_sample</c>)
-        using <c>rep_sample_n</c>, and calculate the means for
-        each of those replicates. Recall that this assumes that <c>one_sample</c> <em>looks like</em>
+        and calculate the means for each of those replicates.
+        Recall that this assumes that <c>one_sample</c> <em>looks like</em>
         our original population; but since we do not have access to the population itself,
         this is often the best we can do.
+        Note that here we break the list comprehension over multiple lines
+        so that it is easier to read.
       </p>
       <program language="python">
         <input>
-one_sample
+boot20000 = pd.concat([
+    one_sample.sample(frac=1, replace=True).assign(replicate=n)
+    for n in range(20_000)
+])
+boot20000
         </input>
       </program>
       <p>
@@ -750,14 +814,17 @@ one_sample
       </p>
       <program language="python">
         <input>
-one_sample_dist = alt.Chart(one_sample).mark_bar().encode(
-    x=alt.X(&quot;price&quot;)
-        .bin(maxbins=30)
-        .title(&quot;Price per night (dollars)&quot;),
-    y=alt.Y(&quot;count()&quot;).title(&quot;Count&quot;),
+six_bootstrap_samples = boot20000.query("replicate &lt; 6")
+six_bootstrap_fig = alt.Chart(six_bootstrap_samples, height=150).mark_bar().encode(
+    x=alt.X("price")
+        .bin(maxbins=20)
+        .title("Price per night (dollars)"),
+    y=alt.Y("count()").title("Count")
+).facet(
+    "replicate:N",  # Recall that `:N` converts the variable to a categorical type
+    columns=2
 )
-
-one_sample_dist
+six_bootstrap_fig
         </input>
       </program>
 
@@ -767,34 +834,68 @@ one_sample_dist
       </figure>
 
       <p>
-        We see in <xref ref="fig-inference-six-bootstrap-samples"/> how the
-        bootstrap samples differ. We can also calculate the sample mean for each of
-        these six replicates.
+        We see in <xref ref="fig-inference-six-bootstrap-samples"/> how the distributions of the
+        bootstrap samples differ. If we calculate the sample mean for each of
+        these six samples, we can see that these are also different between samples.
+        To compute the mean for each sample,
+        we first group by the "replicate" which is the column containing the sample/replicate number.
+        Then we compute the mean of the <c>price</c> column and rename it to <c>mean_price</c>
+        for it to be more descriptive.
+        Finally we use <c>reset_index</c> to get the <c>replicate</c> values back as a column in the dataframe.
       </p>
       <program language="python">
         <input>
-boot1 = one_sample.sample(frac=1, replace=True)
-boot1_dist = alt.Chart(boot1).mark_bar().encode(
-    x=alt.X(&quot;price&quot;)
-        .bin(maxbins=30)
-        .title(&quot;Price per night (dollars)&quot;),
-    y=alt.Y(&quot;count()&quot;, title=&quot;Count&quot;),
+(
+    six_bootstrap_samples
+    .groupby("replicate")
+    ["price"]
+    .mean()
+    .reset_index()
+    .rename(columns={"price": "mean_price"})
 )
-
-boot1_dist
         </input>
       </program>
       <p>
-        We can see that the bootstrap sample distributions and the sample means are
-        different. They are different because we are sampling <em>with replacement</em>. We
-        will now calculate point estimates for our 20,000 bootstrap samples and
-        generate a bootstrap distribution of our point estimates. The bootstrap
+        The distributions and the means differ between the bootstrapped samples
+        because we are sampling <em>with replacement</em>.
+        If we instead would have sampled <em>without replacement</em>,
+        we would end up with the exact same values in the sample each time.
+      </p>
+      <p>
+        We will now calculate point estimates of the mean for our 20,000 bootstrap samples and
+        generate a bootstrap distribution of these point estimates. The bootstrap
         distribution (<xref ref="fig-inference-bootstrap-dist"/>) suggests how we might expect
-        our point estimate to behave if we took another sample.
+        our point estimate to behave if we take multiple samples.
+        <idx><h>DataFrame</h><h>reset_index</h></idx>
+        <idx><h>DataFrame</h><h>rename</h></idx>
+        <idx><h>DataFrame</h><h>groupby</h></idx>
+        <idx><h>Series</h><h>mean</h></idx>
       </p>
       <program language="python">
         <input>
-boot1[&quot;price&quot;].mean()
+boot20000_means = (
+    boot20000
+    .groupby("replicate")
+    ["price"]
+    .mean()
+    .reset_index()
+    .rename(columns={"price": "mean_price"})
+)
+
+boot20000_means
+        </input>
+      </program>
+
+      <program language="python">
+        <input>
+boot_est_dist = alt.Chart(boot20000_means).mark_bar().encode(
+    x=alt.X("mean_price")
+        .bin(maxbins=20)
+        .title("Sample mean price per night (dollars)"),
+    y=alt.Y("count()").title("Count"),
+)
+
+boot_est_dist
         </input>
       </program>
 
@@ -821,7 +922,7 @@ boot1[&quot;price&quot;].mean()
         distribution and the bootstrap distribution are similar; the bootstrap
         distribution lets us get a sense of the point estimate&#x2019;s variability. The
         second important point is that the means of these two distributions are
-        different. The sampling distribution is centered at
+        slightly different. The sampling distribution is centered at
         $154.51, the population mean value. However, the bootstrap
         distribution is centered at the original sample&#x2019;s mean price per night,
         $155.80. Because we are resampling from the
@@ -877,26 +978,20 @@ boot1[&quot;price&quot;].mean()
         <li><p>Find the value such that 97.5% of observations fall below it (the 97.5% percentile). Use that value as the upper bound of the interval.</p></li>
       </ol>
       <p>
-        To do this in Python, we can use the <c>quantile()</c> function. Quantiles are expressed in proportions rather than
-        percentages, so the 2.5th and 97.5th percentiles would be the 0.025 and 0.975 quantiles, respectively.
+        To do this in Python, we can use the <c>quantile</c> function of our DataFrame.
+        Quantiles are expressed in proportions rather than percentages,
+        so the 2.5th and 97.5th percentiles would be the 0.025 and 0.975 quantiles, respectively.
         <idx><h>percentile</h></idx>
-        <idx><h>quantile</h></idx>
-        <idx><h>pull</h></idx>
-        <idx><h>select</h></idx>
+        <idx><h>DataFrame</h><h>[]</h></idx>
+        <idx><h>DataFrame</h><h>quantile</h></idx>
       </p>
       <program language="python">
         <input>
-boot20000 = pd.concat([
-    one_sample.sample(frac=1, replace=True).assign(replicate=n)
-    for n in range(20_000)
-])
-boot20000
+ci_bounds = boot20000_means["mean_price"].quantile([0.025, 0.975])
+ci_bounds
         </input>
       </program>
-      <pre>
-##  2.5% 97.5% 
-##   119   204
-      </pre>
+     
       <p>
         Our interval, $119.28 to $203.63, captures
         the middle 95% of the sample mean prices in the bootstrap distribution. We can
@@ -912,11 +1007,10 @@ boot20000
       <p>
         To finish our estimation of the population parameter, we would report the point
         estimate and our confidence interval&#x2019;s lower and upper bounds. Here the sample
-        mean price per night of 40 Airbnb listings was
+        mean price-per-night of 40 Airbnb listings was
         $155.80, and we are 95% &#x201C;confident&#x201D; that the true
-        population mean price per night for all Airbnb listings in Vancouver is between
-        $119.28 and $203.63.
-        Notice that our interval does indeed contain the true
+        population mean price-per-night for all Airbnb listings in Vancouver is between
+        $119.28 and $203.63. Notice that our interval does indeed contain the true
         population mean value, $154.51! However, in
         practice, we would not know whether our interval captured the population
         parameter or not because we usually only have a single sample, not the entire
@@ -934,13 +1028,12 @@ boot20000
     </subsection>
   </section>
 
-  <!-- ============================================================ -->
   <section xml:id="sec-inference-exercises">
     <title>Exercises</title>
     <p>
       Practice exercises for the material covered in this chapter
       can be found in the accompanying
-      <url href="https://worksheets.datasciencebook.ca">worksheets repository</url>
+      <url href="https://worksheets.python.datasciencebook.ca">worksheets repository</url>
       in the two &#x201C;Statistical inference&#x201D; rows.
       You can launch an interactive version of each worksheet in your browser by clicking the &#x201C;launch binder&#x201D; button.
       You can also preview a non-interactive version of each worksheet by clicking &#x201C;view worksheet.&#x201D;
@@ -951,27 +1044,13 @@ boot20000
     </p>
   </section>
 
-  <!-- ============================================================ -->
   <section xml:id="sec-inference-additional-resources">
     <title>Additional resources</title>
     <ul>
       <li>
         <p>
-          Chapters 7 to 10 of <em>Modern Dive</em> <xref ref="moderndive"/> provide a great
-          next step in learning about inference. In particular, Chapters 7 and 8 cover
-          sampling and bootstrapping using <c>tidyverse</c> and <c>infer</c> in a slightly more
-          in-depth manner than the present chapter. Chapters 9 and 10 take the next step
-          beyond the scope of this chapter and begin to provide some of the initial
-          mathematical underpinnings of inference and more advanced applications of the
-          concept of inference in testing hypotheses and performing regression. This
-          material offers a great starting point for getting more into the technical side
-          of statistics.
-        </p>
-      </li>
-      <li>
-        <p>
           Chapters 4 to 7 of <em>OpenIntro Statistics</em> <xref ref="openintro"/>
-          provide a good next step after <em>Modern Dive</em>. Although it is still certainly
+          provide a good next step in learning about inference. Although it is still certainly
           an introductory text, things get a bit more mathematical here. Depending on
           your background, you may actually want to start going through Chapters 1 to 3
           first, where you will learn some fundamental concepts in probability theory.

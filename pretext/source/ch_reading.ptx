@@ -119,11 +119,11 @@
       reached by starting at the root, and entering the <c>home</c> folder, then the <c>dsci-100</c> folder,
       then the <c>project3</c> folder, and then finally the <c>data</c> folder. So its absolute path would be
       <c>/home/dsci-100/project3/data/happiness_report.csv</c>. We can load the file using its absolute path
-      as a string passed to the <c>read_csv</c> function.
+      as a string passed to the <c>read_csv</c> function from <c>pandas</c>.
     </p>
     <program language="python">
       <input>
-happy_data = pd.read_csv(&quot;/home/dsci-100/project3/data/happiness_report.csv&quot;)
+happy_data = pd.read_csv("/home/dsci-100/project3/data/happiness_report.csv")
       </input>
     </program>
     <p>
@@ -135,11 +135,12 @@ happy_data = pd.read_csv(&quot;/home/dsci-100/project3/data/happiness_report.csv
     </p>
     <program language="python">
       <input>
-happy_data = pd.read_csv(&quot;data/happiness_report.csv&quot;)
+happy_data = pd.read_csv("data/happiness_report.csv")
       </input>
     </program>
     <p>
-      Note that there is no forward slash at the beginning of a relative path; if we accidentally typed
+      Note that there is no forward slash at the beginning of a relative path;
+      if we accidentally typed
       <c>"/data/happiness_report.csv"</c>, Python would look for a folder named <c>data</c> in the root folder
       of the computer&#x2014;but that doesn&#x2019;t exist!
     </p>
@@ -164,16 +165,19 @@ happy_data = pd.read_csv(&quot;data/happiness_report.csv&quot;)
       (and as an added bonus, relative paths are often shorter&#x2014;easier to type!). This is because a
       file&#x2019;s relative path is often the same across different computers, while a file&#x2019;s absolute path
       (the names of all of the folders between the computer&#x2019;s root, represented by <c>/</c>, and the file)
-      isn&#x2019;t usually the same across different computers.
-      For example, suppose Fatima and Jayden are working on a project together on the
+      isn&#x2019;t usually the same across different computers. For example, suppose Fatima and Jayden are working on a project together on the
       <c>happiness_report.csv</c> data. Fatima&#x2019;s file is stored at
-</p><p>
+    </p>
+    <p>
       <c>/home/Fatima/project3/data/happiness_report.csv</c>,
-</p><p>
+    </p>
+    <p>
       while Jayden&#x2019;s is stored at
-</p><p>
+    </p>
+    <p>
       <c>/home/Jayden/project3/data/happiness_report.csv</c>.
-</p><p>
+    </p>
+    <p>
       Even though Fatima and Jayden stored their
       files in the same place on their computers (in their home folders), the absolute paths are different
       due to their different usernames. If Jayden has code that loads the <c>happiness_report.csv</c>
@@ -204,7 +208,7 @@ happy_data = pd.read_csv(&quot;data/happiness_report.csv&quot;)
         tabular data from a plain text file (a document containing only text) <em>into</em> Python and
         <em>write</em> tabular data to a file <em>out of</em> Python. The function we use to do this depends
         on the file&#x2019;s format. For example, in the last chapter, we learned about using the
-        <c>read_csv</c> function from the <c>pandas</c> when reading <c>.csv</c>
+        <c>read_csv</c> function from <c>pandas</c> when reading <c>.csv</c>
         (<em>c</em>omma-<em>s</em>eparated <em>v</em>alues) files.
         <idx><h>csv</h></idx>
         In that case, the separator or <em>delimiter</em>
@@ -231,9 +235,13 @@ happy_data = pd.read_csv(&quot;data/happiness_report.csv&quot;)
 category,language,mother_tongue,most_at_home,most_at_work,lang_known
 Aboriginal languages,"Aboriginal languages, n.o.s.",590,235,30,665
 Non-Official &amp; Non-Aboriginal languages,Afrikaans,10260,4785,85,23415
-Non-Official &amp; Non-Aboriginal languages,"Afro-Asiatic languages, n.i.e.",1150,445,10,2775
+Non-Official &amp; Non-Aboriginal languages,"Afro-Asiatic languages, n.i.e.",1150,44
 Non-Official &amp; Non-Aboriginal languages,Akan (Twi),13460,5985,25,22150
-Non-Official &amp; Non-Aboriginal languages,Albanian,26895,13135,345,31930</pre>
+Non-Official &amp; Non-Aboriginal languages,Albanian,26895,13135,345,31930
+Aboriginal languages,"Algonquian languages, n.i.e.",45,10,0,120
+Aboriginal languages,Algonquin,1260,370,40,2480
+Non-Official &amp; Non-Aboriginal languages,American Sign Language,2685,3020,1145,21
+Non-Official &amp; Non-Aboriginal languages,Amharic,22465,12785,200,33670</pre>
       <p>
         And here is a review of how we can use <c>read_csv</c> to load it into Python. First we load the
         <c>pandas</c> package to gain access to useful functions for reading the data.
@@ -245,16 +253,14 @@ import pandas as pd
       </program>
       <p>
         Next we use <c>read_csv</c> to load the data into Python, and in that call we specify the relative path
-        to the file. 
+        to the file.
       </p>
       <program language="python">
         <input>
-canlang_data = pd.read_csv(&quot;data/can_lang.csv&quot;)
+canlang_data = pd.read_csv("data/can_lang.csv")
 canlang_data
         </input>
       </program>
-      <pre>
-     </pre>
     </subsection>
 
     <subsection xml:id="sec-reading-skip">
@@ -295,29 +301,15 @@ canlang_data = pd.read_csv("data/can_lang_meta-data.csv")
       <pre>
 ParserError: Error tokenizing data. C error: Expected 1 fields in line 4, saw 6
 </pre>
-<p>
-To successfully read data like this into Python, the <c>skiprows</c> argument can be useful to tell Python how many rows to skip before it should start reading in the data. In the example above, we would set this value to 3 to read and load the data correctly.
-</p>
+      <p>
+        To successfully read data like this into Python, the <c>skiprows</c> argument can be useful to tell Python how many rows to skip before it should start reading in the data.
+        In the example above, we would set this value to 3 to read and load the data correctly.
+      </p>
       <program language="python">
         <input>
 canlang_data = pd.read_csv("data/can_lang_meta-data.csv", skiprows=3)
 canlang_data        </input>
       </program>
-<pre>
-	category	                              language	                     mother_tongue	most_at_home	most_at_work	lang_known
-0	Aboriginal languages	                  Aboriginal languages, n.o.s.  	590	                   235	          30	       665
-1	Non-Official &amp; Non-Aboriginal languages	Afrikaans	                     10260	                4785		        85	     23415
-2	Non-Official &amp; Non-Aboriginal languages	Afro-Asiatic languages, n.i.e.  1150		               445		        10	      2775
-3	Non-Official &amp; Non-Aboriginal languages	Akan (Twi)	                   13460		              5985		        25	     22150
-4	Non-Official &amp; Non-Aboriginal languages	Albanian	                     26895		             13135		        345	     31930
-...	...	...	...	...	...	...
-209	Non-Official &amp; Non-Aboriginal languages	Wolof		                      3990		              1385		        10	      8240
-210	Aboriginal languages	                  Woods Cree		                1840		               800		        75	      2665
-211	Non-Official &amp; Non-Aboriginal languages	Wu (Shanghainese)	           12915	               	7650		        105	     16530
-212	Non-Official &amp; Non-Aboriginal languages	Yiddish		                   13555		              7085		        895	     20985
-213	Non-Official &amp; Non-Aboriginal languages	Yoruba	                      9080		              2615		         15	     22415
-214 rows × 6 columns
-     </pre>
       <p>
         How did we know to skip three lines? We looked at the data! The first three lines of the data
         had information we didn&#x2019;t need to import:
@@ -337,16 +329,16 @@ Reproduced and distributed on an as-is basis with their permission.</pre>
       </p>
       <pre>
 category    language    mother_tongue   most_at_home    most_at_work    lang_kno
-Aboriginal languages    Aboriginal languages, n.o.s.    590 235 30  665
+Aboriginal languages    Aboriginal languages, n.o.s. 590 235 30  665
 Non-Official &amp; Non-Aboriginal languages Afrikaans   10260   4785    85  23415
 Non-Official &amp; Non-Aboriginal languages Afro-Asiatic languages, n.i.e.  1150
 Non-Official &amp; Non-Aboriginal languages Akan (Twi)  13460   5985    25  22150
 Non-Official &amp; Non-Aboriginal languages Albanian    26895   13135   345 31930
-Aboriginal languages    Algonquian languages, n.i.e.    45  10  0   120
+Aboriginal languages    Algonquian languages, n.i.e. 45  10  0   120
 Aboriginal languages    Algonquin   1260    370 40  2480
 Non-Official &amp; Non-Aboriginal languages American Sign Language  2685    3020
 Non-Official &amp; Non-Aboriginal languages Amharic 22465   12785   200 33670
-    </pre>
+      </pre>
       <p>
         To read in <c>.tsv</c> (<em>t</em>ab <em>s</em>eparated <em>v</em>alues) files, we can set the
         <c>sep</c> argument in the <c>read_csv</c> function to the tab character <c>\t</c>.
@@ -356,17 +348,15 @@ Non-Official &amp; Non-Aboriginal languages Amharic 22465   12785   200 33670
       </p>
       <program language="python">
         <input>
-canlang_data = pd.read_csv(&quot;data/can_lang.tsv&quot;, sep=&quot;\t&quot;)
+canlang_data = pd.read_csv("data/can_lang.tsv", sep="\t")
 canlang_data
         </input>
       </program>
-      <pre>
-      </pre>
       <p>
         If you compare the data frame here to the data frame we obtained in
         <xref ref="sec-reading-readcsv"/> using <c>read_csv</c>, you&#x2019;ll notice that they look
         identical: they have the same number of columns and rows, the same column names, and the same
-        entries! So even though we needed to use a different function depending on the file format, our
+        entries! So even though we needed to use different arguments depending on the file format, our
         resulting data frame (<c>canlang_data</c>) in both cases was the same.
       </p>
     </subsection>
@@ -380,18 +370,20 @@ canlang_data
         Here is how the file looks in a text editor:
       </p>
       <pre>
-Aboriginal languages    Aboriginal languages, n.o.s.    590 235 30  665
+Aboriginal languages    Aboriginal languages, n.o.s. 590 235 30  665
 Non-Official &amp; Non-Aboriginal languages Afrikaans   10260   4785    85  23415
 Non-Official &amp; Non-Aboriginal languages Afro-Asiatic languages, n.i.e.  1150
 Non-Official &amp; Non-Aboriginal languages Akan (Twi)  13460   5985    25  22150
 Non-Official &amp; Non-Aboriginal languages Albanian    26895   13135   345 31930
-Aboriginal languages    Algonquian languages, n.i.e.    45  10  0   120
+Aboriginal languages    Algonquian languages, n.i.e. 45  10  0   120
 Aboriginal languages    Algonquin   1260    370 40  2480
 Non-Official &amp; Non-Aboriginal languages American Sign Language  2685    3020
 Non-Official &amp; Non-Aboriginal languages Amharic 22465   12785   200 33670
 Non-Official &amp; Non-Aboriginal languages Arabic  419890  223535  5585    629055
-</pre>
+      </pre>
       <p>
+        Data frames in Python need to have column names. Thus if you read in data without column names, Python
+        will assign names automatically. In this example, Python assigns the column names <c>0, 1, 2, 3, 4, 5</c>.
         To read this data into Python, we specify the first argument as the path to the file (as done
         with <c>read_csv</c>), provide a tab as the <c>sep</c> argument, and set
         <c>header=None</c> to tell <c>pandas</c> that the data file does not contain its own column names.
@@ -409,40 +401,57 @@ Non-Official &amp; Non-Aboriginal languages Arabic  419890  223535  5585    6290
       <program language="python">
         <input>
 canlang_data = pd.read_csv(
-    &quot;data/can_lang_no_names.tsv&quot;,
-    sep=&quot;\t&quot;,
+    "data/can_lang_no_names.tsv",
+    sep="\t",
     header=None
 )
 canlang_data
         </input>
       </program>
-      <pre>
-      </pre>
       <p>
-        Data frames in Python need to have column names. Thus if you read in data without column names, Python
-        will assign names automatically. In this example, Python assigns the column names <c>0, 1, 2, 3, 4, 5</c>.
         It is best to rename your columns manually in this scenario. The current column names (<c>0, 1</c>, etc.)
-        are not very descriptive and will make your analysis confusing. To rename your columns, you can use the
-        <c>rename</c> function from the <c>pandas</c> package.
+        are problematic for two reasons: first, because they are not very descriptive names, which will make your analysis
+        confusing; and second, because your column names should generally be <em>strings</em>, but are currently <em>integers</em>.
+        To rename your columns, you can use the <c>rename</c> function from the <c>pandas</c> package.
         <idx><h>rename</h></idx>
         We rename the <c>0, 1, ..., 5</c> columns in the <c>canlang_data</c> data frame to more descriptive names below.
       </p>
       <program language="python">
         <input>
 col_map = {
-    0 : &quot;category&quot;,
-    1 : &quot;language&quot;,
-    2 : &quot;mother_tongue&quot;,
-    3 : &quot;most_at_home&quot;,
-    4 : &quot;most_at_work&quot;,
-    5 : &quot;lang_known&quot;
+    0 : "category",
+    1 : "language",
+    2 : "mother_tongue",
+    3 : "most_at_home",
+    4 : "most_at_work",
+    5 : "lang_known"
 }
 canlang_data_renamed = canlang_data.rename(columns=col_map)
 canlang_data_renamed
         </input>
       </program>
-      <pre>
-      </pre>
+      <p>
+        The column names can also be assigned to the data frame immediately upon reading it from the file by passing a
+        list of column names to the <c>names</c> argument in <c>read_csv</c>.
+      </p>
+      <program language="python">
+        <input>
+canlang_data = pd.read_csv(
+    "data/can_lang_no_names.tsv",
+    sep="\t",
+    header=None,
+    names=[
+        "category",
+        "language",
+        "mother_tongue",
+        "most_at_home",
+        "most_at_work",
+        "lang_known",
+    ],
+)
+canlang_data
+        </input>
+      </program>
     </subsection>
 
     <subsection xml:id="sec-reading-url">
@@ -451,7 +460,7 @@ canlang_data_renamed
         We can also use <c>read_csv</c>
         to read in data directly from a <em>Uniform Resource Locator (URL)</em> that contains tabular data.
         <idx><h>URL</h><h>reading from</h></idx>
-        Here, we provide the URL of a remote file to <c>read_*</c>, instead of a path to a local file on
+        Here, we provide the URL of a remote file to <c>read_csv</c>, instead of a path to a local file on
         our computer.
       </p>
       <p>
@@ -461,46 +470,13 @@ canlang_data_renamed
       </p>
       <program language="python">
         <input>
-canlang_data = pd.read_csv(
-    &quot;data/can_lang_no_names.tsv&quot;,
-    sep=&quot;\t&quot;,
-    header=None,
-    names=[
-        &quot;category&quot;,
-        &quot;language&quot;,
-        &quot;mother_tongue&quot;,
-        &quot;most_at_home&quot;,
-        &quot;most_at_work&quot;,
-        &quot;lang_known&quot;,
-    ],
-)
-canlang_data
-        </input>
-      </program>
-      <pre>
-      </pre>
-    </subsection>
-
-    <subsection xml:id="sec-reading-download">
-      <title>Downloading data from a URL</title>
-      <p>
-        Occasionally the data available at a URL is not formatted nicely enough to use <c>read_csv</c>,
-        <c>read_tsv</c>, <c>read_delim</c>, or other related functions to read the data directly into Python.
-        In situations where it is necessary to download a file to our local computer prior to working with
-        it in Python, we can use the <c>download.file</c> function. The first argument is the URL, and the
-        second is a path where we would like to store the downloaded file.
-      </p>
-      <program language="python">
-        <input>
-url = &quot;https://raw.githubusercontent.com/UBC-DSCI/introduction-to-datascience-python/reading/source/data/can_lang.csv&quot;
+url = "https://raw.githubusercontent.com/UBC-DSCI/introduction-to-datascience-python/reading/source/data/can_lang.csv"
 pd.read_csv(url)
 canlang_data = pd.read_csv(url)
 
 canlang_data
         </input>
       </program>
-      <pre>
-      </pre>
     </subsection>
 
     <subsection xml:id="sec-reading-preview">
@@ -552,20 +528,18 @@ X?a??4VT?,D?Jq
       This type of file representation allows Excel files to store additional things that 
       you cannot store in a <c>.csv</c> file, such as fonts, text formatting, graphics, multiple
       sheets and more. And despite looking odd in a plain text editor, we can read Excel
-      spreadsheets into Python using the <c>readxl</c> package developed specifically for this purpose.
+      spreadsheets into Python using the <c>pandas</c> package's <c>read_excel</c> function developed specifically for this purpose.
     </p>
 
     <program language="python">
       <input>
-canlang_data = pd.read_excel(&quot;data/can_lang.xlsx&quot;)
+canlang_data = pd.read_excel("data/can_lang.xlsx")
 canlang_data
       </input>
     </program>
-    <pre>
-    </pre>
     <p>
-      If the <c>.xlsx</c> file has multiple sheets, you have to use the <c>sheet</c> argument to specify
-      the sheet number or name. You can also specify cell ranges using the <c>range</c> argument. This
+      If the <c>.xlsx</c> file has multiple sheets, you have to use the <c>sheet_name</c> argument to specify
+      the sheet number or name. You can also specify cell ranges using the <c>usecols</c> argument. This
       functionality is useful when a single sheet contains multiple tables (a sad thing that happens to
       many Excel spreadsheets since this makes reading in data more difficult).
     </p>
@@ -576,32 +550,45 @@ canlang_data
       preview the file. Examples include Google Sheets and Libre Office.
     </p>
     <p>
-      In <xref ref="tab-reading-read-table"/> we summarize the data-reading functions we covered in
-      this chapter.
+      In <xref ref="tab-reading-read-table"/> we summarize the <c>read_csv</c> and <c>read_excel</c> functions we covered in
+      this chapter. We also include the arguments for data separated by
+      semicolons <c>;</c>, which you may run into with data sets where the decimal is
+      represented by a comma instead of a period (as with some data sets from
+      European countries).
     </p>
 
     <table xml:id="tab-reading-read-table">
-      <title>Summary of data-reading functions</title>
+      <title>Summary of read_csv and read_excel</title>
       <tabular top="major" bottom="minor" left="minor" right="minor">
         <row header="yes" bottom="major">
           <cell>Data File Type</cell>
           <cell>Python Function</cell>
-          <cell>Python Package</cell>
+          <cell>Arguments</cell>
         </row>
         <row>
           <cell>Comma (<c>,</c>) separated files</cell>
           <cell><c>read_csv</c></cell>
-          <cell><c>pandas</c></cell>
+          <cell>just the file path</cell>
         </row>
         <row>
           <cell>Tab (<c>\t</c>) separated files</cell>
-          <cell><c>read_csv(..., sep="\t")</c></cell>
-          <cell><c>pandas</c></cell>
+          <cell><c>read_csv</c></cell>
+          <cell><c>sep="\t"</c></cell>
+        </row>
+        <row>
+          <cell>Missing header</cell>
+          <cell><c>read_csv</c></cell>
+          <cell><c>header=None</c></cell>
+        </row>
+        <row>
+          <cell>European-style numbers, semicolon (<c>;</c>) separators</cell>
+          <cell><c>read_csv</c></cell>
+          <cell><c>sep=";"</c>, <c>thousands="."</c>, <c>decimal=","</c></cell>
         </row>
         <row bottom="major">
           <cell>Excel files (<c>.xlsx</c>)</cell>
           <cell><c>read_excel</c></cell>
-          <cell><c>pandas</c></cell>
+          <cell><c>sheet_name</c>, <c>usecols</c></cell>
         </row>
       </tabular>
     </table>
@@ -634,16 +621,25 @@ canlang_data
       </p>
       <p>
         The first thing you need to do to read data into Python from a database is to connect to the database.
-        We do that using the <c>connect</c> function from the <c>DBI</c> (database interface) package.
+        For an SQLite database, we will do that using the <c>connect</c> function from the <c>sqlite</c> backend in the <c>ibis</c> package.
         <idx><h>database</h><h>connect</h></idx>
-        This does not read in the data, but simply tells Python where the database is and opens up a
+        This command does not read in the data, but simply tells Python where the database is and opens up a
         communication channel that Python can use to send SQL commands to the database.
       </p>
+      <note>
+        <p>
+          There is another database package in python called <c>sqlalchemy</c>.
+          That package is a bit more mature than <c>ibis</c>,
+          so if you want to dig deeper into working with databases in Python, that is a good next
+          package to learn about. We will work with <c>ibis</c> in this book, as it
+          provides a more modern and friendlier syntax that is more like <c>pandas</c> for data analysis code.
+        </p>
+      </note>
       <program language="python">
         <input>
 import ibis
 
-conn = ibis.sqlite.connect(&quot;data/can_lang.db&quot;)
+conn = ibis.sqlite.connect("data/can_lang.db")
         </input>
       </program>
       <p>
@@ -659,154 +655,142 @@ tables = conn.list_tables()
 tables
         </input>
       </program>
-      <pre>
-[1] "lang"</pre>
       <p>
-        The <c>list_tables</c> function returned only one name, which tells us that there is only one
+        The <c>list_tables</c> function returned only one name&#x2014;<c>"can_lang"</c>&#x2014;which tells us that there is only one
         table in this database. To reference a table in the database (so that we can perform operations
-        like selecting columns and filtering rows), we use the <c>tbl</c> function
-        <idx><h>database</h><h>tbl</h></idx>
-        from the <c>ibis</c> package.
-        <idx><h>dbplyr</h><see>database</see></idx>
-        <idx><h>database</h><h>dbplyr</h></idx>
-        The object returned by the <c>tbl</c> function allows us to work with data stored in databases as
-        if they were just regular data frames; but secretly, behind the scenes, <c>ibis</c> is turning
-        your function calls (e.g., <c>select</c> and <c>filter</c>) into SQL queries!
+        like selecting columns and filtering rows), we use the <c>table</c> function
+        <idx><h>database</h><h>table</h></idx>
+        from the <c>conn</c> object. The object returned by the <c>table</c> function allows us to work with data stored in databases as
+        if they were just regular <c>pandas</c> data frames; but secretly, behind the scenes, <c>ibis</c> will turn
+        your commands into SQL queries!
       </p>
       <program language="python">
         <input>
-canlang_table = conn.table(&quot;can_lang&quot;)
+canlang_table = conn.table("can_lang")
 canlang_table
         </input>
       </program>
-      <pre>
-      </pre>
       <p>
-        Although it looks like we just got a data frame from the database, we didn&#x2019;t! It&#x2019;s a
-        <em>reference</em>; the data is still stored only in the SQLite database. The <c>ibis</c> package
-        works this way because databases are often more efficient at selecting, filtering and joining large
-        data sets than Python.
-        And typically the database will not even be stored on your computer, but rather a more powerful
-        machine somewhere on the web. So Python is lazy and waits to bring this data into memory until you
-        explicitly tell it to using the <c>execute</c>
-        <idx><h>database</h><h>collect</h></idx>
-        function.
-        <xref ref="fig-reading-ref-vs-tibble"/> highlights the difference between a <c>data frame</c>
-        object in Python and the output we just created. Notice in the table on the right, the first two lines
-        of the output indicate the source is SQL. The last line doesn&#x2019;t show how many rows there are
-        (Python is trying to avoid performing expensive query operations), whereas the output for the
-        <c>data frame</c> object does.
-      </p>
-
-      <figure xml:id="fig-reading-ref-vs-tibble">
-        <caption>Comparison of a reference to data in a database and a data frame in Python.</caption>
-        <image source="images/reading/ref_vs_tibble.001.jpeg" width="80%"/>
-      </figure>
-
-      <p>
-        We can look at the SQL commands that are sent to the database when we write
-        <c>tbl(canlang_conn, "lang")</c> in Python with the <c>show_query</c> function from the <c>ibis</c>
-        package.
-        <idx><h>database</h><h>show_query</h></idx>
+        Although it looks like we might have obtained the whole data frame from the database, we didn&#x2019;t!
+        It&#x2019;s a <em>reference</em>; the data is still stored only in the SQLite database. The <c>canlang_table</c> object is a <c>DatabaseTable</c>, which, when printed, tells you which columns are available in the table. But unlike a usual <c>pandas</c> data frame, we do not immediately know how many rows are in the table. In order to find out how many rows there are, we have to send an SQL <em>query</em> (i.e., command) to the data base. In <c>ibis</c>, we can do that using the <c>count</c> function from the table object.
       </p>
       <program language="python">
         <input>
 canlang_table.count()
         </input>
       </program>
-      <pre>
-&lt;SQL&gt;
-SELECT *
-FROM `lang`</pre>
       <p>
-        The output above shows the SQL code that is sent to the database. When we write
-        <c>tbl(canlang_conn, "lang")</c> in Python, in the background, the function is translating the Python code
-        into SQL, sending that SQL to the database, and then translating the response for us. So
-        <c>ibis</c> does all the hard work of translating from Python to SQL and back for us; we can just
-        stick with Python!
-      </p>
-      <p>
-        With our <c>lang_db</c> table reference for the 2016 Canadian Census data in hand, we can mostly
-        continue onward as if it were a regular data frame. For example, let&#x2019;s do the same exercise
-        from <xref ref="ch-intro"/>: we will obtain only those rows corresponding to Aboriginal languages,
-        and keep only the <c>language</c> and <c>mother_tongue</c> columns. We can use the <c>filter</c>
-        function to obtain only certain rows. Below we filter the data to include only Aboriginal languages.
+        Wait a second...this isn't the number of rows in the database. In fact, we haven't actually sent our
+        SQL query to the database yet! We need to explicitly tell <c>ibis</c> when we want to send the query.
+        The reason for this is that databases are often more efficient at working with (i.e., selecting, filtering,
+        joining, etc.) large data sets than Python. And typically, the database will not even
+        be stored on your computer, but rather a more powerful machine somewhere on the
+        web. So <c>ibis</c> is lazy and waits to bring this data into memory until you explicitly
+        tell it to using the <c>execute</c> function. The <c>execute</c> function actually sends the SQL query
+        to the database, and gives you the result. Let's look at the number of rows in the table by executing
+        the <c>count</c> command.
       </p>
       <program language="python">
         <input>
 canlang_table.count().execute()
         </input>
       </program>
-      <pre>
-      </pre>
       <p>
-        Above you can again see the hints that this data is not actually stored in Python yet: the source is
-        <c>SQL [?? x 6]</c> and the output says <c>... more rows</c> at the end (both indicating that Python
-        does not know how many rows there are in total!), and a database type <c>sqlite</c> is listed.
-        We didn&#x2019;t use the <c>execute</c> function because we are not ready to bring the data into Python yet.
-        <idx><h>collect</h></idx>
-        We can still use the database to do some work to obtain <em>only</em> the small amount of data we
-        want to work with locally in Python. Let&#x2019;s add the second part of our database query: selecting only
-        the <c>language</c> and <c>mother_tongue</c> columns using the <c>select</c> function.
+        There we go! There are 214 rows in the <c>can_lang</c> table. If you are interested in seeing
+        the <em>actual</em> text of the SQL query that <c>ibis</c> sends to the database, you can use the <c>compile</c> function
+        instead of <c>execute</c>. But note that you have to pass the result of <c>compile</c> to the <c>str</c> function to turn it into
+        a human-readable string first.
       </p>
       <program language="python">
         <input>
 str(canlang_table.count().compile())
         </input>
       </program>
-      <pre>
-      </pre>
       <p>
-        Now you can see that the database will return only the two columns we asked for with the
-        <c>select</c> function. In order to actually retrieve this data in Python as a data frame, we use the
-        <c>execute</c> function.
-        <idx><h>filter</h></idx>
-        Below you will see that after running <c>execute</c>, Python knows that the retrieved data has 67
-        rows, and there is no database listed any more.
+        The output above shows the SQL code that is sent to the database. When we write
+        <c>canlang_table.count().execute()</c> in Python, in the background, the <c>execute</c> function is translating the Python code
+        into SQL, sending that SQL to the database, and then translating the response for us. So
+        <c>ibis</c> does all the hard work of translating from Python to SQL and back for us; we can just
+        stick with Python!
+      </p>
+      <p>
+        The <c>ibis</c> package provides lots of <c>pandas</c>-like tools for working with database tables.
+        For example, we can look at the first few rows of the table by using the <c>head</c> function,
+        followed by <c>execute</c> to retrieve the response.
       </p>
       <program language="python">
         <input>
 canlang_table.head(10).execute()
         </input>
       </program>
-      <pre>
-      </pre>
       <p>
-        Aside from knowing the number of rows, the data looks pretty similar in both outputs shown above.
-        And <c>ibis</c> provides many more functions (not just <c>filter</c>) that you can use to
-        directly feed the database reference (<c>lang_db</c>) into downstream analysis functions
-        (e.g., <c>ggplot2</c> for data visualization). But <c>ibis</c> does not provide <em>every</em>
-        function that we need for analysis; we do eventually need to call <c>execute</c>.
-        For example, look what happens when we try to use <c>nrow</c> to count rows in a data frame:
-        <idx><h>nrow</h></idx>
+        You can see that <c>ibis</c> actually returned a <c>pandas</c> data frame to us after we executed the query,
+        which is very convenient for working with the data after getting it from the database.
+        So now that we have the <c>canlang_table</c> table reference for the 2016 Canadian Census data in hand, we can mostly
+        continue onward as if it were a regular data frame. For example, let&#x2019;s do the same exercise
+        from <xref ref="ch-intro"/>: we will obtain only those rows corresponding to Aboriginal languages,
+        and keep only the <c>language</c> and <c>mother_tongue</c> columns. We can use the <c>[]</c> operation with a logical statement
+        to obtain only certain rows. Below we filter the data to include only Aboriginal languages.
       </p>
       <program language="python">
         <input>
-canlang_table_filtered = canlang_table[canlang_table[&quot;category&quot;] == &quot;Aboriginal languages&quot;]
+canlang_table_filtered = canlang_table[canlang_table["category"] == "Aboriginal languages"]
 canlang_table_filtered
         </input>
       </program>
-      <pre>
-[1] NA</pre>
-      <p>or <c>tail</c>
-        <idx><h>tail</h></idx>
-        to preview the last six rows of a data frame:
+      <p>
+        Above you can see that we have not yet executed this command; <c>canlang_table_filtered</c> is just showing
+        the first part of our query (the part that starts with <c>Selection[r0]</c> above).
+        We didn't call <c>execute</c> because we are not ready to bring the data into Python yet.
+        <idx><h>collect</h></idx>
+        We can still use the database to do some work to obtain <em>only</em> the small amount of data we
+        want to work with locally in Python. Let&#x2019;s add the second part of our SQL query: selecting only
+        the <c>language</c> and <c>mother_tongue</c> columns.
       </p>
       <program language="python">
         <input>
-canlang_table_selected = canlang_table_filtered[[&quot;language&quot;, &quot;mother_tongue&quot;]]
+canlang_table_selected = canlang_table_filtered[["language", "mother_tongue"]]
 canlang_table_selected
         </input>
       </program>
-      <pre>
-Error: tail() is not supported by sql sources</pre>
       <p>
-        Additionally, some operations will not work to extract columns or single values from the reference
-        given by the <c>tbl</c> function. Thus, once you have finished your data wrangling of the
-        <c>tbl</c> database reference object, it is advisable to bring it into Python as a data frame using
-        <c>execute</c>. But be very careful using <c>execute</c>: databases are often <em>very</em> big,
+        Now you can see that the <c>ibis</c> query will have two steps: it will first find rows corresponding to
+        Aboriginal languages, then it will extract only the <c>language</c> and <c>mother_tongue</c> columns that we are interested in.
+        Let's actually execute the query now to bring the data into Python as a <c>pandas</c> data frame, and print the result.
+      </p>
+      <program language="python">
+        <input>
+aboriginal_lang_data = canlang_table_selected.execute()
+aboriginal_lang_data
+        </input>
+      </program>
+      <p>
+        <c>ibis</c> provides many more functions (not just the <c>[]</c> operation) that you can use to
+        manipulate the data within the database before calling <c>execute</c> to obtain the data in Python. But <c>ibis</c> does not provide <em>every</em>
+        function that we need for analysis; we do eventually need to call <c>execute</c>.
+        For example, <c>ibis</c> does not provide the <c>tail</c> function to look at the last
+        rows in a database, even though <c>pandas</c> does.
+        <idx><h>tail</h></idx>
+      </p>
+      <program language="python">
+        <input>
+canlang_table_selected.tail(6)
+        </input>
+      </program>
+      <pre>
+AttributeError: 'Selection' object has no attribute 'tail'
+      </pre>
+      <program language="python">
+        <input>
+aboriginal_lang_data.tail(6)
+        </input>
+      </program>
+      <p>
+        So once you have finished your data wrangling of the database reference object, it is advisable to
+        bring it into Python as a <c>pandas</c> data frame using the <c>execute</c> function.
+        But be very careful using <c>execute</c>: databases are often <em>very</em> big,
         and reading an entire table into Python might take a long time to run or even possibly crash your
-        machine. So make sure you use <c>filter</c> and <c>select</c> on the database table to reduce the
+        machine. So make sure you select and filter the database table to reduce the
         data to a reasonable size before using <c>execute</c> to read it into Python!
       </p>
     </subsection>
@@ -823,122 +807,72 @@ Error: tail() is not supported by sql sources</pre>
         function is listed below:
       </p>
       <ul>
-        <li><p><c>dbname</c>: the name of the database (a single PostgreSQL instance can host more than
+        <li><p><c>database</c>: the name of the database (a single PostgreSQL instance can host more than
           one database)</p></li>
-        <li><p><c>host</c>: the URL pointing to where the database is located</p></li>
+        <li><p><c>host</c>: the URL pointing to where the database is located (<c>localhost</c> if it is on your local machine)</p></li>
         <li><p><c>port</c>: the communication endpoint between Python and the PostgreSQL database (usually
           <c>5432</c>)</p></li>
         <li><p><c>user</c>: the username for accessing the database</p></li>
         <li><p><c>password</c>: the password for accessing the database</p></li>
       </ul>
       <p>
-        Additionally, we must use the <c>RPostgres</c> package instead of <c>RSQLite</c> in the
-        <c>connect</c> function call. Below we demonstrate how to connect to a version of the
+        Below we demonstrate how to connect to a version of the
         <c>can_mov_db</c> database, which contains information about Canadian movies. Note that the
-        <c>host</c>, <c>user</c>, and <c>password</c> below are <em>not real</em>; you will not actually
+        <c>host</c> (<c>fakeserver.stat.ubc.ca</c>), <c>user</c> (<c>user0001</c>), and <c>password</c> (<c>abc123</c>) below are <em>not real</em>; you will not actually
         be able to connect to a database using this information.
       </p>
       <program language="python">
         <input>
-aboriginal_lang_data = canlang_table_selected.execute()
-aboriginal_lang_data
-        </input>
-      </program>
-      <p>
-        After opening the connection, everything looks and behaves almost identically to when we were
-        using an SQLite database in Python. For example, we can again use <c>list_tables</c> to find out what
-        tables are in the <c>can_mov_db</c> database:
-      </p>
-      <program language="python">
-        <input>
-canlang_table_selected.tail(6)
-        </input>
-      </program>
-      <pre>
- [1] "themes"            "medium"            "titles"            "title_aliases"
- [5] "forms"             "episodes"          "names"             "names_occupations"
- [9] "occupation"        "ratings"</pre>
-      <p>
-        We see that there are 10 tables in this database. Let&#x2019;s first look at the <c>"ratings"</c> table
-        to find the lowest rating that exists in the <c>can_mov_db</c> database:
-      </p>
-      <program language="python">
-        <input>
-aboriginal_lang_data.tail(6)
-        </input>
-      </program>
-      <pre>
-# Source:   table&lt;ratings&gt; [?? x 3]
-# Database: postgres [user0001@fakeserver.stat.ubc.ca:5432/can_mov_db]
-   title              average_rating num_votes
-   &lt;chr&gt;                    &lt;dbl&gt;     &lt;int&gt;
- 1 The Grand Seduction       6.6       150
- 2 Rhymes for Young Ghouls   6.3      1685
- 3 Mommy                     7.5      1060
- 4 Incendies                 6.1      1101
- 5 Bon Cop, Bad Cop          7.0       894
- 6 Goon                      5.5      1111
- 7 Monsieur Lazhar           5.6       610
- 8 What if                   5.3      1401
- 9 The Barbarian Invations   5.8        99
-10 Away from Her             6.9      2311
-# … with more rows
-</pre>
-      <p>
-        To find the lowest rating that exists in the data base, we first need to extract the
-        <c>average_rating</c> column using <c>select</c>:
-        <idx><h>select</h></idx>
-      </p>
-      <program language="python">
-        <input>
 conn = ibis.postgres.connect(
-    database=&quot;can_mov_db&quot;,
-    host=&quot;fakeserver.stat.ubc.ca&quot;,
+    database="can_mov_db",
+    host="fakeserver.stat.ubc.ca",
     port=5432,
-    user=&quot;user0001&quot;,
-    password=&quot;abc123&quot;
+    user="user0001",
+    password="abc123"
 )
         </input>
       </program>
-      <pre>
-# Source:   SQL [?? x 1]
-# Database: postgres [user0001@fakeserver.stat.ubc.ca:5432/can_mov_db]
-   average_rating
-            &lt;dbl&gt;
- 1            6.6
- 2            6.3
- 3            7.5
- 4            6.1
- 5            7.0
- 6            5.5
- 7            5.6
- 8            5.3
- 9            5.8
-10            6.9
-# … with more rows
-      </pre>
       <p>
-        Next we use <c>min</c> to find the minimum rating in that column:
-        <idx><h>min</h></idx>
+        Aside from needing to provide that additional information, <c>ibis</c> makes it so that connecting to and working with a Postgres database is identical to
+        connecting to and working with an SQLite database. For example, we can again use <c>list_tables</c> to find out what
+        tables are in the <c>can_mov_db</c> database:
       </p>
       <program language="python">
         <input>
 conn.list_tables()
         </input>
       </program>
-      <pre>
-Error in min(avg_rating_db) : invalid 'type' (list) of argument</pre>
       <p>
-        Instead of the minimum, we get an error! This is another example of when we need to use the
-        <c>execute</c> function to bring the data into Python for further computation:
+        We see that there are 10 tables in this database. Let&#x2019;s first look at the <c>"ratings"</c> table
+        to find the lowest rating that exists in the <c>can_mov_db</c> database:
       </p>
       <program language="python">
         <input>
-print('[&quot;themes&quot;, &quot;medium&quot;, &quot;titles&quot;, &quot;title_aliases&quot;, &quot;forms&quot;, &quot;episodes&quot;, &quot;names&quot;, &quot;names_occupations&quot;, &quot;occupation&quot;, &quot;ratings&quot;]')
+ratings_table = conn.table("ratings")
+ratings_table
         </input>
       </program>
-      <pre>
-[1] 1</pre>
+      <p>
+        To find the lowest rating that exists in the data base, we first need to select the
+        <c>average_rating</c> column:
+        <idx><h>select</h></idx>
+      </p>
+      <program language="python">
+        <input>
+avg_rating = ratings_table[["average_rating"]]
+avg_rating
+        </input>
+      </program>
+      <p>
+        Next we use the <c>order_by</c> function from <c>ibis</c> order the table by <c>average_rating</c>,
+        and then the <c>head</c> function to select the first row (i.e., the lowest score).
+      </p>
+      <program language="python">
+        <input>
+lowest = avg_rating.order_by("average_rating").head(1)
+lowest.execute()
+        </input>
+      </program>
       <p>We see the lowest rating given to a movie is 1, indicating that it must have been a really bad movie...</p>
     </subsection>
 
@@ -947,12 +881,11 @@ print('[&quot;themes&quot;, &quot;medium&quot;, &quot;titles&quot;, &quot;title_
       <p>
         Opening a database
         <idx><h>database</h><h>reasons to use</h></idx>
-        involved a lot more effort than just opening a <c>.csv</c>, <c>.tsv</c>, or any of the other
+        involved a lot more effort than just opening a <c>.csv</c>, or any of the other
         plain text or Excel formats. We had to open a connection to the database, then use <c>ibis</c>
-        to translate <c>pandas</c>-like commands (<c>filter</c>, <c>select</c> etc.) into SQL commands
-        that the database understands, and then finally <c>execute</c> the results. And not all
-        <c>pandas</c> commands can currently be translated to work with databases. For example, we
-        can compute a mean with a database but can&#x2019;t easily compute a median. So you might be wondering:
+        to translate <c>pandas</c>-like commands (the <c>[]</c> operation, <c>head</c>, etc.) into SQL queries
+        that the database understands, and then finally <c>execute</c> them. And not all
+        <c>pandas</c> commands can currently be translated via <c>ibis</c> into database queries. So you might be wondering:
         why should we use databases at all?
       </p>
       <p>Databases are beneficial in a large-scale setting:</p>
@@ -972,19 +905,20 @@ print('[&quot;themes&quot;, &quot;medium&quot;, &quot;titles&quot;, &quot;title_
     <title>Writing data from Python to a <c>.csv</c> file</title>
     <p>
       At the middle and end of a data analysis, we often want to write a data frame that has changed
-      (either through filtering, selecting, mutating or summarizing) to a file to share it with others
+      (through selecting columns, filtering rows, etc.) to a file to share it with others
       or use it for another step in the analysis. The most straightforward way to do this is to use the
-      <c>to_csv</c> method
+      <c>to_csv</c> function
       <idx><h>write function</h><h>to_csv</h></idx>
-      from <c>pandas</c>. The default arguments for this file are to use a comma
-      (<c>,</c>) as the separator and include column names. Below we demonstrate creating a new version
-      of the Canadian languages data set without the official languages category according to the
+      from the <c>pandas</c> package. The default arguments are to use a comma
+      (<c>,</c>) as the separator, and to include column names in the first row. We also specify <c>index = False</c> to tell <c>pandas</c> not to print
+      row numbers in the <c>.csv</c> file. Below we demonstrate creating a new version
+      of the Canadian languages data set without the "Official languages" category according to the
       Canadian 2016 Census, and then writing this to a <c>.csv</c> file:
     </p>
     <program language="python">
       <input>
-ratings_table = conn.table(&quot;ratings&quot;)
-ratings_table
+no_official_lang_data = canlang_data[canlang_data["category"] != "Official languages"]
+no_official_lang_data.to_csv("data/no_official_languages.csv", index=False)
       </input>
     </program>
   </section>
@@ -1001,7 +935,8 @@ ratings_table
     <p>
       Data doesn&#x2019;t just magically appear on your computer; you need to get it from somewhere. Earlier
       in the chapter we showed you how to access data stored in a plain text, spreadsheet-like format
-      (e.g., comma- or tab-separated) from a web URL using <c>read_csv</c>. But as time goes on, it is increasingly uncommon to find data (especially large
+      (e.g., comma- or tab-separated) from a web URL using the <c>read_csv</c> function from <c>pandas</c>.
+      But as time goes on, it is increasingly uncommon to find data (especially large
       amounts of data) in this format available for download from a URL. Instead, websites now often offer
       something known as an <em>application programming interface (API)</em>,
       <idx><h>application programming interface</h><see>API</see></idx>
@@ -1013,11 +948,11 @@ ratings_table
       have to provide when accessing the API.
     </p>
     <p>
-     Another interesting thought: websites themselves are data! When you type a URL into your browser window, your browser asks the web server (another computer on the internet whose job it is to respond to requests for the website) to give it the website’s data, and then your browser translates that data into something you can see. If the website shows you some information that you’re interested in, you could create a data set for yourself by copying and pasting that information into a file. This process of taking information directly from what a website displays is called web scraping (or sometimes screen scraping). Now, of course, copying and pasting information manually is a painstaking and error-prone process, especially when there is a lot of information to gather. So instead of asking your browser to translate the information that the web server provides into something you can see, you can collect that data programmatically—in the form of hypertext markup language (HTML) and cascading style sheet (CSS) code—and process it to extract useful information. HTML provides the basic structure of a site and tells the webpage how to display the content (e.g., titles, paragraphs, bullet lists etc.), whereas CSS helps style the content and tells the webpage how the HTML elements should be presented (e.g., colors, layouts, fonts etc.).
+     Another interesting thought: websites themselves <em>are</em> data! When you type a URL into your browser window, your browser asks the <em>web server</em> (another computer on the internet whose job it is to respond to requests for the website) to give it the website’s data, and then your browser translates that data into something you can see. If the website shows you some information that you’re interested in, you could <em>create</em> a data set for yourself by copying and pasting that information into a file. This process of taking information directly from what a website displays is called <em>web scraping</em> (or sometimes <em>screen scraping</em>). Now, of course, copying and pasting information manually is a painstaking and error-prone process, especially when there is a lot of information to gather. So instead of asking your browser to translate the information that the web server provides into something you can see, you can collect that data programmatically—in the form of <strong>h</strong>yper<strong>t</strong>ext <strong>m</strong>arkup <strong>l</strong>anguage (HTML) and <strong>c</strong>ascading <strong>s</strong>tyle <strong>s</strong>heet (CSS) code—and process it to extract useful information. HTML provides the basic structure of a site and tells the webpage how to display the content (e.g., titles, paragraphs, bullet lists etc.), whereas CSS helps style the content and tells the webpage how the HTML elements should be presented (e.g., colors, layouts, fonts etc.).
     </p>
     <p>
-      This subsection will show you the basics of both web scraping with <c>BeautifulSoup</c>
-      and accessing the NASA &#x201C;Astronomy Picture of the Day&#x201D; API using <c>requests</c>.
+      This subsection will show you the basics of both web scraping with the <url href="https://beautiful-soup-4.readthedocs.io/en/latest/"><c>BeautifulSoup</c> Python package</url> <xref ref="beautifulsoup"/>
+      and accessing the NASA &#x201C;Astronomy Picture of the Day&#x201D; API using the <url href="https://requests.readthedocs.io/en/latest/"><c>requests</c> Python package</url> <xref ref="requests"/>.
     </p>
 
     <subsection xml:id="sec-reading-scraping">
@@ -1049,8 +984,7 @@ ratings_table
           Based on what our browser shows us, it&#x2019;s pretty easy to find the size and price for each
           apartment listed. But we would like to be able to obtain that information using Python, without any
           manual human effort or copying and pasting. We do this by examining the <em>source code</em> that
-          the web server actually sent our browser to display for us. A snippet of HTML source code is shown
-          below (the <url href="https://github.com/UBC-DSCI/introduction-to-datascience/blob/main/img/reading/website_source.txt" visual="github.com/UBC-DSCI/introduction-to-datascience/blob/main/img/reading/website_source.txt">entire source is included with the code for this book</url>):
+          the web server actually sent our browser to display for us. We show a snippet of it below; the <url href="https://github.com/UBC-DSCI/introduction-to-datascience-python/blob/main/source/data/website_source.txt" visual="github.com/UBC-DSCI/introduction-to-datascience-python/blob/main/source/data/website_source.txt">entire source is included with the code for this book</url>:
         </p>
         <pre>
 &lt;span class="result-meta"&gt;
@@ -1066,13 +1000,13 @@ ratings_table
             &lt;span class="screen-reader-text"&gt;hide this posting&lt;/span&gt;
         &lt;/span&gt;
     &lt;span class="unbanish icon icon-trash red" role="button"&gt;&lt;/span&gt;
-    &lt;ahref="#" class="restore-link"&gt;
+    &lt;a href="#" class="restore-link"&gt;
         &lt;span class="restore-narrow-text"&gt;restore&lt;/span&gt;
         &lt;span class="restore-wide-text"&gt;restore this posting&lt;/span&gt;
     &lt;/a&gt;
     &lt;span class="result-price"&gt;$2285&lt;/span&gt;
 &lt;/span&gt;
-</pre>
+        </pre>
         <p>
           Oof...you can tell that the source code for a web page is not really designed for humans to
           understand easily. However, if you look through it closely, you will find that the information
@@ -1097,7 +1031,7 @@ ratings_table
           closing tags like these. Tags are keywords that tell the web browser how to display or format the
           content. Above you can see that the information we want (<c>$800</c>) is stored between an opening
           and closing tag (<c>&lt;span&gt;</c> and <c>&lt;/span&gt;</c>). In the opening tag, you can also see
-          a very useful &#x201C;class&#x201D;: <c>class="result-price"</c>. Since we want Python to
+          a very useful &#x201C;class&#x201D; (a special word that is sometimes included with opening tags): <c>class="result-price"</c>. Since we want Python to
           programmatically sort through all of the source code for the website to find apartment prices,
           maybe we can look for all the tags with the <c>"result-price"</c> class, and grab the
           information between the opening and closing tag. Indeed, take a look at another line of the source snippet above:
@@ -1112,7 +1046,7 @@ ratings_table
           dollar amount between opening and closing tags that have the <c>"result-price"</c>
           class&#x2014;we should be able to use code to pull out all of the matching patterns from the
           source code to obtain our data. This sort of &#x201C;pattern&#x201D; is known as a <em>CSS
-          selector</em> (where CSS stands for cascading style sheet).
+          selector</em> (where CSS stands for <strong>c</strong>ascading <strong>s</strong>tyle <strong>s</strong>heet).
         </p>
         <p>
           The above was a simple example of &#x201C;finding the pattern to look for&#x201D;; many websites are
@@ -1206,99 +1140,67 @@ td:nth-child(4) ,
         </p>
       </subsubsection>
 
-      <subsubsection xml:id="sec-reading-rvest">
-        <title>Using <c>BeautifulSoup</c></title>
+      <subsubsection xml:id="sec-reading-beautifulsoup">
+        <title>Scraping with <c>BeautifulSoup</c></title>
         <p>
-          We will use the <c>BeautifulSoup</c> Python package
-          <idx><h>rvest</h></idx>
-          to scrape data from the Wikipedia page. We start by loading the <c>BeautifulSoup</c> package:
+          We will use the <c>requests</c> and <c>BeautifulSoup</c> Python packages
+          to scrape data from the Wikipedia page. After loading those packages, we tell Python 
+          which page we want to scrape by providing its URL in quotations to the <c>requests.get</c> function. This function obtains the raw HTML of the page, which we then pass to the <c>BeautifulSoup</c> function for parsing:
         </p>
         <program language="python">
           <input>
-print(&quot;&quot;&quot;
-AlchemyTable: ratings
-  title           string
-  average_rating  float64
-  num_votes       int64
-&quot;&quot;&quot;)
-          </input>
-        </program>
-        <p>
-          Next, we tell Python what page we want to scrape by providing the webpage&#x2019;s URL in quotations to
-          the function <c>read_html</c>:
-        </p>
-        <program language="python">
-          <input>
-avg_rating = ratings_table[[&quot;average_rating&quot;]]
-avg_rating
-          </input>
-        </program>
-        <p>
-          The <c>read_html</c> function
-          <idx><h>read function</h><h>read_html</h></idx>
-          directly downloads the source code for the page at the URL you specify, just like your browser
-          would if you navigated to that site. But instead of displaying the website to you, the
-          <c>read_html</c> function just returns the HTML source code itself, which we have stored in the
-          <c>page</c> variable. Next, we send the page object to the <c>html_nodes</c> function, along with
-          the CSS selectors we obtained from the SelectorGadget tool. Make sure to surround the selectors
-          with quotation marks; the function <c>html_nodes</c> expects that argument is a string. We store
-          the result of the <c>html_nodes</c> function in the <c>population_nodes</c> variable. Note that
-          below we use the <c>paste</c> function with a comma separator (<c>sep=","</c>) to build the list
-          of selectors. The <c>paste</c> function converts elements to characters and combines the values
-          into a list. We use this function to build the list of selectors to maintain code readability;
-          this avoids having a very long line of code.
-        </p>
-        <program language="python">
-          <input>
-print(&quot;&quot;&quot;
-r0 := AlchemyTable: ratings
-  title           string
-  average_rating  float64
-  num_votes       int64
+import requests
+import bs4
 
-Selection[r0]
-  selections:
-    average_rating: r0.average_rating
-&quot;&quot;&quot;)
+wiki = requests.get("https://en.wikipedia.org/wiki/Canada")
+page = bs4.BeautifulSoup(wiki.content, "html.parser")
+          </input>
+        </program>
+        <p>
+          The <c>requests.get</c> function downloads the HTML source code for the page at the URL you specify, just like your browser would if you navigated to this site.
+          But instead of displaying the website to you, the <c>requests.get</c> function just returns the HTML source code itself&#x2014;stored in the <c>wiki.content</c> variable&#x2014;which we then parse using <c>BeautifulSoup</c> and store in the <c>page</c> variable. 
+          Next, we pass the CSS selectors we obtained from SelectorGadget to the <c>select</c> method of the <c>page</c> object. Make sure to surround the selectors with quotation marks; <c>select</c> expects that argument is a string. We store the result of the <c>select</c> function in the <c>population_nodes</c> variable. Note that <c>select</c> returns a list; below we slice the list to print only the first 5 elements for clarity.
+        </p>
+        <program language="python">
+          <input>
+population_nodes = page.select(
+    "td:nth-child(8) , td:nth-child(4) , .largestCities-cell-background+ td a"
+)
+population_nodes[:5]
           </input>
         </program>
         <pre>
+[&lt;a href="/wiki/Toronto" title="Toronto"&gt;Toronto&lt;/a&gt;,
+ &lt;td&gt;6,202,225&lt;/td&gt;,
+ &lt;a href="/wiki/Montreal" title="Montreal"&gt;Montreal&lt;/a&gt;,
+ &lt;td&gt;4,291,732&lt;/td&gt;,
+ &lt;a href="/wiki/Vancouver" title="Vancouver"&gt;Vancouver&lt;/a&gt;]
         </pre>
-        <note>
-          <p>
-            <c>head</c> is a function that is often useful for viewing only a short summary of a Python
-            object, rather than the whole thing (which may be quite a lot to look at). For example, here
-            <c>head</c> shows us only the first 6 items in the <c>population_nodes</c> object. Note that
-            some Python objects by default print only a small summary. For example, <c>data frame</c> data frames
-            only show you the first 10 rows. But not <em>all</em> Python objects do this, and that&#x2019;s where
-            the <c>head</c> function helps summarize things for you.
-          </p>
-        </note>
         <p>
           Each of the items in the <c>population_nodes</c> list is a <em>node</em> from the HTML document
           that matches the CSS selectors you specified. A <em>node</em> is an HTML tag pair (e.g.,
           <c>&lt;td&gt;</c> and <c>&lt;/td&gt;</c>, which defines the cell of a table) combined with the
           content stored between the tags. For our CSS selector <c>td:nth-child(4)</c>, an example node that
           that would be selected would be:
-</p>
+        </p>
 <pre>
-&lt;td style="text-align:left;background:#f0f0f0;"&gt;
+&lt;td style="text-align:left;"&gt;
 &lt;a href="/wiki/London,_Ontario" title="London, Ontario"&gt;London&lt;/a&gt;
 &lt;/td&gt;
 </pre>
 
-<p>Next we extract the meaningful
+        <p>Next we extract the meaningful
           data&#x2014;in other words, we get rid of the HTML code syntax and tags&#x2014;from the nodes using the
-          <c>html_text</c> function. In the case of the example node above, <c>html_text</c> returns
-          <c>"London"</c>.
+          <c>get_text</c> function. In the case of the example node above, <c>get_text</c> returns
+          <c>"London"</c>. Once again we show only the first 5 elements for clarity.
         </p>
         <program language="python">
           <input>
-lowest = avg_rating.order_by(&quot;average_rating&quot;).head(1)
-lowest.execute()
+[row.get_text() for row in population_nodes[:5]]
           </input>
         </program>
         <pre>
+['Toronto', '6,202,225', 'Montreal', '4,291,732', 'Vancouver']
         </pre>
         <p>
           Fantastic! We seem to have extracted the data of interest from the raw HTML source code. But we
@@ -1311,6 +1213,37 @@ lowest.execute()
           into a more useful format for data analysis using Python.
         </p>
       </subsubsection>
+
+      <subsubsection xml:id="sec-reading-read-html">
+        <title>Scraping with <c>read_html</c></title>
+        <p>
+          Using <c>requests</c> and <c>BeautifulSoup</c> to extract data based on CSS selectors is a very general way to scrape data from the web, albeit perhaps a little bit complicated.
+          Fortunately, <c>pandas</c> provides the <url href="https://pandas.pydata.org/docs/reference/api/pandas.read_html.html"><c>read_html</c></url> function, which is easier method to try when the data appear on the webpage already in a tabular format. The <c>read_html</c> function takes one argument&#x2014;the URL of the page to scrape&#x2014;and will return a list of data frames corresponding to all the tables it finds at that URL. We can see below that <c>read_html</c> found 17 tables on the Wikipedia page for Canada.
+        </p>
+        <program language="python">
+          <input>
+canada_wiki_tables = pd.read_html("https://en.wikipedia.org/wiki/Canada")
+len(canada_wiki_tables)
+          </input>
+        </program>
+        <pre>
+17
+        </pre>
+        <p>
+          After manually searching through these, we find that the table containing the population counts of the largest metropolitan areas in Canada is contained in index 1. We use the <c>droplevel</c> method to simplify the column names in the resulting data frame:
+        </p>
+        <program language="python">
+          <input>
+canada_wiki_df = canada_wiki_tables[1]
+canada_wiki_df.columns = canada_wiki_df.columns.droplevel()
+canada_wiki_df
+          </input>
+        </program>
+        <p>
+          Once again, we have managed to extract the data of interest from the raw HTML source code&#x2014;but this time using the convenient <c>read_html</c> function, without needing to explicitly use CSS selectors! However, once again, we still need to do some cleaning of this result. Referring back to <xref ref="fig-reading-sg4"/>, we can see that the table is formatted with two sets of columns (e.g., <c>Name</c> and <c>Name.1</c>) that we will need to somehow merge. In <xref ref="ch-wrangling"/>, we will learn more about how to <em>wrangle</em> data into a useful format for data analysis.
+        </p>
+      </subsubsection>
+
     </subsection>
 
     <subsection xml:id="sec-reading-api">
@@ -1319,19 +1252,16 @@ lowest.execute()
         Rather than posting a data file at a URL for you to download, many websites these days provide an
         API
         <idx><h>API</h></idx>
-        that must be accessed through a programming language like Python. The benefit of using an API is that
+        that can be accessed through a programming language like Python. The benefit of using an API is that
         data owners have much more control over the data they provide to users. However, unlike web
         scraping, there is no consistent way to access an API across websites. Every website typically has
         its own API designed especially for its own use case. Therefore we will just provide one example of
         accessing data through an API in this book, with the hope that it gives you enough of a basic idea
         that you can learn how to use another API if needed. In particular, in this book we will show you
         the basics of how to use the <c>requests</c> package in Python
-        <idx><h>API</h><h>httr2</h></idx>
-        <idx><h>httr2</h></idx>
-        <idx><h>NASA</h></idx>
-        to access data from the NASA &#x201C;Astronomy Picture of the Day&#x201D; API. Take a look at the
-        stunning picture of the Rho-Ophiuchi cloud complex <xref ref="rhoophiuchi"/> in
-        <xref ref="fig-reading-nasa-rho-ophiuchi"/> from July 13, 2023!
+        to access data from the NASA &#x201C;Astronomy Picture of the Day&#x201D;
+        API (a great source of desktop backgrounds, by the way&#x2014;take a look at the stunning
+        picture of the Rho-Ophiuchi cloud complex in <xref ref="fig-reading-nasa-rho-ophiuchi"/> from July 13, 2023!).
       </p>
 
       <figure xml:id="fig-reading-nasa-rho-ophiuchi">
@@ -1352,6 +1282,10 @@ lowest.execute()
         <caption>Generating the API access token for the NASA API.</caption>
         <image source="images/reading/NASA-API-signup.png" width="100%"/>
       </figure>
+
+      <p>
+<alert>Caution: think about your API usage carefully!</alert>
+      </p>
 
       <p>
         When you access an API, you are initiating a transfer of data from a web server to your computer.
@@ -1386,7 +1320,7 @@ lowest.execute()
           particular URL as if it were a regular website. To make a query to the NASA API, we need to
           specify three things. First, we specify the URL <em>endpoint</em> of
           <idx><h>API</h><h>endpoint</h></idx>
-          the API, , which is simply a URL that helps the remote server understand which API you are
+          the API, which is simply a URL that helps the remote server understand which API you are
           trying to access. NASA offers a variety of APIs, each with its own endpoint; in the case of
           the NASA “Astronomy Picture of the Day” API, the URL endpoint is:
           <c>https://api.nasa.gov/planetary/apod</c>. Second, we write <c>?</c>, which denotes
@@ -1430,78 +1364,87 @@ disks.","hdurl":"https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph.png",
 "media_type":"image","service_version":"v1","title":"Webb's
 Rho Ophiuchi","url":"https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph1024.png"}
 </pre>
-<p>
+        <p>
           Neat! There is definitely some data there, but it&#x2019;s a bit hard to see what it all is. As it
           turns out, this is a common format for data called <em>JSON</em> (JavaScript Object Notation).
           <idx><h>JSON</h></idx>
           <idx><h>JavaScript Object Notation</h><see>JSON</see></idx>
           We won&#x2019;t encounter this kind of data much in this book, but for now you can interpret this data
-          as <c>key : value</c> pairs separated by commas. For example, if you look closely, you'll see that the
+          just like you'd interpret a Python dictionary: these are <c>key : value</c> pairs separated by commas. For example, if you look closely, you'll see that the
           first entry is <c>"date":"2023-07-13"</c>, which indicates that we indeed successfully received data
           corresponding to July 13, 2023.
         </p>
         <p>
           So now our job is to do all of this programmatically in Python. We will load the <c>requests</c> package,
-          and construct the query using the <c>request</c> function, which takes a single URL argument;
-          you will recognize the same query URL that we pasted into the browser earlier. We will then send
-          the query using the <c>req_perform</c> function, and finally obtain a JSON representation of the
-          response using the <c>resp_body_json</c> function.
-          <idx><h>httr2</h><h>req_perform</h></idx>
-          <idx><h>httr2</h><h>resp_body_json</h></idx>
+          and make the query using the <c>get</c> function, which takes a single URL argument;
+          you will recognize the same query URL that we pasted into the browser earlier. We will then obtain a JSON representation of the
+          response using the <c>json</c> method.
         </p>
         <program language="python">
           <input>
-lowest = pd.DataFrame({&quot;average_rating&quot; : [1.0]})
-lowest
+import requests
+
+nasa_data_single = requests.get(
+    "https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY&amp;date=2023-07-13"
+).json()
+nasa_data_single
           </input>
         </program>
-        <pre>
-        </pre>
         <p>
-          We can obtain more records at once by using the <c>start_date</c> and <c>end_date</c> parameters, as shown in the table of parameters in <xref ref = "fig-reading-nasa-parameters"/>.
-          Let&#x2019;s obtain all the records between May 1, 2023, and July 13, 2023; now the response
-          will take the form of a Python <em>list</em> (you&#x2019;ll learn more about these in <xref ref="ch-wrangling"/>).
-          Each item in the list will correspond to a single day&#x2019;s record (just like the <c>nasa_data_single</c> object),
+          We can obtain more records at once by using the <c>start_date</c> and <c>end_date</c> parameters, as shown in the table of parameters in <xref ref="fig-reading-nasa-parameters"/>.
+          Let&#x2019;s obtain all the records between May 1, 2023, and July 13, 2023, and store the result in an object called <c>nasa_data</c>; now the response
+          will take the form of a Python <em>list</em>. Each item in the list will correspond to a single day&#x2019;s record (just like the <c>nasa_data_single</c> object),
           and there will be 74 items total, one for each day between the start and end dates:
         </p>
         <program language="python">
           <input>
-no_official_lang_data = canlang_data[canlang_data[&quot;category&quot;] != &quot;Official languages&quot;]
-no_official_lang_data.to_csv(&quot;data/no_official_languages.csv&quot;, index=False)
+nasa_data = requests.get(
+    "https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY&amp;start_date=2023-05-01&amp;end_date=2023-07-13"
+).json()
+len(nasa_data)
           </input>
         </program>
         <pre>
-[1] 74</pre>
+74
+        </pre>
         <p>
           For further data processing using the techniques in this book, you&#x2019;ll need to turn this list
-          of items into a data frame. Here we will extract the <c>date</c>, <c>title</c>, <c>copyright</c>,
-          and <c>url</c> variables from the JSON data, and construct a data frame using the extracted
+          of dictionaries into a <c>pandas</c> data frame. Here we will extract the <c>date</c>, <c>title</c>, <c>copyright</c>,
+          and <c>url</c> variables from the JSON data, and construct a <c>pandas</c> DataFrame using the extracted
           information.
         </p>
         <note>
           <p>
             Understanding this code is not required for the remainder of the textbook. It is included for
-            those readers who would like to parse JSON data into a data frame in their own data analyses.
+            those readers who would like to parse JSON data into a <c>pandas</c> data frame in their own data analyses.
           </p>
         </note>
         <program language="python">
           <input>
-import requests
-import bs4
+data_dict = {
+    "date":[],
+    "title": [],
+    "copyright" : [],
+    "url": []
+}
 
-wiki = requests.get(&quot;https://en.wikipedia.org/wiki/Canada&quot;)
-page = bs4.BeautifulSoup(wiki.content, &quot;html.parser&quot;)
+for item in nasa_data:
+    if "copyright" not in item:
+        item["copyright"] = None
+    for entry in ["url", "title", "date", "copyright"]:
+        data_dict[entry].append(item[entry])
+
+nasa_df = pd.DataFrame(data_dict)
+nasa_df
           </input>
         </program>
-        <pre>
-        </pre>
         <p>
           Success&#x2014;we have created a small data set using the NASA API! This data is also quite different
           from what we obtained from web scraping; the extracted information is readily available in a JSON
           format, as opposed to raw HTML code (although not <em>every</em> API will provide data in such a
           nice format). From this point onward, the <c>nasa_df</c> data frame is stored on your machine, and
-          you can play with it to your heart&#x2019;s content. For example, you can use <c>to_csv</c> to
-          save it to a file and <c>read_csv</c> to read it into Python again later; and after reading the next
+          you can play with it to your heart&#x2019;s content. For example, you can use <c>pandas.to_csv</c> to
+          save it to a file and <c>pandas.read_csv</c> to read it into Python again later; and after reading the next
           few chapters you will have the skills to do even more interesting things! If you decide that you
           want to ask any of the various NASA APIs for more data (see <url href="https://api.nasa.gov/"
           visual="api.nasa.gov/">the list of awesome NASA APIs here</url> for more examples of what is
@@ -1516,7 +1459,7 @@ page = bs4.BeautifulSoup(wiki.content, &quot;html.parser&quot;)
     <title>Exercises</title>
     <p>
       Practice exercises for the material covered in this chapter can be found in the accompanying
-      <url href="https://worksheets.datasciencebook.ca" visual="worksheets.datasciencebook.ca">worksheets
+      <url href="https://worksheets.python.datasciencebook.ca" visual="worksheets.python.datasciencebook.ca">worksheets
       repository</url> in the &#x201C;Reading in data locally and from the web&#x201D; row. You can launch an
       interactive version of the worksheet in your browser by clicking the &#x201C;launch binder&#x201D; button.
       You can also preview a non-interactive version of the worksheet by clicking &#x201C;view worksheet.&#x201D;
@@ -1531,24 +1474,14 @@ page = bs4.BeautifulSoup(wiki.content, &quot;html.parser&quot;)
     <title>Additional resources</title>
     <ul>
       <li><p>The <url href="https://pandas.pydata.org/docs/getting_started/index.html"><c>pandas</c>
-        documentation</url> provides the documentation for the functions we cover in this chapter. 
+        documentation</url> provides the documentation for the functions we cover in this chapter.
         It is where you should look if you want to learn more about these functions, the full set of
         arguments you can use, and other related functions.</p></li>
-      <li><p>Sometimes you might run into data in such poor shape that none of the reading functions we
-        cover in this chapter work. In that case, you can consult the
+      <li><p>Sometimes you might run into data in such poor shape that the reading functions we
+        cover in this capter do not work. In that case, you can consult the
         <url href="https://wesmckinney.com/book/accessing-data.html#io_flat_files">data
-        loading chapter</url> from <em>Python for Data Science</em> <xref ref="wickham2016r"/>, which goes into a
+        loading chapter</url> from <em>Python for Data Analysis</em> <xref ref="mckinney2012python"/>, which goes into a
         lot more detail about how Python parses text from files into data frames.</p></li>
-      <li><p>The <url href="https://here.r-lib.org/" visual="here.r-lib.org/"><c>here</c> Python package</url>
-        <xref ref="here"/> provides a way for you to construct or find your files&#x2019; paths.</p></li>
-      <li><p>The <url href="https://readxl.tidyverse.org/" visual="readxl.tidyverse.org/"><c>readxl</c>
-        documentation</url> provides more details on reading data from Excel, such as reading in data with
-        multiple sheets, or specifying the cells to read in.</p></li>
-      <li><p>The <url href="https://github.com/leeper/rio" visual="github.com/leeper/rio"><c>rio</c> Python
-        package</url> <xref ref="rio"/> provides an alternative set of tools for reading and writing data
-        in Python. It aims to be a &#x201C;Swiss army knife&#x201D; for data reading/writing/converting, and supports a
-        wide variety of data types (including data formats generated by other statistical software like
-        SPSS and SAS).</p></li>
       <li><p>A <url href="https://www.youtube.com/embed/ephId3mYu9o" visual="youtube.com/embed/ephId3mYu9o">video</url>
         from the Udacity course <em>Linux Command Line Basics</em> provides a good explanation of absolute
         versus relative paths.</p></li>
@@ -1560,9 +1493,6 @@ page = bs4.BeautifulSoup(wiki.content, &quot;html.parser&quot;)
           <li><p><url href="https://www.youtube.com/embed/O9HKbdhqYzk" visual="youtube.com/embed/O9HKbdhqYzk">extracting Canadian city names and populations from Wikipedia</url>.</p></li>
         </ul>
       </p></li>
-      <li><p>The <url href="https://dmi3kno.github.io/polite/" visual="dmi3kno.github.io/polite/"><c>polite</c>
-        Python package</url> <xref ref="polite"/> provides a set of tools for responsibly scraping data from
-        websites.</p></li>
     </ul>
   </section>
 

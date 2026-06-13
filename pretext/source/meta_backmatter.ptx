@@ -2,6 +2,12 @@
 <backmatter xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="meta-back">
   <references xml:id="references">
     <title>References</title>
+<biblio type="raw" xml:id="altair">
+      VanderPlas, J., Granger, B., Heer, J., Moritz, D., Wongsuphasawat, K., Satyanarayan, A., Lees, E., Timofeev, I., Welsh, B., and Sievert, S. (2018).
+      Altair: Interactive Statistical Visualizations for Python.
+      <em>Journal of Open Source Software</em>, 3(32), 1057.
+      <url href="https://doi.org/10.21105/joss.01057" visual="doi.org/10.21105/joss.01057"/>
+    </biblio>
 
     <biblio type="raw" xml:id="calls2015">
       Truth and Reconciliation Commission of Canada. (2015).
