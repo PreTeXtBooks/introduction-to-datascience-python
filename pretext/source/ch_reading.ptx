@@ -904,6 +904,9 @@ tables = conn.list_tables()
 tables
         </input>
       </program>
+<pre>
+['can_lang']
+</pre>
       <p>
         The <c>list_tables</c> function returned only one name&#x2014;<c>"can_lang"</c>&#x2014;which tells us that there is only one
         table in this database. To reference a table in the database (so that we can perform operations
@@ -919,6 +922,15 @@ canlang_table = conn.table("can_lang")
 canlang_table
         </input>
       </program>
+<pre>
+DatabaseTable: can_lang
+  category      string
+  language      string
+  mother_tongue float64
+  most_at_home  float64
+  most_at_work  float64
+  lang_known    float64
+</pre>
       <p>
         Although it looks like we might have obtained the whole data frame from the database, we didn&#x2019;t!
         It&#x2019;s a <em>reference</em>; the data is still stored only in the SQLite database. The <c>canlang_table</c> object is a <c>DatabaseTable</c>, which, when printed, tells you which columns are available in the table. But unlike a usual <c>pandas</c> data frame, we do not immediately know how many rows are in the table. In order to find out how many rows there are, we have to send an SQL <em>query</em> (i.e., command) to the data base. In <c>ibis</c>, we can do that using the <c>count</c> function from the table object.
@@ -928,6 +940,17 @@ canlang_table
 canlang_table.count()
         </input>
       </program>
+<pre>
+r0 := DatabaseTable: can_lang
+  category      string
+  language      string
+  mother_tongue float64
+  most_at_home  float64
+  most_at_work  float64
+  lang_known    float64
+
+CountStar(can_lang): CountStar(r0)
+</pre>
       <p>
         Wait a second...this isn't the number of rows in the database. In fact, we haven't actually sent our
         SQL query to the database yet! We need to explicitly tell <c>ibis</c> when we want to send the query.
@@ -944,6 +967,9 @@ canlang_table.count()
 canlang_table.count().execute()
         </input>
       </program>
+<pre>
+214
+</pre>
       <p>
         There we go! There are 214 rows in the <c>can_lang</c> table. If you are interested in seeing
         the <em>actual</em> text of the SQL query that <c>ibis</c> sends to the database, you can use the <c>compile</c> function
@@ -955,6 +981,9 @@ canlang_table.count().execute()
 str(canlang_table.count().compile())
         </input>
       </program>
+<pre>
+'SELECT count(*) AS "CountStar(can_lang)" \nFROM can_lang AS t0'
+</pre>
       <p>
         The output above shows the SQL code that is sent to the database. When we write
         <c>canlang_table.count().execute()</c> in Python, in the background, the <c>execute</c> function is translating the Python code
@@ -987,6 +1016,19 @@ canlang_table_filtered = canlang_table[canlang_table["category"] == "Aboriginal 
 canlang_table_filtered
         </input>
       </program>
+<pre>
+r0 := DatabaseTable: can_lang
+  category      string
+  language      string
+  mother_tongue float64
+  most_at_home  float64
+  most_at_work  float64
+  lang_known    float64
+
+Selection[r0]
+  predicates:
+    r0.category == 'Aboriginal languages'
+</pre>
       <p>
         Above you can see that we have not yet executed this command; <c>canlang_table_filtered</c> is just showing
         the first part of our query (the part that starts with <c>Selection[r0]</c> above).
@@ -1002,6 +1044,24 @@ canlang_table_selected = canlang_table_filtered[["language", "mother_tongue"]]
 canlang_table_selected
         </input>
       </program>
+<pre>
+r0 := DatabaseTable: can_lang
+  category      string
+  language      string
+  mother_tongue float64
+  most_at_home  float64
+  most_at_work  float64
+  lang_known    float64
+
+r1 := Selection[r0]
+  predicates:
+    r0.category == 'Aboriginal languages'
+
+Selection[r1]
+  selections:
+    language:      r1.language
+    mother_tongue: r1.mother_tongue
+</pre>
       <p>
         Now you can see that the <c>ibis</c> query will have two steps: it will first find rows corresponding to
         Aboriginal languages, then it will extract only the <c>language</c> and <c>mother_tongue</c> columns that we are interested in.
@@ -1013,6 +1073,74 @@ aboriginal_lang_data = canlang_table_selected.execute()
 aboriginal_lang_data
         </input>
       </program>
+<table xml:id="table-aboriginal-mother-tongue-2">
+  <title>Aboriginal Language Mother Tongue Data</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>590.0</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Algonquian languages, n.i.e.</cell>
+      <cell>45.0</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Algonquin</cell>
+      <cell>1260.0</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Athabaskan languages, n.i.e.</cell>
+      <cell>50.0</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Atikamekw</cell>
+      <cell>6150.0</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>62</cell>
+      <cell>Thompson (Ntlakapamux)</cell>
+      <cell>335.0</cell>
+    </row>
+    <row>
+      <cell>63</cell>
+      <cell>Tlingit</cell>
+      <cell>95.0</cell>
+    </row>
+    <row>
+      <cell>64</cell>
+      <cell>Tsimshian</cell>
+      <cell>200.0</cell>
+    </row>
+    <row>
+      <cell>65</cell>
+      <cell>Wakashan languages, n.i.e.</cell>
+      <cell>10.0</cell>
+    </row>
+    <row>
+      <cell>66</cell>
+      <cell>Woods Cree</cell>
+      <cell>1840.0</cell>
+    </row>
+  </tabular>
+</table>
       <p>
         <c>ibis</c> provides many more functions (not just the <c>[]</c> operation) that you can use to
         manipulate the data within the database before calling <c>execute</c> to obtain the data in Python. But <c>ibis</c> does not provide <em>every</em>
@@ -1034,6 +1162,49 @@ AttributeError: 'Selection' object has no attribute 'tail'
 aboriginal_lang_data.tail(6)
         </input>
       </program>
+<table xml:id="table-aboriginal-mother-tongue-2">
+  <title>Aboriginal Language Mother Tongue Data</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+    </row>
+    <row>
+      <cell>61</cell>
+      <cell>Tahltan</cell>
+      <cell>95.0</cell>
+    </row>
+    <row>
+      <cell>62</cell>
+      <cell>Thompson (Ntlakapamux)</cell>
+      <cell>335.0</cell>
+    </row>
+    <row>
+      <cell>63</cell>
+      <cell>Tlingit</cell>
+      <cell>95.0</cell>
+    </row>
+    <row>
+      <cell>64</cell>
+      <cell>Tsimshian</cell>
+      <cell>200.0</cell>
+    </row>
+    <row>
+      <cell>65</cell>
+      <cell>Wakashan languages, n.i.e.</cell>
+      <cell>10.0</cell>
+    </row>
+    <row>
+      <cell>66</cell>
+      <cell>Woods Cree</cell>
+      <cell>1840.0</cell>
+    </row>
+  </tabular>
+</table>
       <p>
         So once you have finished your data wrangling of the database reference object, it is advisable to
         bring it into Python as a <c>pandas</c> data frame using the <c>execute</c> function.
@@ -1091,6 +1262,9 @@ conn = ibis.postgres.connect(
 conn.list_tables()
         </input>
       </program>
+<pre>
+["themes", "medium", "titles", "title_aliases", "forms", "episodes", "names", "names_occupations", "occupation", "ratings"]
+</pre>
       <p>
         We see that there are 10 tables in this database. Let&#x2019;s first look at the <c>"ratings"</c> table
         to find the lowest rating that exists in the <c>can_mov_db</c> database:
@@ -1101,6 +1275,12 @@ ratings_table = conn.table("ratings")
 ratings_table
         </input>
       </program>
+<pre>
+AlchemyTable: ratings
+  title           string
+  average_rating  float64
+  num_votes       int64
+</pre>
       <p>
         To find the lowest rating that exists in the data base, we first need to select the
         <c>average_rating</c> column:
@@ -1112,6 +1292,16 @@ avg_rating = ratings_table[["average_rating"]]
 avg_rating
         </input>
       </program>
+<pre>
+r0 := AlchemyTable: ratings
+  title           string
+  average_rating  float64
+  num_votes       int64
+
+Selection[r0]
+  selections:
+    average_rating: r0.average_rating
+</pre>
       <p>
         Next we use the <c>order_by</c> function from <c>ibis</c> order the table by <c>average_rating</c>,
         and then the <c>head</c> function to select the first row (i.e., the lowest score).
@@ -1122,6 +1312,19 @@ lowest = avg_rating.order_by("average_rating").head(1)
 lowest.execute()
         </input>
       </program>
+<table xml:id="table-average-rating">
+  <title>Average Rating</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>average_rating</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>1.0</cell>
+    </row>
+  </tabular>
+</table>
       <p>We see the lowest rating given to a movie is 1, indicating that it must have been a really bad movie...</p>
     </subsection>
 
@@ -1449,13 +1652,13 @@ population_nodes[:5]
           </input>
         </program>
         <pre>
-['Toronto', '6,202,225', 'Montreal', '4,291,732', 'Vancouver']
+['Toronto', '6,202,225', 'London', '543,551\n', 'Montreal']
         </pre>
         <p>
           Fantastic! We seem to have extracted the data of interest from the raw HTML source code. But we
           are not quite done; the data is not yet in an optimal format for data analysis. Both the city
           names and population are encoded as characters in a single vector, instead of being in a data
-          frame with one character column for city and one numeric column for population. (like a spreadsheet).
+          frame with one character column for city and one numeric column for population (like a spreadsheet).
           Additionally, the populations contain commas (not useful for programmatically dealing with
           numbers), and some even contain a line break character at the end (<c>\n</c>). In
           <xref ref="ch-wrangling"/>, we will learn more about how to <em>wrangle</em> data such as this
@@ -1488,6 +1691,129 @@ canada_wiki_df.columns = canada_wiki_df.columns.droplevel()
 canada_wiki_df
           </input>
         </program>
+<table xml:id="table-canadian-cities">
+  <title>Largest Canadian Census Metropolitan Areas</title>
+  <tabular halign="left">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell>Rank</cell>
+      <cell>Name</cell>
+      <cell>Province</cell>
+      <cell>Pop.</cell>
+      <cell>Rank</cell>
+      <cell>Name</cell>
+      <cell>Province</cell>
+      <cell>Pop.</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Toronto</cell>
+      <cell>Ontario</cell>
+      <cell>6202225</cell>
+      <cell>11</cell>
+      <cell>London</cell>
+      <cell>Ontario</cell>
+      <cell>543551</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Montreal</cell>
+      <cell>Quebec</cell>
+      <cell>4291732</cell>
+      <cell>12</cell>
+      <cell>Halifax</cell>
+      <cell>Nova Scotia</cell>
+      <cell>465703</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Vancouver</cell>
+      <cell>British Columbia</cell>
+      <cell>2642825</cell>
+      <cell>13</cell>
+      <cell>St. Catharines<ndash/>Niagara</cell>
+      <cell>Ontario</cell>
+      <cell>433604</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Ottawa<ndash/>Gatineau</cell>
+      <cell>Ontario<ndash/>Quebec</cell>
+      <cell>1488307</cell>
+      <cell>14</cell>
+      <cell>Windsor</cell>
+      <cell>Ontario</cell>
+      <cell>422630</cell>
+    </row>
+    <row>
+      <cell>5</cell>
+      <cell>Calgary</cell>
+      <cell>Alberta</cell>
+      <cell>1481806</cell>
+      <cell>15</cell>
+      <cell>Oshawa</cell>
+      <cell>Ontario</cell>
+      <cell>415311</cell>
+    </row>
+    <row>
+      <cell>6</cell>
+      <cell>Edmonton</cell>
+      <cell>Alberta</cell>
+      <cell>1418118</cell>
+      <cell>16</cell>
+      <cell>Victoria</cell>
+      <cell>British Columbia</cell>
+      <cell>397237</cell>
+    </row>
+    <row>
+      <cell>7</cell>
+      <cell>Quebec City</cell>
+      <cell>Quebec</cell>
+      <cell>839311</cell>
+      <cell>17</cell>
+      <cell>Saskatoon</cell>
+      <cell>Saskatchewan</cell>
+      <cell>317480</cell>
+    </row>
+    <row>
+      <cell>8</cell>
+      <cell>Winnipeg</cell>
+      <cell>Manitoba</cell>
+      <cell>834678</cell>
+      <cell>18</cell>
+      <cell>Regina</cell>
+      <cell>Saskatchewan</cell>
+      <cell>249217</cell>
+    </row>
+    <row>
+      <cell>9</cell>
+      <cell>Hamilton</cell>
+      <cell>Ontario</cell>
+      <cell>785184</cell>
+      <cell>19</cell>
+      <cell>Sherbrooke</cell>
+      <cell>Quebec</cell>
+      <cell>227398</cell>
+    </row>
+    <row>
+      <cell>10</cell>
+      <cell>Kitchener<ndash/>Cambridge<ndash/>Waterloo</cell>
+      <cell>Ontario</cell>
+      <cell>575847</cell>
+      <cell>20</cell>
+      <cell>Kelowna</cell>
+      <cell>British Columbia</cell>
+      <cell>222162</cell>
+    </row>
+  </tabular>
+</table>
         <p>
           Once again, we have managed to extract the data of interest from the raw HTML source code&#x2014;but this time using the convenient <c>read_html</c> function, without needing to explicitly use CSS selectors! However, once again, we still need to do some cleaning of this result. Referring back to <xref ref="fig-reading-sg4"/>, we can see that the table is formatted with two sets of columns (e.g., <c>Name</c> and <c>Name.1</c>) that we will need to somehow merge. In <xref ref="ch-wrangling"/>, we will learn more about how to <em>wrangle</em> data into a useful format for data analysis.
         </p>
@@ -1546,7 +1872,7 @@ canada_wiki_df
         prevent issues from happening in the first place by being extra careful with how you write and run
         your code. You should also keep in mind that when a website owner grants you API access, they also
         usually specify a limit (or <em>quota</em>) of how much data you can ask for. Be careful not to
-        overrun your quota! So <em>before</em> we try to use the API, we will first visit the NASA website
+        overrun your quota! So <em>before</em> we try to use the API, we will first visit <url href = "https://api.nasa.gov/">the NASA website</url>
         to see what limits we should abide by when using the API. These limits are outlined in
         <xref ref="fig-reading-nasa-limits"/>.
       </p>
@@ -1639,6 +1965,15 @@ nasa_data_single = requests.get(
 nasa_data_single
           </input>
         </program>
+<pre>
+{'date': '2023-07-13',
+ 'explanation': "A mere 390 light-years away, Sun-like stars and future planetary systems are forming in the Rho Ophiuchi molecular cloud complex, the closest star-forming region to our fair planet. The James Webb Space Telescope's NIRCam peered into the nearby natal chaos to capture this infrared image at an inspiring scale. The spectacular cosmic snapshot was released to celebrate the successful first year of Webb's exploration of the Universe. The frame spans less than a light-year across the Rho Ophiuchi region and contains about 50 young stars. Brighter stars clearly sport Webb's characteristic pattern of diffraction spikes. Huge jets of shocked molecular hydrogen blasting from newborn stars are red in the image, with the large, yellowish dusty cavity carved out by the energetic young star near its center. Near some stars in the stunning image are shadows cast by their protoplanetary disks.",
+ 'hdurl': 'https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph.png',
+ 'media_type': 'image',
+ 'service_version': 'v1',
+ 'title': "Webb's Rho Ophiuchi",
+ 'url': 'https://apod.nasa.gov/apod/image/2307/STScI-01_RhoOph1024.png'}
+</pre>
         <p>
           We can obtain more records at once by using the <c>start_date</c> and <c>end_date</c> parameters, as shown in the table of parameters in <xref ref="fig-reading-nasa-parameters"/>.
           Let&#x2019;s obtain all the records between May 1, 2023, and July 13, 2023, and store the result in an object called <c>nasa_data</c>; now the response
@@ -1687,6 +2022,100 @@ nasa_df = pd.DataFrame(data_dict)
 nasa_df
           </input>
         </program>
+<table xml:id="table-apod-data">
+  <title>Astronomy Picture of the Day Data</title>
+  <tabular halign="left">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>date</cell>
+      <cell>title</cell>
+      <cell>copyright</cell>
+      <cell>url</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>2023-05-01</cell>
+      <cell>Carina Nebula North</cell>
+      <cell>Carlos Taylor</cell>
+      <cell><c>https://apod.nasa.gov/apod/image/2305/CarNorth...</c></cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>2023-05-02</cell>
+      <cell>Flat Rock Hills on Mars</cell>
+      <cell>NASA, JPL-Caltech, MSSS; Processing: Ne...</cell>
+      <cell><c>https://apod.nasa.gov/apod/image/2305/FlatMars...</c></cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>2023-05-03</cell>
+      <cell>Centaurus A: A Peculiar Island of Stars</cell>
+      <cell>Marco Lorenzi, Angus Lau <ampersand/> Tommy Tse; Tex...</cell>
+      <cell><c>https://apod.nasa.gov/apod/image/2305/NGC5128_...</c></cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>2023-05-04</cell>
+      <cell>The Galaxy, the Jet, and a Famous Black Hole</cell>
+      <cell>None</cell>
+      <cell><c>https://apod.nasa.gov/apod/image/2305/pia23122...</c></cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>2023-05-05</cell>
+      <cell>Shackleton from ShadowCam</cell>
+      <cell>None</cell>
+      <cell><c>https://apod.nasa.gov/apod/image/2305/shacklet...</c></cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>69</cell>
+      <cell>2023-07-09</cell>
+      <cell>Doomed Star Eta Carinae</cell>
+      <cell>NASA, ESA, Hubble; Processing <ampersand/> Lice...</cell>
+      <cell><c>https://apod.nasa.gov/apod/image/2307/EtaCarin...</c></cell>
+    </row>
+    <row>
+      <cell>70</cell>
+      <cell>2023-07-10</cell>
+      <cell>Stars, Dust and Nebula in NGC 6559</cell>
+      <cell>Adam Block, Telescope Live</cell>
+      <cell><c>https://apod.nasa.gov/apod/image/2307/NGC6559_...</c></cell>
+    </row>
+    <row>
+      <cell>71</cell>
+      <cell>2023-07-11</cell>
+      <cell>Sunspots on an Active Sun</cell>
+      <cell>None</cell>
+      <cell><c>https://apod.nasa.gov/apod/image/2307/SpottedS...</c></cell>
+    </row>
+    <row>
+      <cell>72</cell>
+      <cell>2023-07-12</cell>
+      <cell>Rings and Bar of Spiral Galaxy NGC 1398</cell>
+      <cell>None</cell>
+      <cell><c>https://apod.nasa.gov/apod/image/2307/Ngc1398_...</c></cell>
+    </row>
+    <row>
+      <cell>73</cell>
+      <cell>2023-07-13</cell>
+      <cell>Webb's Rho Ophiuchi</cell>
+      <cell>None</cell>
+      <cell><c>https://apod.nasa.gov/apod/image/2307/STScI-01...</c></cell>
+    </row>
+  </tabular>
+</table>
         <p>
           Success&#x2014;we have created a small data set using the NASA API! This data is also quite different
           from what we obtained from web scraping; the extracted information is readily available in a JSON
