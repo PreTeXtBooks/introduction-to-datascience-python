@@ -531,14 +531,143 @@ canlang_data = pd.read_csv(
 canlang_data
         </input>
       </program>
+
+<table xml:id="table-canadian-languages-2">
+  <title>Canadian Language Data (214 rows <times/> 6 columns)</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>0</cell>
+      <cell>1</cell>
+      <cell>2</cell>
+      <cell>3</cell>
+      <cell>4</cell>
+      <cell>5</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>590</cell>
+      <cell>235</cell>
+      <cell>30</cell>
+      <cell>665</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Afrikaans</cell>
+      <cell>10260</cell>
+      <cell>4785</cell>
+      <cell>85</cell>
+      <cell>23415</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Afro-Asiatic languages, n.i.e.</cell>
+      <cell>1150</cell>
+      <cell>445</cell>
+      <cell>10</cell>
+      <cell>2775</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Akan (Twi)</cell>
+      <cell>13460</cell>
+      <cell>5985</cell>
+      <cell>25</cell>
+      <cell>22150</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Albanian</cell>
+      <cell>26895</cell>
+      <cell>13135</cell>
+      <cell>345</cell>
+      <cell>31930</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>209</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Wolof</cell>
+      <cell>3990</cell>
+      <cell>1385</cell>
+      <cell>10</cell>
+      <cell>8240</cell>
+    </row>
+    <row>
+      <cell>210</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Woods Cree</cell>
+      <cell>1840</cell>
+      <cell>800</cell>
+      <cell>75</cell>
+      <cell>2665</cell>
+    </row>
+    <row>
+      <cell>211</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Wu (Shanghainese)</cell>
+      <cell>12915</cell>
+      <cell>7650</cell>
+      <cell>105</cell>
+      <cell>16530</cell>
+    </row>
+    <row>
+      <cell>212</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yiddish</cell>
+      <cell>13555</cell>
+      <cell>7085</cell>
+      <cell>895</cell>
+      <cell>20985</cell>
+    </row>
+    <row>
+      <cell>213</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>9080</cell>
+      <cell>2615</cell>
+      <cell>15</cell>
+      <cell>22415</cell>
+    </row>
+  </tabular>
+</table>
       <p>
         It is best to rename your columns manually in this scenario. The current column names (<c>0, 1</c>, etc.)
         are problematic for two reasons: first, because they are not very descriptive names, which will make your analysis
         confusing; and second, because your column names should generally be <em>strings</em>, but are currently <em>integers</em>.
-        To rename your columns, you can use the <c>rename</c> function from the <c>pandas</c> package.
+        To rename your columns, you can use the <c>rename</c> function from the <url href = "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rename.html#">pandas package</url>.
+        The argument of the <c>rename</c> function is <c>columns</c>, which takes a mapping between the old column names and the new column names.
+        In this case, we want to rename the old columns <c>(0, 1, ..., 5)</c> in the <c>canlang_data</c> data frame to more descriptive names.
         <idx><h>rename</h></idx>
-        We rename the <c>0, 1, ..., 5</c> columns in the <c>canlang_data</c> data frame to more descriptive names below.
       </p>
+<p>
+To specify the mapping, we create a <em>dictionary</em>: a Python object that represents a mapping from <em>keys</em>
+to <em>values</em>. We can create a dictionary by using a pair of curly braces <c>{ }</c>, and inside the
+braces placing pairs of <c>key : value</c> separated by commas. Below, we create a dictionary called
+<c>col_map</c> that maps the old column names in <c>canlang_data</c> to new column names, and then pass it
+to the <c>rename</c> function.
+</p>
       <program language="python">
         <input>
 col_map = {
