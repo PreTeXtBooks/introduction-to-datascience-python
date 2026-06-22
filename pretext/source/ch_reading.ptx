@@ -714,8 +714,6 @@ canlang_data
         <idx><h>URL</h><h>reading from</h></idx>
         Here, we provide the URL of a remote file to <c>read_csv</c>, instead of a path to a local file on
         our computer.
-      </p>
-      <p>
         We need to surround the URL with quotes similar to when we specify a path on our local computer.
         All other arguments that we use are the same as when using these functions with a local file on
         our computer.
@@ -735,7 +733,7 @@ canlang_data
       <title>Previewing a data file before reading it into Python</title>
       <p>
         In many of the examples above, we gave you previews of the data file before we read it into Python.
-        Previewing data is essential to see whether or not there are column names, what the delimiters are,
+        Previewing data is essential to see whether or not there are column names, what the separators are,
         and if there are lines you need to skip. You should do this yourself when trying to read in data
         files: open the file in whichever text editor you prefer to inspect its contents prior to reading
         it into Python.
@@ -791,9 +789,8 @@ canlang_data
     </program>
     <p>
       If the <c>.xlsx</c> file has multiple sheets, you have to use the <c>sheet_name</c> argument to specify
-      the sheet number or name. You can also specify cell ranges using the <c>usecols</c> argument. This
-      functionality is useful when a single sheet contains multiple tables (a sad thing that happens to
-      many Excel spreadsheets since this makes reading in data more difficult).
+      the sheet number or name. This functionality is useful when a single sheet contains multiple tables (a sad thing that happens to many Excel spreadsheets since this makes reading in data more difficult).
+You can also specify cell ranges using the <c>usecols</c> argument  (e.g., <c>usecols="A:D"</c> for including columns from <c>A</c> to <c>D</c>).
     </p>
     <p>
       As with plain text files, you should always explore the data file before importing it into Python.
