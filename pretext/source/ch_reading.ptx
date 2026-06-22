@@ -1162,7 +1162,7 @@ AttributeError: 'Selection' object has no attribute 'tail'
 aboriginal_lang_data.tail(6)
         </input>
       </program>
-<table xml:id="table-aboriginal-mother-tongue-2">
+<table xml:id="table-aboriginal-mother-tongue-3">
   <title>Aboriginal Language Mother Tongue Data</title>
   <tabular halign="right">
     <col halign="right"/>
