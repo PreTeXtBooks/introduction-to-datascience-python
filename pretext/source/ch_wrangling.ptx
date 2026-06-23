@@ -218,7 +218,7 @@ type(can_lang)
           </input>
         </program>
       </note>
-
+    </subsection>
     <subsection xml:id="sec-wrangling-df-in-python">
       <title>Data structures in Python</title>
       <p>
