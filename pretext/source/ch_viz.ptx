@@ -280,11 +280,90 @@ co2_df = pd.read_csv(
 co2_df
         </input>
       </program>
+<table xml:id="table-co2-measurements">
+  <title>Atmospheric CO2 Measurements (ppm)</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>date_measured</cell>
+      <cell>ppm</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>1980-02-01</cell>
+      <cell>338.34</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>1980-03-01</cell>
+      <cell>340.01</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>1980-04-01</cell>
+      <cell>340.93</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>1980-05-01</cell>
+      <cell>341.48</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>1980-06-01</cell>
+      <cell>341.33</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>479</cell>
+      <cell>2020-02-01</cell>
+      <cell>414.11</cell>
+    </row>
+    <row>
+      <cell>480</cell>
+      <cell>2020-03-01</cell>
+      <cell>414.51</cell>
+    </row>
+    <row>
+      <cell>481</cell>
+      <cell>2020-04-01</cell>
+      <cell>416.21</cell>
+    </row>
+    <row>
+      <cell>482</cell>
+      <cell>2020-05-01</cell>
+      <cell>417.07</cell>
+    </row>
+    <row>
+      <cell>483</cell>
+      <cell>2020-06-01</cell>
+      <cell>416.39</cell>
+    </row>
+  </tabular>
+</table>
       <program language="python">
         <input>
 co2_df.info()
         </input>
       </program>
+<pre>
+&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 484 entries, 0 to 483
+Data columns (total 2 columns):
+ #   Column         Non-Null Count  Dtype         
+---  ------         --------------  -----         
+ 0   date_measured  484 non-null    datetime64[ns]
+ 1   ppm            484 non-null    float64       
+dtypes: datetime64[ns](1), float64(1)
+memory usage: 7.7 KB
+</pre>
       <p>
         We see that there are two columns in the <c>co2_df</c> data frame: 
         <c>date_measured</c> and <c>ppm</c>. The <c>date_measured</c> column holds the date 
@@ -513,6 +592,71 @@ faithful = pd.read_csv("data/faithful.csv")
 faithful
         </input>
       </program>
+<table xml:id="table-faithful-eruptions">
+  <title>Old Faithful Eruption Data</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>eruptions</cell>
+      <cell>waiting</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>3.600</cell>
+      <cell>79</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>1.800</cell>
+      <cell>54</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>3.333</cell>
+      <cell>74</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>2.283</cell>
+      <cell>62</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>4.533</cell>
+      <cell>85</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>267</cell>
+      <cell>4.117</cell>
+      <cell>81</cell>
+    </row>
+    <row>
+      <cell>268</cell>
+      <cell>2.150</cell>
+      <cell>46</cell>
+    </row>
+    <row>
+      <cell>269</cell>
+      <cell>4.417</cell>
+      <cell>90</cell>
+    </row>
+    <row>
+      <cell>270</cell>
+      <cell>1.817</cell>
+      <cell>46</cell>
+    </row>
+    <row>
+      <cell>271</cell>
+      <cell>4.467</cell>
+      <cell>74</cell>
+    </row>
+  </tabular>
+</table>
       <p>
         Here again, we investigate the relationship between two quantitative variables
         (waiting time and eruption time). But if you look at the output of the data
@@ -602,6 +746,126 @@ can_lang = pd.read_csv("data/can_lang.csv")
 can_lang
         </input>
       </program>
+<table xml:id="table-canadian-languages-full">
+  <title>Canadian Language Data</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>category</cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+      <cell>lang_known</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>590</cell>
+      <cell>235</cell>
+      <cell>30</cell>
+      <cell>665</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Afrikaans</cell>
+      <cell>10260</cell>
+      <cell>4785</cell>
+      <cell>85</cell>
+      <cell>23415</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Afro-Asiatic languages, n.i.e.</cell>
+      <cell>1150</cell>
+      <cell>445</cell>
+      <cell>10</cell>
+      <cell>2775</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Akan (Twi)</cell>
+      <cell>13460</cell>
+      <cell>5985</cell>
+      <cell>25</cell>
+      <cell>22150</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Albanian</cell>
+      <cell>26895</cell>
+      <cell>13135</cell>
+      <cell>345</cell>
+      <cell>31930</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>209</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Wolof</cell>
+      <cell>3990</cell>
+      <cell>1385</cell>
+      <cell>10</cell>
+      <cell>8240</cell>
+    </row>
+    <row>
+      <cell>210</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Woods Cree</cell>
+      <cell>1840</cell>
+      <cell>800</cell>
+      <cell>75</cell>
+      <cell>2665</cell>
+    </row>
+    <row>
+      <cell>211</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Wu (Shanghainese)</cell>
+      <cell>12915</cell>
+      <cell>7650</cell>
+      <cell>105</cell>
+      <cell>16530</cell>
+    </row>
+    <row>
+      <cell>212</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yiddish</cell>
+      <cell>13555</cell>
+      <cell>7085</cell>
+      <cell>895</cell>
+      <cell>20985</cell>
+    </row>
+    <row>
+      <cell>213</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>9080</cell>
+      <cell>2615</cell>
+      <cell>15</cell>
+      <cell>22415</cell>
+    </row>
+  </tabular>
+</table>
       <p>
         We will begin with a scatter plot of the <c>mother_tongue</c> and
         <c>most_at_home</c> columns from our data frame.
@@ -674,6 +938,45 @@ can_lang.loc[
 ]
         </input>
       </program>
+<table xml:id="table-official-languages-canada">
+  <title>Official Language Usage in Canada</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>category</cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+      <cell>lang_known</cell>
+    </row>
+    <row>
+      <cell>54</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>19460850</cell>
+      <cell>22162865</cell>
+      <cell>15265335</cell>
+      <cell>29748265</cell>
+    </row>
+    <row>
+      <cell>59</cell>
+      <cell>Official languages</cell>
+      <cell>French</cell>
+      <cell>7166700</cell>
+      <cell>6943800</cell>
+      <cell>3825215</cell>
+      <cell>10242945</cell>
+    </row>
+  </tabular>
+</table>
       <p>
         Recall that our question about this data pertains to <em>all</em> languages;
         so to properly answer our question, we will need to adjust the scale of the
@@ -769,6 +1072,71 @@ can_lang["most_at_home_percent"] = can_lang["most_at_home"]/canadian_population*
 can_lang[["mother_tongue_percent", "most_at_home_percent"]]
         </input>
       </program>
+<table xml:id="table-language-percentages">
+  <title>Language Mother Tongue and Most at Home Percentages</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>mother_tongue_percent</cell>
+      <cell>most_at_home_percent</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>0.001678</cell>
+      <cell>0.000669</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>0.029188</cell>
+      <cell>0.013612</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>0.003272</cell>
+      <cell>0.001266</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>0.038291</cell>
+      <cell>0.017026</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>0.076511</cell>
+      <cell>0.037367</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>209</cell>
+      <cell>0.011351</cell>
+      <cell>0.003940</cell>
+    </row>
+    <row>
+      <cell>210</cell>
+      <cell>0.005234</cell>
+      <cell>0.002276</cell>
+    </row>
+    <row>
+      <cell>211</cell>
+      <cell>0.036741</cell>
+      <cell>0.021763</cell>
+    </row>
+    <row>
+      <cell>212</cell>
+      <cell>0.038561</cell>
+      <cell>0.020155</cell>
+    </row>
+    <row>
+      <cell>213</cell>
+      <cell>0.025831</cell>
+      <cell>0.007439</cell>
+    </row>
+  </tabular>
+</table>
       <p>
         Next, we will edit the visualization to use the percentages we just
         computed (and change our axis labels to reflect this change in units).
@@ -916,6 +1284,7 @@ can_lang_plot_legend = alt.Chart(can_lang).mark_circle().encode(
         In general, the color schemes that are used by default in Altair are adapted to the type of data that is displayed and selected to be easy to interpret both for people with good and reduced color vision.
         If you are unsure about a certain color combination, you can use this <url href="https://www.color-blindness.com/coblis-color-blindness-simulator/">color blindness simulator</url> to check
         if your visualizations are color-blind friendly.
+</p><p>
         All the available color schemes and information on how to create your own can be viewed <url href="https://altair-viz.github.io/user_guide/customization.html#customizing-colors">in the Altair documentation</url>.
         To change the color scheme of our chart, we can add the <c>scheme</c> argument in the <c>scale</c> of the <c>color</c> encoding.
         Below we pick the <c>"dark2"</c> theme, with the result shown in <xref ref="fig-viz-canlang-scatter-color-palette"/>.
@@ -1042,6 +1411,75 @@ islands_df = pd.read_csv("data/islands.csv")
 islands_df
         </input>
       </program>
+<table xml:id="table-landmass">
+  <title>Landmass Data</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="left"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>landmass</cell>
+      <cell>size</cell>
+      <cell>landmass_type</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>Africa</cell>
+      <cell>11506</cell>
+      <cell>Continent</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Antarctica</cell>
+      <cell>5500</cell>
+      <cell>Continent</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Asia</cell>
+      <cell>16988</cell>
+      <cell>Continent</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Australia</cell>
+      <cell>2968</cell>
+      <cell>Continent</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Axel Heiberg</cell>
+      <cell>16</cell>
+      <cell>Other</cell>
+    </row>
+    <row>
+      <cell>5</cell>
+      <cell>Baffin</cell>
+      <cell>184</cell>
+      <cell>Other</cell>
+    </row>
+    <row>
+      <cell>6</cell>
+      <cell>Banks</cell>
+      <cell>23</cell>
+      <cell>Other</cell>
+    </row>
+    <row>
+      <cell>7</cell>
+      <cell>Borneo</cell>
+      <cell>280</cell>
+      <cell>Other</cell>
+    </row>
+    <row>
+      <cell>8</cell>
+      <cell>Britain</cell>
+      <cell>84</cell>
+      <cell>Other</cell>
+    </row>
+  </tabular>
+</table>
       <p>
         Here, we have a data frame of Earth&#x2019;s landmasses, and are trying to compare
         their sizes. The right type of visualization to answer this question is a bar
@@ -1088,7 +1526,7 @@ islands_bar = alt.Chart(islands_df).mark_bar().encode(
       <note>
         <p>Recall that in <xref ref="ch-intro"/>, we used <c>sort_values</c> followed by
         <c>head</c> to obtain the ten rows with the largest values of a variable. We
-        could have instead used the <c>nlargest</c> function for this purpose. The
+        could have instead used the <c>nlargest</c> function from <c>pandas</c> for this purpose. The
         <c>nsmallest</c> and <c>nlargest</c> functions achieve the same goal as
         <c>sort_values</c> followed by <c>head</c>, but are slightly more efficient
         because they are specialized for this purpose. In general, it is good to use
@@ -1189,6 +1627,83 @@ morley_df = pd.read_csv("data/morley.csv")
 morley_df
         </input>
       </program>
+<table xml:id="table-speed-experiment">
+  <title>Speed Experiment Data</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Expt</cell>
+      <cell>Run</cell>
+      <cell>Speed</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>850</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>2</cell>
+      <cell>740</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>1</cell>
+      <cell>3</cell>
+      <cell>900</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>1</cell>
+      <cell>4</cell>
+      <cell>1070</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>1</cell>
+      <cell>5</cell>
+      <cell>930</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>95</cell>
+      <cell>5</cell>
+      <cell>16</cell>
+      <cell>940</cell>
+    </row>
+    <row>
+      <cell>96</cell>
+      <cell>5</cell>
+      <cell>17</cell>
+      <cell>950</cell>
+    </row>
+    <row>
+      <cell>97</cell>
+      <cell>5</cell>
+      <cell>18</cell>
+      <cell>800</cell>
+    </row>
+    <row>
+      <cell>98</cell>
+      <cell>5</cell>
+      <cell>19</cell>
+      <cell>810</cell>
+    </row>
+    <row>
+      <cell>99</cell>
+      <cell>5</cell>
+      <cell>20</cell>
+      <cell>870</cell>
+    </row>
+  </tabular>
+</table>
       <p>
         In this experimental data, Michelson was trying to measure just a single
         quantitative number (the speed of light). The data set contains many
@@ -1322,11 +1837,24 @@ morley_hist_colored = morley_hist_colored + v_line
 morley_df.info()
           </input>
         </program>
+<pre>
+&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 100 entries, 0 to 99
+Data columns (total 3 columns):
+ #   Column  Non-Null Count  Dtype
+---  ------  --------------  -----
+ 0   Expt    100 non-null    int64
+ 1   Run     100 non-null    int64
+ 2   Speed   100 non-null    int64
+dtypes: int64(3)
+memory usage: 2.5 KB
+</pre>
         <p>
           To fix this issue we can convert the <c>Expt</c> variable into a <c>nominal</c>
           (i.e., categorical) type variable by adding a suffix <c>:N</c>
           to the <c>Expt</c> variable. Adding the <c>:N</c> suffix ensures that <c>altair</c>
-          will treat a variable as a categorical variable, and hence use a discrete color map in visualizations.
+          will treat a variable as a categorical variable, and hence use a discrete color map in visualizations
+          (<url href = "https://altair-viz.github.io/user_guide/encodings/index.html#encoding-data-types">read more about data types in the altair documentation</url>).
           We also add the <c>stack(False)</c> method on the <c>y</c> encoding so
           that the bars are not stacked on top of each other, but instead share the same baseline.
           We try to ensure that the different colors can be seen despite them sitting in front of each other
@@ -1413,6 +1941,95 @@ morley_df["RelativeError"] = (
 morley_df
           </input>
         </program>
+<table xml:id="table-speed-experiment-relative-error">
+  <title>Speed Experiment Data with Relative Error</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Expt</cell>
+      <cell>Run</cell>
+      <cell>Speed</cell>
+      <cell>RelativeError</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>850</cell>
+      <cell>0.019194</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>2</cell>
+      <cell>740</cell>
+      <cell>-0.017498</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>1</cell>
+      <cell>3</cell>
+      <cell>900</cell>
+      <cell>0.035872</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>1</cell>
+      <cell>4</cell>
+      <cell>1070</cell>
+      <cell>0.092578</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>1</cell>
+      <cell>5</cell>
+      <cell>930</cell>
+      <cell>0.045879</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>95</cell>
+      <cell>5</cell>
+      <cell>16</cell>
+      <cell>940</cell>
+      <cell>0.049215</cell>
+    </row>
+    <row>
+      <cell>96</cell>
+      <cell>5</cell>
+      <cell>17</cell>
+      <cell>950</cell>
+      <cell>0.052550</cell>
+    </row>
+    <row>
+      <cell>97</cell>
+      <cell>5</cell>
+      <cell>18</cell>
+      <cell>800</cell>
+      <cell>0.002516</cell>
+    </row>
+    <row>
+      <cell>98</cell>
+      <cell>5</cell>
+      <cell>19</cell>
+      <cell>810</cell>
+      <cell>0.005851</cell>
+    </row>
+    <row>
+      <cell>99</cell>
+      <cell>5</cell>
+      <cell>20</cell>
+      <cell>870</cell>
+      <cell>0.025865</cell>
+    </row>
+  </tabular>
+</table>
         <program language="python">
           <input>
 morley_hist_rel = alt.Chart(morley_df).mark_bar().encode(
@@ -1641,17 +2258,6 @@ morley_hist_maxbins = alt.Chart(morley_df).mark_bar().encode(
       <c>faithful_scatter_labels</c> scatter plot of the
       <url href="https://www.stat.cmu.edu/~larry/all-of-statistics/=data/faithful.dat">Old Faithful data set</url> <xref ref="faithfuldata"/>
       that we created earlier, shown in <xref ref="fig-viz-faithful-save"/>.
-    </p>
-    <program language="python">
-      <input>
-faithful_scatter_labels
-      </input>
-    </program>
-    <figure xml:id="fig-viz-faithful-save">
-      <caption>Scatter plot of waiting time and eruption time.</caption>
-      <image source="images/viz/faithful_plot.png" width="60%"/>
-    </figure>
-    <p>
       To save the plot to a file, we can use the <c>save</c> method. The <c>save</c> method takes the path to the filename
       where you would like to save the file (e.g., <c>img/viz/filename.png</c> to
       save a file named <c>filename.png</c> to the <c>img/viz/</c> directory). The
@@ -1689,11 +2295,9 @@ faithful_scatter_labels.save("img/viz/faithful_plot.svg")
     <p>
       Take a look at the file sizes in <xref ref="tab-viz-filesizes"/>.
       Wow, that's quite a difference! In this case, the <c>.png</c> image is almost 4 times
-      smaller than the <c>.svg</c> image (Note: The sizes here reflect approximate outputs, the exact file sizes may vary). Since there are a decent number of points in the plot, the
-      vector graphics format image (<c>.svg</c>) is bigger than the raster image (<c>.png</c>),
-      which just stores the image data itself.
-    </p>
-    <p>
+      smaller than the <c>.svg</c> image. Since there are a decent number of points in the
+      plot, the vector graphics format image (<c>.svg</c>) is bigger than the raster image
+      (<c>.png</c>), which just stores the image data itself.
       In <xref ref="fig-viz-raster-image"/>, we show what the images look like
       when we zoom in to a rectangle with only 3 data points. You can see why vector
       graphics formats are so useful: because they&#x2019;re just based on mathematical
