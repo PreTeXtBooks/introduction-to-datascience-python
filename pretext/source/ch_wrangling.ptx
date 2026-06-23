@@ -3736,11 +3736,17 @@ region_lang
 region_lang["most_at_home"].min()
         </input>
       </program>
+<pre>
+0
+</pre>
       <program language="python">
         <input>
 region_lang["most_at_home"].max()
         </input>
       </program>
+<pre>
+3836770
+</pre>
       <p>
         From this we see that there are some languages in the data set that no one speaks
         as their primary language at home. We also see that the most commonly spoken
@@ -3752,6 +3758,9 @@ region_lang["most_at_home"].max()
 region_lang["most_at_home"].sum()
         </input>
       </program>
+<pre>
+23171710
+</pre>
       <p>
         <idx><h>Series</h><h>sum</h></idx>
         <idx><h>Series</h><h>mean</h></idx>
@@ -3769,6 +3778,11 @@ region_lang["most_at_home"].sum()
 region_lang["most_at_home"].agg(["min", "max"])
         </input>
       </program>
+<pre>
+min          0
+max    3836770
+Name: most_at_home, dtype: int64
+</pre>
       <p>
         The <c>pandas</c> package also provides the <c>describe</c> method,
         which is a handy function that computes many common summary statistics at once; it
@@ -3779,6 +3793,17 @@ region_lang["most_at_home"].agg(["min", "max"])
 region_lang["most_at_home"].describe()
         </input>
       </program>
+<pre>
+count    7.490000e+03
+mean     3.093686e+03
+std      6.401258e+04
+min      0.000000e+00
+25%      0.000000e+00
+50%      0.000000e+00
+75%      3.000000e+01
+max      3.836770e+06
+Name: most_at_home, dtype: float64
+</pre>
       <p>
         In addition to the summary methods we introduced earlier, the <c>describe</c> method
         outputs a <c>count</c> (the total number of observations, or rows, in our data frame),
@@ -3832,6 +3857,16 @@ region_lang["most_at_home"].describe()
 region_lang.max()
         </input>
       </program>
+<pre>
+region                     Winnipeg
+category         Official languages
+language                     Yoruba
+mother_tongue               3061820
+most_at_home                3836770
+most_at_work                3218725
+lang_known                  5600480
+dtype: object
+</pre>
       <p>
         We can see that for columns that contain string data
         with words like <c>"Vancouver"</c> and <c>"Halifax"</c>,
@@ -3844,6 +3879,13 @@ region_lang.max()
 region_lang.max(numeric_only=True)
         </input>
       </program>
+<pre>
+mother_tongue    3061820
+most_at_home     3836770
+most_at_work     3218725
+lang_known       5600480
+dtype: int64
+</pre>
       <p>
         We could also ask for the <c>mean</c> for each column in the dataframe.
         It does not make sense to compute the mean of the string columns,
@@ -3855,6 +3897,13 @@ region_lang.max(numeric_only=True)
 region_lang.mean(numeric_only=True)
         </input>
       </program>
+<pre>
+mother_tongue    3200.341121
+most_at_home     3093.686248
+most_at_work     1853.757677
+lang_known       5127.499332
+dtype: float64
+</pre>
       <p>
         If there are only some columns for which you would like to get summary statistics,
         you can first use <c>[]</c> or <c>.loc[]</c> to select those columns,
@@ -3867,6 +3916,11 @@ region_lang.mean(numeric_only=True)
 region_lang.loc[:, "mother_tongue":"lang_known"].agg(["mean", "std"])
         </input>
       </program>
+<pre>
+	     mother_tongue  most_at_home  most_at_work    lang_known
+mean	   3200.341121   3093.686248   1853.757677   5127.499332
+std	    55231.640268  64012.578320  48574.532066  94001.162338
+</pre>
     </subsection>
   </section>
 
@@ -3899,6 +3953,9 @@ region_lang.loc[:, "mother_tongue":"lang_known"].agg(["mean", "std"])
 region_lang.groupby("region")
       </input>
     </program>
+<pre>
+&lt;pandas.core.groupby.generic.DataFrameGroupBy object at 0x7f9289e69910&gt;
+</pre>
     <p>
       Notice that <c>groupby</c> converts a <c>DataFrame</c> object to a <c>DataFrameGroupBy</c>
       object, which contains information about the groups of the data frame. We can
@@ -3911,6 +3968,74 @@ region_lang.groupby("region")
 region_lang.groupby("region")["most_at_home"].agg(["min", "max"])
       </input>
     </program>
+<table xml:id="table-region-min-max">
+  <title>Minimum and Maximum Language Usage by Region</title>
+  <tabular halign="right">
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell>region</cell>
+      <cell>min</cell>
+      <cell>max</cell>
+    </row>
+    <row>
+      <cell>Abbotsford <ndash/> Mission</cell>
+      <cell>0</cell>
+      <cell>137445</cell>
+    </row>
+    <row>
+      <cell>Barrie</cell>
+      <cell>0</cell>
+      <cell>182390</cell>
+    </row>
+    <row>
+      <cell>Belleville</cell>
+      <cell>0</cell>
+      <cell>97840</cell>
+    </row>
+    <row>
+      <cell>Brantford</cell>
+      <cell>0</cell>
+      <cell>124560</cell>
+    </row>
+    <row>
+      <cell>Calgary</cell>
+      <cell>0</cell>
+      <cell>1065070</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>Trois-Rivières</cell>
+      <cell>0</cell>
+      <cell>149835</cell>
+    </row>
+    <row>
+      <cell>Vancouver</cell>
+      <cell>0</cell>
+      <cell>1622735</cell>
+    </row>
+    <row>
+      <cell>Victoria</cell>
+      <cell>0</cell>
+      <cell>331375</cell>
+    </row>
+    <row>
+      <cell>Windsor</cell>
+      <cell>0</cell>
+      <cell>270715</cell>
+    </row>
+    <row>
+      <cell>Winnipeg</cell>
+      <cell>0</cell>
+      <cell>612595</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       The resulting dataframe has <c>region</c> as an index name.
       This is similar to what happened when we used the <c>pivot</c> function
@@ -3923,6 +4048,87 @@ region_lang.groupby("region")["most_at_home"].agg(["min", "max"])
 region_lang.groupby("region")["most_at_home"].agg(["min", "max"]).reset_index()
       </input>
     </program>
+<table xml:id="table-region-min-max-indexed">
+  <title>Minimum and Maximum Language Usage by Region</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>min</cell>
+      <cell>max</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>Abbotsford <ndash/> Mission</cell>
+      <cell>0</cell>
+      <cell>137445</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Barrie</cell>
+      <cell>0</cell>
+      <cell>182390</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Belleville</cell>
+      <cell>0</cell>
+      <cell>97840</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Brantford</cell>
+      <cell>0</cell>
+      <cell>124560</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Calgary</cell>
+      <cell>0</cell>
+      <cell>1065070</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>30</cell>
+      <cell>Trois-Rivières</cell>
+      <cell>0</cell>
+      <cell>149835</cell>
+    </row>
+    <row>
+      <cell>31</cell>
+      <cell>Vancouver</cell>
+      <cell>0</cell>
+      <cell>1622735</cell>
+    </row>
+    <row>
+      <cell>32</cell>
+      <cell>Victoria</cell>
+      <cell>0</cell>
+      <cell>331375</cell>
+    </row>
+    <row>
+      <cell>33</cell>
+      <cell>Windsor</cell>
+      <cell>0</cell>
+      <cell>270715</cell>
+    </row>
+    <row>
+      <cell>34</cell>
+      <cell>Winnipeg</cell>
+      <cell>0</cell>
+      <cell>612595</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       You can also pass multiple column names to <c>groupby</c>. For example, if we wanted to
       know about how the different categories of languages (Aboriginal, Non-Official &amp;
@@ -3934,6 +4140,100 @@ region_lang.groupby("region")["most_at_home"].agg(["min", "max"]).reset_index()
 region_lang.groupby(["region", "category"])["most_at_home"].agg(["min", "max"]).reset_index()
       </input>
     </program>
+<table xml:id="table-region-category-min-max">
+  <title>Minimum and Maximum Language Usage by Region and Category</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>category</cell>
+      <cell>min</cell>
+      <cell>max</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>Abbotsford <ndash/> Mission</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>0</cell>
+      <cell>5</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Abbotsford <ndash/> Mission</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>0</cell>
+      <cell>23015</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Abbotsford <ndash/> Mission</cell>
+      <cell>Official languages</cell>
+      <cell>250</cell>
+      <cell>137445</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Barrie</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Barrie</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>0</cell>
+      <cell>875</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>100</cell>
+      <cell>Windsor</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>0</cell>
+      <cell>8235</cell>
+    </row>
+    <row>
+      <cell>101</cell>
+      <cell>Windsor</cell>
+      <cell>Official languages</cell>
+      <cell>2695</cell>
+      <cell>270715</cell>
+    </row>
+    <row>
+      <cell>102</cell>
+      <cell>Winnipeg</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>0</cell>
+      <cell>365</cell>
+    </row>
+    <row>
+      <cell>103</cell>
+      <cell>Winnipeg</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>0</cell>
+      <cell>23565</cell>
+    </row>
+    <row>
+      <cell>104</cell>
+      <cell>Winnipeg</cell>
+      <cell>Official languages</cell>
+      <cell>11185</cell>
+      <cell>612595</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       You can also ask for grouped summary statistics on the whole data frame.
     </p>
@@ -3942,6 +4242,227 @@ region_lang.groupby(["region", "category"])["most_at_home"].agg(["min", "max"]).
 region_lang.groupby("region").agg(["min", "max"]).reset_index()
       </input>
     </program>
+<table xml:id="table-region-language-min-max-full">
+  <title>Minimum and Maximum Language Statistics by Region</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left" />
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell colspan="2">category</cell>
+      <cell colspan="2">language</cell>
+      <cell colspan="2">mother_tongue</cell>
+      <cell colspan="2">most_at_home</cell>
+      <cell colspan="2">most_at_work</cell>
+      <cell colspan="2">lang_known</cell>
+    </row>
+    <row>
+      <cell></cell>
+      <cell></cell>
+      <cell>min</cell>
+      <cell>max</cell>
+      <cell>min</cell>
+      <cell>max</cell>
+      <cell>min</cell>
+      <cell>max</cell>
+      <cell>min</cell>
+      <cell>max</cell>
+      <cell>min</cell>
+      <cell>max</cell>
+      <cell>min</cell>
+      <cell>max</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>Abbotsford <ndash/> Mission</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Official languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>Yoruba</cell>
+      <cell>0</cell>
+      <cell>122100</cell>
+      <cell>0</cell>
+      <cell>137445</cell>
+      <cell>0</cell>
+      <cell>93495</cell>
+      <cell>0</cell>
+      <cell>167835</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Barrie</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Official languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>Yoruba</cell>
+      <cell>0</cell>
+      <cell>168990</cell>
+      <cell>0</cell>
+      <cell>182390</cell>
+      <cell>0</cell>
+      <cell>115125</cell>
+      <cell>0</cell>
+      <cell>193445</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Belleville</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Official languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>Yoruba</cell>
+      <cell>0</cell>
+      <cell>93655</cell>
+      <cell>0</cell>
+      <cell>97840</cell>
+      <cell>0</cell>
+      <cell>54150</cell>
+      <cell>0</cell>
+      <cell>100855</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Brantford</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Official languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>Yoruba</cell>
+      <cell>0</cell>
+      <cell>116645</cell>
+      <cell>0</cell>
+      <cell>124560</cell>
+      <cell>0</cell>
+      <cell>73910</cell>
+      <cell>0</cell>
+      <cell>130835</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Calgary</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Official languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>Yoruba</cell>
+      <cell>0</cell>
+      <cell>937055</cell>
+      <cell>0</cell>
+      <cell>1065070</cell>
+      <cell>0</cell>
+      <cell>844740</cell>
+      <cell>0</cell>
+      <cell>1343335</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>30</cell>
+      <cell>Trois-Rivières</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Official languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>Yoruba</cell>
+      <cell>0</cell>
+      <cell>147805</cell>
+      <cell>0</cell>
+      <cell>149835</cell>
+      <cell>0</cell>
+      <cell>78610</cell>
+      <cell>0</cell>
+      <cell>149805</cell>
+    </row>
+    <row>
+      <cell>31</cell>
+      <cell>Vancouver</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Official languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>Yoruba</cell>
+      <cell>0</cell>
+      <cell>1316635</cell>
+      <cell>0</cell>
+      <cell>1622735</cell>
+      <cell>0</cell>
+      <cell>1330555</cell>
+      <cell>0</cell>
+      <cell>2289515</cell>
+    </row>
+    <row>
+      <cell>32</cell>
+      <cell>Victoria</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Official languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>Yoruba</cell>
+      <cell>0</cell>
+      <cell>302690</cell>
+      <cell>0</cell>
+      <cell>331375</cell>
+      <cell>0</cell>
+      <cell>211705</cell>
+      <cell>0</cell>
+      <cell>354470</cell>
+    </row>
+    <row>
+      <cell>33</cell>
+      <cell>Windsor</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Official languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>Yoruba</cell>
+      <cell>0</cell>
+      <cell>235990</cell>
+      <cell>0</cell>
+      <cell>270715</cell>
+      <cell>0</cell>
+      <cell>166220</cell>
+      <cell>0</cell>
+      <cell>318540</cell>
+    </row>
+    <row>
+      <cell>34</cell>
+      <cell>Winnipeg</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Official languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>Yoruba</cell>
+      <cell>0</cell>
+      <cell>530570</cell>
+      <cell>0</cell>
+      <cell>612595</cell>
+      <cell>0</cell>
+      <cell>437460</cell>
+      <cell>0</cell>
+      <cell>749285</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       If you want to ask for only some columns, for example
       the columns between <c>"most_at_home"</c> and <c>"lang_known"</c>,
@@ -3973,6 +4494,100 @@ KeyError: "region"
 region_lang.groupby("region")[["most_at_home", "most_at_work", "lang_known"]].max().reset_index()
       </input>
     </program>
+<table xml:id="table-region-language-max">
+  <title>Maximum Language Usage by Region</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+      <cell>lang_known</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>Abbotsford <ndash/> Mission</cell>
+      <cell>137445</cell>
+      <cell>93495</cell>
+      <cell>167835</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Barrie</cell>
+      <cell>182390</cell>
+      <cell>115125</cell>
+      <cell>193445</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Belleville</cell>
+      <cell>97840</cell>
+      <cell>54150</cell>
+      <cell>100855</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Brantford</cell>
+      <cell>124560</cell>
+      <cell>73910</cell>
+      <cell>130835</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Calgary</cell>
+      <cell>1065070</cell>
+      <cell>844740</cell>
+      <cell>1343335</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>30</cell>
+      <cell>Trois-Rivières</cell>
+      <cell>149835</cell>
+      <cell>78610</cell>
+      <cell>149805</cell>
+    </row>
+    <row>
+      <cell>31</cell>
+      <cell>Vancouver</cell>
+      <cell>1622735</cell>
+      <cell>1330555</cell>
+      <cell>2289515</cell>
+    </row>
+    <row>
+      <cell>32</cell>
+      <cell>Victoria</cell>
+      <cell>331375</cell>
+      <cell>211705</cell>
+      <cell>354470</cell>
+    </row>
+    <row>
+      <cell>33</cell>
+      <cell>Windsor</cell>
+      <cell>270715</cell>
+      <cell>166220</cell>
+      <cell>318540</cell>
+    </row>
+    <row>
+      <cell>34</cell>
+      <cell>Winnipeg</cell>
+      <cell>612595</cell>
+      <cell>437460</cell>
+      <cell>749285</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       <idx><h>DataFrame</h><h>value_counts</h></idx>
       To see how many observations there are in each group, we can use <c>value_counts</c>.
@@ -3982,6 +4597,21 @@ region_lang.groupby("region")[["most_at_home", "most_at_work", "lang_known"]].ma
 region_lang.value_counts("region")
       </input>
     </program>
+<pre>
+region
+Abbotsford - Mission                214
+St. Catharines - Niagara            214
+Québec                              214
+Regina                              214
+Saguenay                            214
+                                   ... 
+Kitchener - Cambridge - Waterloo    214
+Lethbridge                          214
+London                              214
+Moncton                             214
+Winnipeg                            214
+Name: count, Length: 35, dtype: int64
+</pre>
     <p>
       Which takes the <c>normalize</c> parameter to show the output as proportion instead of a count.
     </p>
@@ -3990,6 +4620,21 @@ region_lang.value_counts("region")
 region_lang.value_counts("region", normalize=True)
       </input>
     </program>
+<pre>
+region
+Abbotsford - Mission                0.028571
+St. Catharines - Niagara            0.028571
+Québec                              0.028571
+Regina                              0.028571
+Saguenay                            0.028571
+                                      ...   
+Kitchener - Cambridge - Waterloo    0.028571
+Lethbridge                          0.028571
+London                              0.028571
+Moncton                             0.028571
+Winnipeg                            0.028571
+Name: proportion, Length: 35, dtype: float64
+</pre>
   </section>
 
   <section xml:id="sec-wrangling-apply-multiple">
@@ -4168,6 +4813,19 @@ region_lang_nums = region_lang.loc[:, "mother_tongue":"lang_known"].astype("int3
 region_lang_nums.info()
       </input>
     </program>
+<pre>
+&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 7490 entries, 0 to 7489
+Data columns (total 4 columns):
+ #   Column         Non-Null Count  Dtype
+---  ------         --------------  -----
+ 0   mother_tongue  7490 non-null   int32
+ 1   most_at_home   7490 non-null   int32
+ 2   most_at_work   7490 non-null   int32
+ 3   lang_known     7490 non-null   int32
+dtypes: int32(4)
+memory usage: 117.2 KB
+</pre>
 
     <p>
       You can now see that the columns from <c>mother_tongue</c> to <c>lang_known</c> are type <c>int32</c>,
@@ -4200,6 +4858,21 @@ region_lang_nums.info()
 region_lang_nums.max(axis=1)
       </input>
     </program>
+
+<pre>
+0         5
+1         5
+2         0
+3         0
+4         5
+       ... 
+7485    910
+7486      5
+7487     50
+7488    505
+7489     90
+Length: 7490, dtype: int32
+</pre>
 
     <p>
       We see that we obtain a series containing the maximum value between <c>mother_tongue</c>,
@@ -4586,6 +5259,79 @@ english_lang = region_lang[
 english_lang
       </input>
     </program>
+<table xml:id="table-english-official-language">
+  <title>English Official Language Usage by Region</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>category</cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+      <cell>lang_known</cell>
+    </row>
+    <row>
+      <cell>1898</cell>
+      <cell>Montréal</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>444955</cell>
+      <cell>620510</cell>
+      <cell>412120</cell>
+      <cell>2500590</cell>
+    </row>
+    <row>
+      <cell>1903</cell>
+      <cell>Toronto</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>3061820</cell>
+      <cell>3836770</cell>
+      <cell>3218725</cell>
+      <cell>5600480</cell>
+    </row>
+    <row>
+      <cell>1918</cell>
+      <cell>Calgary</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>937055</cell>
+      <cell>1065070</cell>
+      <cell>844740</cell>
+      <cell>1343335</cell>
+    </row>
+    <row>
+      <cell>1919</cell>
+      <cell>Edmonton</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>930405</cell>
+      <cell>1050410</cell>
+      <cell>792700</cell>
+      <cell>1275265</cell>
+    </row>
+    <row>
+      <cell>1923</cell>
+      <cell>Vancouver</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>1316635</cell>
+      <cell>1622735</cell>
+      <cell>1330555</cell>
+      <cell>2289515</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       Okay, now we have a data frame that pertains only to the English language
       and the five cities mentioned earlier.
@@ -4597,6 +5343,65 @@ english_lang
 five_cities
       </input>
     </program>
+<table xml:id="table-large-canadian-regions-demographics">
+  <title>Largest Canadian Region Demographics</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>households</cell>
+      <cell>area</cell>
+      <cell>population</cell>
+      <cell>dwellings</cell>
+    </row>
+    <row>
+      <cell>29</cell>
+      <cell>Edmonton</cell>
+      <cell>502143</cell>
+      <cell>9857.77908</cell>
+      <cell>1321426</cell>
+      <cell>537634</cell>
+    </row>
+    <row>
+      <cell>31</cell>
+      <cell>Calgary</cell>
+      <cell>519693</cell>
+      <cell>5241.70103</cell>
+      <cell>1392609</cell>
+      <cell>544870</cell>
+    </row>
+    <row>
+      <cell>32</cell>
+      <cell>Vancouver</cell>
+      <cell>960894</cell>
+      <cell>3040.41532</cell>
+      <cell>2463431</cell>
+      <cell>1027613</cell>
+    </row>
+    <row>
+      <cell>33</cell>
+      <cell>Montréal</cell>
+      <cell>1727310</cell>
+      <cell>4638.24059</cell>
+      <cell>4098927</cell>
+      <cell>1823281</cell>
+    </row>
+    <row>
+      <cell>34</cell>
+      <cell>Toronto</cell>
+      <cell>2135909</cell>
+      <cell>6269.93132</cell>
+      <cell>5928040</cell>
+      <cell>2235145</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       The data frame above shows that the populations of the five cities in 2016 were
       5928040 (Toronto), 4098927 (Montr&#xe9;al), 2463431 (Vancouver), 1392609 (Calgary), and 1321426 (Edmonton).
@@ -4617,6 +5422,86 @@ english_lang.assign(
 )
       </input>
     </program>
+<table xml:id="table-english-official-language-city-pops">
+  <title>English Official Language Usage and City Populations by Region</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>category</cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+      <cell>lang_known</cell>
+      <cell>city_pops</cell>
+    </row>
+    <row>
+      <cell>1898</cell>
+      <cell>Montréal</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>444955</cell>
+      <cell>620510</cell>
+      <cell>412120</cell>
+      <cell>2500590</cell>
+      <cell>4098927</cell>
+    </row>
+    <row>
+      <cell>1903</cell>
+      <cell>Toronto</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>3061820</cell>
+      <cell>3836770</cell>
+      <cell>3218725</cell>
+      <cell>5600480</cell>
+      <cell>5928040</cell>
+    </row>
+    <row>
+      <cell>1918</cell>
+      <cell>Calgary</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>937055</cell>
+      <cell>1065070</cell>
+      <cell>844740</cell>
+      <cell>1343335</cell>
+      <cell>1392609</cell>
+    </row>
+    <row>
+      <cell>1919</cell>
+      <cell>Edmonton</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>930405</cell>
+      <cell>1050410</cell>
+      <cell>792700</cell>
+      <cell>1275265</cell>
+      <cell>1321426</cell>
+    </row>
+    <row>
+      <cell>1923</cell>
+      <cell>Vancouver</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>1316635</cell>
+      <cell>1622735</cell>
+      <cell>1330555</cell>
+      <cell>2289515</cell>
+      <cell>2463431</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       Instead of using the <c>assign</c> method we can directly modify the <c>english_lang</c> data frame using regular column assignment.
       This would be a more natural choice in this particular case,
@@ -4636,6 +5521,88 @@ Try using .loc[row_indexer,col_indexer] = value instead
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   english_lang["city_pops"] = [4098927, 5928040, 1392609, 1321426, 2463431]
     </pre>
+
+<table xml:id="table-english-official-language-city-pops-2">
+  <title>English Official Language Usage and City Populations by Region</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>category</cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+      <cell>lang_known</cell>
+      <cell>city_pops</cell>
+    </row>
+    <row>
+      <cell>1898</cell>
+      <cell>Montréal</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>444955</cell>
+      <cell>620510</cell>
+      <cell>412120</cell>
+      <cell>2500590</cell>
+      <cell>4098927</cell>
+    </row>
+    <row>
+      <cell>1903</cell>
+      <cell>Toronto</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>3061820</cell>
+      <cell>3836770</cell>
+      <cell>3218725</cell>
+      <cell>5600480</cell>
+      <cell>5928040</cell>
+    </row>
+    <row>
+      <cell>1918</cell>
+      <cell>Calgary</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>937055</cell>
+      <cell>1065070</cell>
+      <cell>844740</cell>
+      <cell>1343335</cell>
+      <cell>1392609</cell>
+    </row>
+    <row>
+      <cell>1919</cell>
+      <cell>Edmonton</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>930405</cell>
+      <cell>1050410</cell>
+      <cell>792700</cell>
+      <cell>1275265</cell>
+      <cell>1321426</cell>
+    </row>
+    <row>
+      <cell>1923</cell>
+      <cell>Vancouver</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>1316635</cell>
+      <cell>1622735</cell>
+      <cell>1330555</cell>
+      <cell>2289515</cell>
+      <cell>2463431</cell>
+    </row>
+  </tabular>
+</table>
+
     <p>
       <idx><h>SettingWithCopyWarning</h></idx>
       Wait a moment...what is that warning message? It seems to suggest that something went wrong, but
@@ -4681,6 +5648,88 @@ english_lang.loc[:, "mother_tongue":"lang_known"] = english_lang.loc[
 english_lang
       </input>
     </program>
+
+<table xml:id="table-english-proportions-city-pops">
+  <title>English Official Language Proportions and City Populations by Region</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>category</cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+      <cell>lang_known</cell>
+      <cell>city_pops</cell>
+    </row>
+    <row>
+      <cell>1898</cell>
+      <cell>Montréal</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>0.108554</cell>
+      <cell>0.151384</cell>
+      <cell>0.100543</cell>
+      <cell>0.610060</cell>
+      <cell>4098927</cell>
+    </row>
+    <row>
+      <cell>1903</cell>
+      <cell>Toronto</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>0.516498</cell>
+      <cell>0.647224</cell>
+      <cell>0.542966</cell>
+      <cell>0.944744</cell>
+      <cell>5928040</cell>
+    </row>
+    <row>
+      <cell>1918</cell>
+      <cell>Calgary</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>0.672877</cell>
+      <cell>0.764802</cell>
+      <cell>0.606588</cell>
+      <cell>0.964617</cell>
+      <cell>1392609</cell>
+    </row>
+    <row>
+      <cell>1919</cell>
+      <cell>Edmonton</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>0.704092</cell>
+      <cell>0.794906</cell>
+      <cell>0.599882</cell>
+      <cell>0.965067</cell>
+      <cell>1321426</cell>
+    </row>
+    <row>
+      <cell>1923</cell>
+      <cell>Vancouver</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>0.534472</cell>
+      <cell>0.658730</cell>
+      <cell>0.540123</cell>
+      <cell>0.929401</cell>
+      <cell>2463431</cell>
+    </row>
+  </tabular>
+</table>
+
   </section>
 
   <section xml:id="sec-wrangling-merge">
@@ -4697,6 +5746,79 @@ english_lang
 english_lang
       </input>
     </program>
+<table xml:id="table-english-official-language-counts">
+  <title>English Official Language Usage by Region</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>category</cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+      <cell>lang_known</cell>
+    </row>
+    <row>
+      <cell>1898</cell>
+      <cell>Montréal</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>444955</cell>
+      <cell>620510</cell>
+      <cell>412120</cell>
+      <cell>2500590</cell>
+    </row>
+    <row>
+      <cell>1903</cell>
+      <cell>Toronto</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>3061820</cell>
+      <cell>3836770</cell>
+      <cell>3218725</cell>
+      <cell>5600480</cell>
+    </row>
+    <row>
+      <cell>1918</cell>
+      <cell>Calgary</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>937055</cell>
+      <cell>1065070</cell>
+      <cell>844740</cell>
+      <cell>1343335</cell>
+    </row>
+    <row>
+      <cell>1919</cell>
+      <cell>Edmonton</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>930405</cell>
+      <cell>1050410</cell>
+      <cell>792700</cell>
+      <cell>1275265</cell>
+    </row>
+    <row>
+      <cell>1923</cell>
+      <cell>Vancouver</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>1316635</cell>
+      <cell>1622735</cell>
+      <cell>1330555</cell>
+      <cell>2289515</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       We then added the populations of these cities as a column
       (Toronto: 5928040, Montr&#xe9;al: 4098927, Vancouver: 2463431,
@@ -4720,6 +5842,43 @@ city_populations = pd.DataFrame({
 city_populations
       </input>
     </program>
+<table xml:id="table-english-official-language-counts-1">
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>population</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>Toronto</cell>
+      <cell>5928040</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Montréal</cell>
+      <cell>4098927</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Vancouver</cell>
+      <cell>2463431</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Calgary</cell>
+      <cell>1392609</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Edmonton</cell>
+      <cell>1321426</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       This new data frame has the same <c>region</c> column as the <c>english_lang</c> data frame. The order of
       the cities is different, but that is okay! We can use the <c>merge</c> function in <c>pandas</c> to say
@@ -4732,6 +5891,85 @@ english_lang = english_lang.merge(city_populations, on="region")
 english_lang
       </input>
     </program>
+<table xml:id="table-english-official-language-counts-6">
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>category</cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+      <cell>lang_known</cell>
+      <cell>population</cell>
+    </row>
+    <row>
+      <cell>1898</cell>
+      <cell>Montréal</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>444955</cell>
+      <cell>620510</cell>
+      <cell>412120</cell>
+      <cell>2500590</cell>
+      <cell>4098927</cell>
+    </row>
+    <row>
+      <cell>1903</cell>
+      <cell>Toronto</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>3061820</cell>
+      <cell>3836770</cell>
+      <cell>3218725</cell>
+      <cell>5600480</cell>
+      <cell>5928040</cell>
+    </row>
+    <row>
+      <cell>1918</cell>
+      <cell>Calgary</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>937055</cell>
+      <cell>1065070</cell>
+      <cell>844740</cell>
+      <cell>1343335</cell>
+      <cell>1392609</cell>
+    </row>
+    <row>
+      <cell>1919</cell>
+      <cell>Edmonton</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>930405</cell>
+      <cell>1050410</cell>
+      <cell>792700</cell>
+      <cell>1275265</cell>
+      <cell>1321426</cell>
+    </row>
+    <row>
+      <cell>1923</cell>
+      <cell>Vancouver</cell>
+      <cell>Official languages</cell>
+      <cell>English</cell>
+      <cell>1316635</cell>
+      <cell>1622735</cell>
+      <cell>1330555</cell>
+      <cell>2289515</cell>
+      <cell>2463431</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       You can see that the populations for each city are correct (e.g. Montr&#xe9;al: 4098927, Toronto: 5928040),
       and we can proceed to with our analysis from here.
