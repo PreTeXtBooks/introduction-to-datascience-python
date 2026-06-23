@@ -3378,6 +3378,20 @@ tidy_lang.loc[:, tidy_lang.columns.str.contains("_")]
 tidy_lang.iloc[:, 1]
       </input>
     </program>
+<pre>
+0         Aboriginal languages, n.o.s.
+1                            Afrikaans
+2       Afro-Asiatic languages, n.i.e.
+3                           Akan (Twi)
+4                             Albanian
+                     ...              
+1065                             Wolof
+1066                        Woods Cree
+1067                 Wu (Shanghainese)
+1068                           Yiddish
+1069                            Yoruba
+Name: language, Length: 1070, dtype: object
+</pre>
     <p>
       You can also ask for multiple columns. We pass <c>1:</c> after the comma
       indicating we want columns after and including index 1 (<em>i.e.</em> <c>language</c>).
@@ -3387,6 +3401,99 @@ tidy_lang.iloc[:, 1]
 tidy_lang.iloc[:, 1:]
       </input>
     </program>
+<table xml:id="table-language-home-work-all-regions-1-1">
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>language</cell>
+      <cell>region</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>Toronto</cell>
+      <cell>50</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Afrikaans</cell>
+      <cell>Toronto</cell>
+      <cell>265</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Afro-Asiatic languages, n.i.e.</cell>
+      <cell>Toronto</cell>
+      <cell>185</cell>
+      <cell>10</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Akan (Twi)</cell>
+      <cell>Toronto</cell>
+      <cell>4045</cell>
+      <cell>20</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Albanian</cell>
+      <cell>Toronto</cell>
+      <cell>6380</cell>
+      <cell>215</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>1065</cell>
+      <cell>Wolof</cell>
+      <cell>Edmonton</cell>
+      <cell>90</cell>
+      <cell>10</cell>
+    </row>
+    <row>
+      <cell>1066</cell>
+      <cell>Woods Cree</cell>
+      <cell>Edmonton</cell>
+      <cell>20</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>1067</cell>
+      <cell>Wu (Shanghainese)</cell>
+      <cell>Edmonton</cell>
+      <cell>120</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>1068</cell>
+      <cell>Yiddish</cell>
+      <cell>Edmonton</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>1069</cell>
+      <cell>Yoruba</cell>
+      <cell>Edmonton</cell>
+      <cell>280</cell>
+      <cell>0</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       We can also use <c>iloc[]</c> to select ranges of rows, or simultaneously select ranges of rows and columns, using a similar syntax.
       For example, to select the first five rows and columns after and including index 1, we could use the following:
@@ -3396,6 +3503,57 @@ tidy_lang.iloc[:, 1:]
 tidy_lang.iloc[:5, 1:]
       </input>
     </program>
+<table xml:id="table-language-home-work-all-regions-1">
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>language</cell>
+      <cell>region</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>Toronto</cell>
+      <cell>50</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Afrikaans</cell>
+      <cell>Toronto</cell>
+      <cell>265</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Afro-Asiatic languages, n.i.e.</cell>
+      <cell>Toronto</cell>
+      <cell>185</cell>
+      <cell>10</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Akan (Twi)</cell>
+      <cell>Toronto</cell>
+      <cell>4045</cell>
+      <cell>20</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Albanian</cell>
+      <cell>Toronto</cell>
+      <cell>6380</cell>
+      <cell>215</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       Note that the <c>iloc[]</c> method is not commonly used, and must be used with care.
       For example, it is easy to accidentally put in the wrong integer index! If you did not correctly remember
@@ -3434,6 +3592,139 @@ region_lang = pd.read_csv("data/region_lang.csv")
 region_lang
         </input>
       </program>
+<table xml:id="table-region-language-full">
+  <title>Language Usage by Region</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>category</cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+      <cell>lang_known</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>St. John's</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Halifax</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Moncton</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Saint John</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Saguenay</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>5</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>7485</cell>
+      <cell>Ottawa <ndash/> Gatineau</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>265</cell>
+      <cell>65</cell>
+      <cell>10</cell>
+      <cell>910</cell>
+    </row>
+    <row>
+      <cell>7486</cell>
+      <cell>Kelowna</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>7487</cell>
+      <cell>Abbotsford <ndash/> Mission</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>20</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>50</cell>
+    </row>
+    <row>
+      <cell>7488</cell>
+      <cell>Vancouver</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>190</cell>
+      <cell>40</cell>
+      <cell>0</cell>
+      <cell>505</cell>
+    </row>
+    <row>
+      <cell>7489</cell>
+      <cell>Victoria</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>20</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>90</cell>
+    </row>
+  </tabular>
+</table>
       <p>
         <idx><h>Series</h><h>min</h></idx>
         <idx><h>Series</h><h>max</h></idx>
@@ -3730,7 +4021,139 @@ region_lang.value_counts("region", normalize=True)
 region_lang
       </input>
     </program>
-
+<table xml:id="table-region-language-full-1">
+  <title>Language Usage by Region</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>category</cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+      <cell>lang_known</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>St. John's</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Halifax</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Moncton</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Saint John</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Saguenay</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>5</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>7485</cell>
+      <cell>Ottawa <ndash/> Gatineau</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>265</cell>
+      <cell>65</cell>
+      <cell>10</cell>
+      <cell>910</cell>
+    </row>
+    <row>
+      <cell>7486</cell>
+      <cell>Kelowna</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>7487</cell>
+      <cell>Abbotsford <ndash/> Mission</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>20</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>50</cell>
+    </row>
+    <row>
+      <cell>7488</cell>
+      <cell>Vancouver</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>190</cell>
+      <cell>40</cell>
+      <cell>0</cell>
+      <cell>505</cell>
+    </row>
+    <row>
+      <cell>7489</cell>
+      <cell>Victoria</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>20</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>90</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       <idx><h>DataFrame</h><h>apply</h></idx>
       <idx><h>DataFrame</h><h>loc[]</h></idx>
@@ -3818,6 +4241,150 @@ region_lang["maximum"] = region_lang_nums.max(axis=1)
 region_lang
       </input>
     </program>
+<table xml:id="table-region-language-full-3">
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>category</cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+      <cell>lang_known</cell>
+      <cell>maximum</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>St. John's</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>5</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Halifax</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>5</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Moncton</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Saint John</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Saguenay</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>5</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>5</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>7485</cell>
+      <cell>Ottawa <ndash/> Gatineau</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>265</cell>
+      <cell>65</cell>
+      <cell>10</cell>
+      <cell>910</cell>
+      <cell>910</cell>
+    </row>
+    <row>
+      <cell>7486</cell>
+      <cell>Kelowna</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>5</cell>
+    </row>
+    <row>
+      <cell>7487</cell>
+      <cell>Abbotsford <ndash/> Mission</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>20</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>50</cell>
+      <cell>50</cell>
+    </row>
+    <row>
+      <cell>7488</cell>
+      <cell>Vancouver</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>190</cell>
+      <cell>40</cell>
+      <cell>0</cell>
+      <cell>505</cell>
+      <cell>505</cell>
+    </row>
+    <row>
+      <cell>7489</cell>
+      <cell>Victoria</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>20</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>90</cell>
+      <cell>90</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       You can see above that the <c>region_lang</c> data frame now has an additional column named <c>maximum</c>.
       The <c>maximum</c> column contains the maximum value between <c>mother_tongue</c>,
@@ -3839,6 +4406,151 @@ region_lang.assign(
 )
       </input>
     </program>
+<table xml:id="table-region-language-full-6">
+  <title>Language Usage by Region</title>
+  <tabular halign="right">
+    <col halign="right"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="left"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <col halign="right"/>
+    <row header="yes">
+      <cell></cell>
+      <cell>region</cell>
+      <cell>category</cell>
+      <cell>language</cell>
+      <cell>mother_tongue</cell>
+      <cell>most_at_home</cell>
+      <cell>most_at_work</cell>
+      <cell>lang_known</cell>
+      <cell>maximum</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>St. John's</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>5</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Halifax</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>5</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Moncton</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Saint John</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Saguenay</cell>
+      <cell>Aboriginal languages</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>5</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>5</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>7485</cell>
+      <cell>Ottawa <ndash/> Gatineau</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>265</cell>
+      <cell>65</cell>
+      <cell>10</cell>
+      <cell>910</cell>
+      <cell>910</cell>
+    </row>
+    <row>
+      <cell>7486</cell>
+      <cell>Kelowna</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>5</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>5</cell>
+    </row>
+    <row>
+      <cell>7487</cell>
+      <cell>Abbotsford <ndash/> Mission</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>20</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>50</cell>
+      <cell>50</cell>
+    </row>
+    <row>
+      <cell>7488</cell>
+      <cell>Vancouver</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>190</cell>
+      <cell>40</cell>
+      <cell>0</cell>
+      <cell>505</cell>
+      <cell>505</cell>
+    </row>
+    <row>
+      <cell>7489</cell>
+      <cell>Victoria</cell>
+      <cell>Non-Official <ampersand/> Non-Aboriginal languages</cell>
+      <cell>Yoruba</cell>
+      <cell>20</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>90</cell>
+      <cell>90</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       This data frame looks just like the previous one, except that it is a copy of <c>region_lang</c>, not <c>region_lang</c> itself; making further
       changes to this data frame will not impact the original <c>region_lang</c> data frame.
