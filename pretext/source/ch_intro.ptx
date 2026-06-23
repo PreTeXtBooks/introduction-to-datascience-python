@@ -515,6 +515,119 @@ can_lang
 can_lang[can_lang["category"] == "Aboriginal languages"]
         </input>
       </program>
+<table xml:id="table-aboriginal-languages-usage">
+  <title>Aboriginal Languages: Mother Tongue, Home Use, Work Use, and Languages Known</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Language</cell>
+      <cell>MotherTongue</cell>
+      <cell>MostAtHome</cell>
+      <cell>MostAtWork</cell>
+      <cell>LangKnown</cell>
+    </row>
+
+    <row>
+      <cell>0</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>590</cell>
+      <cell>235</cell>
+      <cell>30</cell>
+      <cell>665</cell>
+    </row>
+
+    <row>
+      <cell>5</cell>
+      <cell>Algonquian languages, n.i.e.</cell>
+      <cell>45</cell>
+      <cell>10</cell>
+      <cell>0</cell>
+      <cell>120</cell>
+    </row>
+
+    <row>
+      <cell>6</cell>
+      <cell>Algonquin</cell>
+      <cell>1260</cell>
+      <cell>370</cell>
+      <cell>40</cell>
+      <cell>2480</cell>
+    </row>
+
+    <row>
+      <cell>12</cell>
+      <cell>Athabaskan languages, n.i.e.</cell>
+      <cell>50</cell>
+      <cell>10</cell>
+      <cell>0</cell>
+      <cell>85</cell>
+    </row>
+
+    <row>
+      <cell>13</cell>
+      <cell>Atikamekw</cell>
+      <cell>6150</cell>
+      <cell>5465</cell>
+      <cell>1100</cell>
+      <cell>6645</cell>
+    </row>
+
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+
+    <row>
+      <cell>191</cell>
+      <cell>Thompson (Ntlakapamux)</cell>
+      <cell>335</cell>
+      <cell>20</cell>
+      <cell>0</cell>
+      <cell>450</cell>
+    </row>
+
+    <row>
+      <cell>195</cell>
+      <cell>Tlingit</cell>
+      <cell>95</cell>
+      <cell>0</cell>
+      <cell>10</cell>
+      <cell>260</cell>
+    </row>
+
+    <row>
+      <cell>196</cell>
+      <cell>Tsimshian</cell>
+      <cell>200</cell>
+      <cell>30</cell>
+      <cell>10</cell>
+      <cell>410</cell>
+    </row>
+
+    <row>
+      <cell>206</cell>
+      <cell>Wakashan languages, n.i.e.</cell>
+      <cell>10</cell>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>25</cell>
+    </row>
+
+    <row>
+      <cell>210</cell>
+      <cell>Woods Cree</cell>
+      <cell>1840</cell>
+      <cell>800</cell>
+      <cell>75</cell>
+      <cell>2665</cell>
+    </row>
+
+  </tabular>
+</table>
     </subsection>
 
     <subsection xml:id="subsec-intro-select-cols">
@@ -545,6 +658,71 @@ can_lang[can_lang["category"] == "Aboriginal languages"]
 can_lang[["language", "mother_tongue"]]
         </input>
       </program>
+<table xml:id="table-language-mother-tongue-full">
+  <title>Languages and Number of Mother Tongue Speakers</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Language</cell>
+      <cell>MotherTongue</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>590</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>Afrikaans</cell>
+      <cell>10260</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>Afro-Asiatic languages, n.i.e.</cell>
+      <cell>1150</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>Akan (Twi)</cell>
+      <cell>13460</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>Albanian</cell>
+      <cell>26895</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>209</cell>
+      <cell>Wolof</cell>
+      <cell>3990</cell>
+    </row>
+    <row>
+      <cell>210</cell>
+      <cell>Woods Cree</cell>
+      <cell>1840</cell>
+    </row>
+    <row>
+      <cell>211</cell>
+      <cell>Wu (Shanghainese)</cell>
+      <cell>12915</cell>
+    </row>
+    <row>
+      <cell>212</cell>
+      <cell>Yiddish</cell>
+      <cell>13555</cell>
+    </row>
+    <row>
+      <cell>213</cell>
+      <cell>Yoruba</cell>
+      <cell>9080</cell>
+    </row>
+  </tabular>
+</table>
     </subsection>
 
     <subsection xml:id="subsec-intro-loc">
@@ -607,8 +785,73 @@ aboriginal_lang = can_lang.loc[can_lang["category"] == "Aboriginal languages", [
 aboriginal_lang
         </input>
       </program>
+<table xml:id="table-indigenous-languages-mother-tongue-full">
+  <title>Indigenous Languages and Number of Mother Tongue Speakers</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Language</cell>
+      <cell>MotherTongue</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>Aboriginal languages, n.o.s.</cell>
+      <cell>590</cell>
+    </row>
+    <row>
+      <cell>5</cell>
+      <cell>Algonquian languages, n.i.e.</cell>
+      <cell>45</cell>
+    </row>
+    <row>
+      <cell>6</cell>
+      <cell>Algonquin</cell>
+      <cell>1260</cell>
+    </row>
+    <row>
+      <cell>12</cell>
+      <cell>Athabaskan languages, n.i.e.</cell>
+      <cell>50</cell>
+    </row>
+    <row>
+      <cell>13</cell>
+      <cell>Atikamekw</cell>
+      <cell>6150</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>191</cell>
+      <cell>Thompson (Ntlakapamux)</cell>
+      <cell>335</cell>
+    </row>
+    <row>
+      <cell>195</cell>
+      <cell>Tlingit</cell>
+      <cell>95</cell>
+    </row>
+    <row>
+      <cell>196</cell>
+      <cell>Tsimshian</cell>
+      <cell>200</cell>
+    </row>
+    <row>
+      <cell>206</cell>
+      <cell>Wakashan languages, n.i.e.</cell>
+      <cell>10</cell>
+    </row>
+    <row>
+      <cell>210</cell>
+      <cell>Woods Cree</cell>
+      <cell>1840</cell>
+    </row>
+  </tabular>
+</table>
       <p>
-        We can see the original <c>can_lang</c> data set contained 214 rows
+        <c>Tab</c> original <c>can_lang</c> data set contained 214 rows
         with multiple kinds of <c>category</c>. The data frame
         <c>aboriginal_lang</c> contains only 67 rows, and looks like it only contains Aboriginal languages.
         So it looks like the <c>loc[]</c> operation gave us the result we wanted!
@@ -651,6 +894,72 @@ arranged_lang
       </input>
     </program>
 
+<table xml:id="table-indigenous-languages-mother-tongue">
+  <title>Indigenous Languages and Number of Mother Tongue Speakers</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Language</cell>
+      <cell>MotherTongue</cell>
+    </row>
+    <row>
+      <cell>40</cell>
+      <cell>Cree, n.o.s.</cell>
+      <cell>64050</cell>
+    </row>
+    <row>
+      <cell>89</cell>
+      <cell>Inuktitut</cell>
+      <cell>35210</cell>
+    </row>
+    <row>
+      <cell>138</cell>
+      <cell>Ojibway</cell>
+      <cell>17885</cell>
+    </row>
+    <row>
+      <cell>137</cell>
+      <cell>Oji-Cree</cell>
+      <cell>12855</cell>
+    </row>
+    <row>
+      <cell>48</cell>
+      <cell>Dene</cell>
+      <cell>10700</cell>
+    </row>
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+    <row>
+      <cell>5</cell>
+      <cell>Algonquian languages, n.i.e.</cell>
+      <cell>45</cell>
+    </row>
+    <row>
+      <cell>32</cell>
+      <cell>Cayuga</cell>
+      <cell>45</cell>
+    </row>
+    <row>
+      <cell>179</cell>
+      <cell>Squamish</cell>
+      <cell>40</cell>
+    </row>
+    <row>
+      <cell>90</cell>
+      <cell>Iroquoian languages, n.i.e.</cell>
+      <cell>35</cell>
+    </row>
+    <row>
+      <cell>206</cell>
+      <cell>Wakashan languages, n.i.e.</cell>
+      <cell>10</cell>
+    </row>
+  </tabular>
+</table>
+
     <p>
       Next, we will obtain the ten most common Aboriginal languages by selecting only
       the first ten rows of the <c>arranged_lang</c> data frame.
@@ -664,6 +973,66 @@ ten_lang = arranged_lang.head(10)
 ten_lang
       </input>
     </program>
+<table xml:id="table-indigenous-languages-mother-tongue">
+  <title>Selected Indigenous Languages and Number of Mother Tongue Speakers</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Language</cell>
+      <cell>MotherTongue</cell>
+    </row>
+    <row>
+      <cell>40</cell>
+      <cell>Cree, n.o.s.</cell>
+      <cell>64050</cell>
+    </row>
+    <row>
+      <cell>89</cell>
+      <cell>Inuktitut</cell>
+      <cell>35210</cell>
+    </row>
+    <row>
+      <cell>138</cell>
+      <cell>Ojibway</cell>
+      <cell>17885</cell>
+    </row>
+    <row>
+      <cell>137</cell>
+      <cell>Oji-Cree</cell>
+      <cell>12855</cell>
+    </row>
+    <row>
+      <cell>48</cell>
+      <cell>Dene</cell>
+      <cell>10700</cell>
+    </row>
+    <row>
+      <cell>125</cell>
+      <cell>Montagnais (Innu)</cell>
+      <cell>10235</cell>
+    </row>
+    <row>
+      <cell>119</cell>
+      <cell>Mi'kmaq</cell>
+      <cell>6690</cell>
+    </row>
+    <row>
+      <cell>13</cell>
+      <cell>Atikamekw</cell>
+      <cell>6150</cell>
+    </row>
+    <row>
+      <cell>149</cell>
+      <cell>Plains Cree</cell>
+      <cell>3065</cell>
+    </row>
+    <row>
+      <cell>180</cell>
+      <cell>Stoney</cell>
+      <cell>3025</cell>
+    </row>
+  </tabular>
+</table>
   </section>
 
   <section xml:id="ch1-adding-modifying">
@@ -706,7 +1075,77 @@ ten_lang["mother_tongue_percent"] = 100 * ten_lang["mother_tongue"] / canadian_p
 ten_lang
       </input>
     </program>
-
+<table xml:id="table-indigenous-languages-mother-tongue-percent">
+  <title>Selected Indigenous Languages, Number of Mother Tongue Speakers, and Proportion of Total</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Language</cell>
+      <cell>MotherTongue</cell>
+      <cell>MotherTonguePercent</cell>
+    </row>
+    <row>
+      <cell>40</cell>
+      <cell>Cree, n.o.s.</cell>
+      <cell>64050</cell>
+      <cell>0.182210</cell>
+    </row>
+    <row>
+      <cell>89</cell>
+      <cell>Inuktitut</cell>
+      <cell>35210</cell>
+      <cell>0.100166</cell>
+    </row>
+    <row>
+      <cell>138</cell>
+      <cell>Ojibway</cell>
+      <cell>17885</cell>
+      <cell>0.050879</cell>
+    </row>
+    <row>
+      <cell>137</cell>
+      <cell>Oji-Cree</cell>
+      <cell>12855</cell>
+      <cell>0.036570</cell>
+    </row>
+    <row>
+      <cell>48</cell>
+      <cell>Dene</cell>
+      <cell>10700</cell>
+      <cell>0.030439</cell>
+    </row>
+    <row>
+      <cell>125</cell>
+      <cell>Montagnais (Innu)</cell>
+      <cell>10235</cell>
+      <cell>0.029117</cell>
+    </row>
+    <row>
+      <cell>119</cell>
+      <cell>Mi'kmaq</cell>
+      <cell>6690</cell>
+      <cell>0.019032</cell>
+    </row>
+    <row>
+      <cell>13</cell>
+      <cell>Atikamekw</cell>
+      <cell>6150</cell>
+      <cell>0.017496</cell>
+    </row>
+    <row>
+      <cell>149</cell>
+      <cell>Plains Cree</cell>
+      <cell>3065</cell>
+      <cell>0.008719</cell>
+    </row>
+    <row>
+      <cell>180</cell>
+      <cell>Stoney</cell>
+      <cell>3025</cell>
+      <cell>0.008606</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       The <c>ten_lang_percent</c> data frame shows that
       the ten Aboriginal languages in the <c>ten_lang</c> data frame were spoken
@@ -816,6 +1255,66 @@ ten_lang = (
 ten_lang
       </input>
     </program>
+<table xml:id="table-indigenous-languages-mother-tongue">
+  <title>Selected Indigenous Languages and Number of Mother Tongue Speakers</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Language</cell>
+      <cell>MotherTongue</cell>
+    </row>
+    <row>
+      <cell>40</cell>
+      <cell>Cree, n.o.s.</cell>
+      <cell>64050</cell>
+    </row>
+    <row>
+      <cell>89</cell>
+      <cell>Inuktitut</cell>
+      <cell>35210</cell>
+    </row>
+    <row>
+      <cell>138</cell>
+      <cell>Ojibway</cell>
+      <cell>17885</cell>
+    </row>
+    <row>
+      <cell>137</cell>
+      <cell>Oji-Cree</cell>
+      <cell>12855</cell>
+    </row>
+    <row>
+      <cell>48</cell>
+      <cell>Dene</cell>
+      <cell>10700</cell>
+    </row>
+    <row>
+      <cell>125</cell>
+      <cell>Montagnais (Innu)</cell>
+      <cell>10235</cell>
+    </row>
+    <row>
+      <cell>119</cell>
+      <cell>Mi'kmaq</cell>
+      <cell>6690</cell>
+    </row>
+    <row>
+      <cell>13</cell>
+      <cell>Atikamekw</cell>
+      <cell>6150</cell>
+    </row>
+    <row>
+      <cell>149</cell>
+      <cell>Plains Cree</cell>
+      <cell>3065</cell>
+    </row>
+    <row>
+      <cell>180</cell>
+      <cell>Stoney</cell>
+      <cell>3025</cell>
+    </row>
+  </tabular>
+</table>
     <p>
       Let's parse this new block of code piece by piece.
       The code above starts with a left parenthesis, <c>(</c>, and so Python
@@ -1154,7 +1653,7 @@ help(pd.read_csv)
 
     <p>
       You can also type the first characters of the function you want to use,
-      and then press &lt;kbd&gt;Tab&lt;/kbd&gt; to bring up small menu
+      and then press <c>Tab</c> to bring up small menu
       that shows you all the available functions
       that starts with those characters.
       This is helpful both for remembering function names
@@ -1162,19 +1661,19 @@ help(pd.read_csv)
     </p>
 
     <figure xml:id="completion_menu">
-      <caption>The suggestions that are shown after typing <c>pd.read</c> and pressing &lt;kbd&gt;Tab&lt;/kbd&gt;.</caption>
+      <caption>The suggestions that are shown after typing <c>pd.read</c> and pressing <c>Tab</c>.</caption>
       <image source="images/intro/completion_menu.png" width="100%"/>
     </figure>
 
     <p>
       To get more info on the function you want to use,
       you can type out the full name
-      and then hold &lt;kbd&gt;Shift&lt;/kbd&gt; while pressing &lt;kbd&gt;Tab&lt;/kbd&gt;
+      and then hold <c>Shift</c> while pressing <c>Tab</c>
       to bring up a help dialog including the same information as when using <c>help()</c>.
     </p>
 
     <figure xml:id="help_dialog">
-      <caption>The help dialog that is shown after typing <c>pd.read_csv</c> and then pressing &lt;kbd&gt;Shift&lt;/kbd&gt; + &lt;kbd&gt;Tab&lt;/kbd&gt;.</caption>
+      <caption>The help dialog that is shown after typing <c>pd.read_csv</c> and then pressing <c>Shift</c> + <c>Tab</c>.</caption>
       <image source="images/intro/help_dialog.png" width="100%"/>
     </figure>
 
