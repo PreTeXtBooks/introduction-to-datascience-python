@@ -894,7 +894,7 @@ arranged_lang
       </input>
     </program>
 
-<table xml:id="table-indigenous-languages-mother-tongue">
+<table xml:id="table-indigenous-languages-mother-tongue-01">
   <title>Indigenous Languages and Number of Mother Tongue Speakers</title>
   <tabular halign="right">
     <row header="yes">
@@ -973,7 +973,7 @@ ten_lang = arranged_lang.head(10)
 ten_lang
       </input>
     </program>
-<table xml:id="table-indigenous-languages-mother-tongue">
+<table xml:id="table-indigenous-languages-mother-tongue-02">
   <title>Selected Indigenous Languages and Number of Mother Tongue Speakers</title>
   <tabular halign="right">
     <row header="yes">
@@ -1255,7 +1255,7 @@ ten_lang = (
 ten_lang
       </input>
     </program>
-<table xml:id="table-indigenous-languages-mother-tongue">
+<table xml:id="table-indigenous-languages-mother-tongue-0">
   <title>Selected Indigenous Languages and Number of Mother Tongue Speakers</title>
   <tabular halign="right">
     <row header="yes">
