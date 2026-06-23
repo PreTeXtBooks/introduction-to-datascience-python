@@ -2257,7 +2257,7 @@ morley_hist_maxbins = alt.Chart(morley_df).mark_bar().encode(
       Let's learn how to save plot images to <c>.png</c> and <c>.svg</c> file formats using the
       <c>faithful_scatter_labels</c> scatter plot of the
       <url href="https://www.stat.cmu.edu/~larry/all-of-statistics/=data/faithful.dat">Old Faithful data set</url> <xref ref="faithfuldata"/>
-      that we created earlier, shown in <xref ref="fig-viz-faithful-save"/>.
+      that we created earlier.
       To save the plot to a file, we can use the <c>save</c> method. The <c>save</c> method takes the path to the filename
       where you would like to save the file (e.g., <c>img/viz/filename.png</c> to
       save a file named <c>filename.png</c> to the <c>img/viz/</c> directory). The
