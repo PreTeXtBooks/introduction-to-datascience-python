@@ -2658,7 +2658,7 @@ official_langs[official_langs["most_at_home"] &gt; 2669195]
 official_langs.query("most_at_home &gt; 2669195")
         </input>
       </program>
-<table xml:id="table-language-home-work-region-4-2">
+<table xml:id="table-language-home-work-region-4-3">
   <tabular halign="right">
     <col halign="right"/>
     <col halign="left"/>
@@ -3503,7 +3503,7 @@ tidy_lang.iloc[:, 1:]
 tidy_lang.iloc[:5, 1:]
       </input>
     </program>
-<table xml:id="table-language-home-work-all-regions-1">
+<table xml:id="table-language-home-work-all-regions-1-2">
   <tabular halign="right">
     <col halign="right"/>
     <col halign="left"/>
