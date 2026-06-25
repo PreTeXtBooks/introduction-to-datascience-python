@@ -1245,8 +1245,7 @@ scaled_cancer_all
         You will see
         further on in <xref ref="sec-classif1-workflow"/> that <c>scikit-learn</c>
         provides tools to automatically streamline the preprocessor and the model so
-        that you can call <c>fit</c> and <c>predict</c> on the <c>Pipeline</c> as we
-        did above with the <c>knn</c> model.
+        that you can call <c>fit</c> and <c>transform</c> on the <c>Pipeline</c> without additional coding effort.
       </p>
       <p>
         <xref ref="fig-classif1-scaling"/> shows the two scatter plots
