@@ -1335,6 +1335,21 @@ scaled_cancer_all
         <xref ref="fig-classif1-imbalanced"/>, and we print the counts of the classes
         using the <c>value_counts</c> function.
       </p>
+<program language = "python">
+<input>
+rare_cancer = pd.concat((
+    cancer[cancer["Class"] == "Benign"],
+    cancer[cancer["Class"] == "Malignant"].head(3)
+))
+
+rare_plot = alt.Chart(rare_cancer).mark_circle().encode(
+    x=alt.X("Perimeter").title("Perimeter (standardized)"),
+    y=alt.Y("Concavity").title("Concavity (standardized)"),
+    color=alt.Color("Class").title("Diagnosis")
+)
+rare_plot
+</input>
+</program>
       <figure xml:id="fig-classif1-imbalanced">
         <caption>Imbalanced data.</caption>
         <image source="images/classification1/cancer-imbalanced.png" width="70%"/>
