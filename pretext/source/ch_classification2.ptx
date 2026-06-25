@@ -810,10 +810,37 @@ cancer_tune_pipe.get_params()
         </input>
       </program>
       <pre>
-{'memory': None, 'steps': [('columntransformer', ColumnTransformer(transformers=[('standardscaler', StandardScaler(),
-                                 ['Smoothness', 'Concavity'])])), ('kneighborsclassifier', KNeighborsClassifier())], 'transform_input': None, 'verbose': False, 'columntransformer': ColumnTransformer(transformers=[('standardscaler', StandardScaler(),
-                               ['Smoothness', 'Concavity'])]), 'kneighborsclassifier': KNeighborsClassifier(), 'columntransformer__n_jobs': None, 'columntransformer__remainder': 'drop', 'columntransformer__sparse_threshold': 0.3, 'columntransformer__transformer_weights': None, 'columntransformer__transformers': [('standardscaler', StandardScaler(), ['Smoothness', 'Concavity'])], 'columntransformer__verbose': False, 'columntransformer__verbose_feature_names_out': True, 'columntransformer__standardscaler': StandardScaler(), 'columntransformer__standardscaler__copy': True, 'columntransformer__standardscaler__with_mean': True, 'columntransformer__standardscaler__with_std': True, 'kneighborsclassifier__algorithm': 'auto', 'kneighborsclassifier__leaf_size': 30, 'kneighborsclassifier__metric': 'minkowski', 'kneighborsclassifier__metric_params': None, 'kneighborsclassifier__n_jobs': None, 'kneighborsclassifier__n_neighbors': 5, 'kneighborsclassifier__p': 2, 'kneighborsclassifier__weights': 'uniform'}
-      </pre>
+{'memory': None,
+ 'steps': [('columntransformer',
+   ColumnTransformer(transformers=[('standardscaler', StandardScaler(),
+                                    ['Smoothness', 'Concavity'])])),
+  ('kneighborsclassifier', KNeighborsClassifier())],
+ 'verbose': False,
+ 'columntransformer': ColumnTransformer(transformers=[('standardscaler', StandardScaler(),
+                                  ['Smoothness', 'Concavity'])]),
+ 'kneighborsclassifier': KNeighborsClassifier(),
+ 'columntransformer__n_jobs': None,
+ 'columntransformer__remainder': 'drop',
+ 'columntransformer__sparse_threshold': 0.3,
+ 'columntransformer__transformer_weights': None,
+ 'columntransformer__transformers': [('standardscaler',
+   StandardScaler(),
+   ['Smoothness', 'Concavity'])],
+ 'columntransformer__verbose': False,
+ 'columntransformer__verbose_feature_names_out': True,
+ 'columntransformer__standardscaler': StandardScaler(),
+ 'columntransformer__standardscaler__copy': True,
+ 'columntransformer__standardscaler__with_mean': True,
+ 'columntransformer__standardscaler__with_std': True,
+ 'kneighborsclassifier__algorithm': 'auto',
+ 'kneighborsclassifier__leaf_size': 30,
+ 'kneighborsclassifier__metric': 'minkowski',
+ 'kneighborsclassifier__metric_params': None,
+ 'kneighborsclassifier__n_jobs': None,
+ 'kneighborsclassifier__n_neighbors': 5,
+ 'kneighborsclassifier__p': 2,
+ 'kneighborsclassifier__weights': 'uniform'}
+</pre>
       <p>Wow, there's quite a bit of <em>stuff</em> there!
       If you sift through the muck a little bit, you will see one parameter identifier that stands out: <c>"kneighborsclassifier__n_neighbors"</c>.
       This identifier combines the name of the K nearest neighbors classification step in our pipeline, <c>kneighborsclassifier</c>, with the name of the parameter, <c>n_neighbors</c>.
