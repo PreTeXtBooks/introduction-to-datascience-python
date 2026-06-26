@@ -150,6 +150,157 @@ airbnb = pd.read_csv("data/listings.csv")
 airbnb
         </input>
       </program>
+
+<table xml:id="table-airbnb-listings-vancouver">
+  <title>Airbnb Listings in Vancouver</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>ID</cell>
+      <cell>Neighbourhood</cell>
+      <cell>RoomType</cell>
+      <cell>Accommodates</cell>
+      <cell>Bathrooms</cell>
+      <cell>Bedrooms</cell>
+      <cell>Beds</cell>
+      <cell>Price</cell>
+    </row>
+
+    <row>
+      <cell>0</cell>
+      <cell>1</cell>
+      <cell>Downtown</cell>
+      <cell>Entire home/apt</cell>
+      <cell>5</cell>
+      <cell>2 baths</cell>
+      <cell>2</cell>
+      <cell>2</cell>
+      <cell>150.00</cell>
+    </row>
+
+    <row>
+      <cell>1</cell>
+      <cell>2</cell>
+      <cell>Downtown Eastside</cell>
+      <cell>Entire home/apt</cell>
+      <cell>4</cell>
+      <cell>2 baths</cell>
+      <cell>2</cell>
+      <cell>2</cell>
+      <cell>132.00</cell>
+    </row>
+
+    <row>
+      <cell>2</cell>
+      <cell>3</cell>
+      <cell>West End</cell>
+      <cell>Entire home/apt</cell>
+      <cell>2</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>85.00</cell>
+    </row>
+
+    <row>
+      <cell>3</cell>
+      <cell>4</cell>
+      <cell>Kensington-Cedar Cottage</cell>
+      <cell>Entire home/apt</cell>
+      <cell>2</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>0</cell>
+      <cell>146.00</cell>
+    </row>
+
+    <row>
+      <cell>4</cell>
+      <cell>5</cell>
+      <cell>Kensington-Cedar Cottage</cell>
+      <cell>Entire home/apt</cell>
+      <cell>4</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>2</cell>
+      <cell>110.00</cell>
+    </row>
+
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+
+    <row>
+      <cell>4589</cell>
+      <cell>4590</cell>
+      <cell>Downtown Eastside</cell>
+      <cell>Entire home/apt</cell>
+      <cell>5</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>99.00</cell>
+    </row>
+
+    <row>
+      <cell>4590</cell>
+      <cell>4591</cell>
+      <cell>Oakridge</cell>
+      <cell>Private room</cell>
+      <cell>2</cell>
+      <cell>1.5 baths</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>42.51</cell>
+    </row>
+
+    <row>
+      <cell>4591</cell>
+      <cell>4592</cell>
+      <cell>Dunbar Southlands</cell>
+      <cell>Private room</cell>
+      <cell>2</cell>
+      <cell>1.5 shared baths</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>53.29</cell>
+    </row>
+
+    <row>
+      <cell>4592</cell>
+      <cell>4593</cell>
+      <cell>West End</cell>
+      <cell>Entire home/apt</cell>
+      <cell>4</cell>
+      <cell>1 bath</cell>
+      <cell>2</cell>
+      <cell>2</cell>
+      <cell>145.00</cell>
+    </row>
+
+    <row>
+      <cell>4593</cell>
+      <cell>4594</cell>
+      <cell>Shaughnessy</cell>
+      <cell>Entire home/apt</cell>
+      <cell>6</cell>
+      <cell>1 bath</cell>
+      <cell>3</cell>
+      <cell>4</cell>
+      <cell>135.00</cell>
+    </row>
+
+  </tabular>
+</table>
+
       <p>
         Suppose the city of Vancouver wants information about Airbnb rentals to help
         plan city bylaws, and they want to know how many Airbnb places are listed as
@@ -169,6 +320,14 @@ airbnb
 airbnb["room_type"].value_counts(normalize=True)
         </input>
       </program>
+<pre>
+room_type
+Entire home/apt    0.747497
+Private room       0.246408
+Shared room        0.005224
+Hotel room         0.000871
+Name: proportion, dtype: float64
+</pre>
       <p>
         We can see that the proportion of <c>Entire home/apt</c> listings in
         the data set is 0.747. This value, 0.747, is the population parameter. Remember, this
@@ -196,9 +355,16 @@ np.random.seed(155)
 airbnb.sample(n=40)["room_type"].value_counts(normalize=True)
         </input>
       </program>
+<pre>
+room_type
+Entire home/apt    0.725
+Private room       0.250
+Shared room        0.025
+Name: proportion, dtype: float64
+</pre>
       <p>
         Here we see that the proportion of entire home/apartment listings in this
-        random sample is 0.650. Wow&#x2014;that&#x2019;s close to our
+        random sample is 0.725. Wow&#x2014;that&#x2019;s close to our
         true population value! But remember, we computed the proportion using a random sample of size 40.
         This has two consequences. First, this value is only an <em>estimate</em>, i.e., our best guess
         of our population parameter using this sample.
@@ -212,6 +378,13 @@ airbnb.sample(n=40)["room_type"].value_counts(normalize=True)
 airbnb.sample(n=40)["room_type"].value_counts(normalize=True)
         </input>
       </program>
+<pre>
+room_type
+Entire home/apt    0.625
+Private room       0.350
+Shared room        0.025
+Name: proportion, dtype: float64
+</pre>
       <p>
         Confirmed! We get a different value for our estimate this time.
         That means that our point estimate might be unreliable. Indeed, estimates vary from sample to
@@ -251,6 +424,169 @@ samples = pd.concat([
 samples
         </input>
       </program>
+
+<table xml:id="table-airbnb-bootstrap-replicates">
+  <title>Bootstrap Sample of Airbnb Listings (Replicates)</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>ID</cell>
+      <cell>Neighbourhood</cell>
+      <cell>RoomType</cell>
+      <cell>Accommodates</cell>
+      <cell>Bathrooms</cell>
+      <cell>Bedrooms</cell>
+      <cell>Beds</cell>
+      <cell>Price</cell>
+      <cell>Replicate</cell>
+    </row>
+
+    <row>
+      <cell>605</cell>
+      <cell>606</cell>
+      <cell>Marpole</cell>
+      <cell>Entire home/apt</cell>
+      <cell>3</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>91.0</cell>
+      <cell>0</cell>
+    </row>
+
+    <row>
+      <cell>4579</cell>
+      <cell>4580</cell>
+      <cell>Downtown</cell>
+      <cell>Entire home/apt</cell>
+      <cell>3</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>2</cell>
+      <cell>160.0</cell>
+      <cell>0</cell>
+    </row>
+
+    <row>
+      <cell>1739</cell>
+      <cell>1740</cell>
+      <cell>West End</cell>
+      <cell>Entire home/apt</cell>
+      <cell>2</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>2</cell>
+      <cell>151.0</cell>
+      <cell>0</cell>
+    </row>
+
+    <row>
+      <cell>3904</cell>
+      <cell>3905</cell>
+      <cell>Oakridge</cell>
+      <cell>Private room</cell>
+      <cell>6</cell>
+      <cell>1 private bath</cell>
+      <cell>3</cell>
+      <cell>3</cell>
+      <cell>185.0</cell>
+      <cell>0</cell>
+    </row>
+
+    <row>
+      <cell>1596</cell>
+      <cell>1597</cell>
+      <cell>Kitsilano</cell>
+      <cell>Entire home/apt</cell>
+      <cell>1</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>99.0</cell>
+      <cell>0</cell>
+    </row>
+
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+
+    <row>
+      <cell>3060</cell>
+      <cell>3061</cell>
+      <cell>Hastings-Sunrise</cell>
+      <cell>Private room</cell>
+      <cell>2</cell>
+      <cell>3.5 shared baths</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>78.0</cell>
+      <cell>19999</cell>
+    </row>
+
+    <row>
+      <cell>527</cell>
+      <cell>528</cell>
+      <cell>Kitsilano</cell>
+      <cell>Private room</cell>
+      <cell>4</cell>
+      <cell>1 private bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>99.0</cell>
+      <cell>19999</cell>
+    </row>
+
+    <row>
+      <cell>1587</cell>
+      <cell>1588</cell>
+      <cell>Downtown</cell>
+      <cell>Entire home/apt</cell>
+      <cell>6</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>3</cell>
+      <cell>169.0</cell>
+      <cell>19999</cell>
+    </row>
+
+    <row>
+      <cell>3860</cell>
+      <cell>3861</cell>
+      <cell>Downtown</cell>
+      <cell>Entire home/apt</cell>
+      <cell>3</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>100.0</cell>
+      <cell>19999</cell>
+    </row>
+
+    <row>
+      <cell>2747</cell>
+      <cell>2748</cell>
+      <cell>Downtown</cell>
+      <cell>Entire home/apt</cell>
+      <cell>3</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>285.0</cell>
+      <cell>19999</cell>
+    </row>
+
+  </tabular>
+</table>
+
       <p>
         Since the column <c>replicate</c> indicates the replicate/sample number,
         we can verify that we indeed seem to have 20,0000 samples
@@ -277,6 +613,21 @@ samples
 )
         </input>
       </program>
+<pre>
+replicate  room_type      
+0          Entire home/apt    0.750
+           Private room       0.250
+1          Entire home/apt    0.775
+           Private room       0.225
+2          Entire home/apt    0.750
+                              ...  
+19998      Entire home/apt    0.700
+           Private room       0.275
+           Shared room        0.025
+19999      Entire home/apt    0.750
+           Private room       0.250
+Name: proportion, Length: 44552, dtype: float64
+</pre>
       <p>
         The returned object is a series,
         and as we have previously learned
@@ -305,6 +656,92 @@ samples
 )
         </input>
       </program>
+
+<table xml:id="table-airbnb-bootstrap-roomtype-proportions">
+  <title>Bootstrap Distribution of Room Type Proportions</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Replicate</cell>
+      <cell>RoomType</cell>
+      <cell>SampleProportion</cell>
+    </row>
+
+    <row>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.750</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>0</cell>
+      <cell>Private room</cell>
+      <cell>0.250</cell>
+    </row>
+
+    <row>
+      <cell>2</cell>
+      <cell>1</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.775</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>1</cell>
+      <cell>Private room</cell>
+      <cell>0.225</cell>
+    </row>
+
+    <row>
+      <cell>4</cell>
+      <cell>2</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.750</cell>
+    </row>
+
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+
+    <row>
+      <cell>44547</cell>
+      <cell>19998</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.700</cell>
+    </row>
+    <row>
+      <cell>44548</cell>
+      <cell>19998</cell>
+      <cell>Private room</cell>
+      <cell>0.275</cell>
+    </row>
+    <row>
+      <cell>44549</cell>
+      <cell>19998</cell>
+      <cell>Shared room</cell>
+      <cell>0.025</cell>
+    </row>
+
+    <row>
+      <cell>44550</cell>
+      <cell>19999</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.750</cell>
+    </row>
+    <row>
+      <cell>44551</cell>
+      <cell>19999</cell>
+      <cell>Private room</cell>
+      <cell>0.250</cell>
+    </row>
+
+  </tabular>
+</table>
+
       <p>
         Below we put everything together
         and also filter the data frame to keep only the room types
@@ -324,6 +761,96 @@ sample_estimates = sample_estimates[sample_estimates["room_type"] == "Entire hom
 sample_estimates
         </input>
       </program>
+
+<table xml:id="table-airbnb-bootstrap-entire-home-proportion">
+  <title>Bootstrap Distribution of “Entire Home/Apt” Proportion</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Replicate</cell>
+      <cell>RoomType</cell>
+      <cell>SampleProportion</cell>
+    </row>
+
+    <row>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.750</cell>
+    </row>
+
+    <row>
+      <cell>2</cell>
+      <cell>1</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.775</cell>
+    </row>
+
+    <row>
+      <cell>4</cell>
+      <cell>2</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.750</cell>
+    </row>
+
+    <row>
+      <cell>6</cell>
+      <cell>3</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.675</cell>
+    </row>
+
+    <row>
+      <cell>8</cell>
+      <cell>4</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.725</cell>
+    </row>
+
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+
+    <row>
+      <cell>44541</cell>
+      <cell>19995</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.775</cell>
+    </row>
+
+    <row>
+      <cell>44543</cell>
+      <cell>19996</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.750</cell>
+    </row>
+
+    <row>
+      <cell>44545</cell>
+      <cell>19997</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.725</cell>
+    </row>
+
+    <row>
+      <cell>44547</cell>
+      <cell>19998</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.700</cell>
+    </row>
+
+    <row>
+      <cell>44550</cell>
+      <cell>19999</cell>
+      <cell>Entire home/apt</cell>
+      <cell>0.750</cell>
+    </row>
+
+  </tabular>
+</table>
 
       <p>
         We can now visualize the sampling distribution of sample proportions
@@ -358,7 +885,7 @@ sampling_distribution
         The sampling distribution in <xref ref="fig-inference-proportions-sampling-dist"/> appears
         to be bell-shaped, is roughly symmetric, and has one peak. It is centered
         around 0.75 and the sample proportions
-        range from about 0.45 to about 0.98. In fact, we can
+        range from about 0.55 to about 0.95. In fact, we can
         calculate the mean of the sample proportions.
         <idx><h>sampling distribution</h><h>shape</h></idx>
       </p>
@@ -367,9 +894,12 @@ sampling_distribution
 sample_estimates["sample_proportion"].mean()
         </input>
       </program>
+<pre>
+0.74848375
+</pre>
       <p>
         We notice that the sample proportions are centered around the population
-        proportion value, 0.747! In general, the mean of
+        proportion value, 0.748! In general, the mean of
         the sampling distribution should be equal to the population proportion.
         This is great news because it means that the sample proportion is neither an overestimate nor an
         underestimate of the population proportion.
@@ -426,6 +956,9 @@ population_distribution
 airbnb["price"].mean()
         </input>
       </program>
+<pre>
+154.5109773617762
+</pre>
       <p>
         The price per night of all Airbnb rentals in Vancouver, BC
         is $154.51, on average. This value is our
@@ -475,15 +1008,18 @@ sample_distribution
 one_sample["price"].mean()
         </input>
       </program>
+<pre>
+153.48225
+</pre>
 
       <p>
         The average value of the sample of size 40
-        is $155.80. This
+        is $153.48. This
         number is a point estimate for the mean of the full population.
         Recall that the population mean was
         $154.51. So our estimate was fairly close to
         the population parameter: the mean was about
-        0.8% off. Note that we usually cannot compute the estimate&#x2019;s accuracy in practice
+        0.7% off. Note that we usually cannot compute the estimate&#x2019;s accuracy in practice
         since we do not have access to the population parameter; if we did, we wouldn&#x2019;t
         need to estimate it!
       </p>
@@ -515,6 +1051,85 @@ sample_estimates = (
 sample_estimates
         </input>
       </program>
+
+<table xml:id="table-airbnb-bootstrap-mean-price">
+  <title>Bootstrap Distribution of Mean Airbnb Price</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Replicate</cell>
+      <cell>MeanPrice</cell>
+    </row>
+
+    <row>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>187.00000</cell>
+    </row>
+
+    <row>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>148.56075</cell>
+    </row>
+
+    <row>
+      <cell>2</cell>
+      <cell>2</cell>
+      <cell>165.50500</cell>
+    </row>
+
+    <row>
+      <cell>3</cell>
+      <cell>3</cell>
+      <cell>140.93925</cell>
+    </row>
+
+    <row>
+      <cell>4</cell>
+      <cell>4</cell>
+      <cell>139.14650</cell>
+    </row>
+
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+
+    <row>
+      <cell>19995</cell>
+      <cell>19995</cell>
+      <cell>198.50000</cell>
+    </row>
+
+    <row>
+      <cell>19996</cell>
+      <cell>19996</cell>
+      <cell>192.66425</cell>
+    </row>
+
+    <row>
+      <cell>19997</cell>
+      <cell>19997</cell>
+      <cell>144.88600</cell>
+    </row>
+
+    <row>
+      <cell>19998</cell>
+      <cell>19998</cell>
+      <cell>146.08800</cell>
+    </row>
+
+    <row>
+      <cell>19999</cell>
+      <cell>19999</cell>
+      <cell>156.25000</cell>
+    </row>
+
+  </tabular>
+</table>
+
       <program language="python">
         <input>
 sampling_distribution = alt.Chart(sample_estimates).mark_bar().encode(
@@ -541,7 +1156,7 @@ sampling_distribution
         about $140 and $170; but there is
         a good fraction of cases outside this range (i.e., where the point estimate was
         not close to the population parameter). So it does indeed look like we were
-        quite lucky when we estimated the population mean with only about 0.8% error.
+        quite lucky when we estimated the population mean with only about 0.7% error.
       </p>
       <p>
         Let&#x2019;s visualize the population distribution, distribution of the sample, and
@@ -779,6 +1394,9 @@ boot1_dist
 boot1["price"].mean()
         </input>
       </program>
+<pre>
+132.65
+</pre>
 
       <p>
         Notice in <xref ref="fig-inference-one-bootstrap-sample"/> that the histogram of our bootstrap sample
