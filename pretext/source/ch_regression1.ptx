@@ -790,7 +790,7 @@ sacr_results = (
 sacr_results
       </input>
     </program>
-<table xml:id="table-knn-cross-validation-results">
+<table>
   <title>KNN Cross-Validation Results</title>
   <tabular halign="right">
     <row header="yes">
@@ -898,7 +898,7 @@ sacr_results[&quot;mean_test_score&quot;] = -sacr_results[&quot;mean_test_score&
 sacr_results
       </input>
     </program>
-<table xml:id="table-knn-cross-validation-results">
+<table>
   <title>KNN Cross-Validation Results</title>
   <tabular halign="right">
     <row header="yes">
