@@ -179,6 +179,108 @@ penguins
       </input>
     </program>
 
+<table>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>BillLengthMm</cell>
+      <cell>FlipperLengthMm</cell>
+    </row>
+
+    <row>
+      <cell>0</cell>
+      <cell>39.2</cell>
+      <cell>196</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>36.5</cell>
+      <cell>182</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>34.5</cell>
+      <cell>187</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>36.7</cell>
+      <cell>187</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>38.1</cell>
+      <cell>181</cell>
+    </row>
+    <row>
+      <cell>5</cell>
+      <cell>39.2</cell>
+      <cell>190</cell>
+    </row>
+    <row>
+      <cell>6</cell>
+      <cell>36.0</cell>
+      <cell>195</cell>
+    </row>
+    <row>
+      <cell>7</cell>
+      <cell>37.8</cell>
+      <cell>193</cell>
+    </row>
+    <row>
+      <cell>8</cell>
+      <cell>46.5</cell>
+      <cell>213</cell>
+    </row>
+    <row>
+      <cell>9</cell>
+      <cell>46.1</cell>
+      <cell>215</cell>
+    </row>
+    <row>
+      <cell>10</cell>
+      <cell>47.8</cell>
+      <cell>215</cell>
+    </row>
+    <row>
+      <cell>11</cell>
+      <cell>45.0</cell>
+      <cell>220</cell>
+    </row>
+    <row>
+      <cell>12</cell>
+      <cell>49.1</cell>
+      <cell>212</cell>
+    </row>
+    <row>
+      <cell>13</cell>
+      <cell>43.3</cell>
+      <cell>208</cell>
+    </row>
+    <row>
+      <cell>14</cell>
+      <cell>46.0</cell>
+      <cell>195</cell>
+    </row>
+    <row>
+      <cell>15</cell>
+      <cell>46.7</cell>
+      <cell>195</cell>
+    </row>
+    <row>
+      <cell>16</cell>
+      <cell>52.2</cell>
+      <cell>197</cell>
+    </row>
+    <row>
+      <cell>17</cell>
+      <cell>46.8</cell>
+      <cell>189</cell>
+    </row>
+
+  </tabular>
+</table>
+
     <p>
       We will begin by using a version of the data that we have standardized,
       <c>penguins_standardized</c>, to illustrate how K-means clustering works
@@ -194,6 +296,107 @@ penguins
 penguins_standardized
       </input>
     </program>
+
+<table>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>BillLengthStandardized</cell>
+      <cell>FlipperLengthStandardized</cell>
+    </row>
+
+    <row>
+      <cell>0</cell>
+      <cell>-0.641361</cell>
+      <cell>-0.189773</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>-1.144917</cell>
+      <cell>-1.328412</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>-1.517922</cell>
+      <cell>-0.921755</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>-1.107617</cell>
+      <cell>-0.921755</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>-0.846513</cell>
+      <cell>-1.409743</cell>
+    </row>
+    <row>
+      <cell>5</cell>
+      <cell>-0.641361</cell>
+      <cell>-0.677761</cell>
+    </row>
+    <row>
+      <cell>6</cell>
+      <cell>-1.238168</cell>
+      <cell>-0.271104</cell>
+    </row>
+    <row>
+      <cell>7</cell>
+      <cell>-0.902464</cell>
+      <cell>-0.433767</cell>
+    </row>
+    <row>
+      <cell>8</cell>
+      <cell>0.720106</cell>
+      <cell>1.192860</cell>
+    </row>
+    <row>
+      <cell>9</cell>
+      <cell>0.645505</cell>
+      <cell>1.355522</cell>
+    </row>
+    <row>
+      <cell>10</cell>
+      <cell>0.962559</cell>
+      <cell>1.355522</cell>
+    </row>
+    <row>
+      <cell>11</cell>
+      <cell>0.440353</cell>
+      <cell>1.762179</cell>
+    </row>
+    <row>
+      <cell>12</cell>
+      <cell>1.205012</cell>
+      <cell>1.111528</cell>
+    </row>
+    <row>
+      <cell>13</cell>
+      <cell>0.123299</cell>
+      <cell>0.786203</cell>
+    </row>
+    <row>
+      <cell>14</cell>
+      <cell>0.626855</cell>
+      <cell>-0.271104</cell>
+    </row>
+    <row>
+      <cell>15</cell>
+      <cell>0.757407</cell>
+      <cell>-0.271104</cell>
+    </row>
+    <row>
+      <cell>16</cell>
+      <cell>1.783170</cell>
+      <cell>-0.108442</cell>
+    </row>
+    <row>
+      <cell>17</cell>
+      <cell>0.776057</cell>
+      <cell>-0.759092</cell>
+    </row>
+  </tabular>
+</table>
 
     <p>
       Next, we can create a scatter plot using this data set to see if we can
@@ -540,7 +743,8 @@ scatter_plot = alt.Chart(penguins_standardized).mark_circle().encode(
       <p>
         If we set K less than 3, then the clustering merges separate groups of
         data;
-        this causes a large total WSSD, since the cluster center is not
+        this causes a large total WSSD, since the cluster center (denoted by large
+        shapes with black outlines) is not
         close to any of the data in the cluster.
         On the other hand, if we set K
         greater than 3, the clustering subdivides subgroups of data;
@@ -652,6 +856,129 @@ penguins
       </input>
     </program>
 
+<table>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>BillLengthMm</cell>
+      <cell>FlipperLengthMm</cell>
+      <cell>Cluster</cell>
+    </row>
+
+    <row>
+      <cell>0</cell>
+      <cell>39.2</cell>
+      <cell>196</cell>
+      <cell>1</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>36.5</cell>
+      <cell>182</cell>
+      <cell>1</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>34.5</cell>
+      <cell>187</cell>
+      <cell>1</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>36.7</cell>
+      <cell>187</cell>
+      <cell>1</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>38.1</cell>
+      <cell>181</cell>
+      <cell>1</cell>
+    </row>
+    <row>
+      <cell>5</cell>
+      <cell>39.2</cell>
+      <cell>190</cell>
+      <cell>1</cell>
+    </row>
+    <row>
+      <cell>6</cell>
+      <cell>36.0</cell>
+      <cell>195</cell>
+      <cell>1</cell>
+    </row>
+    <row>
+      <cell>7</cell>
+      <cell>37.8</cell>
+      <cell>193</cell>
+      <cell>1</cell>
+    </row>
+
+    <row>
+      <cell>8</cell>
+      <cell>46.5</cell>
+      <cell>213</cell>
+      <cell>2</cell>
+    </row>
+    <row>
+      <cell>9</cell>
+      <cell>46.1</cell>
+      <cell>215</cell>
+      <cell>2</cell>
+    </row>
+    <row>
+      <cell>10</cell>
+      <cell>47.8</cell>
+      <cell>215</cell>
+      <cell>2</cell>
+    </row>
+    <row>
+      <cell>11</cell>
+      <cell>45.0</cell>
+      <cell>220</cell>
+      <cell>2</cell>
+    </row>
+    <row>
+      <cell>12</cell>
+      <cell>49.1</cell>
+      <cell>212</cell>
+      <cell>2</cell>
+    </row>
+    <row>
+      <cell>13</cell>
+      <cell>43.3</cell>
+      <cell>208</cell>
+      <cell>2</cell>
+    </row>
+
+    <row>
+      <cell>14</cell>
+      <cell>46.0</cell>
+      <cell>195</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>15</cell>
+      <cell>46.7</cell>
+      <cell>195</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>16</cell>
+      <cell>52.2</cell>
+      <cell>197</cell>
+      <cell>0</cell>
+    </row>
+    <row>
+      <cell>17</cell>
+      <cell>46.8</cell>
+      <cell>189</cell>
+      <cell>0</cell>
+    </row>
+
+  </tabular>
+</table>
+
     <p>
       Now that we have the cluster assignments included in the
       <c>penguins</c> data frame, we can visualize them as shown in
@@ -697,7 +1024,9 @@ cluster_plot=alt.Chart(penguins).mark_circle().encode(
 penguin_clust[1].inertia_
       </input>
     </program>
-
+<pre>
+4.730719092276117
+</pre>
     <p>
       To calculate the total WSSD for a variety of Ks, we will
       create a data frame that contains different values of <c>k</c>
@@ -714,7 +1043,9 @@ penguin_clust[1].inertia_
 [n for n in range(3)]
       </input>
     </program>
-
+<pre>
+[0, 1, 2]
+</pre>
     <p>
       We can change the variable <c>n</c> to be called whatever we prefer
       and we can also perform any operation we want as part of the list comprehension.
@@ -727,7 +1058,9 @@ penguin_clust[1].inertia_
 [number**2 for number in range(1, 5)]
       </input>
     </program>
-
+<pre>
+[1, 4, 9, 16]
+</pre>
     <p>
       Next, we will use this approach to compute the WSSD for the K-values 1 through 9.
       For each value of K,
@@ -769,6 +1102,63 @@ penguin_clust_ks = pd.DataFrame({
 penguin_clust_ks
       </input>
     </program>
+
+<table>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>K</cell>
+      <cell>WSSD</cell>
+    </row>
+
+    <row>
+      <cell>0</cell>
+      <cell>1</cell>
+      <cell>36.000000</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>2</cell>
+      <cell>11.576264</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>3</cell>
+      <cell>4.730719</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>4</cell>
+      <cell>3.343613</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>5</cell>
+      <cell>2.362131</cell>
+    </row>
+    <row>
+      <cell>5</cell>
+      <cell>6</cell>
+      <cell>1.678383</cell>
+    </row>
+    <row>
+      <cell>6</cell>
+      <cell>7</cell>
+      <cell>1.293320</cell>
+    </row>
+    <row>
+      <cell>7</cell>
+      <cell>8</cell>
+      <cell>0.975016</cell>
+    </row>
+    <row>
+      <cell>8</cell>
+      <cell>9</cell>
+      <cell>0.785232</cell>
+    </row>
+
+  </tabular>
+</table>
 
     <p>
       Now that we have <c>wssd</c> and <c>k</c> as columns in
