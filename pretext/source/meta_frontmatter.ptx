@@ -97,8 +97,10 @@
            visual="www.amazon.com">Amazon</url>.
     </p>
     <p>
-      For the R version of this textbook, visit
+      For the R version of this textbook, please visit
       <url href="https://datasciencebook.ca" visual="datasciencebook.ca">https://datasciencebook.ca</url>.
+      The PreTeXt R version can be found at 
+      <url href="https://pretextbooks.github.io/introduction-to-datascience/meta-front.html">pretextbooks.github.io/introduction-to-datascience</url>.
     </p>
     <p>
       This book is listed in a number of open educational resource (OER) collections:
