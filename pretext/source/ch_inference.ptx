@@ -151,8 +151,7 @@ airbnb
         </input>
       </program>
 
-<table xml:id="table-airbnb-listings-vancouver">
-  <title>Airbnb Listings in Vancouver</title>
+<table>
   <tabular halign="right">
     <row header="yes">
       <cell></cell>
@@ -425,8 +424,7 @@ samples
         </input>
       </program>
 
-<table xml:id="table-airbnb-bootstrap-replicates">
-  <title>Bootstrap Sample of Airbnb Listings (Replicates)</title>
+<table>
   <tabular halign="right">
     <row header="yes">
       <cell></cell>
@@ -657,8 +655,7 @@ Name: proportion, Length: 44552, dtype: float64
         </input>
       </program>
 
-<table xml:id="table-airbnb-bootstrap-roomtype-proportions">
-  <title>Bootstrap Distribution of Room Type Proportions</title>
+<table>
   <tabular halign="right">
     <row header="yes">
       <cell></cell>
@@ -762,8 +759,7 @@ sample_estimates
         </input>
       </program>
 
-<table xml:id="table-airbnb-bootstrap-entire-home-proportion">
-  <title>Bootstrap Distribution of “Entire Home/Apt” Proportion</title>
+<table>
   <tabular halign="right">
     <row header="yes">
       <cell></cell>
@@ -1052,8 +1048,7 @@ sample_estimates
         </input>
       </program>
 
-<table xml:id="table-airbnb-bootstrap-mean-price">
-  <title>Bootstrap Distribution of Mean Airbnb Price</title>
+<table>
   <tabular halign="right">
     <row header="yes">
       <cell></cell>
@@ -1327,7 +1322,7 @@ sampling_distribution
         Once again, suppose we are
         interested in estimating the population mean price per night of all Airbnb
         listings in Vancouver, Canada, using a single sample size of 40.
-        Recall our point estimate was $155.80. The
+        Recall our point estimate was $153.48. The
         histogram of prices in the sample is displayed in <xref ref="fig-inference-one-sample-hist"/>.
       </p>
       <program language="python">
@@ -1335,6 +1330,204 @@ sampling_distribution
 one_sample
         </input>
       </program>
+
+<table>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>ID</cell>
+      <cell>Neighbourhood</cell>
+      <cell>RoomType</cell>
+      <cell>Accommodates</cell>
+      <cell>Bathrooms</cell>
+      <cell>Bedrooms</cell>
+      <cell>Beds</cell>
+      <cell>Price</cell>
+    </row>
+
+    <row>
+      <cell>4025</cell>
+      <cell>4026</cell>
+      <cell>Renfrew-Collingwood</cell>
+      <cell>Private room</cell>
+      <cell>1</cell>
+      <cell>1 shared bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>40.00</cell>
+    </row>
+
+    <row>
+      <cell>1977</cell>
+      <cell>1978</cell>
+      <cell>Fairview</cell>
+      <cell>Private room</cell>
+      <cell>1</cell>
+      <cell>2 baths</cell>
+      <cell>3</cell>
+      <cell>1</cell>
+      <cell>70.00</cell>
+    </row>
+
+    <row>
+      <cell>4008</cell>
+      <cell>4009</cell>
+      <cell>Downtown</cell>
+      <cell>Entire home/apt</cell>
+      <cell>4</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>269.00</cell>
+    </row>
+
+    <row>
+      <cell>1543</cell>
+      <cell>1544</cell>
+      <cell>Kensington-Cedar Cottage</cell>
+      <cell>Entire home/apt</cell>
+      <cell>6</cell>
+      <cell>2 baths</cell>
+      <cell>3</cell>
+      <cell>5</cell>
+      <cell>320.00</cell>
+    </row>
+
+    <row>
+      <cell>3350</cell>
+      <cell>3351</cell>
+      <cell>Downtown</cell>
+      <cell>Entire home/apt</cell>
+      <cell>2</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>140.00</cell>
+    </row>
+
+    <row>
+      <cell>804</cell>
+      <cell>805</cell>
+      <cell>Mount Pleasant</cell>
+      <cell>Private room</cell>
+      <cell>2</cell>
+      <cell>1 private bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>77.00</cell>
+    </row>
+
+    <row>
+      <cell>2286</cell>
+      <cell>2287</cell>
+      <cell>Marpole</cell>
+      <cell>Entire home/apt</cell>
+      <cell>4</cell>
+      <cell>1 bath</cell>
+      <cell>2</cell>
+      <cell>2</cell>
+      <cell>105.00</cell>
+    </row>
+
+    <row>
+      <cell>1010</cell>
+      <cell>1011</cell>
+      <cell>Strathcona</cell>
+      <cell>Entire home/apt</cell>
+      <cell>2</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>120.00</cell>
+    </row>
+
+    <row>
+      <cell>1878</cell>
+      <cell>1879</cell>
+      <cell>Fairview</cell>
+      <cell>Private room</cell>
+      <cell>2</cell>
+      <cell>1 private bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>175.00</cell>
+    </row>
+
+    <row>
+      <cell>1644</cell>
+      <cell>1645</cell>
+      <cell>Downtown</cell>
+      <cell>Entire home/apt</cell>
+      <cell>4</cell>
+      <cell>2 baths</cell>
+      <cell>2</cell>
+      <cell>1</cell>
+      <cell>150.00</cell>
+    </row>
+
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+
+    <row>
+      <cell>1997</cell>
+      <cell>1998</cell>
+      <cell>Downtown</cell>
+      <cell>Entire home/apt</cell>
+      <cell>6</cell>
+      <cell>2 baths</cell>
+      <cell>3</cell>
+      <cell>3</cell>
+      <cell>257.00</cell>
+    </row>
+
+    <row>
+      <cell>4329</cell>
+      <cell>4330</cell>
+      <cell>West End</cell>
+      <cell>Entire home/apt</cell>
+      <cell>2</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>0</cell>
+      <cell>92.00</cell>
+    </row>
+
+    <row>
+      <cell>3408</cell>
+      <cell>3409</cell>
+      <cell>Downtown</cell>
+      <cell>Entire home/apt</cell>
+      <cell>2</cell>
+      <cell>2 baths</cell>
+      <cell>2</cell>
+      <cell>2</cell>
+      <cell>189.00</cell>
+    </row>
+
+    <row>
+      <cell>635</cell>
+      <cell>636</cell>
+      <cell>Grandview-Woodland</cell>
+      <cell>Entire home/apt</cell>
+      <cell>6</cell>
+      <cell>2 baths</cell>
+      <cell>1</cell>
+      <cell>2</cell>
+      <cell>103.00</cell>
+    </row>
+
+  </tabular>
+</table>
+
       <program language="python">
         <input>
 one_sample_dist = alt.Chart(one_sample).mark_bar().encode(
@@ -1355,7 +1548,7 @@ one_sample_dist
 
       <p>
         The histogram for the sample is skewed, with a few observations out to the right. The
-        mean of the sample is $155.80.
+        mean of the sample is $153.48.
         Remember, in practice, we usually only have this one sample from the population. So
         this sample and estimate are the only data we can work with.
       </p>
@@ -1427,6 +1620,168 @@ boot20000 = pd.concat([
 boot20000
         </input>
       </program>
+
+<table>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>ID</cell>
+      <cell>Neighbourhood</cell>
+      <cell>RoomType</cell>
+      <cell>Accommodates</cell>
+      <cell>Bathrooms</cell>
+      <cell>Bedrooms</cell>
+      <cell>Beds</cell>
+      <cell>Price</cell>
+      <cell>Replicate</cell>
+    </row>
+
+    <row>
+      <cell>2286</cell>
+      <cell>2287</cell>
+      <cell>Marpole</cell>
+      <cell>Entire home/apt</cell>
+      <cell>4</cell>
+      <cell>1 bath</cell>
+      <cell>2</cell>
+      <cell>2</cell>
+      <cell>105.0</cell>
+      <cell>0</cell>
+    </row>
+
+    <row>
+      <cell>254</cell>
+      <cell>255</cell>
+      <cell>Downtown</cell>
+      <cell>Entire home/apt</cell>
+      <cell>4</cell>
+      <cell>1.5 baths</cell>
+      <cell>2</cell>
+      <cell>2</cell>
+      <cell>300.0</cell>
+      <cell>0</cell>
+    </row>
+
+    <row>
+      <cell>2246</cell>
+      <cell>2247</cell>
+      <cell>Mount Pleasant</cell>
+      <cell>Entire home/apt</cell>
+      <cell>4</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>2</cell>
+      <cell>105.0</cell>
+      <cell>0</cell>
+    </row>
+
+    <row>
+      <cell>4579</cell>
+      <cell>4580</cell>
+      <cell>Downtown</cell>
+      <cell>Entire home/apt</cell>
+      <cell>3</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>2</cell>
+      <cell>160.0</cell>
+      <cell>0</cell>
+    </row>
+
+    <row>
+      <cell>4495</cell>
+      <cell>4496</cell>
+      <cell>Riley Park</cell>
+      <cell>Entire home/apt</cell>
+      <cell>2</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>115.0</cell>
+      <cell>0</cell>
+    </row>
+
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+
+    <row>
+      <cell>1997</cell>
+      <cell>1998</cell>
+      <cell>Downtown</cell>
+      <cell>Entire home/apt</cell>
+      <cell>6</cell>
+      <cell>2 baths</cell>
+      <cell>3</cell>
+      <cell>3</cell>
+      <cell>257.0</cell>
+      <cell>19999</cell>
+    </row>
+
+    <row>
+      <cell>241</cell>
+      <cell>242</cell>
+      <cell>Hastings-Sunrise</cell>
+      <cell>Private room</cell>
+      <cell>2</cell>
+      <cell>1 shared bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>50.0</cell>
+      <cell>19999</cell>
+    </row>
+
+    <row>
+      <cell>1878</cell>
+      <cell>1879</cell>
+      <cell>Fairview</cell>
+      <cell>Private room</cell>
+      <cell>2</cell>
+      <cell>1 private bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>175.0</cell>
+      <cell>19999</cell>
+    </row>
+
+    <row>
+      <cell>1783</cell>
+      <cell>1784</cell>
+      <cell>Downtown Eastside</cell>
+      <cell>Private room</cell>
+      <cell>2</cell>
+      <cell>1 private bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>60.0</cell>
+      <cell>19999</cell>
+    </row>
+
+    <row>
+      <cell>4495</cell>
+      <cell>4496</cell>
+      <cell>Riley Park</cell>
+      <cell>Entire home/apt</cell>
+      <cell>2</cell>
+      <cell>1 bath</cell>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>115.0</cell>
+      <cell>19999</cell>
+    </row>
+
+  </tabular>
+</table>
+
       <p>
         Let&#x2019;s take a look at the histograms of the first six replicates of our bootstrap samples.
       </p>
@@ -1473,6 +1828,48 @@ six_bootstrap_fig
 )
         </input>
       </program>
+
+<table xml:id="table-bootstrap-mean-prices">
+  <title>Bootstrap Mean Prices for the First Six Replicates</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Replicate</cell>
+      <cell>MeanPrice</cell>
+    </row>
+    <row>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>155.67175</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>154.42500</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>2</cell>
+      <cell>149.35000</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>3</cell>
+      <cell>169.13225</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>4</cell>
+      <cell>179.79675</cell>
+    </row>
+    <row>
+      <cell>5</cell>
+      <cell>5</cell>
+      <cell>188.28225</cell>
+    </row>
+  </tabular>
+</table>
+
       <p>
         The distributions and the means differ between the bootstrapped samples
         because we are sampling <em>with replacement</em>.
@@ -1503,6 +1900,75 @@ boot20000_means = (
 boot20000_means
         </input>
       </program>
+
+<table>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Replicate</cell>
+      <cell>MeanPrice</cell>
+    </row>
+
+    <row>
+      <cell>0</cell>
+      <cell>0</cell>
+      <cell>155.67175</cell>
+    </row>
+    <row>
+      <cell>1</cell>
+      <cell>1</cell>
+      <cell>154.42500</cell>
+    </row>
+    <row>
+      <cell>2</cell>
+      <cell>2</cell>
+      <cell>149.35000</cell>
+    </row>
+    <row>
+      <cell>3</cell>
+      <cell>3</cell>
+      <cell>169.13225</cell>
+    </row>
+    <row>
+      <cell>4</cell>
+      <cell>4</cell>
+      <cell>179.79675</cell>
+    </row>
+
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+
+    <row>
+      <cell>19995</cell>
+      <cell>19995</cell>
+      <cell>159.29675</cell>
+    </row>
+    <row>
+      <cell>19996</cell>
+      <cell>19996</cell>
+      <cell>137.20000</cell>
+    </row>
+    <row>
+      <cell>19997</cell>
+      <cell>19997</cell>
+      <cell>136.55725</cell>
+    </row>
+    <row>
+      <cell>19998</cell>
+      <cell>19998</cell>
+      <cell>161.93950</cell>
+    </row>
+    <row>
+      <cell>19999</cell>
+      <cell>19999</cell>
+      <cell>170.22500</cell>
+    </row>
+
+  </tabular>
+</table>
 
       <program language="python">
         <input>
@@ -1543,7 +2009,7 @@ boot_est_dist
         slightly different. The sampling distribution is centered at
         $154.51, the population mean value. However, the bootstrap
         distribution is centered at the original sample&#x2019;s mean price per night,
-        $155.80. Because we are resampling from the
+        $153.48. Because we are resampling from the
         original sample repeatedly, we see that the bootstrap distribution is centered
         at the original sample&#x2019;s mean value (unlike the sampling distribution of the
         sample mean, which is centered at the population parameter value).
@@ -1609,9 +2075,14 @@ ci_bounds = boot20000_means["mean_price"].quantile([0.025, 0.975])
 ci_bounds
         </input>
       </program>
+<pre>
+0.025    121.607069
+0.975    191.525362
+Name: mean_price, dtype: float64
+</pre>
      
       <p>
-        Our interval, $119.28 to $203.63, captures
+        Our interval, $121.61 to $191.53, captures
         the middle 95% of the sample mean prices in the bootstrap distribution. We can
         visualize the interval on our distribution in Figure
         <xref ref="fig-inference-bootstrap-ci"/>.
@@ -1626,9 +2097,9 @@ ci_bounds
         To finish our estimation of the population parameter, we would report the point
         estimate and our confidence interval&#x2019;s lower and upper bounds. Here the sample
         mean price-per-night of 40 Airbnb listings was
-        $155.80, and we are 95% &#x201C;confident&#x201D; that the true
+        $153.48, and we are 95% &#x201C;confident&#x201D; that the true
         population mean price-per-night for all Airbnb listings in Vancouver is between
-        $119.28 and $203.63. Notice that our interval does indeed contain the true
+        $121.61 and $191.53. Notice that our interval does indeed contain the true
         population mean value, $154.51! However, in
         practice, we would not know whether our interval captured the population
         parameter or not because we usually only have a single sample, not the entire
@@ -1667,7 +2138,7 @@ ci_bounds
     <ul>
       <li>
         <p>
-          Chapters 4 to 7 of <em>OpenIntro Statistics</em> <xref ref="openintro"/>
+          Chapters 4 to 7 of <em>OpenIntro Statistics</em><fn>See our PreTeXt version of it here: <url href = "https://pretextbooks.github.io/introductory-statistics/frontmatter.html">pretextbooks.github.io/introductory-statistics/frontmatter.html</url></fn> <xref ref="openintro"/>
           provide a good next step in learning about inference. Although it is still certainly
           an introductory text, things get a bit more mathematical here. Depending on
           your background, you may actually want to start going through Chapters 1 to 3
