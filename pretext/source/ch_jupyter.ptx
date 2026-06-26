@@ -207,7 +207,7 @@
         languages have been created for Jupyter, which means that Jupyter can interpret
         and execute the code of many different programming languages.
         To run Python code,
-        your notebook will need an Python kernel.
+        your notebook will need a Python kernel.
         In the top right of your window, you can
         see a circle that indicates the status of your kernel.
         If the circle is empty
@@ -390,7 +390,7 @@
         The most common way to inadvertently create a nonlinear notebook is to rely
         solely on using the &#x25B6;
         button to execute cells. For example, suppose you
-        write some Python code that creates an Python object, say a variable named <c>y</c>.
+        write some Python code that creates a Python object, say a variable named <c>y</c>.
         When you execute that cell and create <c>y</c>, it will continue to exist until
         it is deliberately deleted with Python code, or when the Jupyter notebook Python session
         (<em>i.e.</em>, kernel) is stopped or restarted.
@@ -641,9 +641,9 @@
 
     <figure xml:id="fig-launcher">
       <caption>Clicking on the Python icon under the Notebook heading will create a new
-      Jupyter notebook with an Python kernel.</caption>
+      Jupyter notebook with a Python kernel.</caption>
       <image source="images/jupyter/launcher-annotated.png" width="100%">
-        <description>The JupyterLab launcher tab showing the Notebook section with an Python icon highlighted.</description>
+        <description>The JupyterLab launcher tab showing the Notebook section with a Python icon highlighted.</description>
       </image>
     </figure>
 
