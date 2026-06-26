@@ -161,6 +161,167 @@ sacramento = pd.read_csv("data/sacramento.csv")
 sacramento
       </input>
     </program>
+<table xml:id="table-sacramento-housing-data">
+  <title>Sacramento Housing Data</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>City</cell>
+      <cell>Zip</cell>
+      <cell>Beds</cell>
+      <cell>Baths</cell>
+      <cell>SqFt</cell>
+      <cell>Type</cell>
+      <cell>Price</cell>
+      <cell>Latitude</cell>
+      <cell>Longitude</cell>
+    </row>
+
+    <row>
+      <cell>0</cell>
+      <cell>SACRAMENTO</cell>
+      <cell>z95838</cell>
+      <cell>2</cell>
+      <cell>1.0</cell>
+      <cell>836</cell>
+      <cell>Residential</cell>
+      <cell>59222</cell>
+      <cell>38.631913</cell>
+      <cell>-121.434879</cell>
+    </row>
+
+    <row>
+      <cell>1</cell>
+      <cell>SACRAMENTO</cell>
+      <cell>z95823</cell>
+      <cell>3</cell>
+      <cell>1.0</cell>
+      <cell>1167</cell>
+      <cell>Residential</cell>
+      <cell>68212</cell>
+      <cell>38.478902</cell>
+      <cell>-121.431028</cell>
+    </row>
+
+    <row>
+      <cell>2</cell>
+      <cell>SACRAMENTO</cell>
+      <cell>z95815</cell>
+      <cell>2</cell>
+      <cell>1.0</cell>
+      <cell>796</cell>
+      <cell>Residential</cell>
+      <cell>68880</cell>
+      <cell>38.618305</cell>
+      <cell>-121.443839</cell>
+    </row>
+
+    <row>
+      <cell>3</cell>
+      <cell>SACRAMENTO</cell>
+      <cell>z95815</cell>
+      <cell>2</cell>
+      <cell>1.0</cell>
+      <cell>852</cell>
+      <cell>Residential</cell>
+      <cell>69307</cell>
+      <cell>38.616835</cell>
+      <cell>-121.439146</cell>
+    </row>
+
+    <row>
+      <cell>4</cell>
+      <cell>SACRAMENTO</cell>
+      <cell>z95824</cell>
+      <cell>2</cell>
+      <cell>1.0</cell>
+      <cell>797</cell>
+      <cell>Residential</cell>
+      <cell>81900</cell>
+      <cell>38.519470</cell>
+      <cell>-121.435768</cell>
+    </row>
+
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+
+    <row>
+      <cell>927</cell>
+      <cell>SACRAMENTO</cell>
+      <cell>z95829</cell>
+      <cell>4</cell>
+      <cell>3.0</cell>
+      <cell>2280</cell>
+      <cell>Residential</cell>
+      <cell>232425</cell>
+      <cell>38.457679</cell>
+      <cell>-121.359620</cell>
+    </row>
+
+    <row>
+      <cell>928</cell>
+      <cell>SACRAMENTO</cell>
+      <cell>z95823</cell>
+      <cell>3</cell>
+      <cell>2.0</cell>
+      <cell>1477</cell>
+      <cell>Residential</cell>
+      <cell>234000</cell>
+      <cell>38.499893</cell>
+      <cell>-121.458890</cell>
+    </row>
+
+    <row>
+      <cell>929</cell>
+      <cell>CITRUS_HEIGHTS</cell>
+      <cell>z95610</cell>
+      <cell>3</cell>
+      <cell>2.0</cell>
+      <cell>1216</cell>
+      <cell>Residential</cell>
+      <cell>235000</cell>
+      <cell>38.708824</cell>
+      <cell>-121.256803</cell>
+    </row>
+
+    <row>
+      <cell>930</cell>
+      <cell>ELK_GROVE</cell>
+      <cell>z95758</cell>
+      <cell>4</cell>
+      <cell>2.0</cell>
+      <cell>1685</cell>
+      <cell>Residential</cell>
+      <cell>235301</cell>
+      <cell>38.417000</cell>
+      <cell>-121.397424</cell>
+    </row>
+
+    <row>
+      <cell>931</cell>
+      <cell>EL_DORADO_HILLS</cell>
+      <cell>z95762</cell>
+      <cell>3</cell>
+      <cell>2.0</cell>
+      <cell>1362</cell>
+      <cell>Residential</cell>
+      <cell>235738</cell>
+      <cell>38.655245</cell>
+      <cell>-121.075915</cell>
+    </row>
+
+  </tabular>
+</table>
     <p>
       The scientific question guides our initial exploration: the columns in the
       data that we are interested in are <c>sqft</c> (house size, in livable
@@ -289,6 +450,95 @@ nearest_neighbors = small_sacramento.nsmallest(5, "dist")
 nearest_neighbors
       </input>
     </program>
+<table xml:id="table-nearest-sacramento-properties">
+  <title>Nearest Sacramento Properties</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>City</cell>
+      <cell>Zip</cell>
+      <cell>Beds</cell>
+      <cell>Baths</cell>
+      <cell>SqFt</cell>
+      <cell>Type</cell>
+      <cell>Price</cell>
+      <cell>Latitude</cell>
+      <cell>Longitude</cell>
+      <cell>Dist</cell>
+    </row>
+
+    <row>
+      <cell>298</cell>
+      <cell>SACRAMENTO</cell>
+      <cell>z95823</cell>
+      <cell>4</cell>
+      <cell>2.0</cell>
+      <cell>1900</cell>
+      <cell>Residential</cell>
+      <cell>361745</cell>
+      <cell>38.487409</cell>
+      <cell>-121.461413</cell>
+      <cell>100</cell>
+    </row>
+
+    <row>
+      <cell>718</cell>
+      <cell>ANTELOPE</cell>
+      <cell>z95843</cell>
+      <cell>4</cell>
+      <cell>2.0</cell>
+      <cell>2160</cell>
+      <cell>Residential</cell>
+      <cell>290000</cell>
+      <cell>38.704554</cell>
+      <cell>-121.354753</cell>
+      <cell>160</cell>
+    </row>
+
+    <row>
+      <cell>748</cell>
+      <cell>ROSEVILLE</cell>
+      <cell>z95678</cell>
+      <cell>3</cell>
+      <cell>2.0</cell>
+      <cell>1744</cell>
+      <cell>Residential</cell>
+      <cell>326951</cell>
+      <cell>38.771917</cell>
+      <cell>-121.304439</cell>
+      <cell>256</cell>
+    </row>
+
+    <row>
+      <cell>252</cell>
+      <cell>SACRAMENTO</cell>
+      <cell>z95835</cell>
+      <cell>3</cell>
+      <cell>2.5</cell>
+      <cell>1718</cell>
+      <cell>Residential</cell>
+      <cell>250000</cell>
+      <cell>38.676658</cell>
+      <cell>-121.528128</cell>
+      <cell>282</cell>
+    </row>
+
+    <row>
+      <cell>211</cell>
+      <cell>RANCHO_CORDOVA</cell>
+      <cell>z95670</cell>
+      <cell>3</cell>
+      <cell>2.0</cell>
+      <cell>1671</cell>
+      <cell>Residential</cell>
+      <cell>175000</cell>
+      <cell>38.591477</cell>
+      <cell>-121.315340</cell>
+      <cell>329</cell>
+    </row>
+
+  </tabular>
+</table>
     <figure xml:id="fig-sacr-knn-example">
       <caption>Scatter plot of price (USD) versus house size (square feet) with lines to 5 nearest neighbors (highlighted in orange).</caption>
       <image source="images/regression1/sacr-knn-example.png" width="60%"/>
@@ -310,6 +560,9 @@ prediction = nearest_neighbors["price"].mean()
 prediction
       </input>
     </program>
+<pre>
+280739.2
+</pre>
     <figure xml:id="fig-sacr-predicted-viz">
       <caption>Scatter plot of price (USD) versus house size (square feet) with predicted price for a 2,000 square-foot house based on 5 nearest neighbors represented as a red dot.</caption>
       <image source="images/regression1/sacr-predicted-viz.png" width="60%"/>
@@ -352,6 +605,12 @@ prediction
       (<xref ref="fig-sacr-small-eda"/>).
       <idx>training set</idx> <idx>test set</idx>
     </p>
+    <note>
+<p>
+We are not specifying the <c>stratify</c> argument here like we did in Chapter 6,
+since the <c>train_test_split</c> function cannot stratify based on a
+quantitative variable.</p>
+</note>
     <program language="python">
       <input>
 sacramento_train, sacramento_test = train_test_split(
@@ -463,6 +722,13 @@ sacramento_train, sacramento_test = train_test_split(
       <idx><h>scikit-learn</h></idx> <idx><h>scikit-learn</h><h>Pipeline</h></idx> <idx><h>scikit-learn</h><h>make_pipeline</h></idx> <idx><h>scikit-learn</h><h>make_column_transformer</h></idx>
       <idx><h>scikit-learn</h><h>GridSearchCV</h></idx>
     </p>
+<note>
+<p>
+We obtained the identifier of the parameter representing the number of neighbours,
+<c>"kneighborsregressor__n_neighbors"</c> by examining the output of
+<c>sacr_pipeline.get_params()</c>, as we did in Chapter 5.
+</p>
+</note>
     <program language="python">
       <input>
 # import the K-NN regression model
@@ -524,6 +790,95 @@ sacr_results = (
 sacr_results
       </input>
     </program>
+<table xml:id="table-knn-cross-validation-results">
+  <title>KNN Cross-Validation Results</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Neighbors</cell>
+      <cell>MeanTestScore</cell>
+      <cell>SEMTestScore</cell>
+    </row>
+
+    <row>
+      <cell>0</cell>
+      <cell>1</cell>
+      <cell>-117365.988307</cell>
+      <cell>2715.383001</cell>
+    </row>
+
+    <row>
+      <cell>1</cell>
+      <cell>4</cell>
+      <cell>-93956.523683</cell>
+      <cell>2466.200227</cell>
+    </row>
+
+    <row>
+      <cell>2</cell>
+      <cell>7</cell>
+      <cell>-89859.401722</cell>
+      <cell>2739.713448</cell>
+    </row>
+
+    <row>
+      <cell>3</cell>
+      <cell>10</cell>
+      <cell>-87893.534919</cell>
+      <cell>2958.587153</cell>
+    </row>
+
+    <row>
+      <cell>4</cell>
+      <cell>13</cell>
+      <cell>-86444.413831</cell>
+      <cell>3383.712997</cell>
+    </row>
+
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+
+    <row>
+      <cell>62</cell>
+      <cell>187</cell>
+      <cell>-92909.550051</cell>
+      <cell>2562.784826</cell>
+    </row>
+
+    <row>
+      <cell>63</cell>
+      <cell>190</cell>
+      <cell>-93137.289780</cell>
+      <cell>2511.564001</cell>
+    </row>
+
+    <row>
+      <cell>64</cell>
+      <cell>193</cell>
+      <cell>-93395.588763</cell>
+      <cell>2492.272799</cell>
+    </row>
+
+    <row>
+      <cell>65</cell>
+      <cell>196</cell>
+      <cell>-93671.588088</cell>
+      <cell>2473.312705</cell>
+    </row>
+
+    <row>
+      <cell>66</cell>
+      <cell>199</cell>
+      <cell>-93986.752272</cell>
+      <cell>2473.048651</cell>
+    </row>
+
+  </tabular>
+</table>
     <p>
       In the <c>sacr_results</c> results data frame, we see that the
       <c>n_neighbors</c> variable contains the values of <m>K</m>,
@@ -543,6 +898,95 @@ sacr_results[&quot;mean_test_score&quot;] = -sacr_results[&quot;mean_test_score&
 sacr_results
       </input>
     </program>
+<table xml:id="table-knn-cross-validation-results">
+  <title>KNN Cross-Validation Results</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Neighbors</cell>
+      <cell>MeanTestScore</cell>
+      <cell>SEMTestScore</cell>
+    </row>
+
+    <row>
+      <cell>0</cell>
+      <cell>1</cell>
+      <cell>117365.988307</cell>
+      <cell>2715.383001</cell>
+    </row>
+
+    <row>
+      <cell>1</cell>
+      <cell>4</cell>
+      <cell>93956.523683</cell>
+      <cell>2466.200227</cell>
+    </row>
+
+    <row>
+      <cell>2</cell>
+      <cell>7</cell>
+      <cell>89859.401722</cell>
+      <cell>2739.713448</cell>
+    </row>
+
+    <row>
+      <cell>3</cell>
+      <cell>10</cell>
+      <cell>87893.534919</cell>
+      <cell>2958.587153</cell>
+    </row>
+
+    <row>
+      <cell>4</cell>
+      <cell>13</cell>
+      <cell>86444.413831</cell>
+      <cell>3383.712997</cell>
+    </row>
+
+    <row>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+      <cell><ellipsis/></cell>
+    </row>
+
+    <row>
+      <cell>62</cell>
+      <cell>187</cell>
+      <cell>92909.550051</cell>
+      <cell>2562.784826</cell>
+    </row>
+
+    <row>
+      <cell>63</cell>
+      <cell>190</cell>
+      <cell>93137.289780</cell>
+      <cell>2511.564001</cell>
+    </row>
+
+    <row>
+      <cell>64</cell>
+      <cell>193</cell>
+      <cell>93395.588763</cell>
+      <cell>2492.272799</cell>
+    </row>
+
+    <row>
+      <cell>65</cell>
+      <cell>196</cell>
+      <cell>93671.588088</cell>
+      <cell>2473.312705</cell>
+    </row>
+
+    <row>
+      <cell>66</cell>
+      <cell>199</cell>
+      <cell>93986.752272</cell>
+      <cell>2473.048651</cell>
+    </row>
+
+  </tabular>
+</table>
     <p>
       Alright, now the <c>mean_test_score</c> variable actually has values of the RMSPE
       for different numbers of neighbors. Finally, the <c>sem_test_score</c> variable
@@ -575,6 +1019,9 @@ sacr_results
 sacr_gridsearch.best_params_
       </input>
     </program>
+<pre>
+{'kneighborsregressor__n_neighbors': 55}
+</pre>
   </section>
 
   <section xml:id="sec-regression1-overfitting">
@@ -696,23 +1143,26 @@ RMSPE = mean_squared_error(
 RMSPE
       </input>
     </program>
+<pre>
+87498.86808211416
+</pre>
 <p>
-  Our final model's test error as assessed by RMSPE is $90,529.
+  Our final model's test error as assessed by RMSPE is $87,499.
   Note that RMSPE is 
   measured in the same units as the response variable.
   In other words, on new 
-  observations, we expect the error in our prediction to be roughly $90,529.
+  observations, we expect the error in our prediction to be roughly $87,499.
   From one 
   perspective, this is good news: this is about the same as the cross-validation RMSPE 
-  estimate of our tuned model (which was $84,561), so we can say that the model appears 
+  estimate of our tuned model (which was $85,578), so we can say that the model appears 
   to generalize well to new data that it has never seen before.
   However, much like in 
   the case of K-NN classification, whether this value for RMSPE is good <mdash/> i.e., 
-  whether an error of around $90,529 is acceptable <mdash/> depends entirely on the 
+  whether an error of around $87,499 is acceptable <mdash/> depends entirely on the 
   application.
   In this application, this error is not prohibitively large, but it is 
   not negligible either;
-  $90,529 might represent a substantial fraction of a home 
+  $87,499 might represent a substantial fraction of a home 
   buyer's budget, and could make or break whether or not they could afford to put an 
   offer on a house.
 </p>
@@ -890,6 +1340,23 @@ sacr_results = (
 sacr_results.nsmallest(1, &quot;mean_test_score&quot;)
       </input>
     </program>
+<table xml:id="table-knn-cross-validation-best-result">
+  <title>KNN Cross-Validation Result for 29 Neighbors</title>
+  <tabular halign="right">
+    <row header="yes">
+      <cell></cell>
+      <cell>Neighbors</cell>
+      <cell>MeanTestScore</cell>
+      <cell>SEMTestScore</cell>
+    </row>
+    <row>
+      <cell>28</cell>
+      <cell>29</cell>
+      <cell>85156.027067</cell>
+      <cell>3376.143313</cell>
+    </row>
+  </tabular>
+</table>
 <p>
   Here we see 
   that the smallest estimated RMSPE from cross-validation occurs when 
@@ -900,9 +1367,9 @@ sacr_results.nsmallest(1, &quot;mean_test_score&quot;)
   classification models), then we must compare the RMSPE estimated using only the 
   training data via cross-validation.
   Looking back, the estimated cross-validation RMSPE 
-  for the single-predictor model was $84,561.
+  for the single-predictor model was $85,578.
   The estimated cross-validation RMSPE for 
-  the multivariable model is $81,839.
+  the multivariable model is $85,156.
   Thus in this case, we did not improve the model 
   by a large amount by adding this additional predictor.
 </p>
@@ -924,10 +1391,13 @@ RMSPE_mult = mean_squared_error(
 RMSPE_mult
       </input>
     </program>
+<pre>
+85083.2902421959
+</pre>
     <p>
       This time, when we performed K-NN regression on the same data set, but
       also included number of bedrooms as a predictor, we obtained a RMSPE test
-      error of $90,862.
+      error of $85,083.
       <xref ref="fig-sacr-3d-mult-viz"/> visualizes the
       model's predictions overlaid on top of the data.
       This time the
