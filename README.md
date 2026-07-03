@@ -1,12 +1,12 @@
 ## Data Science: A First Introduction
 
-This is the source for the PreTeXt version of *Data Science: A First Introduction* textbook.
+This is the source for the PreTeXt version of *Data Science: A First Introduction in Python* textbook.
 
-The original book is available online at: https://datasciencebook.ca/
+The original book is available online at: https://python.datasciencebook.ca
 
 © 2020 Tiffany A. Timbers, Trevor Campbell, Melissa Lee
 
-For the python version of the textbook, please visit https://python.datasciencebook.ca or the github repository at https://github.com/ubc-dsci/introduction-to-datascience-python.
+For the R version of the textbook, please visit https://datasciencebook.ca or the PreTeXt version at https://github.com/PreTeXtBooks/introduction-to-datascience/
 
 ## License Information
 
