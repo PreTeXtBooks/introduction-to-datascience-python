@@ -56,21 +56,3 @@ in the `pretext/` directory. The generated PDF will be placed in `pretext/output
 
 Primary development in this repository happens on the `main` branch. If you want to contribute to the book,
 please branch off of `main` and make a pull request into `main`. You cannot commit directly to `main`.
-
-## Style Guide
-
-### General
-- **80 character line limit!** This is necessary to make git diffs useful
-- numbers in text should be english words ("four common mistakes" not "4 common mistakes") unless there are units (40km, not forty km)
-- use Oxford commas ("a, b, and c" not "a, b and c")
-- "subset" should not be used as a verb
-- functions in text should not have parentheses (`read_csv` not `read_csv()`)
-- remove all references to "course" and "student"; replace with "reader" or "you" where necessary
-- make sure we have permission to use all external resources that we use
-- remove all references to "clicking on things" in the HTML version of the book (e.g. "click this link to ...")
-- When we introduce a new term, use `**bolding**` to typeset it (but only the first introduction of the term)
-- for symbols as part of the text, make sure you give them their full name and surround with parentheses so that they
-  don't "disappear" in the rest of the text. So for example, if I have a `,` in the text, I should do
-  something like  "here is some text about the comma (`,`)". Or for `<-`, we should do "something like this assignment operator (`<-`)".
-  There are likely exceptions to this rule though.
-- Book titles in the text should be typeset in italics (e.g. *R for Data Science*)
